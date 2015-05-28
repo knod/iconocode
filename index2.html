@@ -1,0 +1,60 @@
+<!-- index2.html -->
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Iconocode Testing</title>
+
+	<!-- CodeMirror -->
+	<link 	rel="stylesheet" href="CodeMirror-master/lib/codemirror.css">
+	<!-- Iconocode -->
+	<!-- <link 	rel="stylesheet" type="text/css" href="css/iconocode.css" /> -->
+	<link 	rel="stylesheet" type="text/css" href="css/iconocode-testing.css" />
+
+</head>
+
+
+<body>
+	
+	<h1>Testing</h1>
+	<p>Refactoring to base code structure on functionality instead of on DOM</p>
+
+	<h2>Exploring lazy search</h2>
+	<p>From http://codepen.io/atwulf/pen/vczhJ (but without styling)</p>
+	<form id="searchform">
+		<h1>Lazy Search Prediction</h1>
+		<span>Search this site: </span>
+		<input type="text" id="search-bar" autocomplete="off" />
+		<ul id="search-output" style="display:none;">
+		</ul>
+		<button type="submit" id="submit">Search</button>
+		<p>This is a pseudo predictive search I made for a client site. It suggests possible search terms from an array that could theoretically be filled from an outside source, but for my purposes is filled by, well, me.</p>
+		<p>I'm slowly working to improve functionality, but it's got the basic stuff there.</p>
+	</form>
+
+	<!-- Third Party -->
+	<script src="js/third-party/jquery-2.1.4.min.js"></script>
+	<script src="CodeMirror-master/lib/codemirror.js"></script>
+	<script src="CodeMirror-master/mode/javascript/javascript.js"></script>
+	<script src="js2/lazy-search-example1.js"></script>
+
+	<!-- Defaults/Data -->
+	<!-- <script src="js/default-icons.js"></script>
+	<script src="js/map.js"></script> -->
+
+	<!-- Functionality -->
+	<script src="js2/Icon.js"></script>
+	<script src="js2/start.js"></script>
+
+	<script src="js/iconocode-image-list.js"></script>
+	<script src="js/adder-utils-tabs.js"></script>
+	
+	<script src="js2/adder.js"></script>
+	<script src="js2/viewer.js"></script>
+	<script src="js2/mode-types.js"></script>
+	<script src="js2/mode-images.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+/* iconocode-testing.css
+Testing with backgrounds instead of shapes
+since I can't figure out shapes right now
+*/
+
+/*iconocode.css*/
+
+.icd {
+	padding: 0;
+	margin: 0;
+
+	display: inline-block;
+	/*vertical-align: middle;*/
+	box-sizing: border-box;
+
+	/* Need to decide on font */
+	font-family: sans-serif;
+	font-size: 1rem;
+	font-weight: normal;
+}
+
+.icd.icon-container div,
+.icd section, .icd div {
+	/* These next two break something in CodeMirror.
+	Will have to deal with individual instances of position: absolute */
+	/*position: relative;*/
+	/*display: inline-block;*/
+	vertical-align: top;
+	transform-origin: center;
+
+	/*border: 1px solid gray;*/
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.icd.icon-container .icon-body {
+	position: relative;
+	margin: 0 auto;
+
+	height: 1.2rem;
+	min-width: 1.5rem;
+}
+
+.icd.icon-container .icon-side-hider {
+	width: 0;
+	height: 0;
+	border: none;
+}
+
+
+/* ================== */
+/* SHAPES */
+/* ================== */
+.icd.before-icon-body,
+.icd.after-icon-body {
+	width: 0;
+	height: 0;
+	border: none;
+}
+
+/* !!!! Something needs to be done about width - trapezoid needs
+	significant width to show shape, for example !!!! */
+/* Process? */
+/* diamond is only one with different height? */
+.icd.verb .icon-body {
+	background: khaki;
+}
+/* Process? */
+.icd.square .icon-body {
+	background-color: firebrick;
+}
+/* Data? */
+.icd.noun .icon-body {
+	background-color: lightblue;
+}
+/* Message */
+.icd.message .icon-body {
+	background-color: sandybrown;
+}
+
+
+/* =================== */
+/* ALL TABS */
+/* =================== */
+.icd.tab {
+	text-align: center;
+	border-right: 1px solid rgb( 150, 150, 150 );
+}
+.icd.tab.last { border-right: none; }
+.icd.tab.active { background-color: rgb( 165, 165, 165 ); }
+
+
+/* =================== */
+/* ADDER */
+/* =================== */
+/* Calculate position based on text that was selected
+or scroll code till position will be just under text,
+unless the text is too low or too heigh, in which case
+switch sides, unless there's no room, in which case... I dunno.
+I mean, it's position absolute, so it's not going to
+be scrollable... make it position: relative?
+*/
+.icd.icon-adder {
+	position: absolute;
+	left: calc( 50% - 20rem/2 );
+	top: calc( 50% - 10rem/2 );
+
+	width: 20rem;
+	height: auto;
+
+	background-color: rgb( 200, 200, 200 );
+	border-right: 1px solid rgb( 150, 150, 150 );
+	border-left: 1px solid rgb( 150, 150, 150 );
+}
+
+.icd.icon-adder section {
+	width: 100%;
+
+	border-top: 1px solid rgb( 150, 150, 150 );
+	border-bottom: 1px solid rgb( 150, 150, 150 );
+}
+
+/* --- TABS --- */
+/* This messes up all the spacing calculation */
+.icd.adder-mode-tabs {
+	position:static;
+	min-height: 1.2rem;
+}
+
+.icd.adder-mode-tab {
+	height: 100%;
+	/*width: 50%;*/
+}
+
+/* --- VIEWER --- */
+.icd.adder-icon-viewer-container {
+	padding: .2rem .5rem 0 .5rem;
+	/* To make room for horizontal scroll bar */
+	height: 2.5rem;
+}
+.icd.adder-icon-viewer {
+	position: absolute;
+	top: 50%;
+	transform: translate( 0, -50% );
+
+	color: rgb( 140, 140, 140 );
+}
+
+/* --- PICKERS --- */
+.icd.adder-picker {
+	height: 9rem;
+	width: 100%;
+}
+
+
+/* --- TYPE PICKER --- */
+#icd-types-picker {
+	background-color: teal;
+}
+
+.icd.type-choice {
+	text-align: center;
+	margin-top: 5%;
+	/* Why does this go out of the parent? */
+	height: 95%;
+}
+.icd.type-choice .icon-container {
+	display: block;
+	margin-top: .7rem;
+}
+.icd.type-choice .icon-body {
+	height: calc(1.2rem * 2);
+	min-width: calc(1.5rem * 2);
+}
+
+
+/* --- IMAGE PICKER --- */
+/* Maybe way to do image size to maximize
+image http://jsfiddle.net/0bmws0me/1/ (from ThePendulum something),
+but maybe we want the images to be their proper size?
+*/
+#icd-images-picker {
+	background-color: tomato;
+
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-wrap: wrap;
+
+	padding-left: 2.5%;
+	padding-top: 2.5%;
+
+	overflow: scroll;
+}
+
+.icd.image-choice-container {
+	/* Not really sure about this stuff */
+    /*display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 15%;
+    margin-right: 5%;
+    margin-bottom: 5%;*/
+}
+.icd.image-choice {
+	max-width: 15%;
+	margin: 2.5%;
+
+	border: 1px solid gray;
+}
+.icd.image-choice:hover {
+	border: 1px solid white;
+}
+.icd.image-choice:active {
+	border: 1px solid darkseagreen;
+}
+
+
+/* --- COLOR PICKER --- */
+#icd-colors-picker {
+	background-color: firebrick;
+}
+

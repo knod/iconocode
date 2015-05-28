@@ -1,0 +1,242 @@
+/*iconocode.css*/
+
+.icd {
+  padding: 0;
+  margin: 0;
+
+  display: inline-block;
+  /*vertical-align: middle;*/
+  box-sizing: border-box;
+
+  /* Need to decide on font */
+  font-family: sans-serif;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.icd.icon-container div,
+.icd section, .icd div {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  transform-origin: center;
+
+  /*border: 1px solid gray;*/
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.icd.icon-container .icon-body {
+  position: relative;
+  margin: 0 auto;
+
+  height: 100%;
+  min-width: 1rem;
+}
+
+.icd.icon-container .icon-side-hider {
+  width: calc(1.2rem/1.41/2);
+  height: 100%;
+  border: none;
+}
+
+
+/* ================== */
+/* SHAPES */
+/* ================== */
+/* !!!! Something needs to be done about width - trapezoid needs
+      significant width to show shape, for example !!!! */
+/* Process? */
+/* diamond is only one with different height? */
+.icd.diamond .before-icon-body,
+.icd.diamond .after-icon-body {
+  border-top: none;
+  border-right: none;
+  height: calc(1.2rem/1.41);
+  width: calc(1.2rem/1.41);
+  top: 50%;
+}
+.icd.diamond .icon-body {
+  border-left: none;
+  border-right: none;
+}
+.icd.diamond .before-icon-body {
+  transform: translate(0, -50%) rotate(45deg);
+}
+.icd.diamond .after-icon-body {
+  left: -100%;
+  transform: translate(0, -50%) rotate(-135deg);
+}
+
+/* Process? */
+.icd.square .icon-body {
+  width: 100%;
+}
+.icd.square .before-icon-body,
+.icd.square .after-icon-body {
+  border: none;
+}
+.icd.square .icon-side-hider { width: 0;}
+
+
+/* Data? */
+.icd.data .before-icon-body,
+.icd.data .after-icon-body {
+  border-radius: 3rem;
+}
+.icd.data .before-icon-body {
+  border-right: none;
+  border-top: none;
+  border-bottom: none;
+
+  /* guess */
+  width: 1rem;
+  left: -0.5rem;
+}
+.icd.data .after-icon-body {
+  border-left: none;
+  border-top: none;
+  border-bottom: none;
+
+  /* guess */
+  width: 1rem;
+  right: -0.5rem;
+}
+
+/* Message? */
+/* http://stackoverflow.com/questions/17955597/css-shapes-with-only-a-border */
+.icd.equalateral .before-icon-body,
+.icd.equalateral .after-icon-body {
+  width: 59%;
+  height: 100%;
+}
+.icd.equalateral .before-icon-body {
+  left: -4%;
+  border-right: none;
+   -webkit-transform: skewX(-20deg); 
+  transform: skewX(-20deg);
+}
+.icd.equalateral .after-icon-body {
+  right: -4%;
+  border-left: none;
+  -webkit-transform: skewX(20deg);
+  transform: skewX(20deg);
+}
+
+
+/* =================== */
+/* ALL TABS */
+/* =================== */
+.icd.tab {
+  text-align: center;
+  border-right: 1px solid rgb( 150, 150, 150 );
+}
+.icd.last-tab { border-right: none; }
+.icd.tab.active { background-color: rgb( 165, 165, 165 ); }
+
+
+/* =================== */
+/* ADDER */
+/* =================== */
+.icd.icon-adder {
+  position: absolute;
+  left: calc( 50% - 20rem/2 );
+  top: calc( 50% - 15rem/2 );
+
+  width: 20rem;
+  height: auto;
+
+  background-color: rgb( 200, 200, 200 );
+  border-right: 1px solid rgb( 150, 150, 150 );
+  border-left: 1px solid rgb( 150, 150, 150 );
+}
+
+.icd.icon-adder section {
+  width: 100%;
+
+  border-top: 1px solid rgb( 150, 150, 150 );
+  border-bottom: 1px solid rgb( 150, 150, 150 );
+}
+
+/* --- TABS --- */
+/* This messes up all the spacing calculation */
+.icd.adder-mode-tabs { min-height: 1.2rem; }
+
+.icd.adder-mode-tab {
+  height: 100%;
+  /*width: 50%;*/
+}
+
+/* --- VIEWER --- */
+.icd.adder-icon-viewer-container {
+  height: 2rem;
+  padding-left: .5rem;
+}
+.icd.adder-icon-viewer {
+  position: absolute;
+  top: 50%;
+  transform: translate( 0, -50% );
+
+  color: rgb( 140, 140, 140 );
+}
+
+/* --- PICKERS --- */
+.icd.adder-picker {
+  height: 9rem;
+  width: 100%;
+}
+#icd-type-picker {
+  background-color: teal;
+}
+#icd-img-picker {
+  background-color: tomato;
+}
+#icd-color-picker {
+  background-color: firebrick;
+}
+
+
+/* OLD */
+/* More felxible widths: http://jsfiddle.net/2az358rq/2/
+comingsoontm_
+Much simpler: http://jsfiddle.net/2az358rq/4/ (doesn't work with
+separate divs, just with :before and :after)
+*/
+/*.icd {
+  padding: 0;
+  margin: 0;
+
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+.icd.icon-container {
+  position: relative;
+  border: none;
+  height: 1.2rem;
+  width: 2rem;
+  background: rgba(0, 128, 128, 0.23);
+}
+
+.icd.icon-container div {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  transform-origin: center;
+
+  border: 1px solid gray;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.icd.icon-container .icon-body {
+  position: relative;
+  margin: 0 auto;
+
+  height: 100%;
+  min-width: 1rem;
+}
+
+.icd.icon-container .icon-side-hider {
+  width: calc(1.2rem/1.41/2);
+  height: 100%;
+  border: none;
+}*/
