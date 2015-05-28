@@ -49,36 +49,9 @@ http://stackoverflow.com/questions/9255840/regex-match-two-or-more-same-characte
 			regexPattern = regexPattern + toMatchArray[ chari ] + '{1}.*';
 		}
 
-		// regexPattern = regexPattern + ''
-
 		// 'i' means case doesn't matter
 		var toTestWith = new RegExp( regexPattern, 'i' )
 		containsAllLetters = toTestWith.test( wordToTest );
-		// containsAllLetters = regexPattern.test( wordToTest );
-		console.log(toTestWith, containsAllLetters);
-
-
-		// !!! How to test if it doesn't matter which order they are given !!! \\
-		// var toMatchArray 		= toMatch.split(''),
-  //           wordCopy            = wordToTest,  // Copy we can destroy for testing
-  //           containsAllLetters  = true;  // Does the word contain all the letters?
-
-  //       for ( var chari = 0; chari < toMatchArray.length; chari ++  ) {
-
-	 //        var thisChar    = toMatchArray[ chari ],
-	 //            matchInfo   = wordCopy.match( thisChar );  // Test the remaining letters
-
-	 //        // If there's no match, letters are missing
-	 //        if ( matchInfo === null ) {
-	 //            containsAllLetters = false;
-	 //            // break;  // I don't like break :/
-	 //        }
-
-  //           // Make sure that specific character isn't found again
-	 //        wordCopy = wordCopy.replace( thisChar, '' );
-
-	 //        // if ( containsAllLetters === false ) { break; }  // still dont' like break :/
-	 //    }  // end for char in toMatchArray
 
 	    return containsAllLetters;
     };  // End doesContainAll()
