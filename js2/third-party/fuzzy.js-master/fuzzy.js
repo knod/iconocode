@@ -12,15 +12,16 @@
 
     if (fuzzy.analyzeSubTerms) {
 
-      for (var i = 1; i < termLength && i < fuzzy.analyzeSubTermDepth; i++) {
-        var subTerm = term.substring(i);
+      for (var subTermi = 1; subTermi < termLength &&
+                          subTermi < fuzzy.analyzeSubTermDepth; subTermi++) {
+        var subTerm = term.substring(subTermi);
         var score = calcFuzzyScore(subTerm, query);
         if (score.score > max.score) {
           // we need to correct 'term' and 'matchedTerm', as calcFuzzyScore
           // does not now that it operates on a substring. Doing it only for
           // new maximum score to save some performance.
           score.term = term;
-          score.highlightedTerm = term.substring(0, i) + score.highlightedTerm;
+          score.highlightedTerm = term.substring(0, subTermi) + score.highlightedTerm;
           max = score;
         }
       }
@@ -34,40 +35,41 @@
     var termLength = term.length;
     var queryLength = query.length;
     var highlighting = '';
-    var ti = 0;
+    var termi = 0;
     // -1 would not work as this would break the calculations of bonus
     // points for subsequent character matches. Something like
     // Number.MIN_VALUE would be more appropriate, but unfortunately
     // Number.MIN_VALUE + 1 equals 1...
     var previousMatchingCharacter = -2;
 
-    for (var qi = 0; qi < queryLength && ti < termLength; qi++) {
-      var qc = query.charAt(qi);
-      var lowerQc = qc.toLowerCase();
+    for (var queryi = 0; queryi < queryLength && termi < termLength; queryi++) {
+      var queryChar = query.charAt(queryi);
+      var lowerCaseQueryChar = queryChar.toLowerCase();
 
-      for (; ti < termLength; ti++) {
-        var tc = term.charAt(ti);
+      // termi is already defined
+      for (; termi < termLength; termi++) {
+        var termChar = term.charAt(termi);
 
-        if (lowerQc === tc.toLowerCase()) {
+        if (lowerCaseQueryChar === termChar.toLowerCase()) {
           score++;
 
-          if ((previousMatchingCharacter + 1) === ti) {
+          if ((previousMatchingCharacter + 1) === termi) {
             score += 2;
           }
 
           highlighting += fuzzy.highlighting.before +
-              tc +
+              termChar +
               fuzzy.highlighting.after;
-          previousMatchingCharacter = ti;
-          ti++;
+          previousMatchingCharacter = termi;
+          termi++;
           break;
         } else {
-          highlighting += tc;
+          highlighting += termChar;
         }
       }
     }
 
-    highlighting += term.substring(ti, term.length);
+    highlighting += term.substring(termi, term.length);
 
     return {
       score: score,

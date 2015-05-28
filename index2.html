@@ -20,21 +20,35 @@
 	<h1>Testing</h1>
 	<p>Refactoring to base code structure on functionality instead of on DOM</p>
 
-<!-- 	<h2>Exploring lazy search</h2>
-	<p>From http://codepen.io/atwulf/pen/vczhJ (but without styling)</p>
-	<form id="searchform">
-		<h1>Lazy Search Prediction</h1>
-		<span>Search this site: </span>
-		<input type="text" id="search-bar" autocomplete="off" />
-		<ul id="search-output" style="display:none;">
-		</ul>
-		<button type="submit" id="submit">Search</button>
-	</form> -->
+	<h2>fuzzy.js Demo</h2>
+      <div class='row'>
+        <div class='span6'>
+          <p>
+            Use the demo like an auto-completion search box on the web. Start
+            typing to get a list of the 5 best matching available items. The
+            demo applies fuzzy matching to the following items.
+          </p>
+          <ul id='demoItems'>
+
+          </ul>
+        </div>
+        <div class='span6'>
+          <div class='fuzzy-search-wrapper'>
+            <div class='fuzzy-search'>
+              <input type='text' class='search-query' autofocus>
+            </div>
+
+            <ul>
+            </ul>
+          </div>
+        </div>
+      </div>
 
 	<!-- Third Party -->
 	<script src="js/third-party/jquery-2.1.4.min.js"></script>
 	<script src="CodeMirror-master/lib/codemirror.js"></script>
 	<script src="CodeMirror-master/mode/javascript/javascript.js"></script>
+	<script src="js2/third-party/fuzzy.js-master/fuzzy.js"></script>
 	<!-- <script src="js2/lazy-search-example1.js"></script> -->
 
 	<!-- Defaults/Data -->
@@ -46,6 +60,7 @@
 	<script src="js2/start.js"></script>
 
 	<script src="js/iconocode-image-list.js"></script>
+	<script src="js2/fuzzy-search.js"></script>
 	<script src="js/adder-utils-tabs.js"></script>
 	
 	<script src="js2/adder.js"></script>
