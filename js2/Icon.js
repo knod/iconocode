@@ -1,4 +1,9 @@
 /* Icon.js
+
+??:
+- What can be the deliniation between different image names in my
+icon id?
+
 Creating and editing an Icon object
 */
 

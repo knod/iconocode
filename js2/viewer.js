@@ -2,6 +2,10 @@
 
 http://stackoverflow.com/questions/13026285/codemirror-for-just-one-line-textfield
 
+CodeMirror addons to try:
+https://codemirror.net/demo/simplescrollbars.html
+search/search.js: https://codemirror.net/demo/search.html
+
 
 Adds element that will show the icon as it's being built
 ??: Should I start out with the code editor being there?
