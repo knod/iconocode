@@ -244,7 +244,8 @@ $(document).ready(function() {
         return listItem;
     };  // End addNewPrediction()
 
-
+// New idea - put $ or something around the letter found. Later parse that and turn
+// everything surrounded by $'s into a bold node...
     var addIfPrediction   = function ( input, wordToTest, parentNode ) {
     /* ( str, str ) -> ?
 
@@ -285,7 +286,7 @@ $(document).ready(function() {
                 // first appearance of the letter.
                 wordCopy = wordCopy.replace( thisChar, '' );
             };  // End test matches
-            caa
+
             // if ( containsAllLetters === false ) { break; }  // still dont' like break :/
         }  // End for char in inputArray
 
