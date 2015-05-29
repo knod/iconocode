@@ -30,6 +30,59 @@ From cjohnson: http://jsfiddle.net/yor2e7cc/
 	output = document.querySelector('.fuzzy-search-wrapper ul'),
 	demoItemOutput = document.getElementById('demoItems');
 
+	var createMatchRegex = function ( strToMatch ) {
+	/*
+
+	Since this is a very unique situation, we'll use the order
+	of the list to our advantage and change it using every other one
+	*/
+
+
+		var toMatchArray 	= toMatch.split('');
+
+		var regexEnd 		= toMatchArray.join( '{1}.*' );  // {1} is automatic, not needed
+		var regexStr 		= '.*' + regexEnd;
+
+		console.log(regexStr)
+		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
+		return ( new RegExp( regexStr, 'i' ) )
+
+	};  // End createMatchRegex()
+
+	var createMatchXRegExp = function ( strToMatch ) {
+	/* ( str ) -> XRegExp
+
+	Makes a XRegExp pattern for the input string
+	
+	??: !!! How do I get unique backreferences in there and how do
+	I then add them in order?
+
+	!!! This would invlove getting the keynames, I think
+	*/
+		var toMatchArray = strToMatch.split('');
+
+		var xregexpEnd 	= '';
+		var count = 0;  // The count will be started at 0, but after the
+		// for loop. In the for loop it starts at 1
+
+		for ( var chari = 0; chari < toMatchArray.length; chari++ ) {
+
+			// '(?<#inList>a)(?<#notInList>.*)'
+			count += 1;
+			xregexpEnd = xregexpEnd + '(?<' + count + 'inList>' +
+				toMatchArray[ chari ] + ')(?<';
+			count +=1;
+			xregexpEnd = xregexpEnd + count + 'notInList>.*)';
+
+		}
+
+		var xregexpStr 		= '(?<0notInList>.*)' + xregexpEnd;
+		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
+		var patternToTest 	= new RegExp( xregexpStr, 'i' )
+
+		return patternToTest;
+	};  // End createMatchXRegExp()
+
 
     var doesContainAll = function ( wordToTest, toMatch ) {
     /* ( str, str ) -> bool
@@ -43,8 +96,10 @@ From cjohnson: http://jsfiddle.net/yor2e7cc/
     */
 		var toMatchArray 	= toMatch.split('');
 
-		var regexEnd 		= toMatchArray.join( '{1}.*' );
+		var regexEnd 		= toMatchArray.join( '{1}.*' );  // {1} is automatic, not needed
 		var regexStr 		= '.*' + regexEnd;
+
+		console.log(regexStr)
 		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
 		var patternToTest 	= new RegExp( regexStr, 'i' )
 
