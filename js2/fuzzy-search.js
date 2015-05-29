@@ -5,6 +5,7 @@ https://github.com/bripkens/fuzzy.js/blob/master/demo/js/main.js
 
 References:
 http://stackoverflow.com/questions/9255840/regex-match-two-or-more-same-character-non-consecutive
+From cjohnson: http://jsfiddle.net/yor2e7cc/
 
 */
 
@@ -35,25 +36,20 @@ http://stackoverflow.com/questions/9255840/regex-match-two-or-more-same-characte
 
 	Returns whether wordToTest contains all letters in toMatch
 	in the order in which they are given.
+
+		.* 0 or more of any character
+		a{1} one a
+	Pattern: .* then a{1}.* (where 'a' represents any character)
     */
+		var toMatchArray 	= toMatch.split('');
 
-    	var containsAllLetters  = true;
-    	// .* 0 or more of any character
-    	// a{1} one a
-    	// Pattern: .* then a{1}.* (where 'a' represents any character)
-
-    	var regexPattern = '.*'
-
-		var toMatchArray 		= toMatch.split('');
-		for ( var chari = 0; chari < toMatchArray.length; chari ++  ) {
-			regexPattern = regexPattern + toMatchArray[ chari ] + '{1}.*';
-		}
+		var regexEnd 		= toMatchArray.join( '{1}.*' );
+		var regexStr 		= '.*' + regexEnd;
 
 		// 'i' means case doesn't matter
-		var toTestWith = new RegExp( regexPattern, 'i' )
-		containsAllLetters = toTestWith.test( wordToTest );
+		var patternToTest 	= new RegExp( regexStr, 'i' )
 
-	    return containsAllLetters;
+	    return patternToTest.test( wordToTest );
     };  // End doesContainAll()
 
 
@@ -140,10 +136,10 @@ http://stackoverflow.com/questions/9255840/regex-match-two-or-more-same-characte
     }
   }, false);
 
-  for (var i = 0; i < options.length; i++) {
-    var textNode = document.createTextNode(options[i]),
-      liNode = document.createElement('li');
-    liNode.appendChild(textNode);
-    demoItemOutput.appendChild(liNode);
-  }
+ //  for (var i = 0; i < options.length; i++) {
+	// var textNode = document.createTextNode(options[i]),
+	// liNode = document.createElement('li');
+	// liNode.appendChild(textNode);
+	// demoItemOutput.appendChild(liNode);
+ //  }
 })();
