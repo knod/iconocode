@@ -1,0 +1,16 @@
+/* fuzzy-search.css */
+
+.icd ol, .icd ul {
+	padding: 0;
+	background-color: lightgray;
+}
+
+.icd ol, .icd ul, .icd li {
+	margin: 0;
+}
+
+.icd li {
+	padding: .2rem;
+	list-style: none;
+}
+

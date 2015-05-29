@@ -45,8 +45,7 @@ From cjohnson: http://jsfiddle.net/yor2e7cc/
 
 		var regexEnd 		= toMatchArray.join( '{1}.*' );
 		var regexStr 		= '.*' + regexEnd;
-
-		// 'i' means case doesn't matter
+		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
 		var patternToTest 	= new RegExp( regexStr, 'i' )
 
 	    return patternToTest.test( wordToTest );
@@ -65,7 +64,6 @@ From cjohnson: http://jsfiddle.net/yor2e7cc/
 		// removing all child elements the easy way
 		output.innerHTML = '';
 
-
 		for ( var optioni = 0; optioni < options.length; optioni++ ) {
 			var thisOption 	= options[ optioni ];
 
@@ -75,7 +73,7 @@ From cjohnson: http://jsfiddle.net/yor2e7cc/
 			}
 		} // end for option in options
 
-		filterResult.sort(fuzzy.matchComparator);
+		filterResult.sort( fuzzy.matchComparator );
 
 		for (var resulti = 0; resulti < filterResult.length && resulti < maxResults; resulti++) {
 			var option = filterResult[ resulti ],

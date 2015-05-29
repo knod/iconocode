@@ -11,6 +11,7 @@
 	<!-- Iconocode -->
 	<!-- <link 	rel="stylesheet" type="text/css" href="css/iconocode.css" /> -->
 	<link 	rel="stylesheet" type="text/css" href="css/iconocode-testing.css" />
+	<link 	rel="stylesheet" type="text/css" href="css/fuzzy-search.css" />
 
 </head>
 
@@ -21,31 +22,37 @@
 	<p>Refactoring to base code structure on functionality instead of on DOM</p>
 
 	<h2>fuzzy.js Demo</h2>
-      <div class='row'>
-        <div class='span6'>
-          <p>
-            Use the demo like an auto-completion search box on the web. Start
-            typing to get a list of the 5 best matching available items. The
-            demo applies fuzzy matching to the following items.
-          </p>
-          <ul id='demoItems'>
+	<div class='span6'>
+		<p>
+			Use the demo like an auto-completion search box on the web. Start
+			typing to get a list of the 5 best matching available items. The
+			demo applies fuzzy matching to the following items.
+		</p>
 
-          </ul>
-        </div>
-        <div class='span6'>
-          <div class='fuzzy-search-wrapper'>
-            <div class='fuzzy-search'>
-              <input type='text' class='search-query' autofocus>
-            </div>
+		<ul id='demoItems'>
+		</ul>
 
-            <ul>
-            </ul>
-          </div>
-        </div>
-      </div>
+	</div> <!-- end span6 -->
+
+	<div class='span6'>
+
+		<div class='icd fuzzy-search-wrapper'>
+
+			<div class='fuzzy-search'>
+			  <input type='text' class='search-query' autofocus>
+			</div>
+
+			<ul>
+			</ul>
+
+		</div>
+
+	</div>
 
 	<!-- Third Party -->
 	<script src="js/third-party/jquery-2.1.4.min.js"></script>
+	<script src="js2/third-party/XRegExp.js"></script>
+
 	<script src="CodeMirror-master/lib/codemirror.js"></script>
 	<script src="CodeMirror-master/mode/javascript/javascript.js"></script>
 	<script src="js2/third-party/fuzzy.js-master/fuzzy.js"></script>
@@ -60,6 +67,7 @@
 	<script src="js2/start.js"></script>
 
 	<script src="js/iconocode-image-list.js"></script>
+	
 	<script src="js2/fuzzy-search.js"></script>
 	<script src="js/adder-utils-tabs.js"></script>
 	
