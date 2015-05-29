@@ -1,4 +1,4 @@
-/* my-fuzzy.js
+/* my-fuzzy-match.js
 
 Because this charcter finding thing is such a specific
 use case, there actually may be a way to make it a lot
@@ -19,37 +19,17 @@ var MyFuzzy = function ( context ) {
 	// Each result will take the form of:
 	// { term: "", query, "", score: #, matchArray: [], htmlString: "", node: Node }
 	fuzzy.results = [];
+	// What was I going to use this for?
 	fuzzy.str 		= "";
 
+	fuzzy.beforeLetter = '<strong>'; fuzzy.afterLetter = '</strong>';
 	fuzzy.resultTag = 'li';
 	fuzzy.node 		= null;
 
 
 
-	fuzzy.buildRegExp = function ( query ) {
-	/* (str) -> RegExp
-
-	Since this is a very unique situation, we'll use the order
-	of the list to our advantage and change it using every other one
-	*/
-		var queryArray 	= query.split('');
-
-		var regexEnd 	= queryArray.join( '{1}.*' );  // {1} is automatic, not needed
-		var regexStr 	= '.*' + regexEnd;
-
-		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
-		return ( new RegExp( regexStr, 'i' ) )
-	};  // End fuzzy.buildRegex()
-
-
 	// fuzzy.getMatchData = function ( query,  ) {
-	
-	
-	// Note: str.match()[0] === str
-	
-
-
-
+		// Note: str.match()[0] === str
 	// };  // End fuzzy.getMatchData()
 
 
@@ -64,18 +44,15 @@ var MyFuzzy = function ( context ) {
 
 	Match looses points based on number of letters found between
 	matches.
+	Note: str.match()[0] === str
 	*/
 		var score = 0;
 		// The first thing in the array is always the original string, take it out
 		matchArray = matchArray.slice(1);
-		console.log( '-------non-term array: ', matchArray );
 		var numGroups = matchArray.length;
 
 		// Don't lose points for number of letters before the first match is found
 		for ( var groupi = 1; groupi < numGroups; groupi++ ) {
-			console.log( groupi, ":", matchArray[groupi])
-			// Test
-			// if ( groupi < (numGroups - 1 ) ) { console.log( 'last-group: ', matchArray[ groupi ]); }
 			// Don't lose points for number of letters after the final match
 			if ( (groupi % 2 === 0) && (groupi < (numGroups - 1)) ) {
 				score -= matchArray[ groupi ].length;
@@ -87,28 +64,144 @@ var MyFuzzy = function ( context ) {
 	};  // End fuzzy.calcScore()
 
 
-	fuzzy.addOnePrediction = function ( term, query, toNode, parentNode ) {
+	// ===================
+	// TAGNAME
+	// ===================
+	fuzzy.sanitizeTagName = function ( tagName ) {
+	/* ( str ) -> Str
+	*/
+		var toRemove = ['<', '>', '"', "'"];
+
+		for ( var chari = 0; chari < toRemove.length; chari++ ) {
+			tagName = tagName.replace( toRemove[ chari ], '' );
+		}
+		console.log( 'sanitized tagname:', tagName );
+
+		return tagName;
+	};  // End fuzzy.sanitizeTagName()
+
+
+	fuzzy.tagNameIsValid = function ( tagName ) {
+	/* ( str ) -> Bool
+
+	Checks if the tagName is in the list of approved tag names.
+	Gives a warning if the tagname isn't valid.
+
+	'' will indicate that someone doesn't want an html element.
+	Not sure what to do if that's given to fuzzy.toNode()
+	*/
+		tagName = fuzzy.sanitizeTagName( tagName );
+
+		var isValid = false;
+		if ( (tagName === '') || (HMT5Tags.indexOf( tagName ) > -1) ) {
+			isValid = true;
+		} else {
+			console.warn( 'The string "' + tagName + '" is not recognized ' +
+				'as a valid tag name as of 2015. Source ' +
+				'https://developer.mozilla.org/en-US/docs/Web/HTML/Element. ' +
+				'Default ' + tagName + 'will be used' );
+		}
+
+		return isValid;
+	};  // End fuzzy.tagNameIsValid()
+
+
+	var determineTagName = function ( tagName ) {
+		// Decide what tag name to use - given or default
+		var nodeTag = fuzzy.resultTag;
+
+		if ( (tagName !== undefined) && (fuzzy.tagNameIsValid( tagName ) === true) ) {
+			nodeTag = tagName;
+		}
+		return nodeTag;
+	};  // End determineTagName()
+
+
+	// ===================
+	// STRING MATCHING
+	// ===================
+	fuzzy.buildRegExp = function ( query ) {
+	/* (str) -> RegExp
+
+	Since this is a very unique situation, we'll use the order
+	of the list to our advantage and change it using every other one
+	*/
+		var queryArray 	= query.split('');
+		// In case it's just one letter long:
+		var regexStr = '(.*)(' + queryArray[0] + ')(.*)';
+
+		if ( queryArray.length > 1 ) {
+			var regexMiddle = queryArray.join( ')(.*)(' );  // {1} is automatic, not needed
+			// Take last parenthesis off
+			regexStr 	= '(.*)(' + regexMiddle + ')';  // empty paren at the end won't return anything
+
+		}
+
+		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
+		return ( new RegExp( regexStr, 'i' ) )
+	};  // End fuzzy.buildRegExp()
+
+
+// !!! What's happening here?
+	fuzzy.getMatch = function ( term, query ) {
+		var regex 	= fuzzy.buildRegExp( query );
+		// Test: fuzzy.getMatch( 'apple', 'a' );
+		console.log( term.match( regex ) );  // ["apple", "", "a", "pple", index: 0, input: "apple"]
+		return term.match( regex );  // ["apple", "", "a", "pple"] <- I want this
+	};
+
+
+	// ===================
+	// STUFF
+	// ===================
+	fuzzy.toString = function ( term, query, tagName ) {
 	/*
 
-	Note: str.match()[0] === str
+
 	*/
+		// Create the provided element, or a default one
+		var htmlTag 		= determineTagName( tagName );
+		
+		// Test: fuzzy.toString( 'apple', 'a', '' );
+		var match = fuzzy.getMatch( term, query );
+		console.log(match);  //
 
-	};  // End fuzzy.addOnePrediction()
+		if ( match !== null ) {
+			// console.log( 'there was a match!', match );
 
+		}
 
-	fuzzy.toString = function ( term, queriesList ) {
-
-
+// fuzzy-match class for letters
+// fuzzy-found class for words
+// entry.tagName (for use in fuzzy list search )
 
 	};  // End fuzzy.toString()
 
 
-	fuzzy.toSpan = function ( term, queriesList ) {
+	fuzzy.toNode = function ( term, query, tagName ) {
 	/*
 
 
 	*/
-		var span = document.createElement('span');
+		// Create the provided element, or a default one
+		var nodeTag = determineTagName( tagName );
+
+		if ( nodeTag !== '' ) {
+
+			var node 			= document.createElement( nodeTag );
+			var match = fuzzy.getMatch( term, query );
+
+			if ( match !== null ) {
+				console.log( 'there was a match!', match );
+
+			}
+
+
+
+		} else {
+			console.error( "A node can't be made with no tag name. If you want a string, use fuzzy.toString." );
+		}
+
 
 
 
