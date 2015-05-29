@@ -75,7 +75,7 @@ var MyFuzzy = function ( context ) {
 		for ( var chari = 0; chari < toRemove.length; chari++ ) {
 			tagName = tagName.replace( toRemove[ chari ], '' );
 		}
-		console.log( 'sanitized tagname:', tagName );
+		// console.log( 'sanitized tagname:', tagName );
 
 		return tagName;
 	};  // End fuzzy.sanitizeTagName()
@@ -146,8 +146,10 @@ var MyFuzzy = function ( context ) {
 	fuzzy.getMatch = function ( term, query ) {
 		var regex 	= fuzzy.buildRegExp( query );
 		// Test: fuzzy.getMatch( 'apple', 'a' );
-		console.log( term.match( regex ) );  // ["apple", "", "a", "pple", index: 0, input: "apple"]
-		return term.match( regex );  // ["apple", "", "a", "pple"] <- I want this
+		console.log( '.getMatch() log:', term.match( regex ) );  // ["apple", "", "a", "pple", index: 0, input: "apple"]
+		// When I run the test in the console and call .getMatch, this gets returned:
+		// ["apple", "", "a", "pple"] <- I want this
+		return term.match( regex );
 	};
 
 
@@ -164,7 +166,7 @@ var MyFuzzy = function ( context ) {
 		
 		// Test: fuzzy.toString( 'apple', 'a', '' );
 		var match = fuzzy.getMatch( term, query );
-		console.log(match);  //
+		console.log('.toString():', match);  //
 
 		if ( match !== null ) {
 			// console.log( 'there was a match!', match );
