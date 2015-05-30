@@ -128,10 +128,11 @@ var MyFuzzy = function ( context ) {
 		// Create the provided element, or a default one
 		var nodeTag = tagName || fuzzy.resultTag;
 
-		var resultNode 	= document.createElement( nodeTag );
-		result_.node 	= resultNode;
+		var resultNode 			= document.createElement( nodeTag );
+		resultNode.className 	= fuzzy.matchedWordClass;
+		result_.node 			= resultNode;
 
-		var matches 	= fuzzy.getMatch( term, query );
+		var matches 			= fuzzy.getMatch( term, query );
 		if ( matches !== null ) {
 
 			result_.matchArray = matches;
@@ -140,7 +141,7 @@ var MyFuzzy = function ( context ) {
 
 		// ??: If there wasn't a match, what do I return?
 		}  else {
-			return null;  // ??
+			result_ = null;  // ??
 		} // end if match
 
 		return result_;

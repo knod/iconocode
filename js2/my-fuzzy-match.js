@@ -11,6 +11,12 @@ Each stylized letter will be a span with a class? Users
 will be responsible for styling that class themselves?
 But then they don't have immediate visible funcitonality...
 
+TODO:
+- Change behavior of tag validation. Keep whatever tag name
+they give, just give a warning if it's not on the approved
+list
+- For fuzzy list search, remember: entry.tagName
+
 */
 
 'use strict'
@@ -23,11 +29,8 @@ var MyFuzzy = function ( context ) {
 		term: "", query: "", score: 0, matchArray: [],
 		htmlString: "", node: null
 	};
-
-	// What was I going to use this for?
-	// fuzzy.str 					= "";
-
 	fuzzy.matchedLetterClass 	= 'fuzzy-matched-letter';
+	fuzzy.matchedWordClass		= 'fuzzy-matched-word';
 	fuzzy.resultTag 			= 'li';
 
 
@@ -49,7 +52,6 @@ var MyFuzzy = function ( context ) {
 			if ( (groupi % 2 !== 0) && (groupi < (numGroups - 1)) ) {
 				score -= matchArray[ groupi ].length;
 			}
-			// console.log('score: ', score)
 		}
 
 		return score;
@@ -91,7 +93,7 @@ var MyFuzzy = function ( context ) {
 			console.warn( 'The string "' + tagName + '" is not recognized ' +
 				'as a valid tag name as of 2015. Source ' +
 				'https://developer.mozilla.org/en-US/docs/Web/HTML/Element. ' +
-				'Default ' + tagName + 'will be used' );
+				'Default ' + tagName + 'will be used.' );
 		}
 
 		return isValid;
@@ -146,10 +148,6 @@ var MyFuzzy = function ( context ) {
 	};  // End fuzzy.addTextNode()
 
 
-	// These two would have to be different for node vs. html str
-	fuzzy.addNonQueryGroup = function () {};  // End fuzzy.addNonQueryGroup()
-	fuzzy.addQueryLetter = function () {};  // End fuzzy.addQueryLetter
-
 	// I have no idea what this does or how I might use it,
 	// but it seems like something...
 	fuzzy.forEveryOther = function ( array, ifEven, ifOdd ) {
@@ -172,13 +170,71 @@ var MyFuzzy = function ( context ) {
 	};  // End fuzzy.forEveryOther()
 
 
-	fuzzy.buildStrResult = function ( matchArray ) {};  // End fuzzy.buildStr()
+	fuzzy.buildHTML = function ( matchArray ) {
+	/* ( [] ) -> Str */
+		var html 		= '';
+
+		var numGroups 	= matchArray.length;
+		for ( var groupi = 0; groupi < numGroups; groupi++ ) {
+
+			// If group is even, it matched .*, which isn't styled text
+			if ( groupi % 2 === 0 ) {
+
+				html = html + matchArray[ groupi ];
+			// If the group is odd, it's a match to an actual letter
+			} else {
+
+				html = html + '<span class="' + fuzzy.matchedLetterClass +
+								'">' + matchArray[ groupi ] + '</span>';
+			}  // end if even
+		}  // end for each array of letters
+
+		return html;
+	};  // End fuzzy.buildStr()
+
+
+	// ===================
+	// STUFF
+	// ===================
+	fuzzy.toString = function ( term, query, tagName ) {
+	/* ( str, str, str ) -> Str or null
+
+	Returns null if no match is found
+	*/
+		var result_ 	= fuzzy.result;
+		result_.term 	= term; result_.query 	= query;
+
+		// Create the provided element, or a default one
+
+		var matches 	= fuzzy.getMatch( term, query );
+		if ( matches !== null ) {
+
+			result_.matchArray 	= matches;
+			result_.score 		= fuzzy.calcScore( matches );
+
+			var htmlTag 		= determineTagName( tagName );
+			var html 			= fuzzy.buildHTML( matches );
+			result_.htmlString 	= '<' + htmlTag + ' class="' +
+					fuzzy.matchedWordClass +
+					'">' + html + '</' + htmlTag + '>';
+
+			console.log(result_.htmlString)
+
+		// ??: If there wasn't a match, what do I return?
+		}  else {
+			result_ = null;  // ??
+		} // end if match
+
+		return result_;
+
+
+	};  // End fuzzy.toString()
 
 
 	fuzzy.buildNode = function ( matchArray ) {
+	/* ( [] ) -> Node */
 
 		var numGroups 	= matchArray.length;
-
 		for ( var groupi = 0; groupi < numGroups; groupi++ ) {
 
 			var chars = matchArray[ groupi ];
@@ -203,38 +259,10 @@ var MyFuzzy = function ( context ) {
 	};  // End fuzzy.buildNode()
 
 
-	// ===================
-	// STUFF
-	// ===================
-	fuzzy.toString = function ( term, query, tagName ) {
-	/*
-
-
-	*/
-		// fuzzy.result 				= {
-		// 	term: "", query: "", score: 0, matchArray: [],
-		// 	htmlString: "", node: null
-		// };	
-		// Create the provided element, or a default one
-		var htmlTag 		= determineTagName( tagName );
-		
-		var match = fuzzy.getMatch( term, query );
-
-		if ( match !== null ) {
-
-		}
-
-// fuzzy-match class for letters
-// fuzzy-found class for words
-// entry.tagName (for use in fuzzy list search )
-
-	};  // End fuzzy.toString()
-
-
 	fuzzy.toNode = function ( term, query, tagName ) {
-	/*
+	/* ( str, str, str ) -> Node or null
 
-
+	Returns null if no match is found
 	*/
 		var result_ = fuzzy.result;
 		result_.term 	= term; result_.query 	= query;
@@ -244,10 +272,11 @@ var MyFuzzy = function ( context ) {
 
 		if ( nodeTag !== '' ) {
 
-			var resultNode 	= document.createElement( nodeTag );
-			result_.node 	= resultNode;
+		var resultNode 			= document.createElement( nodeTag );
+		resultNode.className 	= fuzzy.matchedWordClass;
+		result_.node 			= resultNode;
 
-			var matches 	= fuzzy.getMatch( term, query );
+		var matches 			= fuzzy.getMatch( term, query );
 			if ( matches !== null ) {
 
 				result_.matchArray = matches;
@@ -255,14 +284,14 @@ var MyFuzzy = function ( context ) {
 				fuzzy.buildNode( matches );
 
 				console.log(resultNode)
-
 			// ??: If there wasn't a match, what do I return?
 			}  else {
-				return null;  // ??
+				result_ = null;  // ??
 			} // end if match
 
 		} else {
 			console.error( "A node can't be made with no tag name. If you want a string, use fuzzy.toString." );
+			result_ = null;
 		}  // end if tagName !== ''
 
 		return result_;
@@ -295,17 +324,17 @@ var MyFuzzy = function ( context ) {
    * You should therefore configure how many sub terms you which to analyse.
    * This can be configured through fuzzy.analyzeSubTermDepth = 10.
    */
-  fuzzy.analyzeSubTerms = false;
+  // fuzzy.analyzeSubTerms = false;
 
   /*
    * How many sub terms should be analyzed.
    */
-  fuzzy.analyzeSubTermDepth = 10;
+  // fuzzy.analyzeSubTermDepth = 10;
 
-  fuzzy.highlighting = {
-    before: '<em>',
-    after: '</em>'
-  };
+  // fuzzy.highlighting = {
+  //   before: '<em>',
+  //   after: '</em>'
+  // };
 
 /*
    * Exporting the public API
