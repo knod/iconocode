@@ -21,20 +21,20 @@ list
 
 'use strict'
 
-var MyFuzzy = function ( context ) {
+var FuzzyMatcher = function ( context ) {
 
-	var fuzzy = {};
+	var matcher = {};
 
-	fuzzy.result 				= {
+	matcher.result 				= {
 		term: "", query: "", score: 0, matchArray: [],
 		htmlString: "", node: null
 	};
-	fuzzy.matchedLetterClass 	= 'fuzzy-matched-letter';
-	fuzzy.matchedWordClass		= 'fuzzy-matched-word';
-	fuzzy.defaultTag 			= 'li';
+	matcher.matchedLetterClass 	= 'matcher-matched-letter';
+	matcher.matchedWordClass	= 'matcher-matched-word';
+	matcher.defaultTag 			= 'li';
 
 
-	fuzzy.calcScore = function ( matchArray ) {
+	matcher.calcScore = function ( matchArray ) {
 	/* ( [] ) -> matchArray
 
 	Match loses points based on number of letters found between
@@ -53,13 +53,13 @@ var MyFuzzy = function ( context ) {
 		}
 
 		return score;
-	};  // End fuzzy.calcScore()
+	};  // End matcher.calcScore()
 
 
 	// ===================
 	// TAGNAME
 	// ===================
-	var sanitizeTagName = function ( tagName ) {
+	matcher.sanitizeTagName = function ( tagName ) {
 	/* ( str ) -> Str
 
 	If a tagName hasn't been provided, return the default
@@ -67,7 +67,7 @@ var MyFuzzy = function ( context ) {
 	Otherwise take out any superfluous characters, like < and
 	>, and give a warning if it's not an 'approved' tag name.
 	*/
-		var defaultTag_ = fuzzy.defaultTag;
+		var defaultTag_ = matcher.defaultTag;
 
 		if ( tagName === undefined ) { tagName = defaultTag_; }
 		else {
@@ -94,13 +94,13 @@ var MyFuzzy = function ( context ) {
 		}
 
 		return tagName;
-	};  // End sanitizeTagName()
+	};  // End matcher.sanitizeTagName()
 
 
 	// ===================
 	// STRING MATCHING
 	// ===================
-	fuzzy.buildRegExp = function ( query ) {
+	matcher.buildRegExp = function ( query ) {
 	/* (str) -> RegExp
 
 	Since this is a very unique situation, we'll use the order
@@ -112,33 +112,33 @@ var MyFuzzy = function ( context ) {
 		regexStr = regexStr.replace( "()", '' );  // otherwise, get '' at the end with an extra span
 		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
 		return ( new RegExp( regexStr, 'i' ) )
-	};  // End fuzzy.buildRegExp()
+	};  // End matcher.buildRegExp()
 
 
-	fuzzy.getMatch = function ( term, query ) {
-		var regex 		= fuzzy.buildRegExp( query );
+	matcher.getMatch = function ( term, query ) {
+		var regex 		= matcher.buildRegExp( query );
 		var matchArray	= term.match( regex )
 		// Leave out the first group, which is just the term
 		if ( matchArray !== null ) { matchArray	 = matchArray.slice(1); }
 
-		console.log(matchArray)
+		// console.log(matchArray)
 		return matchArray
-	};  // End fuzzy.getMatch()
+	};  // End matcher.getMatch()
 
 
 	// ===================
 	// DOM
 	// ===================
-	fuzzy.addTextNode = function ( nodeStr, parentNode ) {
+	matcher.addTextNode = function ( nodeStr, parentNode ) {
 		var textNode = document.createTextNode( nodeStr );
 		parentNode.appendChild( textNode );
 		return textNode
-	};  // End fuzzy.addTextNode()
+	};  // End matcher.addTextNode()
 
 
 	// I have no idea what this does or how I might use it,
 	// but it seems like something...
-	fuzzy.forEveryOther = function ( array, ifEven, ifOdd ) {
+	matcher.forEveryOther = function ( array, ifEven, ifOdd ) {
 
 		var numItems 	= array.length;
 		var resultArray = [];
@@ -155,10 +155,10 @@ var MyFuzzy = function ( context ) {
 		}  // end for each array of letters
 
 		return resultArray;
-	};  // End fuzzy.forEveryOther()
+	};  // End matcher.forEveryOther()
 
 
-	fuzzy.buildHTML = function ( matchArray ) {
+	matcher.buildHTML = function ( matchArray ) {
 	/* ( [] ) -> Str */
 		var html 		= '';
 
@@ -172,38 +172,38 @@ var MyFuzzy = function ( context ) {
 			// If the group is odd, it's a match to an actual letter
 			} else {
 
-				html = html + '<span class="' + fuzzy.matchedLetterClass +
+				html = html + '<span class="' + matcher.matchedLetterClass +
 								'">' + matchArray[ groupi ] + '</span>';
 			}  // end if even
 		}  // end for each array of letters
 		// console.log(html)
 		return html;
-	};  // End fuzzy.buildStr()
+	};  // End matcher.buildStr()
 
 
 	// ===================
 	// STUFF
 	// ===================
-	fuzzy.toString = function ( term, query, tagName ) {
+	matcher.toString = function ( term, query, tagName ) {
 	/* ( str, str, str ) -> Str or null
 
 	Returns null if no match is found
 	*/
-		var result_ 	= fuzzy.result;
+		var result_ 	= matcher.result;
 		result_.term 	= term; result_.query 	= query;
 
 		// Create the provided element, or a default one
 
-		var matches 	= fuzzy.getMatch( term, query );
+		var matches 	= matcher.getMatch( term, query );
 		if ( matches !== null ) {
 
 			result_.matchArray 	= matches;
-			result_.score 		= fuzzy.calcScore( matches );
+			result_.score 		= matcher.calcScore( matches );
 
-			var htmlTag 		= sanitizeTagName( tagName );
-			var html 			= fuzzy.buildHTML( matches );
+			var htmlTag 		= matcher.sanitizeTagName( tagName );
+			var html 			= matcher.buildHTML( matches );
 			result_.htmlString 	= '<' + htmlTag + ' class="' +
-					fuzzy.matchedWordClass +
+					matcher.matchedWordClass +
 					'">' + html + '</' + htmlTag + '>';
 
 		// ??: If there wasn't a match, what do I return?
@@ -212,10 +212,10 @@ var MyFuzzy = function ( context ) {
 		} // end if match
 
 		return result_;
-	};  // End fuzzy.toString()
+	};  // End matcher.toString()
 
 
-	fuzzy.buildNode = function ( matchArray ) {
+	matcher.buildNode = function ( matchArray ) {
 	/* ( [] ) -> Node */
 
 		var numGroups 	= matchArray.length;
@@ -225,45 +225,45 @@ var MyFuzzy = function ( context ) {
 			// If group is even, it matched .*, which isn't styled text
 			if ( groupi % 2 === 0 ) {
 
-				fuzzy.addTextNode( chars, fuzzy.result.node );
+				matcher.addTextNode( chars, matcher.result.node );
 
 			// If the group is odd, it's a match to an actual letter
 			} else {
 
 				var matchLetterNode 		= document.createElement( 'span' );
-				matchLetterNode.className 	= fuzzy.matchedLetterClass;
-				fuzzy.result.node.appendChild( matchLetterNode );
+				matchLetterNode.className 	= matcher.matchedLetterClass;
+				matcher.result.node.appendChild( matchLetterNode );
 
-				fuzzy.addTextNode( chars, matchLetterNode );
+				matcher.addTextNode( chars, matchLetterNode );
 
 			}  // end if even
 		}  // end for each array of letters
 
-		return fuzzy.result.node;
-	};  // End fuzzy.buildNode()
+		return matcher.result.node;
+	};  // End matcher.buildNode()
 
 
-	fuzzy.toNode = function ( term, query, tagName ) {
+	matcher.toNode = function ( term, query, tagName ) {
 	/* ( str, str, str ) -> Node or null
 
 	Returns null if no match is found
 	*/
-		var result_ = fuzzy.result;
+		var result_ = matcher.result;
 		result_.term 	= term; result_.query 	= query;
 
 		// Create the provided element, or a default one
-		var nodeTag = sanitizeTagName( tagName );
+		var nodeTag = matcher.sanitizeTagName( tagName );
 
 		var resultNode 			= document.createElement( nodeTag );
-		resultNode.className 	= fuzzy.matchedWordClass;
+		resultNode.className 	= matcher.matchedWordClass;
 		result_.node 			= resultNode;
 
-		var matches 			= fuzzy.getMatch( term, query );
+		var matches 			= matcher.getMatch( term, query );
 			if ( matches !== null ) {
 
 				result_.matchArray = matches;
-				result_.score = fuzzy.calcScore( matches );
-				fuzzy.buildNode( matches );
+				result_.score = matcher.calcScore( matches );
+				matcher.buildNode( matches );
 
 				// console.log(resultNode)
 			// ??: If there wasn't a match, what do I return?
@@ -272,18 +272,21 @@ var MyFuzzy = function ( context ) {
 			} // end if match
 
 		return result_;
-	};  // End fuzzy.toNode()
-	// fuzzy.numMatched letters
+	};  // End matcher.toNode()
+	// matcher.numMatched letters
 
 
-  fuzzy.matchComparator = function(m1, m2) {
+  matcher.matchComparator = function(m1, m2) {
+  /* This is in here because here is where the properties used are created */
   	// might need Math.abs(m1.score) - Math.abs(m2.score)?
   	// on the other hand: http://stackoverflow.com/questions/2961047/javascript-sorting-arrays-containing-positive-and-negative-decimal-numbers
+  	// console.log('m1:', m1.term, m1.score)
+  	// console.log('m2:', m2.term, m2.score)
     return m2.score - m1.score;
   };
 
   /*
-   * Whether or not fuzzy.js should analyze sub-terms, i.e. also
+   * Whether or not matcher.js should analyze sub-terms, i.e. also
    * check term starting positions != 0.
    *
    * Example:
@@ -299,16 +302,16 @@ var MyFuzzy = function ( context ) {
    *
    * Naturally, the second version is more expensive than the first one.
    * You should therefore configure how many sub terms you which to analyse.
-   * This can be configured through fuzzy.analyzeSubTermDepth = 10.
+   * This can be configured through matcher.analyzeSubTermDepth = 10.
    */
-  // fuzzy.analyzeSubTerms = false;
+  // matcher.analyzeSubTerms = false;
 
   /*
    * How many sub terms should be analyzed.
    */
-  // fuzzy.analyzeSubTermDepth = 10;
+  // matcher.analyzeSubTermDepth = 10;
 
-  // fuzzy.highlighting = {
+  // matcher.highlighting = {
   //   before: '<em>',
   //   after: '</em>'
   // };
@@ -316,32 +319,32 @@ var MyFuzzy = function ( context ) {
 /*
    * Exporting the public API
    * ------------------------
-   * In a browser, the library will be available through this.fuzzy. Should
-   * requireJS be used, we register fuzzy.js through requireJS.
+   * In a browser, the library will be available through this.matcher. Should
+   * requireJS be used, we register matcher.js through requireJS.
    * For other environments, CommonJS is supported.
    */
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = fuzzy;
+    module.exports = matcher;
   } else if (typeof define === 'function') {
     define(function() {
-      return fuzzy;
+      return matcher;
     });
   } else {
     /*
 	This was from Ben Ripkins. I have no idea what it means
-     * In case the global variable fuzzy needs to be reset to its previous
-     * value, the fuzzy library is returned by this method.
+     * In case the global variable matcher needs to be reset to its previous
+     * value, the matcher library is returned by this method.
      */
-    // var previousFuzzy = context.fuzzy;
-    // fuzzy.noConflict = function() {
-    //   context.fuzzy = previousFuzzy;
-    //   return fuzzy;
+    // var previousFuzzy = context.matcher;
+    // matcher.noConflict = function() {
+    //   context.matcher = previousFuzzy;
+    //   return matcher;
     // };
 
-    // context.fuzzy = fuzzy;
+    // context.matcher = matcher;
   }
 
-  return fuzzy;
+  return matcher;
 };
 
-var myFuzzy = MyFuzzy( window );
+var fuzzyMatcher = FuzzyMatcher( window );

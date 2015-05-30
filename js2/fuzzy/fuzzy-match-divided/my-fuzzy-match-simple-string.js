@@ -49,9 +49,9 @@ var MyFuzzy = function ( context ) {
 	of the list to our advantage and change it using every other one
 	*/
 		// .concat() makes .join() work for one char. Can't use .split().push()
-		var regexMiddle 	= query.split('').concat(['']).join( ')(.*)(' );
+		var regexMiddle = query.split('').concat(['']).join( ')(.*)(' );
 		var regexStr 	= '(.*)(' + regexMiddle + ')';  // empty paren at the end won't return anything
-		regexStr = regexStr.replace( "()", '' );  // otherwise, get '' at the end with an extra span
+		regexStr 		= regexStr.replace( "()", '' );  // otherwise, get '' at the end with an extra span
 		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
 		return ( new RegExp( regexStr, 'i' ) )
 	};  // End fuzzy.buildRegExp()
