@@ -26,7 +26,7 @@ var MyFuzzy = function ( context ) {
 
 	fuzzy.result = { term: "", query: "", score: 0, matchArray: [], node: null };
 	fuzzy.matchedLetterClass 	= 'fuzzy-matched-letter';
-	fuzzy.resultTag 			= 'li';
+	fuzzy.defaultTag 			= 'li';
 
 
 	fuzzy.calcScore = function ( matchArray ) {
@@ -121,7 +121,7 @@ var MyFuzzy = function ( context ) {
 		result_.term 	= term; result_.query 	= query;
 
 		// Create the provided element, or a default one
-		var nodeTag = tagName || fuzzy.resultTag;
+		var nodeTag = tagName || fuzzy.defaultTag;
 
 		var resultNode 			= document.createElement( nodeTag );
 		resultNode.className 	= fuzzy.matchedWordClass;

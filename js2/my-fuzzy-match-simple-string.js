@@ -66,28 +66,6 @@ var MyFuzzy = function ( context ) {
 	};  // End fuzzy.getMatch()
 
 
-	// ==============
-	// BUILD RESULT
-	// ==============
-	fuzzy.buildHTML = function ( matchArray ) {
-	/* ( [] ) -> Str */
-		var html 		= '';
-
-		var numGroups 	= matchArray.length;
-		for ( var groupi = 0; groupi < numGroups; groupi++ ) {
-			// If group is even, it matched .*, which isn't styled text
-			if ( groupi % 2 === 0 ) {
-				html = html + matchArray[ groupi ];
-			// If the group is odd, it's a match to an actual letter
-			} else {
-				html = html + '<span class="' + fuzzy.matchedLetterClass +
-								'">' + matchArray[ groupi ] + '</span>';
-			}  // end if even
-		}  // end for each array of letters
-		return html;
-	};  // End fuzzy.buildStr()
-
-
 	// ===================
 	// STUFF
 	// ===================
@@ -100,6 +78,7 @@ var MyFuzzy = function ( context ) {
 		result_.term 	= term; result_.query 	= query;
 
 		// Create the provided element, or a default one
+		var htmlTag = tagName || fuzzy.defaultTag;
 
 		var matches 	= fuzzy.getMatch( term, query );
 		if ( matches !== null ) {
@@ -107,7 +86,19 @@ var MyFuzzy = function ( context ) {
 			result_.matchArray 	= matches;
 			result_.score 		= fuzzy.calcScore( matches );
 
-			var html 			= fuzzy.buildHTML( matches );
+			var html 		= '';
+			var numGroups 	= matches.length;
+			for ( var groupi = 0; groupi < numGroups; groupi++ ) {
+				// If group is even, it matched .*, which isn't styled text
+				if ( groupi % 2 === 0 ) {
+					html = html + matches[ groupi ];
+				// If the group is odd, it's a match to an actual letter
+				} else {
+					html = html + '<span class="' + fuzzy.matchedLetterClass +
+									'">' + matches[ groupi ] + '</span>';
+				}  // end if even
+			}  // end for each array of letters
+
 			result_.htmlString 	= '<' + htmlTag + ' class="' +
 					fuzzy.matchedWordClass +
 					'">' + html + '</' + htmlTag + '>';
@@ -187,3 +178,7 @@ var MyFuzzy = function ( context ) {
 
   return fuzzy;
 };
+
+// Testing:
+var myFuzzy = MyFuzzy( window );
+
