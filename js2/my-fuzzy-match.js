@@ -80,12 +80,19 @@ var MyFuzzy = function ( context ) {
 			// tagName.replace( /[^a-z0-9-]/g, '' );  // case is important
 		}  // End if tagname is or isn't undefined
 
+		if ( tagName === "''" || tagName === '""' || tagName === '' ) {
+			console.warn( 'Provind an empty string does not stop the creation of ' +
+				'an element, it will just be an invalid element. If you want to ' + 
+				'just find matches and use them as strings, use the .term property ' +
+				'of the returned value.' );
+		}
+
 		if ( HTML5Tags.indexOf( tagName ) === -1 ) {
 			console.warn( 'The string "' + tagName + '" is not recognized ' +
-				'as a valid tag name as of 2015. Source ' +
+				'as a valid tag name as of 2015. Your element may be an unregistered ' +
+				'element or you may get an error. Source ' +
 				'https://developer.mozilla.org/en-US/docs/Web/HTML/Element. ' +
-				'Also check out http://w3c.github.io/webcomponents/spec/custom/#concepts. ' +
-				'Your element may be an unregistered element.' );
+				'Also check out http://w3c.github.io/webcomponents/spec/custom/#concepts.');
 		}
 
 		console.log(tagName)
@@ -253,8 +260,6 @@ var MyFuzzy = function ( context ) {
 		// Create the provided element, or a default one
 		var nodeTag = sanitizeTagName( tagName );
 
-		if ( nodeTag !== '' ) {
-
 		var resultNode 			= document.createElement( nodeTag );
 		resultNode.className 	= fuzzy.matchedWordClass;
 		result_.node 			= resultNode;
@@ -271,11 +276,6 @@ var MyFuzzy = function ( context ) {
 			}  else {
 				result_ = null;  // ??
 			} // end if match
-
-		} else {
-			console.error( "A node can't be made with no tag name. If you want a string, use fuzzy.toString." );
-			result_ = null;
-		}  // end if tagName !== ''
 
 		return result_;
 	};  // End fuzzy.toNode()
