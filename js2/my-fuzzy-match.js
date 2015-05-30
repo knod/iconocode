@@ -7,42 +7,34 @@ faster!
 I can still mostly use the scoring system from fuzzy.js
 (Ben Ripkens)
 
+Each stylized letter will be a span with a class? Users
+will be responsible for styling that class themselves?
+But then they don't have immediate visible funcitonality...
+
 */
 
 'use strict'
 
 var MyFuzzy = function ( context ) {
 
-
 	var fuzzy = {};
 
-	// Each result will take the form of:
-	// { term: "", query, "", score: #, matchArray: [], htmlString: "", node: Node }
-	fuzzy.results = [];
+	fuzzy.result 				= {
+		term: "", query: "", score: 0, matchArray: [],
+		htmlString: "", node: null
+	};
+
 	// What was I going to use this for?
-	fuzzy.str 		= "";
+	// fuzzy.str 					= "";
 
-	fuzzy.beforeLetter = '<strong>'; fuzzy.afterLetter = '</strong>';
-	fuzzy.resultTag = 'li';
-	fuzzy.node 		= null;
-
-
-
-	// fuzzy.getMatchData = function ( query,  ) {
-		// Note: str.match()[0] === str
-	// };  // End fuzzy.getMatchData()
-
-
-	fuzzy.buildStrResult = function ( matchArray ) {};  // End fuzzy.buildStr()
-
-
-	fuzzy.buildNode = function ( matchArray ) {};  // End fuzzy.buildNode()
+	fuzzy.matchedLetterClass 	= 'fuzzy-matched-letter';
+	fuzzy.resultTag 			= 'li';
 
 
 	fuzzy.calcScore = function ( matchArray ) {
 	/* ( [] ) -> matchArray
 
-	Match looses points based on number of letters found between
+	Match loses points based on number of letters found between
 	matches.
 	Note: str.match()[0] === str
 	*/
@@ -54,10 +46,10 @@ var MyFuzzy = function ( context ) {
 		// Don't lose points for number of letters before the first match is found
 		for ( var groupi = 1; groupi < numGroups; groupi++ ) {
 			// Don't lose points for number of letters after the final match
-			if ( (groupi % 2 === 0) && (groupi < (numGroups - 1)) ) {
+			if ( (groupi % 2 !== 0) && (groupi < (numGroups - 1)) ) {
 				score -= matchArray[ groupi ].length;
 			}
-			console.log('score: ', score)
+			// console.log('score: ', score)
 		}
 
 		return score;
@@ -126,31 +118,89 @@ var MyFuzzy = function ( context ) {
 	Since this is a very unique situation, we'll use the order
 	of the list to our advantage and change it using every other one
 	*/
-		var queryArray 	= query.split('');
-		// In case it's just one letter long:
-		var regexStr = '(.*)(' + queryArray[0] + ')(.*)';
-
-		if ( queryArray.length > 1 ) {
-			var regexMiddle = queryArray.join( ')(.*)(' );  // {1} is automatic, not needed
-			// Take last parenthesis off
-			regexStr 	= '(.*)(' + regexMiddle + ')';  // empty paren at the end won't return anything
-
-		}
-
+		// .concat() makes .join() work for one char. Can't use .split().push()
+		var regexMiddle 	= query.split('').concat(['']).join( ')(.*)(' );
+		var regexStr 	= '(.*)(' + regexMiddle + ')';  // empty paren at the end won't return anything
+		regexStr = regexStr.replace( "()", '' );  // otherwise, get '' at the end with an extra span
 		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
 		return ( new RegExp( regexStr, 'i' ) )
 	};  // End fuzzy.buildRegExp()
 
 
-// !!! What's happening here?
 	fuzzy.getMatch = function ( term, query ) {
-		var regex 	= fuzzy.buildRegExp( query );
-		// Test: fuzzy.getMatch( 'apple', 'a' );
-		console.log( '.getMatch() log:', term.match( regex ) );  // ["apple", "", "a", "pple", index: 0, input: "apple"]
-		// When I run the test in the console and call .getMatch, this gets returned:
-		// ["apple", "", "a", "pple"] <- I want this
-		return term.match( regex );
-	};
+		var regex 		= fuzzy.buildRegExp( query );
+		var matchArray	= term.match( regex )
+		// Leave out the first group, which is just the term
+		if ( matchArray !== null ) { matchArray	 = matchArray.slice(1); }
+		return matchArray
+	};  // End fuzzy.getMatch()
+
+
+	// ===================
+	// DOM
+	// ===================
+	fuzzy.addTextNode = function ( nodeStr, parentNode ) {
+		var textNode = document.createTextNode( nodeStr );
+		parentNode.appendChild( textNode );
+		return textNode
+	};  // End fuzzy.addTextNode()
+
+
+	// These two would have to be different for node vs. html str
+	fuzzy.addNonQueryGroup = function () {};  // End fuzzy.addNonQueryGroup()
+	fuzzy.addQueryLetter = function () {};  // End fuzzy.addQueryLetter
+
+	// I have no idea what this does or how I might use it,
+	// but it seems like something...
+	fuzzy.forEveryOther = function ( array, ifEven, ifOdd ) {
+
+		var numItems 	= array.length;
+		var resultArray = [];
+
+		for ( var indx = 0; indx < numItems; indx++ ) {
+
+			var item = array[ indx ];
+
+			if ( indx % 2 === 0 ) {
+				resultArray.push( ifEven( item ) );
+			} else {
+				resultArray.push( ifOdd( item ) );
+			}  // end if even
+		}  // end for each array of letters
+
+		return resultArray;
+	};  // End fuzzy.forEveryOther()
+
+
+	fuzzy.buildStrResult = function ( matchArray ) {};  // End fuzzy.buildStr()
+
+
+	fuzzy.buildNode = function ( matchArray ) {
+
+		var numGroups 	= matchArray.length;
+
+		for ( var groupi = 0; groupi < numGroups; groupi++ ) {
+
+			var chars = matchArray[ groupi ];
+			// If group is even, it matched .*, which isn't styled text
+			if ( groupi % 2 === 0 ) {
+
+				fuzzy.addTextNode( chars, fuzzy.result.node );
+
+			// If the group is odd, it's a match to an actual letter
+			} else {
+
+				var matchLetterNode 		= document.createElement( 'span' );
+				matchLetterNode.className 	= fuzzy.matchedLetterClass;
+				fuzzy.result.node.appendChild( matchLetterNode );
+
+				fuzzy.addTextNode( chars, matchLetterNode );
+
+			}  // end if even
+		}  // end for each array of letters
+
+		return fuzzy.result.node;
+	};  // End fuzzy.buildNode()
 
 
 	// ===================
@@ -161,15 +211,16 @@ var MyFuzzy = function ( context ) {
 
 
 	*/
+		// fuzzy.result 				= {
+		// 	term: "", query: "", score: 0, matchArray: [],
+		// 	htmlString: "", node: null
+		// };	
 		// Create the provided element, or a default one
 		var htmlTag 		= determineTagName( tagName );
 		
-		// Test: fuzzy.toString( 'apple', 'a', '' );
 		var match = fuzzy.getMatch( term, query );
-		console.log('.toString():', match);  //
 
 		if ( match !== null ) {
-			// console.log( 'there was a match!', match );
 
 		}
 
@@ -185,105 +236,43 @@ var MyFuzzy = function ( context ) {
 
 
 	*/
+		var result_ = fuzzy.result;
+		result_.term 	= term; result_.query 	= query;
+
 		// Create the provided element, or a default one
 		var nodeTag = determineTagName( tagName );
 
 		if ( nodeTag !== '' ) {
 
-			var node 			= document.createElement( nodeTag );
-			var match = fuzzy.getMatch( term, query );
+			var resultNode 	= document.createElement( nodeTag );
+			result_.node 	= resultNode;
 
-			if ( match !== null ) {
-				console.log( 'there was a match!', match );
+			var matches 	= fuzzy.getMatch( term, query );
+			if ( matches !== null ) {
 
-			}
+				result_.matchArray = matches;
+				result_.score = fuzzy.calcScore( matches );
+				fuzzy.buildNode( matches );
 
+				console.log(resultNode)
 
+			// ??: If there wasn't a match, what do I return?
+			}  else {
+				return null;  // ??
+			} // end if match
 
 		} else {
 			console.error( "A node can't be made with no tag name. If you want a string, use fuzzy.toString." );
-		}
+		}  // end if tagName !== ''
 
-
-
-
+		return result_;
 	};  // End fuzzy.toNode()
 	// fuzzy.numMatched letters
 
-  // var fuzzy = function fuzzy(term, query) {
-  //   var max = calcFuzzyScore(term, query);
-  //   var termLength = term.length;
 
-  //   if (fuzzy.analyzeSubTerms) {
-
-  //     for (var subTermi = 1; subTermi < termLength &&
-  //                         subTermi < fuzzy.analyzeSubTermDepth; subTermi++) {
-  //       var subTerm = term.substring(subTermi);
-  //       var score = calcFuzzyScore(subTerm, query);
-  //       if (score.score > max.score) {
-  //         // we need to correct 'term' and 'matchedTerm', as calcFuzzyScore
-  //         // does not now that it operates on a substring. Doing it only for
-  //         // new maximum score to save some performance.
-  //         score.term = term;
-  //         score.highlightedTerm = term.substring(0, subTermi) + score.highlightedTerm;
-  //         max = score;
-  //       }
-  //     }
-  //   }
-
-  //   return max;
-  // };
-
-  var calcFuzzyScore = function calcFuzzyScore(term, query) {
-    var score = 0;
-    var termLength = term.length;
-    var queryLength = query.length;
-    var highlighting = '';
-    var termi = 0;
-    // -1 would not work as this would break the calculations of bonus
-    // points for subsequent character matches. Something like
-    // Number.MIN_VALUE would be more appropriate, but unfortunately
-    // Number.MIN_VALUE + 1 equals 1...
-    var previousMatchingCharacter = -2;
-
-    for (var queryi = 0; queryi < queryLength && termi < termLength; queryi++) {
-      var queryChar = query.charAt(queryi);
-      var lowerCaseQueryChar = queryChar.toLowerCase();
-
-      // termi is already defined
-      for (; termi < termLength; termi++) {
-        var termChar = term.charAt(termi);
-
-        if (lowerCaseQueryChar === termChar.toLowerCase()) {
-          score++;
-
-          if ((previousMatchingCharacter + 1) === termi) {
-            score += 2;
-          }
-
-          highlighting += fuzzy.highlighting.before +
-              termChar +
-              fuzzy.highlighting.after;
-          previousMatchingCharacter = termi;
-          termi++;
-          break;
-        } else {
-          highlighting += termChar;
-        }
-      }
-    }
-
-    highlighting += term.substring(termi, term.length);
-
-    return {
-      score: score,
-      term: term,
-      query: query,
-      highlightedTerm: highlighting
-    };
-  };
-
-  fuzzy.matchComparator = function matchComparator(m1, m2) {
+  fuzzy.matchComparator = function(m1, m2) {
+  	// might need Math.abs(m1.score) - Math.abs(m2.score)?
+  	// on the other hand: http://stackoverflow.com/questions/2961047/javascript-sorting-arrays-containing-positive-and-negative-decimal-numbers
     return m2.score - m1.score;
   };
 
@@ -337,13 +326,13 @@ var MyFuzzy = function ( context ) {
      * In case the global variable fuzzy needs to be reset to its previous
      * value, the fuzzy library is returned by this method.
      */
-    var previousFuzzy = context.fuzzy;
-    fuzzy.noConflict = function() {
-      context.fuzzy = previousFuzzy;
-      return fuzzy;
-    };
+    // var previousFuzzy = context.fuzzy;
+    // fuzzy.noConflict = function() {
+    //   context.fuzzy = previousFuzzy;
+    //   return fuzzy;
+    // };
 
-    context.fuzzy = fuzzy;
+    // context.fuzzy = fuzzy;
   }
 
   return fuzzy;
