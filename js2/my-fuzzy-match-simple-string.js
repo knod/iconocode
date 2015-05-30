@@ -1,32 +1,20 @@
-/* my-fuzzy-match-simple-node.js
+/* my-fuzzy-match-simple-string.js
 
-!!! Don't know if this works yet
-
-Because this charcter finding thing is such a specific
-use case, there actually may be a way to make it a lot
-"simpler"!
-
-In that other script, I was making room for multiple
-use cases, now I'm just dealing with one.
-
-I can still mostly use the scoring system from fuzzy.js
-(Ben Ripkens)
-
-Each stylized letter will be a span with a class? Users
-will be responsible for styling that class themselves?
-But then they don't have immediate visible funcitonality...
+If I take out all the validation stuff, down to
+bare bones, how compact does it get? Do I sacrifice
+readability for this goal as well?
 */
 
 'use strict'
 
 var MyFuzzy = function ( context ) {
 
-
 	var fuzzy = {};
 
-	fuzzy.result = { term: "", query: "", score: 0, matchArray: [], node: null };
+	fuzzy.result = { term: "", query: "", score: 0, matchArray: [], htmlString: "" };
 	fuzzy.matchedLetterClass 	= 'fuzzy-matched-letter';
-	fuzzy.resultTag 			= 'li';
+	fuzzy.matchedWordClass		= 'fuzzy-matched-word';
+	fuzzy.defaultTag 			= 'li';
 
 
 	fuzzy.calcScore = function ( matchArray ) {
@@ -78,76 +66,96 @@ var MyFuzzy = function ( context ) {
 	};  // End fuzzy.getMatch()
 
 
-	// ===================
-	// DOM
-	// ===================
-	fuzzy.buildNode = function ( matchArray ) {
+	// ==============
+	// BUILD RESULT
+	// ==============
+	fuzzy.buildHTML = function ( matchArray ) {
+	/* ( [] ) -> Str */
+		var html 		= '';
 
 		var numGroups 	= matchArray.length;
-
 		for ( var groupi = 0; groupi < numGroups; groupi++ ) {
-
-			var chars = matchArray[ groupi ];
 			// If group is even, it matched .*, which isn't styled text
 			if ( groupi % 2 === 0 ) {
-
-				var textNode = document.createTextNode( chars );
-				fuzzy.result.node.appendChild( textNode );
-
+				html = html + matchArray[ groupi ];
 			// If the group is odd, it's a match to an actual letter
 			} else {
-				var matchLetterNode 		= document.createElement( 'span' );
-				matchLetterNode.className 	= fuzzy.matchedLetterClass;
-				fuzzy.result.node.appendChild( matchLetterNode );
-
-				var textNode = document.createTextNode( chars );
-				matchLetterNode.appendChild( textNode );
+				html = html + '<span class="' + fuzzy.matchedLetterClass +
+								'">' + matchArray[ groupi ] + '</span>';
 			}  // end if even
 		}  // end for each array of letters
-		console.log(fuzzy.result.node);
-		return fuzzy.result.node;
-	};  // End fuzzy.buildNode()
+		return html;
+	};  // End fuzzy.buildStr()
 
 
 	// ===================
 	// STUFF
 	// ===================
-	fuzzy.toNode = function ( term, query, tagName ) {
-	/*
+	fuzzy.toString = function ( term, query, tagName ) {
+	/* ( str, str, str ) -> Str or null
 
-
+	Returns null if no match is found
 	*/
-		var result_ = fuzzy.result;
+		var result_ 	= fuzzy.result;
 		result_.term 	= term; result_.query 	= query;
 
 		// Create the provided element, or a default one
-		var nodeTag = tagName || fuzzy.resultTag;
 
-		var resultNode 			= document.createElement( nodeTag );
-		resultNode.className 	= fuzzy.matchedWordClass;
-		result_.node 			= resultNode;
-
-		var matches 			= fuzzy.getMatch( term, query );
+		var matches 	= fuzzy.getMatch( term, query );
 		if ( matches !== null ) {
 
-			result_.matchArray = matches;
-			result_.score = fuzzy.calcScore( matches );
-			fuzzy.buildNode( matches );
+			result_.matchArray 	= matches;
+			result_.score 		= fuzzy.calcScore( matches );
 
+			var html 			= fuzzy.buildHTML( matches );
+			result_.htmlString 	= '<' + htmlTag + ' class="' +
+					fuzzy.matchedWordClass +
+					'">' + html + '</' + htmlTag + '>';
 		// ??: If there wasn't a match, what do I return?
 		}  else {
 			result_ = null;  // ??
 		} // end if match
 
 		return result_;
-	};  // End fuzzy.toNode()
-	// fuzzy.numMatched letters
+	};  // End fuzzy.toString()
 
 
-	fuzzy.matchComparator = function (m1, m2) {
-		return m2.score - m1.score;
-	};  // End fuzzy.matchComparator()
+  fuzzy.matchComparator = function(m1, m2) {
+  	// might need Math.abs(m1.score) - Math.abs(m2.score)?
+  	// on the other hand: http://stackoverflow.com/questions/2961047/javascript-sorting-arrays-containing-positive-and-negative-decimal-numbers
+    return m2.score - m1.score;
+  };
 
+  /*
+   * Whether or not fuzzy.js should analyze sub-terms, i.e. also
+   * check term starting positions != 0.
+   *
+   * Example:
+   * Given the term 'Halleluja' and query 'luja'
+   *
+   * Fuzzy.js scores this combination with an 8, when analyzeSubTerms is
+   * set to false, as the following matching string will be calculated:
+   * Ha[l]lel[uja]
+   *
+   * If you activate sub temr analysis though, the query will reach a score
+   * of 10, as the matching string looks as following:
+   * Halle[luja]
+   *
+   * Naturally, the second version is more expensive than the first one.
+   * You should therefore configure how many sub terms you which to analyse.
+   * This can be configured through fuzzy.analyzeSubTermDepth = 10.
+   */
+  // fuzzy.analyzeSubTerms = false;
+
+  /*
+   * How many sub terms should be analyzed.
+   */
+  // fuzzy.analyzeSubTermDepth = 10;
+
+  // fuzzy.highlighting = {
+  //   before: '<em>',
+  //   after: '</em>'
+  // };
 
 /*
    * Exporting the public API
@@ -179,6 +187,3 @@ var MyFuzzy = function ( context ) {
 
   return fuzzy;
 };
-
-// Example:
-// var myFuzzy = MyFuzzy( window );

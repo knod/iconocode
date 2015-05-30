@@ -42,14 +42,12 @@ var MyFuzzy = function ( context ) {
 	Note: str.match()[0] === str
 	*/
 		var score = 0;
-		// The first thing in the array is always the original string, take it out
-		matchArray = matchArray.slice(1);
-		var numGroups = matchArray.length;
 
+		var numGroups = matchArray.length;
 		// Don't lose points for number of letters before the first match is found
 		for ( var groupi = 1; groupi < numGroups; groupi++ ) {
 			// Don't lose points for number of letters after the final match
-			if ( (groupi % 2 !== 0) && (groupi < (numGroups - 1)) ) {
+			if ( (groupi % 2 === 0) && (groupi < (numGroups - 1)) ) {
 				score -= matchArray[ groupi ].length;
 			}
 		}
@@ -77,7 +75,7 @@ var MyFuzzy = function ( context ) {
 			tagName = tagName.replace( /[<>]/g, '' );  // Are there any others to watch for?
 			// ?? What are invalid characters in custom html tags? Should I remove them?
 			// http://w3c.github.io/webcomponents/spec/custom/#concepts
-			// tagName.replace( /[^a-z0-9-]/g, '' );  // case is important
+			// tagName.replace( /[^a-z0-9-]/g, '' );  // no uppercase allowed
 		}  // End if tagname is or isn't undefined
 
 		if ( tagName === "''" || tagName === '""' || tagName === '' ) {
@@ -94,8 +92,6 @@ var MyFuzzy = function ( context ) {
 				'https://developer.mozilla.org/en-US/docs/Web/HTML/Element. ' +
 				'Also check out http://w3c.github.io/webcomponents/spec/custom/#concepts.');
 		}
-
-		console.log(tagName)
 
 		return tagName;
 	};  // End sanitizeTagName()
@@ -124,6 +120,8 @@ var MyFuzzy = function ( context ) {
 		var matchArray	= term.match( regex )
 		// Leave out the first group, which is just the term
 		if ( matchArray !== null ) { matchArray	 = matchArray.slice(1); }
+
+		console.log(matchArray)
 		return matchArray
 	};  // End fuzzy.getMatch()
 
@@ -178,7 +176,7 @@ var MyFuzzy = function ( context ) {
 								'">' + matchArray[ groupi ] + '</span>';
 			}  // end if even
 		}  // end for each array of letters
-
+		// console.log(html)
 		return html;
 	};  // End fuzzy.buildStr()
 
@@ -208,16 +206,12 @@ var MyFuzzy = function ( context ) {
 					fuzzy.matchedWordClass +
 					'">' + html + '</' + htmlTag + '>';
 
-			// console.log(result_.htmlString)
-
 		// ??: If there wasn't a match, what do I return?
 		}  else {
 			result_ = null;  // ??
 		} // end if match
 
 		return result_;
-
-
 	};  // End fuzzy.toString()
 
 
