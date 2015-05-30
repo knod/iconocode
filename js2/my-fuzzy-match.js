@@ -31,7 +31,7 @@ var MyFuzzy = function ( context ) {
 	};
 	fuzzy.matchedLetterClass 	= 'fuzzy-matched-letter';
 	fuzzy.matchedWordClass		= 'fuzzy-matched-word';
-	fuzzy.resultTag 			= 'li';
+	fuzzy.defaultTag 			= 'li';
 
 
 	fuzzy.calcScore = function ( matchArray ) {
@@ -61,54 +61,37 @@ var MyFuzzy = function ( context ) {
 	// ===================
 	// TAGNAME
 	// ===================
-	fuzzy.sanitizeTagName = function ( tagName ) {
+	var sanitizeTagName = function ( tagName ) {
 	/* ( str ) -> Str
+
+	If a tagName hasn't been provided, return the default
+	tag name.
+	Otherwise take out any superfluous characters, like < and
+	>, and give a warning if it's not an 'approved' tag name.
 	*/
-		var toRemove = ['<', '>', '"', "'"];
+		var defaultTag_ = fuzzy.defaultTag;
 
-		for ( var chari = 0; chari < toRemove.length; chari++ ) {
-			tagName = tagName.replace( toRemove[ chari ], '' );
-		}
-		// console.log( 'sanitized tagname:', tagName );
+		if ( tagName === undefined ) { tagName = defaultTag_; }
+		else {
 
-		return tagName;
-	};  // End fuzzy.sanitizeTagName()
+			tagName = tagName.replace( /[<>]/g, '' );  // Are there any others to watch for?
+			// ?? What are invalid characters in custom html tags? Should I remove them?
+			// http://w3c.github.io/webcomponents/spec/custom/#concepts
+			// tagName.replace( /[^a-z0-9-]/g, '' );  // case is important
+		}  // End if tagname is or isn't undefined
 
-
-	fuzzy.tagNameIsValid = function ( tagName ) {
-	/* ( str ) -> Bool
-
-	Checks if the tagName is in the list of approved tag names.
-	Gives a warning if the tagname isn't valid.
-
-	'' will indicate that someone doesn't want an html element.
-	Not sure what to do if that's given to fuzzy.toNode()
-	*/
-		tagName = fuzzy.sanitizeTagName( tagName );
-
-		var isValid = false;
-		if ( (tagName === '') || (HMT5Tags.indexOf( tagName ) > -1) ) {
-			isValid = true;
-		} else {
+		if ( HTML5Tags.indexOf( tagName ) === -1 ) {
 			console.warn( 'The string "' + tagName + '" is not recognized ' +
 				'as a valid tag name as of 2015. Source ' +
 				'https://developer.mozilla.org/en-US/docs/Web/HTML/Element. ' +
-				'Default ' + tagName + 'will be used.' );
+				'Also check out http://w3c.github.io/webcomponents/spec/custom/#concepts. ' +
+				'Your element may be an unregistered element.' );
 		}
 
-		return isValid;
-	};  // End fuzzy.tagNameIsValid()
+		console.log(tagName)
 
-
-	var determineTagName = function ( tagName ) {
-		// Decide what tag name to use - given or default
-		var nodeTag = fuzzy.resultTag;
-
-		if ( (tagName !== undefined) && (fuzzy.tagNameIsValid( tagName ) === true) ) {
-			nodeTag = tagName;
-		}
-		return nodeTag;
-	};  // End determineTagName()
+		return tagName;
+	};  // End sanitizeTagName()
 
 
 	// ===================
@@ -212,13 +195,13 @@ var MyFuzzy = function ( context ) {
 			result_.matchArray 	= matches;
 			result_.score 		= fuzzy.calcScore( matches );
 
-			var htmlTag 		= determineTagName( tagName );
+			var htmlTag 		= sanitizeTagName( tagName );
 			var html 			= fuzzy.buildHTML( matches );
 			result_.htmlString 	= '<' + htmlTag + ' class="' +
 					fuzzy.matchedWordClass +
 					'">' + html + '</' + htmlTag + '>';
 
-			console.log(result_.htmlString)
+			// console.log(result_.htmlString)
 
 		// ??: If there wasn't a match, what do I return?
 		}  else {
@@ -268,7 +251,7 @@ var MyFuzzy = function ( context ) {
 		result_.term 	= term; result_.query 	= query;
 
 		// Create the provided element, or a default one
-		var nodeTag = determineTagName( tagName );
+		var nodeTag = sanitizeTagName( tagName );
 
 		if ( nodeTag !== '' ) {
 
@@ -283,7 +266,7 @@ var MyFuzzy = function ( context ) {
 				result_.score = fuzzy.calcScore( matches );
 				fuzzy.buildNode( matches );
 
-				console.log(resultNode)
+				// console.log(resultNode)
 			// ??: If there wasn't a match, what do I return?
 			}  else {
 				result_ = null;  // ??
