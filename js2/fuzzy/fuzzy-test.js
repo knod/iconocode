@@ -11,7 +11,7 @@ window.addEventListener( 'load', function () {
 		outputNode 	= document.getElementById('fuzzy-matches-container');
 
 	var terms = [
-		'Update payment method', 'See payment statistics',
+		'Update paymdent method', 'See payment statistics',
 		'Shopping cart', 'Recently bought', 'Check out',
 		'Check in', 'ca', 'caa', 'cana', 'crabapple'
 	];

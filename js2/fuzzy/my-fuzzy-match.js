@@ -112,9 +112,10 @@ var FuzzyMatcher = function ( context ) {
 	*/
 		// .concat() makes .join() work for one char. Can't use .split().push()
 		// ? is there because, for example 'Update payement method' with query 'd' will highlight the last 'd'
-		var regexMiddle 	= query.split('').concat(['']).join( ')(.*)(' );
-		var regexStr 	= '(.*)(' + regexMiddle + ')';  // empty paren at the end won't return anything
-		regexStr = regexStr.replace( "()", '' );  // otherwise, get '' at the end with an extra span
+		var regexMiddle 	= query.split('').concat(['']).join( ')(.*?)(' );
+		var regexStr 	= '(.*?)(' + regexMiddle + ')';
+		// Without this, we cut off the last word and () get '' at the end with an extra span
+		regexStr = regexStr.replace( "(.*?)()", '(.*)' );
 		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
 		return ( new RegExp( regexStr, 'i' ) )
 	};  // End matcher.buildRegExp()
@@ -125,7 +126,6 @@ var FuzzyMatcher = function ( context ) {
 		var matchArray	= term.match( regex )
 		// Leave out the first group, which is just the term
 		if ( matchArray !== null ) { matchArray	 = matchArray.slice(1); }
-console.log(matchArray)
 		// console.log(matchArray)
 		return matchArray
 	};  // End matcher.getMatch()
