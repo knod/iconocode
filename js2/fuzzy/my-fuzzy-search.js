@@ -22,6 +22,8 @@ var FuzzySearcher = function () {
 	// Defaults
 	searcher.searchTagName 	= 'ol';  // ol because of ranking?
 	searcher.matchTagName 	= 'li';
+	searcher.containerClass = 'fuzzy-matches';
+	searcher.termClass 		= 'fuzzy-matched-term';
 
 	searcher.maxResults 	= 50;
 
@@ -47,7 +49,7 @@ var FuzzySearcher = function () {
 	};  // End searcher.getMatches()
 
 
-	searcher.matchesToNode 	= function( terms, query, tagName ) {
+	searcher.toNode 		= function( terms, query, tagName ) {
 
 		result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
 
@@ -57,9 +59,12 @@ var FuzzySearcher = function () {
 		var tagName 		= tagName || searcher.searchTagName;
 		var node 			= document.createElement( tagName );
 		result.node 		= node;
+		node.className 		= searcher.containerClass;
+
+		matcher.matchedTermClass = searcher.termClass;
 
 		var matchesData 	= searcher.getMatches( terms, query );
-		result.matchesData = matchesData;
+		result.matchesData 	= matchesData;
 
 		for ( var matchi = 0; matchi < matchesData.length; matchi++ ) {
 			var match = matchesData[ matchi ];
@@ -80,12 +85,12 @@ var FuzzySearcher = function () {
 };  // End FuzzySearcher()
 
 // Testing
-var fuzzySearcher = new FuzzySearcher();
+// var fuzzySearcher = new FuzzySearcher();
 
-var terms = [
-	'Update payment method', 'See payment statistics',
-	'Shopping cart', 'Recently bought', 'Check out',
-	'Check in', 'ca', 'caa', 'cana', 'crabapple'
-];
+// var terms = [
+// 	'Update payment method', 'See payment statistics',
+// 	'Shopping cart', 'Recently bought', 'Check out',
+// 	'Check in', 'ca', 'caa', 'cana', 'crabapple'
+// ];
 
-// console.log(fuzzySearcher.matchesToNode( terms, 'ca' ));
+// console.log(fuzzySearcher.toNode( terms, 'ca' ));

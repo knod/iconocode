@@ -19,31 +19,19 @@
 <body>
 	
 	<h1>Testing</h1>
-	<p>Refactoring to base code structure on functionality instead of on DOM</p>
 
-	<h2>fuzzy.js Demo</h2>
-	<div class='span6'>
-		<p>
-			Use the demo like an auto-completion search box on the web. Start
-			typing to get a list of the 5 best matching available items. The
-			demo applies fuzzy matching to the following items.
-		</p>
+	<h2>my-fuzzy.js Demo</h2>
 
-		<ul id='demoItems'>
-		</ul>
-
-	</div> <!-- end span6 -->
-
-	<div class='span6'>
+	<div class='search-container'>
 
 		<div class='icd fuzzy-search-wrapper'>
 
-			<div class='fuzzy-search'>
-			  <input type='text' class='search-query' autofocus>
+			<div class='fuzzy-input'>
+			  <input type='text' id='search-query' autofocus>
 			</div>
 
-			<ul>
-			</ul>
+			<div id='fuzzy-matches-container'>
+			</div>
 
 		</div>
 
@@ -72,6 +60,7 @@
 	<!-- <script src="js2/fuzzy-search.js"></script> -->
 	<script src="js2/fuzzy/my-fuzzy-match.js"></script>
 	<script src="js2/fuzzy/my-fuzzy-search.js"></script>
+	<script src="js2/fuzzy/fuzzy-test.js"></script>
 	<!-- <script src="js2/my-fuzzy-match-simple-string.js"></script> -->
 	<script src="js/adder-utils-tabs.js"></script>
 	

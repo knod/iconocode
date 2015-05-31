@@ -15,7 +15,10 @@ TODO:
 - Change behavior of tag validation. Keep whatever tag name
 they give, just give a warning if it's not on the approved
 list
-- For fuzzy list search, remember: entry.tagName
+http://codereview.stackexchange.com/questions/23899/faster-javascript-fuzzy-string-matching-function
+- Properly escape non-alphanumeric characters from that
+- Also, if we want to optimize, look at that (also
+	if we want to optimize, put regex in fuzzy-search)
 
 */
 
@@ -30,8 +33,8 @@ var FuzzyMatcher = function ( context ) {
 	// 	term: "", query: "", score: 0, matchArray: [],
 	// 	htmlString: "", node: null
 	// };
-	matcher.matchedLetterClass 	= 'matcher-matched-letter';
-	matcher.matchedWordClass	= 'matcher-matched-word';
+	matcher.matchedLetterClass 	= 'fuzzy-matched-letter';
+	matcher.matchedTermClass	= 'fuzzy-matched-term';
 	matcher.defaultTag 			= 'li';
 
 
@@ -108,6 +111,7 @@ var FuzzyMatcher = function ( context ) {
 	of the list to our advantage and change it using every other one
 	*/
 		// .concat() makes .join() work for one char. Can't use .split().push()
+		// ? is there because, for example 'Update payement method' with query 'd' will highlight the last 'd'
 		var regexMiddle 	= query.split('').concat(['']).join( ')(.*)(' );
 		var regexStr 	= '(.*)(' + regexMiddle + ')';  // empty paren at the end won't return anything
 		regexStr = regexStr.replace( "()", '' );  // otherwise, get '' at the end with an extra span
@@ -121,7 +125,7 @@ var FuzzyMatcher = function ( context ) {
 		var matchArray	= term.match( regex )
 		// Leave out the first group, which is just the term
 		if ( matchArray !== null ) { matchArray	 = matchArray.slice(1); }
-
+console.log(matchArray)
 		// console.log(matchArray)
 		return matchArray
 	};  // End matcher.getMatch()
@@ -204,7 +208,7 @@ var FuzzyMatcher = function ( context ) {
 			var htmlTag 		= matcher.sanitizeTagName( tagName );
 			var html 			= matcher.buildHTML( matches );
 			result_.htmlString 	= '<' + htmlTag + ' class="' +
-					matcher.matchedWordClass +
+					matcher.matchedTermClass +
 					'">' + html + '</' + htmlTag + '>';
 
 		// ??: If there wasn't a match, what do I return?
@@ -255,11 +259,12 @@ var FuzzyMatcher = function ( context ) {
 		// Create the provided element, or a default one
 		var nodeTag = matcher.sanitizeTagName( tagName );
 
-		var resultNode 			= document.createElement( nodeTag );
-		resultNode.className 	= matcher.matchedWordClass;
-		result.node 			= resultNode;
+		var resultNode 				= document.createElement( nodeTag );
+		result.node 				= resultNode;
+		resultNode.className 		= matcher.matchedTermClass;
+		resultNode.dataset['term'] 	= term;
 
-		var matches 			= matcher.getMatch( term, query );
+		var matches 				= matcher.getMatch( term, query );
 			if ( matches !== null ) {
 
 				result.matchArray = matches;
