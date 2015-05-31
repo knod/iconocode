@@ -15,7 +15,7 @@ var FuzzySearcher = function () {
 	var searcher = {};
 
 	var matcher = FuzzyMatcher( searcher );
-	var results = { node: null, matchingWords: [], matchesData: [] }
+	var results = { node: null, matchingTerms: [], matchesData: [] }
 
 	// Defaults
 	searcher.searchTagName 	= 'ol';  // ol because of ranking?

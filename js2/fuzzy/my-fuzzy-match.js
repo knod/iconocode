@@ -25,7 +25,7 @@ var FuzzyMatcher = function ( context ) {
 
 	var matcher = {};
 
-	matcher.result 				= {
+	var result 					= {
 		term: "", query: "", score: 0, matchArray: [],
 		htmlString: "", node: null
 	};
@@ -189,7 +189,7 @@ var FuzzyMatcher = function ( context ) {
 
 	Returns null if no match is found
 	*/
-		var result_ 	= matcher.result;
+		var result_ 	= result;
 		result_.term 	= term; result_.query 	= query;
 
 		// Create the provided element, or a default one
@@ -225,21 +225,21 @@ var FuzzyMatcher = function ( context ) {
 			// If group is even, it matched .*, which isn't styled text
 			if ( groupi % 2 === 0 ) {
 
-				matcher.addTextNode( chars, matcher.result.node );
+				matcher.addTextNode( chars, result.node );
 
 			// If the group is odd, it's a match to an actual letter
 			} else {
 
 				var matchLetterNode 		= document.createElement( 'span' );
 				matchLetterNode.className 	= matcher.matchedLetterClass;
-				matcher.result.node.appendChild( matchLetterNode );
+				result.node.appendChild( matchLetterNode );
 
 				matcher.addTextNode( chars, matchLetterNode );
 
 			}  // end if even
 		}  // end for each array of letters
 
-		return matcher.result.node;
+		return result.node;
 	};  // End matcher.buildNode()
 
 
@@ -248,7 +248,7 @@ var FuzzyMatcher = function ( context ) {
 
 	Returns null if no match is found
 	*/
-		var result_ = matcher.result;
+		var result_ = result;
 		result_.term 	= term; result_.query 	= query;
 
 		// Create the provided element, or a default one
@@ -347,4 +347,4 @@ var FuzzyMatcher = function ( context ) {
   return matcher;
 };
 
-var fuzzyMatcher = FuzzyMatcher( window );
+// var fuzzyMatcher = FuzzyMatcher( window );
