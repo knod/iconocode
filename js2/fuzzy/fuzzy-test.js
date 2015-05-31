@@ -11,7 +11,7 @@ window.addEventListener( 'load', function () {
 		outputNode 	= document.getElementById('fuzzy-matches-container');
 
 	var terms = [
-		'Update paymdent method', 'See payment statistics',
+		'Update payment method', 'See payment statistics',
 		'Shopping cart', 'Recently bought', 'Check out',
 		'Check in', 'ca', 'caa', 'cana', 'crabapple'
 	];
@@ -20,17 +20,51 @@ window.addEventListener( 'load', function () {
 	// var getQuery 	= function () {
 	// 	return $(inputNode).val();
 	// };  // End getQuery()
-	var selectOption = function () {};  // End selectOption()
+
+	var getSelectedNode = function () {
+	/* Incase we want to change the classes used */
+		return document.querySelector('.fuzzy-matched-term.selected');
+	};  // End getSelectedNode()
+
+
+	var selectOption = function ( direction ) {
+	/* ( str ) -> Node
+
+	Right now, something will always be selected. Is this generally expected behavior?
+	*/
+		var selectedNode 		= getSelectedNode(),
+			newSelectedNode 	= null;
+
+		if ( direction === 'up' ) {
+			// If selectedNode is the first element in output, we'll get null
+			newSelectedNode = selectedNode.previousSibling;
+		} else {  // down
+			// If selectedNode is the last element, we'll get null
+			newSelectedNode = selectedNode.nextSibling;
+		}  // End if direction
+
+		selectedNode.classList.remove('selected');
+		// If the user pressed up when at top or down when at bottom
+		if ( newSelectedNode === null ) { newSelectedNode = selectedNode; }
+		newSelectedNode.classList.add('selected');
+
+		return newSelectedNode;
+	};  // End selectOption()
 
 
 	var useSelectedOption = function () {
-		// This should return a list item with plain old text in it
-		var selectedNode 	= document.querySelector('.matcher-matched-word.selected');
+	/* ( none ) -> Str
+	
+	Puts the selected option's text in the search node.
+	Returns that text
+	*/
+		var selectedNode = getSelectedNode();
+
 		if (selectedNode !== null) {
-			inputNode.value = selectedNode.dataset.term;
+			$(inputNode).val() = selectedNode.dataset.term;
 		}
 
-		return inputNode.value;  // Retern selected node instead?
+		return $(inputNode).val();  // Retern selected node instead?
 	};
 
 
@@ -41,26 +75,47 @@ window.addEventListener( 'load', function () {
 		if ($(inputNode).val().length > 0) {
 			var matchData = fuzzySearcher.toNode( terms, query, 'ol' );
 			outputNode.appendChild( matchData.node );
+			$(matchData.node).children().first().addClass('selected');
 		}
 
 		return outputNode;
 	};  // End runSearch()
 
 
+	inputNode.addEventListener('keydown', function( evnt ) {
+	/* Prevent navigating in the text using the up and down keys */
+		var key = evnt.keyCode || evnt.which;
+
+		if (key === 40) { // down
+			evnt.preventDefault();
+		} else if (key === 38) { // up
+			evnt.preventDefault();
+		}
+
+	}, false);
+
+
 	inputNode.addEventListener('keyup', function( evnt ) {
-		// if (e.keyCode === 13) { // enter
+		var key = evnt.keyCode || evnt.which;
+
+		// if (evnt.keyCode === 13) { // enter
 			// useSelectedOption();
-		// } else if (e.keyCode === 40) { // down
-		// 	moveSelection(true);
-		// } else if (e.keyCode === 38) { // up
-		// 	moveSelection(false);
-		// } else if (e.keyCode === 27) { // ESC
+		// } else 
+		// No left or right because need to be able to navigate search text
+		if (key === 40) { // down
+			selectOption('down');
+		} else if ( key === 38 ) { // up
+			selectOption('up');
+		} //else if (key === 27) { // ESC
 		// 	outputNode.innerHTML = '';
 		// 	inputNode.value = '';
 		// } else {
 		// 	runSearch();
 		// }
+		else {
 			runSearch( $(inputNode).val() );
+		}
+
 	}, false);
 
 

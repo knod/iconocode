@@ -18,3 +18,7 @@
 	font-weight: bold;
 }
 
+.icd .selected {
+	background-color: gray;
+}
+
