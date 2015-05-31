@@ -25,10 +25,11 @@ var FuzzyMatcher = function ( context ) {
 
 	var matcher = {};
 
-	var result 					= {
-		term: "", query: "", score: 0, matchArray: [],
-		htmlString: "", node: null
-	};
+	var result;
+	// var result 					= {
+	// 	term: "", query: "", score: 0, matchArray: [],
+	// 	htmlString: "", node: null
+	// };
 	matcher.matchedLetterClass 	= 'matcher-matched-letter';
 	matcher.matchedWordClass	= 'matcher-matched-word';
 	matcher.defaultTag 			= 'li';
@@ -248,30 +249,30 @@ var FuzzyMatcher = function ( context ) {
 
 	Returns null if no match is found
 	*/
-		var result_ = result;
-		result_.term 	= term; result_.query 	= query;
+		result = {};
+		result.term 	= term; result.query 	= query;
 
 		// Create the provided element, or a default one
 		var nodeTag = matcher.sanitizeTagName( tagName );
 
 		var resultNode 			= document.createElement( nodeTag );
 		resultNode.className 	= matcher.matchedWordClass;
-		result_.node 			= resultNode;
+		result.node 			= resultNode;
 
 		var matches 			= matcher.getMatch( term, query );
 			if ( matches !== null ) {
 
-				result_.matchArray = matches;
-				result_.score = matcher.calcScore( matches );
+				result.matchArray = matches;
+				result.score = matcher.calcScore( matches );
 				matcher.buildNode( matches );
 
 				// console.log(resultNode)
 			// ??: If there wasn't a match, what do I return?
 			}  else {
-				result_ = null;  // ??
+				result = null;  // ??
 			} // end if match
 
-		return result_;
+		return result;
 	};  // End matcher.toNode()
 	// matcher.numMatched letters
 

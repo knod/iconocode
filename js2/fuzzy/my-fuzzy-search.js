@@ -5,6 +5,8 @@ builds them into an html node unless otherwise specified
 
 TODO:
 - Make a function that returns an html string too
+- If performance gets to be an issue, we can bring the
+regex thing in here
 
 */
 
@@ -14,8 +16,8 @@ var FuzzySearcher = function () {
 
 	var searcher = {};
 
-	var matcher = FuzzyMatcher( searcher );
-	var results = { node: null, matchingTerms: [], matchesData: [] }
+	var matcher = new FuzzyMatcher( searcher );
+	var result = { node: null, matchingElements: [], matchingTerms: [], matchesData: [] }
 
 	// Defaults
 	searcher.searchTagName 	= 'ol';  // ol because of ranking?
@@ -32,46 +34,42 @@ var FuzzySearcher = function () {
 		var matchArray = [];
 		for ( var termi = 0; (termi < terms.length) &&
 							( termi < searcher.maxResults ) ; termi++ ) {
+			// Get possible match data for each word in turn
 			var aMatch = matcher.toNode( terms[ termi ], query );
-		// console.log(aMatch)
 			if ( aMatch !== null ) {
 				matchArray.push( aMatch );
-				console.log(aMatch)
 			}
 		}
-		console.log(matchArray);
-		// console.log(matchArray);
-		// console.log(matchArray.sort( matcher.matchComparator ))
-		// This is kind of not the same functionality, but it's so short...
+		// This is kind of not the same functionality as the rest of the
+		// stuff here, but it's so short... Anyway, puts stuff in the right order
+		// based on score
 		return matchArray.sort( matcher.matchComparator );
 	};  // End searcher.getMatches()
 
 
 	searcher.matchesToNode 	= function( terms, query, tagName ) {
 
+		result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
+
 		// Validator should be separate from the two scripts. Need
 		// A utils script, but then it's less self-contained. Which
 		// I gues it isn't anymore anyway :(
 		var tagName 		= tagName || searcher.searchTagName;
 		var node 			= document.createElement( tagName );
-		results.node 		= node;
+		result.node 		= node;
 
 		var matchesData 	= searcher.getMatches( terms, query );
-		results.matchesData = matchesData;
-// console.log(matchesData);
+		result.matchesData = matchesData;
+
 		for ( var matchi = 0; matchi < matchesData.length; matchi++ ) {
-			node.appendChild( matchesData[ matchi ].node );
+			var match = matchesData[ matchi ];
+			node.appendChild( match.node );
+			result.matchingElements.push( match.node );
+			result.matchingTerms.push( match.term );
 		}
 
-		// console.log(matchesData)
-		console.log(node)
-		return results;
+		return result;
 	};  // End searcher.search()
-	// gets a list of words and a query
-
-	// Sends one word at a time to fuzzy match
-
-	// puts them in some kind of order
 
 	// appends them to whatever element matters
 		// Makes a dummy element first?
@@ -82,7 +80,7 @@ var FuzzySearcher = function () {
 };  // End FuzzySearcher()
 
 // Testing
-var fuzzySearcher = FuzzySearcher();
+var fuzzySearcher = new FuzzySearcher();
 
 var terms = [
 	'Update payment method', 'See payment statistics',
@@ -90,4 +88,4 @@ var terms = [
 	'Check in', 'ca', 'caa', 'cana', 'crabapple'
 ];
 
-console.log(fuzzySearcher.matchesToNode( terms, 'ca' ));
+// console.log(fuzzySearcher.matchesToNode( terms, 'ca' ));
