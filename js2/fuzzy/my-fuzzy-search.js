@@ -29,13 +29,14 @@ var FuzzySearcher = function () {
 	searcher.maxResults 	= 50;
 
 
-	searcher.escapeRegex = function ( queryArray ) {
+	searcher.escapeRegex = function ( str ) {
 	/* ( str ) -> Str
 	* 
-	* Escapes one string from any regex symbols that would otherwise mess up the search
+	* !!!: SUPER IMPORTANT FOR SECURITY
+	* Escapes all symbols that could be used to call commands to turn them into just text
 	*/
 		// http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
-		return queryArray.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 	}  // End searcher.escapeRegex()
 
 
@@ -72,17 +73,19 @@ var FuzzySearcher = function () {
 		var matchArray = [];
 		var queryRegex = searcher.queryRegex( query );
 
-		for ( var termi = 0; (termi < terms.length) &&
-							( termi < searcher.maxResults ) ; termi++ ) {
+		for ( var termi = 0; ( termi < terms.length ) &&
+							 ( termi < searcher.maxResults ); termi++ ) {
 			// Get possible match data for each word in turn
-			var aMatch = matcher.toNode( terms[ termi ], query, queryRegex );
+			matcher.matchedTermClass = searcher.termClass;
+			// In case user has changed this to something like '<span>'
+			var matchTagName = searcher.matchTagName.replace( /[<>]/g, '' )
+			var aMatch = matcher.toNode( terms[ termi ], query, queryRegex, matchTagName );
 			if ( aMatch !== null ) {
 				matchArray.push( aMatch );
 			}
 		}
-		// This is kind of not the same functionality as the rest of the
-		// stuff here, but it's so short... Anyway, puts stuff in the right order
-		// based on score
+		// This doesn't quite fit here , but it's so short... Anyway,
+		// puts stuff in the right order based on score
 		return matchArray.sort( matcher.matchComparator );
 	};  // End searcher.getMatches()
 
@@ -91,7 +94,7 @@ var FuzzySearcher = function () {
 	/* ( [str], str, str ) -> {} */
 		result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
 
-		// Validator should be separate from the two scripts. Need
+		// TODO: Validator should be separate from the two scripts. Need
 		// A utils script, but then it's less self-contained. Which
 		// I gues it isn't anymore anyway :(
 		var tagName 		= tagName || searcher.searchTagName;
@@ -100,8 +103,6 @@ var FuzzySearcher = function () {
 		var node 			= document.createElement( tagName );
 		result.node 		= node;
 		node.className 		= searcher.containerClass;
-
-		matcher.matchedTermClass = searcher.termClass;
 
 		var matchesData 	= searcher.getMatches( terms, query );
 		result.matchesData 	= matchesData;

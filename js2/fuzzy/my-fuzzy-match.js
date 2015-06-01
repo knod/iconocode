@@ -1,22 +1,5 @@
 /* my-fuzzy-match.js
 * 
-* Tests a term to see if it contains the letters from a query
-* in it. The letters have to be in the same order, but they
-* don't have to be next to each other. For example, if the
-* query is 'al' and the term is 'crabapple', it will match
-* because 'crabapple' has an 'l' that is after an 'a'.
-* 
-* It will also score the match based on how close the
-* matching letters are to each other. The above example
-* would get a score of -4 because 4 letters are between the
-* first 'a' and the first 'l'.
-* 
-* It creates either a node or an html string, depending on
-* which function was called.
-* 
-* It returns all that interesting info to something that will
-* deal with comparing the strings.
-* 
 * ??: Each stylized letter will be a span with a class? Users
 * will be responsible for styling that class themselves? But
 * then they don't have immediate visible funcitonality...
@@ -263,7 +246,18 @@ var FuzzyMatcher = function ( context ) {
 
 	matcher.matchComparator = function(m1, m2) {
 	/* This is in here because in here is where the test properties are created */
-		return m2.score - m1.score;
+		var diff = m2.score - m1.score;
+
+		// If the scores are the same
+		if ( m1.score === m2.score ) {
+			// Add the number of letters before the first match
+			m2.altScore = m2.score - $(m2.node).contents()[0].length;
+			m1.altScore = m1.score - $(m1.node).contents()[0].length;
+
+			diff = m2.altScore - m1.altScore;
+		}
+
+		return diff;
 	};
 
 
