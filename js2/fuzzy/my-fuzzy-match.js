@@ -98,39 +98,8 @@ var FuzzyMatcher = function ( context ) {
 	// ===================
 	// STRING MATCHING
 	// ===================
-	matcher.escapeRegExp = function (str) {
-		// http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
-		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-	}  // End matcher.escapeRegExp()
-
-
-	matcher.buildRegExp = function ( query ) {
-	/* (str) -> RegExp
-
-	Since this is a very unique situation, we'll use the order
-	of the list to our advantage and change it using every other one
-	*/
-		// .concat() makes .join() work for one char. Can't use .split().push()
-		// ? is there because, for example 'Update payement method' with query 'd' will highlight the last 'd'
-		var queryArray 		= query.split('').concat([''])
-		// Escape the characters that need escaping
-		queryArray.forEach( function ( str, indx, qArray ) {
-			qArray[ indx ] 	= matcher.escapeRegExp(str);
-		} );
-		var regexMiddle 	= queryArray.join( ')(.*?)(' );
-
-		var regexStr 	= '(.*?)(' + regexMiddle + ')';
-		// Without this, we cut off the last word and () get '' at the end with an extra span
-		regexStr = regexStr.replace( "(.*?)()", '(.*)' );
-		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
-		console.log(regexStr)
-		return ( new RegExp( regexStr, 'i' ) )
-	};  // End matcher.buildRegExp()
-
-
-	matcher.getMatch = function ( term, query ) {
-		var regex 		= matcher.buildRegExp( query );
-		var matchArray	= term.match( regex )
+	matcher.getMatch = function ( term, query, queryRegex ) {
+		var matchArray	= term.match( queryRegex )
 		// Leave out the first group, which is just the term
 		if ( matchArray !== null ) { matchArray	 = matchArray.slice(1); }
 		// console.log(matchArray)
@@ -196,7 +165,7 @@ var FuzzyMatcher = function ( context ) {
 	// ===================
 	// STUFF
 	// ===================
-	matcher.toString = function ( term, query, tagName ) {
+	matcher.toString = function ( term, query, queryRegex, tagName ) {
 	/* ( str, str, str ) -> Str or null
 
 	Returns null if no match is found
@@ -206,7 +175,7 @@ var FuzzyMatcher = function ( context ) {
 
 		// Create the provided element, or a default one
 
-		var matches 	= matcher.getMatch( term, query );
+		var matches 	= matcher.getMatch( term, query, queryRegex );
 		if ( matches !== null ) {
 
 			result_.matchArray 	= matches;
@@ -255,7 +224,7 @@ var FuzzyMatcher = function ( context ) {
 	};  // End matcher.buildNode()
 
 
-	matcher.toNode = function ( term, query, tagName ) {
+	matcher.toNode = function ( term, query, queryRegex, tagName ) {
 	/* ( str, str, str ) -> Node or null
 
 	Returns null if no match is found
@@ -271,7 +240,7 @@ var FuzzyMatcher = function ( context ) {
 		resultNode.className 		= matcher.matchedTermClass;
 		resultNode.dataset['term'] 	= term;
 
-		var matches 				= matcher.getMatch( term, query );
+		var matches 				= matcher.getMatch( term, query, queryRegex );
 			if ( matches !== null ) {
 
 				result.matchArray = matches;

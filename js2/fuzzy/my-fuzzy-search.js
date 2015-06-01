@@ -28,16 +28,53 @@ var FuzzySearcher = function () {
 	searcher.maxResults 	= 50;
 
 
+	searcher.escapeRegExp 	= function ( queryArray ) {
+	/*  ( str ) -> Str
+
+	Escapes one string from any regex symbols that would otherwise mess up the search
+	*/
+		// http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+		return queryArray.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+	}  // End searcher.escapeRegExp()
+
+
+	searcher.buildQueryRegex = function ( query ) {
+		/* (str) -> RegExp
+
+	Since this is a very unique situation, we'll use the order
+	of the list to our advantage and change it using every other one
+	*/
+		// .concat() makes .join() work for one char. Can't use .split().push()
+		// ? is there because, for example 'Update payement method' with query 'd' will highlight the last 'd'
+		var queryArray 		= query.split('').concat([''])
+		// Escape the characters that need escaping
+		for ( var chari = 0; chari < queryArray.length; chari++ ) {
+			queryArray[ chari ] = searcher.escapeRegExp( queryArray[ chari ] );
+		}
+		// Get possible letters in between and after matching letters
+		var regexMiddle 	= queryArray.join( ')(.*?)(' );
+		// Get possible letters before matching letters, close off the end
+		var regexStr 	= '(.*?)(' + regexMiddle + ')';
+		// Without this, we cut off the last word and () get '' at the end with an extra span
+		regexStr = regexStr.replace( "(.*?)()", '(.*)' );
+
+		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
+		return ( new RegExp( regexStr, 'i' ) )
+	};  // End searcher.buildQueryRegex()
+
+
 	searcher.getMatches 	= function( terms, query ) {
 	/* ( str, [str] ) -> [ {} ]
 
 	Builds, sorts, and returns an array of matches
 	*/
 		var matchArray = [];
+		var queryRegex = searcher.buildQueryRegex( query );
+
 		for ( var termi = 0; (termi < terms.length) &&
 							( termi < searcher.maxResults ) ; termi++ ) {
 			// Get possible match data for each word in turn
-			var aMatch = matcher.toNode( terms[ termi ], query );
+			var aMatch = matcher.toNode( terms[ termi ], query, queryRegex );
 			if ( aMatch !== null ) {
 				matchArray.push( aMatch );
 			}
