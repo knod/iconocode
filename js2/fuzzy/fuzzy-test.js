@@ -61,7 +61,7 @@ window.addEventListener( 'load', function () {
 		var selectedNode = getSelectedNode();
 
 		if (selectedNode !== null) {
-			$(inputNode).val() = selectedNode.dataset.term;
+			$(inputNode).val( selectedNode.dataset.term );
 		}
 
 		return $(inputNode).val();  // Retern selected node instead?
@@ -98,20 +98,19 @@ window.addEventListener( 'load', function () {
 	inputNode.addEventListener('keyup', function( evnt ) {
 		var key = evnt.keyCode || evnt.which;
 
-		// if (evnt.keyCode === 13) { // enter
-			// useSelectedOption();
-		// } else 
+		if (evnt.keyCode === 13) { // enter
+			useSelectedOption();
+			runSearch( $(inputNode).val() );  // Otherwise the whole list just stays there
+		} else 
 		// No left or right because need to be able to navigate search text
 		if (key === 40) { // down
 			selectOption('down');
 		} else if ( key === 38 ) { // up
 			selectOption('up');
-		} //else if (key === 27) { // ESC
-		// 	outputNode.innerHTML = '';
-		// 	inputNode.value = '';
-		// } else {
-		// 	runSearch();
-		// }
+		} else if (key === 27) { // ESC
+			$(outputNode).empty();
+			$(inputNode).val('');
+		}
 		else {
 			runSearch( $(inputNode).val() );
 		}
