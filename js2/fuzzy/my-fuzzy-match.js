@@ -1,30 +1,59 @@
 /* my-fuzzy-match.js
-
-Because this charcter finding thing is such a specific
-use case, there actually may be a way to make it a lot
-faster!
-
-I can still mostly use the scoring system from fuzzy.js
-(Ben Ripkens)
-
-Each stylized letter will be a span with a class? Users
-will be responsible for styling that class themselves?
-But then they don't have immediate visible funcitonality...
-
-TODO:
-- Change behavior of tag validation. Keep whatever tag name
-they give, just give a warning if it's not on the approved
-list
-http://codereview.stackexchange.com/questions/23899/faster-javascript-fuzzy-string-matching-function
-- Properly escape non-alphanumeric characters from that
-- Also, if we want to optimize, look at that (also
-	if we want to optimize, put regex in fuzzy-search)
-
+* 
+* Tests a term to see if it contains the letters from a query
+* in it. The letters have to be in the same order, but they
+* don't have to be next to each other. For example, if the
+* query is 'al' and the term is 'crabapple', it will match
+* because 'crabapple' has an 'l' that is after an 'a'.
+* 
+* It will also score the match based on how close the
+* matching letters are to each other. The above example
+* would get a score of -4 because 4 letters are between the
+* first 'a' and the first 'l'.
+* 
+* It creates either a node or an html string, depending on
+* which function was called.
+* 
+* It returns all that interesting info to something that will
+* deal with comparing the strings.
+* 
+* ??: Each stylized letter will be a span with a class? Users
+* will be responsible for styling that class themselves? But
+* then they don't have immediate visible funcitonality...
+* 
+* I can still mostly use the scoring system from fuzzy.js
+* (Ben Ripkens)
+* Actually, I think mine works a bit better and negates
+* the need for separate subterm treatment
+* 
+*
+* TODO:
+* 
 */
 
 'use strict'
 
 var FuzzyMatcher = function ( context ) {
+/* ( obj ) -> FuzzyMatcher (context not currently needed)
+* 
+* This object's functions test one term only.
+* 
+* Tests a term to see if it contains the letters from a query
+* in it. The letters have to be in the same order, but they
+* don't have to be next to each other. For example, if the
+* query is 'al' and the term is 'crabapple', it will match
+* because 'crabapple' has an 'l' that is after an 'a'.
+* 
+* It will also score the match based on how close the
+* matching letters are to each other. The above example
+* would get a score of -4 because 4 letters are between the
+* first 'a' and the first 'l'.
+* 
+* It also creates either a node or an html string, depending
+* on which function was called.
+* 
+* All that stuff is returned in an object.
+*/
 
 	var matcher = {};
 
@@ -34,12 +63,11 @@ var FuzzyMatcher = function ( context ) {
 	matcher.defaultTag 			= 'li';
 
 
-	matcher.calcScore = function ( matchArray ) {
+	matcher.calcScore 		= function ( matchArray ) {
 	/* ( [] ) -> matchArray
-
-	Match loses points based on number of letters found between
-	matches.
-	Note: str.match()[0] === str
+	* 
+	* Match loses points based on number of letters found between matches.
+	* Note: str.match()[0] === str
 	*/
 		var score = 0;
 
@@ -61,11 +89,10 @@ var FuzzyMatcher = function ( context ) {
 	// ===================
 	matcher.sanitizeTagName = function ( tagName ) {
 	/* ( str ) -> Str
-
-	If a tagName hasn't been provided, return the default
-	tag name.
-	Otherwise take out any superfluous characters, like < and
-	>, and give a warning if it's not an 'approved' tag name.
+	* 
+	* If a tagName hasn't been provided, return the default tag name.
+	* Otherwise take out any superfluous characters, like < and >, and
+	* give a warning if it's not an 'approved' tag name.
 	*/
 		var defaultTag_ = matcher.defaultTag;
 
@@ -98,7 +125,7 @@ var FuzzyMatcher = function ( context ) {
 	// ===================
 	// STRING MATCHING
 	// ===================
-	matcher.getMatch = function ( term, query, queryRegex ) {
+	matcher.getMatch 		= function ( term, query, queryRegex ) {
 		var matchArray	= term.match( queryRegex )
 		// Leave out the first group, which is just the term
 		if ( matchArray !== null ) { matchArray	 = matchArray.slice(1); }
@@ -108,38 +135,9 @@ var FuzzyMatcher = function ( context ) {
 
 
 	// ===================
-	// DOM
+	// STRING
 	// ===================
-	matcher.addTextNode = function ( nodeStr, parentNode ) {
-		var textNode = document.createTextNode( nodeStr );
-		parentNode.appendChild( textNode );
-		return textNode
-	};  // End matcher.addTextNode()
-
-
-	// I have no idea what this does or how I might use it,
-	// but it seems like something...
-	matcher.forEveryOther = function ( array, ifEven, ifOdd ) {
-
-		var numItems 	= array.length;
-		var resultArray = [];
-
-		for ( var indx = 0; indx < numItems; indx++ ) {
-
-			var item = array[ indx ];
-
-			if ( indx % 2 === 0 ) {
-				resultArray.push( ifEven( item ) );
-			} else {
-				resultArray.push( ifOdd( item ) );
-			}  // end if even
-		}  // end for each array of letters
-
-		return resultArray;
-	};  // End matcher.forEveryOther()
-
-
-	matcher.buildHTML = function ( matchArray ) {
+	matcher.buildHTML 		= function ( matchArray ) {
 	/* ( [] ) -> Str */
 		var html 		= '';
 
@@ -148,11 +146,9 @@ var FuzzyMatcher = function ( context ) {
 
 			// If group is even, it matched .*, which isn't styled text
 			if ( groupi % 2 === 0 ) {
-
 				html = html + matchArray[ groupi ];
 			// If the group is odd, it's a match to an actual letter
 			} else {
-
 				html = html + '<span class="' + matcher.matchedLetterClass +
 								'">' + matchArray[ groupi ] + '</span>';
 			}  // end if even
@@ -162,13 +158,10 @@ var FuzzyMatcher = function ( context ) {
 	};  // End matcher.buildStr()
 
 
-	// ===================
-	// STUFF
-	// ===================
-	matcher.toString = function ( term, query, queryRegex, tagName ) {
+	matcher.toString 		= function ( term, query, queryRegex, tagName ) {
 	/* ( str, str, str ) -> Str or null
-
-	Returns null if no match is found
+	* 
+	* Returns null if no match is found
 	*/
 		var result_ 	= result;
 		result_.term 	= term; result_.query 	= query;
@@ -196,7 +189,17 @@ var FuzzyMatcher = function ( context ) {
 	};  // End matcher.toString()
 
 
-	matcher.buildNode = function ( matchArray ) {
+	// ===================
+	// NODE
+	// ===================
+	matcher.addText 		= function ( nodeStr, parentNode ) {
+		var textNode = document.createTextNode( nodeStr );
+		parentNode.appendChild( textNode );
+		return textNode
+	};  // End matcher.addText()
+
+
+	matcher.buildNode 		= function ( matchArray ) {
 	/* ( [] ) -> Node */
 
 		var numGroups 	= matchArray.length;
@@ -206,8 +209,7 @@ var FuzzyMatcher = function ( context ) {
 			// If group is even, it matched .*, which isn't styled text
 			if ( groupi % 2 === 0 ) {
 
-				matcher.addTextNode( chars, result.node );
-
+				matcher.addText( chars, result.node );
 			// If the group is odd, it's a match to an actual letter
 			} else {
 
@@ -215,8 +217,7 @@ var FuzzyMatcher = function ( context ) {
 				matchLetterNode.className 	= matcher.matchedLetterClass;
 				result.node.appendChild( matchLetterNode );
 
-				matcher.addTextNode( chars, matchLetterNode );
-
+				matcher.addText( chars, matchLetterNode );
 			}  // end if even
 		}  // end for each array of letters
 
@@ -224,10 +225,12 @@ var FuzzyMatcher = function ( context ) {
 	};  // End matcher.buildNode()
 
 
-	matcher.toNode = function ( term, query, queryRegex, tagName ) {
+	matcher.toNode 			= function ( term, query, queryRegex, tagName ) {
 	/* ( str, str, str ) -> Node or null
-
-	Returns null if no match is found
+	* 
+	* Returns null if no match is found
+	* If you want to see how to make a queryRegex, look at fuzzy searcher
+	* script.
 	*/
 		result = {};
 		result.term 	= term; result.query 	= query;
@@ -258,45 +261,11 @@ var FuzzyMatcher = function ( context ) {
 	// matcher.numMatched letters
 
 
-  matcher.matchComparator = function(m1, m2) {
-  /* This is in here because here is where the properties used are created */
-  	// might need Math.abs(m1.score) - Math.abs(m2.score)?
-  	// on the other hand: http://stackoverflow.com/questions/2961047/javascript-sorting-arrays-containing-positive-and-negative-decimal-numbers
-  	// console.log('m1:', m1.term, m1.score)
-  	// console.log('m2:', m2.term, m2.score)
-    return m2.score - m1.score;
-  };
+	matcher.matchComparator = function(m1, m2) {
+	/* This is in here because in here is where the test properties are created */
+		return m2.score - m1.score;
+	};
 
-  /*
-   * Whether or not matcher.js should analyze sub-terms, i.e. also
-   * check term starting positions != 0.
-   *
-   * Example:
-   * Given the term 'Halleluja' and query 'luja'
-   *
-   * Fuzzy.js scores this combination with an 8, when analyzeSubTerms is
-   * set to false, as the following matching string will be calculated:
-   * Ha[l]lel[uja]
-   *
-   * If you activate sub temr analysis though, the query will reach a score
-   * of 10, as the matching string looks as following:
-   * Halle[luja]
-   *
-   * Naturally, the second version is more expensive than the first one.
-   * You should therefore configure how many sub terms you which to analyse.
-   * This can be configured through matcher.analyzeSubTermDepth = 10.
-   */
-  // matcher.analyzeSubTerms = false;
-
-  /*
-   * How many sub terms should be analyzed.
-   */
-  // matcher.analyzeSubTermDepth = 10;
-
-  // matcher.highlighting = {
-  //   before: '<em>',
-  //   after: '</em>'
-  // };
 
 /*
    * Exporting the public API
@@ -329,4 +298,5 @@ var FuzzyMatcher = function ( context ) {
   return matcher;
 };
 
-// var fuzzyMatcher = FuzzyMatcher( window );
+// Test
+// var fuzzyMatcher = FuzzyMatcher( window );  // context not currently needed

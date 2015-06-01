@@ -1,13 +1,14 @@
 /* my-fuzzy-search.js 
-
-Finds all fuzzy matches in an array and
-builds them into an html node unless otherwise specified
-
-TODO:
-- Make a function that returns an html string too
-- If performance gets to be an issue, we can bring the
-regex thing in here
-
+* 
+* Finds all fuzzy matches in an array and builds them
+* into a node. Returns other interesting info as well
+* 
+* TODO:
+* - Make a function that returns an html string too
+* http://codereview.stackexchange.com/questions/23899/faster-javascript-fuzzy-string-matching-function
+* - If we want to optimize, look at that (also
+* 	if we want to optimize, put regex in fuzzy-search)
+* 
 */
 
 'use strict'
@@ -28,28 +29,28 @@ var FuzzySearcher = function () {
 	searcher.maxResults 	= 50;
 
 
-	searcher.escapeRegExp 	= function ( queryArray ) {
-	/*  ( str ) -> Str
-
-	Escapes one string from any regex symbols that would otherwise mess up the search
+	searcher.escapeRegex = function ( queryArray ) {
+	/* ( str ) -> Str
+	* 
+	* Escapes one string from any regex symbols that would otherwise mess up the search
 	*/
 		// http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 		return queryArray.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-	}  // End searcher.escapeRegExp()
+	}  // End searcher.escapeRegex()
 
 
-	searcher.buildQueryRegex = function ( query ) {
-		/* (str) -> RegExp
-
-	Since this is a very unique situation, we'll use the order
-	of the list to our advantage and change it using every other one
+	searcher.queryRegex = function ( query ) {
+	/* (str) -> RegExp
+	* 
+	* Since this is a very unique situation, we'll use the order
+	* of the list to our advantage and change it using every other one
 	*/
 		// .concat() makes .join() work for one char. Can't use .split().push()
 		// ? is there because, for example 'Update payement method' with query 'd' will highlight the last 'd'
 		var queryArray 		= query.split('').concat([''])
 		// Escape the characters that need escaping
 		for ( var chari = 0; chari < queryArray.length; chari++ ) {
-			queryArray[ chari ] = searcher.escapeRegExp( queryArray[ chari ] );
+			queryArray[ chari ] = searcher.escapeRegex( queryArray[ chari ] );
 		}
 		// Get possible letters in between and after matching letters
 		var regexMiddle 	= queryArray.join( ')(.*?)(' );
@@ -60,16 +61,16 @@ var FuzzySearcher = function () {
 
 		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
 		return ( new RegExp( regexStr, 'i' ) )
-	};  // End searcher.buildQueryRegex()
+	};  // End searcher.queryRegex()
 
 
-	searcher.getMatches 	= function( terms, query ) {
+	searcher.getMatches = function( terms, query ) {
 	/* ( str, [str] ) -> [ {} ]
-
-	Builds, sorts, and returns an array of matches
+	* 
+	* Builds, sorts, and returns an array of matches
 	*/
 		var matchArray = [];
-		var queryRegex = searcher.buildQueryRegex( query );
+		var queryRegex = searcher.queryRegex( query );
 
 		for ( var termi = 0; (termi < terms.length) &&
 							( termi < searcher.maxResults ) ; termi++ ) {
@@ -86,8 +87,8 @@ var FuzzySearcher = function () {
 	};  // End searcher.getMatches()
 
 
-	searcher.toNode 		= function( terms, query, tagName ) {
-
+	searcher.toNode 	= function( terms, query, tagName ) {
+	/* ( [str], str, str ) -> {} */
 		result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
 
 		// Validator should be separate from the two scripts. Need
@@ -115,10 +116,6 @@ var FuzzySearcher = function () {
 		return result;
 	};  // End searcher.search()
 
-	// appends them to whatever element matters
-		// Makes a dummy element first?
-		// Just makes a dummy element so the type of parent is determined by the user?
-			// That seems too complicated for the user
 
 	return searcher;
 };  // End FuzzySearcher()
