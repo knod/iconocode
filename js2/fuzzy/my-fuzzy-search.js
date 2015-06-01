@@ -57,6 +57,8 @@ var FuzzySearcher = function () {
 		// A utils script, but then it's less self-contained. Which
 		// I gues it isn't anymore anyway :(
 		var tagName 		= tagName || searcher.searchTagName;
+		tagName = tagName.replace( /[<>]/g, '' );
+
 		var node 			= document.createElement( tagName );
 		result.node 		= node;
 		node.className 		= searcher.containerClass;

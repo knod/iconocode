@@ -29,10 +29,6 @@ var FuzzyMatcher = function ( context ) {
 	var matcher = {};
 
 	var result;
-	// var result 					= {
-	// 	term: "", query: "", score: 0, matchArray: [],
-	// 	htmlString: "", node: null
-	// };
 	matcher.matchedLetterClass 	= 'fuzzy-matched-letter';
 	matcher.matchedTermClass	= 'fuzzy-matched-term';
 	matcher.defaultTag 			= 'li';
@@ -73,14 +69,12 @@ var FuzzyMatcher = function ( context ) {
 	*/
 		var defaultTag_ = matcher.defaultTag;
 
-		if ( tagName === undefined ) { tagName = defaultTag_; }
-		else {
-
-			tagName = tagName.replace( /[<>]/g, '' );  // Are there any others to watch for?
-			// ?? What are invalid characters in custom html tags? Should I remove them?
-			// http://w3c.github.io/webcomponents/spec/custom/#concepts
-			// tagName.replace( /[^a-z0-9-]/g, '' );  // no uppercase allowed
-		}  // End if tagname is or isn't undefined
+		tagName = tagName || defaultTag_;
+		tagName = tagName.replace( /[<>]/g, '' );
+		// Are there any others to watch for?
+		// ?? What are invalid characters in custom html tags? Should I remove them?
+		// http://w3c.github.io/webcomponents/spec/custom/#concepts
+		// tagName.replace( /[^a-z0-9-]/g, '' );  // no uppercase allowed
 
 		if ( tagName === "''" || tagName === '""' || tagName === '' ) {
 			console.warn( 'Provind an empty string does not stop the creation of ' +
@@ -104,6 +98,12 @@ var FuzzyMatcher = function ( context ) {
 	// ===================
 	// STRING MATCHING
 	// ===================
+	matcher.escapeRegExp = function (str) {
+		// http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+	}  // End matcher.escapeRegExp()
+
+
 	matcher.buildRegExp = function ( query ) {
 	/* (str) -> RegExp
 
@@ -112,11 +112,18 @@ var FuzzyMatcher = function ( context ) {
 	*/
 		// .concat() makes .join() work for one char. Can't use .split().push()
 		// ? is there because, for example 'Update payement method' with query 'd' will highlight the last 'd'
-		var regexMiddle 	= query.split('').concat(['']).join( ')(.*?)(' );
+		var queryArray 		= query.split('').concat([''])
+		// Escape the characters that need escaping
+		queryArray.forEach( function ( str, indx, qArray ) {
+			qArray[ indx ] 	= matcher.escapeRegExp(str);
+		} );
+		var regexMiddle 	= queryArray.join( ')(.*?)(' );
+
 		var regexStr 	= '(.*?)(' + regexMiddle + ')';
 		// Without this, we cut off the last word and () get '' at the end with an extra span
 		regexStr = regexStr.replace( "(.*?)()", '(.*)' );
 		// 'i' means case doesn't matter. RegExp() adds in the start and end '/'
+		console.log(regexStr)
 		return ( new RegExp( regexStr, 'i' ) )
 	};  // End matcher.buildRegExp()
 
