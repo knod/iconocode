@@ -19,7 +19,7 @@ since I can't figure out shapes right now
 	font-weight: normal;
 }
 
-.icd.icon-container div,
+.icd .icon-container div,
 .icd section, .icd div {
 	/* These next two break something in CodeMirror.
 	Will have to deal with individual instances of position: absolute */
@@ -32,7 +32,7 @@ since I can't figure out shapes right now
 	background-color: rgba(0, 0, 0, 0);
 }
 
-.icd.icon-container .icon-body {
+.icd .icon-container .icon-body {
 	position: relative;
 	margin: 0 auto;
 
@@ -40,7 +40,7 @@ since I can't figure out shapes right now
 	min-width: 1.5rem;
 }
 
-.icd.icon-container .icon-side-hider {
+.icd .icon-container .icon-side-hider {
 	width: 0;
 	height: 0;
 	border: none;
@@ -50,8 +50,8 @@ since I can't figure out shapes right now
 /* ================== */
 /* SHAPES */
 /* ================== */
-.icd.before-icon-body,
-.icd.after-icon-body {
+.icd .before-icon-body,
+.icd .after-icon-body {
 	width: 0;
 	height: 0;
 	border: none;
@@ -69,7 +69,7 @@ since I can't figure out shapes right now
 	background-color: firebrick;
 }
 /* Data? */
-.icd.noun .icon-body {
+.icd .noun .icon-body {
 	background-color: navy;
 }
 /* Message */
@@ -81,12 +81,12 @@ since I can't figure out shapes right now
 /* =================== */
 /* ALL TABS */
 /* =================== */
-.icd.tab {
+.icd .tab {
 	text-align: center;
 	border-right: 1px solid rgb( 150, 150, 150 );
 }
-.icd.tab.last { border-right: none; }
-.icd.tab.selected { background-color: rgb( 165, 165, 165 ) }
+.icd .tab.last { border-right: none; }
+.icd .tab.selected { background-color: rgb( 165, 165, 165 ) }
 /* This instead? */
 .icd .selected { background-color: rgb( 165, 165, 165 ) }
 
@@ -123,12 +123,12 @@ be scrollable... make it position: relative?
 
 /* --- TABS --- */
 /* This messes up all the spacing calculation */
-.icd.adder-mode-tabs {
+.icd .adder-mode-tabs {
 	position:static;
 	min-height: 1.2rem;
 }
 
-.icd.adder-mode-tab {
+.icd .adder-mode-tab {
 	height: 1.4rem;
 	padding-top: .1rem;
 	/*width: 50%;*/
@@ -155,7 +155,7 @@ be scrollable... make it position: relative?
 
 
 /* --- PICKERS --- */
-.icd.adder-picker {
+.icd .adder-picker {
 	height: 9rem;
 	width: 100%;
 }
@@ -166,17 +166,17 @@ be scrollable... make it position: relative?
 	background-color: darkkhaki;
 }
 
-.icd.type-choice {
+.icd .type-choice {
 	text-align: center;
 	margin-top: 5%;
 	/* Why does this go out of the parent? */
 	height: 95%;
 }
-.icd.type-choice .icon-container {
+.icd .type-choice .icon-container {
 	display: block;
 	margin-top: .7rem;
 }
-.icd.type-choice .icon-body {
+.icd .type-choice .icon-body {
 	height: calc(1.2rem * 2);
 	min-width: calc(1.5rem * 2);
 }
@@ -201,7 +201,7 @@ but maybe we want the images to be their proper size?
 	overflow: scroll;
 }
 
-.icd.image-choice-container {
+.icd .image-choice-container {
 	/* Not really sure about this stuff */
     /*display: flex;
     justify-content: center;
@@ -211,16 +211,16 @@ but maybe we want the images to be their proper size?
     margin-right: 5%;
     margin-bottom: 5%;*/
 }
-.icd.image-choice {
+.icd .image-choice {
 	max-width: 15%;
 	margin: 2.5%;
 
 	border: 1px solid gray;
 }
-.icd.image-choice:hover {
+.icd .image-choice:hover {
 	border: 1px solid white;
 }
-.icd.image-choice:active {
+.icd .image-choice:active {
 	border: 1px solid darkseagreen;
 }
 
