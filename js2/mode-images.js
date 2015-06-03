@@ -3,7 +3,10 @@
 Creates everything to do with the images mode?
 
 TODO:
-- Checkout http://jsfiddle.net/g9HMf/3/ for grid navigation with scrolling
+- For grid navigation with scrolling, checkout:
+	http://stackoverflow.com/questions/4884839/how-do-i-get-a-element-to-scroll-into-view-using-jquery
+	or https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+
 
 
 Affects:
@@ -19,37 +22,8 @@ adder.addImageMode 	= function () {
 /* Enclose and name so it can be called in order */
 
 	// ====================
-	// Grid
+	// Choosing
 	// ====================
-
-	// ====================
-	// Navigation
-	// ====================
-	// http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
-	adder.selectImg = function ( imgNode ) {
-	/*
-
-	*/
-		$('.image-choice.selected').removeClass('selected');
-		$(imgNode).addClass('selected');
-		// $('.image-choice.selected')[0].contentWindow.focus();
-		// $($('.image-choice.selected')[0]).attr('tabIndex', 0);
-		// console.log($(":focus"))
-
-	};  // adder.selectImg();
-
-
-	adder.deselectAllImages = function () {
-		$('.image-choice.selected').removeClass('selected');
-	};  // End adder.deselectAllImages()
-
-
-	adder.getCellNode = function ( position, grid ) {
-		console.trace(grid, position, grid[ position.row ])
-		return grid[ position.row ][ position.col ];
-	};  // End adder.getCellNode()
-
-
 	adder.chooseImg = function ( imgNode ) {
 
 		var filePath = $('.image-choice.selected').attr('src');
@@ -63,9 +37,36 @@ adder.addImageMode 	= function () {
 	};  // End adder.chooseImg()
 
 
+	// ====================
+	// Navigation
+	// ====================
+	// http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
+	adder.selectImg = function ( imgNode ) {
+	/*
+
+	*/
+		$('.image-choice.selected').removeClass('selected');
+		$(imgNode).addClass('selected');
+		// TODO: ??: How do I focus on a freaking image?!
+		// $('.image-choice.selected')[0].contentWindow.focus();
+		// $($('.image-choice.selected')[0]).attr('tabIndex', 0);
+		// console.log($(":focus"))
+
+	};  // adder.selectImg();
+
+
+	adder.deselectAllImages = function () {
+		$('.image-choice.selected').removeClass('selected');
+	};  // End adder.deselectAllImages()
+
+
+	adder.getCellNode = function ( position, grid ) {
+		return grid[ position.row ][ position.col ];
+	};  // End adder.getCellNode()
+
+
 	adder.position;
 	adder.selectImgByPos = function ( position, grid ) {
-
 		// Change the nodes
 		var node = adder.getCellNode( position, adder.imgGrid );
 		adder.selectImg( node );
@@ -73,7 +74,7 @@ adder.addImageMode 	= function () {
 		return position;
 	};  // End adder.selectImgByPos()
 
-
+	adder.choicesJustActivated;
 	adder.activateKeyboardNav = function ( grid ) {
 	/*
 
@@ -87,7 +88,13 @@ adder.addImageMode 	= function () {
 
 		adder.position = { col: 0, row: 0 };
 		// Change the nodes
+		// Maybe this function should be taken out. This is the only
+		// place it's used so far
 		adder.selectImgByPos( adder.position, grid );
+
+		// Prevent 'tab' from going to the next element on the
+		// first press... how...?
+		adder.choicesJustActivated = true;
 
 		return adder.position;
 	};  // adder.activateKeyboardNav()
@@ -112,10 +119,12 @@ adder.addImageMode 	= function () {
 		else if ( direction === 'next' ) 	{
 			// Navigate to the next cell
 			position.col++
+			// console.log(position.col, numCols - 1)
 			if ( position.col > (numCols - 1) ) {
 				position.col = 0;
 				position.row++;
 			}
+			// debugger;
 		}
 
 		position.col = position.col % numCols;
@@ -125,10 +134,10 @@ adder.addImageMode 	= function () {
 		if ( position.col < 0 ) { position.col += numCols }
 		if ( position.row < 0 ) { position.row += adder.numRows }
 
-
-			// console.log(adder.imgGrid)
 		var imgNode = adder.getCellNode( position, adder.imgGrid );
+		// If we've hit a position that doesn't exist in the grid
 		if ( imgNode === undefined ) {
+			// Go to the last existing position in the grid
 			position.row = adder.imgGrid.length - 1;
 			position.col = adder.imgGrid[ position.row ].length - 1;
 			imgNode = adder.getCellNode( position, adder.imgGrid );
@@ -136,19 +145,10 @@ adder.addImageMode 	= function () {
 
 		adder.selectImg( imgNode );
 
-		// // Change the nodes
-		// var imgNode = adder.selectImgByPos( position, adder.imgGrid );
-
-		// // If there was no image there, which would happen if there were
-		// // more images in the row above than the row below
-		// if ( imgNode === undefined ) {
-		// 	position.col = numCols - 1;
-		// 	imgNode = adder.selectImgByPos( position, adder.imgGrid );
-		// }
-
 		return position;
 	};  // End adder.keyboardNavChoices()
 
+	// ??: Why won't this work?! Because it doesn't have focus?
 	// $('.image-choice').on( 'keypress', function ( evnt ) {
 	// 	console.log('bleh');
 
@@ -163,8 +163,8 @@ adder.addImageMode 	= function () {
 	// 	adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
 
 	// });
-// document.addEventListener( 'keypress', function () { console.log(document.activeElement) } );
-// document.addEventListener( 'click', function () { console.log(document.activeElement) } );
+	// document.addEventListener( 'keypress', function () { console.log(document.activeElement) } );
+	// document.addEventListener( 'click', function () { console.log(document.activeElement) } );
 
 	document.addEventListener( 'keydown', function ( evnt ) {
 
@@ -172,22 +172,30 @@ adder.addImageMode 	= function () {
 		var selectedImage 	= $('.image-choice.selected')[0];
 
 		if ( selectedImage !== undefined ) {
+			// Prevents tab from cycling through other DOM stuff
+			evnt.preventDefault();
+
 			var direction;
 
 			if ( key === 40) { direction = 'down' }
 			else if ( key === 39) { direction = 'right' }
 			else if ( key === 37) { direction = 'left' }
 			else if ( key === 38) { direction = 'up' }
-
-			if ( direction !== undefined ) {
-							if ( adder.imgGrid === undefined ) {debugger;}
-				adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
+			else if ( key ===  9) { // tab			
+			// TODO:  Didn't I want tab to tab through modes and modes' modes? How do I
+			// not have tabbings interfere with each other?
+				// Don't move if it's the tab that activates the choice selection
+				if ( adder.choicesJustActivated !== true ) {
+					direction = 'next';
+				} else {
+					adder.choicesJustActivated = false;
+				}
 			}
 
-			// evnt.preventDefault();
-			// evnt.stopPropagation();
+			if ( direction !== undefined ) {
+				adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
+			}
 		}
-
 
 	});
 
@@ -205,18 +213,13 @@ adder.addImageMode 	= function () {
 		imgNode.src 				= imgFilePath;
 
 		// imgNode.addEventListener( 'keypress', function ( evnt ) {
-		// 	console.log('bleh');
-
 		// 	var key = evnt.keyCode || evnt.which;
-
 		// 	var direction;
 		// 	if ( key === 40) { direction = 'down' }
 		// 	else if ( key === 39) { direction = 'right' }
 		// 	else if ( key === 37) { direction = 'left' }
 		// 	else if ( key === 38) { direction = 'up' }
-
 		// 	adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
-
 		// });
 
 		return imgNode;
