@@ -56,6 +56,7 @@ var FuzzyMatcher = function ( context ) {
 
 		var numGroups = matchArray.length;
 		// Don't lose points for number of letters before the first match is found
+		// Not yet anyway (see matcher.matchComparitor())
 		for ( var groupi = 1; groupi < numGroups; groupi++ ) {
 			// Don't lose points for number of letters after the final match
 			if ( (groupi % 2 === 0) && (groupi < (numGroups - 1)) ) {

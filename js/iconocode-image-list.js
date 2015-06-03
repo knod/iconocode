@@ -25,10 +25,10 @@ adder.addImgList 	= function () {
 
 
 	var imgs = adder.defaultImages;
-	var folder = adder.imgFolder
+	var folderPath = adder.imgFolder
 
 	for ( var imgi = 0; imgi < imgs.length; imgi++ ) {
-		imgs[ imgi ].folder = folder;
+		imgs[ imgi ].folderPath = folderPath;
 	}
 
 };  // End adder.addImgList()
