@@ -62,6 +62,7 @@ window.addEventListener( 'load', function () {
 
 	adder.arrangeTabs();  // adder.js
 
+	// Has to be after others I think
 	adder.addViewer( adder.sections.viewer );
 
 	// This should happen from an event, of course

@@ -107,5 +107,16 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	$(".CodeMirror-scroll").css('overflow', 'hidden');
 	// jQuery again! be careful with selector or move this to .css file
 
+
+	// Tab in this 'search bar' navigates to selecting choices
+	cmEditor.setOption("extraKeys", {
+	// http://codemirror.net/doc/manual.html#keymaps
+		Tab: function() {
+			// Change this to use the right grid using the adder mode
+			adder.activateKeyboardNav( adder.imgGrid );
+		}
+	});
+
+
 	return cmEditor;
 };  // End adder.addViewer()

@@ -22,20 +22,24 @@ adder.addImageMode 	= function () {
 	// Grid
 	// ====================
 
-	// // ====================
-	// // Navigation
-	// // ====================
-	// // http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
-	var position = { x: 0, y: 0 };
-
+	// ====================
+	// Navigation
+	// ====================
+	// http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
 	adder.selectImg = function ( imgNode ) {
 	/*
 
 	*/
 		$('.image-choice.selected').removeClass('selected');
+		$('.image-choice.selected').focus;
 		$(imgNode).addClass('selected');
 
 	};  // adder.selectImg();
+
+
+	adder.getCellNode = function ( position, grid ) {
+		return grid[ position.col ][ position.row ];
+	};  // End adder.getCellNode()
 
 
 	adder.chooseImg = function ( imgNode ) {
@@ -50,16 +54,86 @@ adder.addImageMode 	= function () {
 
 	};  // End adder.chooseImg()
 
-	// var imgGrid = [];
 
-	// function highlightImage( x, y ) {
-	//     $('.image-choice').removeClass('selected');
-	//     imgGrid[y][x].addClass('selected');
-	// }
+	adder.position;
+	adder.selectImgByPos = function ( position, grid ) {
 
- 	// highlightImage( position.x, position.y );
+		// Change the nodes
+		var node = adder.getCellNode( position, adder.imgGrid );
+		adder.selectImg( node );
+
+		return position;
+	};  // End adder.selectImgByPos()
 
 
+	adder.activateKeyboardNav = function ( grid ) {
+	/*
+
+	Trigger this when the user wants to navigate the choices with the keyboard
+	(Triggered by 'tab' kyepress?)
+	*/
+
+		// Take focus off of wherever it is that has focus
+
+		$(':focus').blur();  // Take focus of whatever element has focus
+
+		adder.position = { col: 0, row: 0 };
+		// Change the nodes
+		adder.selectImgByPos( adder.position, grid );
+
+		return adder.position;
+	};  // adder.activateKeyboardNav()
+
+
+	adder.keyboardNavChoices = function ( position, direction, grid ) {
+	/*
+
+	??: How to do initial navigation to selections?
+
+	Make universal so variable types can use it too?
+	Triggered by 'tab' keypress?
+
+	TODO: Tab should just increase the cell number
+	*/
+
+		if 		( direction === 'right' ) 	{ position.col++ }
+		else if ( direction === 'left' ) 	{ position.col-- }
+		else if ( direction === 'down' ) 	{ position.row++ }
+		else if ( direction === 'up' ) 		{ position.row-- }
+		else if ( direction === 'next' ) 	{
+			// Navigate to the next cell
+			position.col++
+			if ( position.col > (adder.numCols - 1) ) {
+				position.col = 0;
+				position.row++;
+			}
+		}
+
+		position.col = position.col % adder.numCols;
+		position.col = position.row % adder.numRows;
+
+		// Change the nodes
+		adder.selectImgByPos( position, adder.imgGrid );
+
+		return position;
+	};  // End adder.keyboardNavChoices()
+
+
+	// adder.activateChoiceSelection = function () {
+
+	// 	adder.viewer.CodeMirror.addEventListener( 'keyup', function ( evnt ) {
+	// 		var key = evnt.keyCode || evnt.which;
+
+	// 		if ( key === 9 ) {  // tab
+	// 			// Change this to use the right grid using the adder mode
+	// 			adder.activateKeyboardNav( adder.imgGrid );
+	// 		}
+	// 	});  // End adder.activateChoiceSelection()
+
+
+	// 	// return ??
+	// };  // End on viewer keyup
+	
 	// $(window).on('keydown', function (e) {
 	//     if (e.keyCode === 37) // left
 	//         moveLeft();
@@ -71,26 +145,6 @@ adder.addImageMode 	= function () {
 	//         moveDown();
 	//     highlightImage();
 	// });
-
-	// function moveLeft() {
-	//     position.x--;
-	//     if (position.x < 0) position.x = 0;
-	// }
-
-	// function moveUp() {
-	//     position.y--;
-	//     if (position.y < 0) position.y = 0;
-	// }
-
-	// function moveRight() {
-	//     position.x++;
-	//     if (position.x >= imgGrid[0].length) position.x = imgGrid[0].length - 1;
-	// }
-
-	// function moveDown() {
-	//     position.y++;
-	//     if (position.y >= imgGrid.length) position.y = imgGrid.length - 1;
-	// }
 
 
 	// =============
@@ -140,6 +194,7 @@ adder.addImageMode 	= function () {
 
 
 	adder.numCols = 5;
+	adder.numRows;
 	adder.addImgRow 		= function ( rowNum, allImgObjs, parentNode ) {
 	/*
 	* 
@@ -177,10 +232,11 @@ adder.addImageMode 	= function () {
 
 
 	adder.addGrid = function ( allImgObjs, parentNode ) {
-		adder.imgGrid = [];
+		adder.imgGrid 	= [];
 
 		// Get the right number of rows for the given number of images
-		var numRows = Math.ceil( allImgObjs.length / adder.numCols )
+		adder.numRows 	= Math.ceil( allImgObjs.length / adder.numCols )
+		var numRows 	= adder.numRows;
 		for ( var rowi = 0; rowi < numRows; rowi++ ) {
 			adder.addImgRow( rowi, allImgObjs, parentNode );
 		}
