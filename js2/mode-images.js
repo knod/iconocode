@@ -45,6 +45,7 @@ adder.addImageMode 	= function () {
 
 
 	adder.getCellNode = function ( position, grid ) {
+		console.trace(grid, position, grid[ position.row ])
 		return grid[ position.row ][ position.col ];
 	};  // End adder.getCellNode()
 
@@ -122,8 +123,10 @@ adder.addImageMode 	= function () {
 
 		// They can only ever get to -1, so the math works
 		if ( position.col < 0 ) { position.col += numCols }
-		if ( position.row < 0 ) { position.row += numCols }
+		if ( position.row < 0 ) { position.row += adder.numRows }
 
+
+			// console.log(adder.imgGrid)
 		var imgNode = adder.getCellNode( position, adder.imgGrid );
 		if ( imgNode === undefined ) {
 			position.row = adder.imgGrid.length - 1;
@@ -164,7 +167,6 @@ adder.addImageMode 	= function () {
 // document.addEventListener( 'click', function () { console.log(document.activeElement) } );
 
 	document.addEventListener( 'keydown', function ( evnt ) {
-		console.log('bleh');
 
 		var key 			= evnt.keyCode || evnt.which;
 		var selectedImage 	= $('.image-choice.selected')[0];
@@ -178,6 +180,7 @@ adder.addImageMode 	= function () {
 			else if ( key === 38) { direction = 'up' }
 
 			if ( direction !== undefined ) {
+							if ( adder.imgGrid === undefined ) {debugger;}
 				adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
 			}
 
