@@ -31,14 +31,21 @@ adder.addImageMode 	= function () {
 
 	*/
 		$('.image-choice.selected').removeClass('selected');
-		$('.image-choice.selected').focus;
 		$(imgNode).addClass('selected');
+		// $('.image-choice.selected')[0].contentWindow.focus();
+		// $($('.image-choice.selected')[0]).attr('tabIndex', 0);
+		// console.log($(":focus"))
 
 	};  // adder.selectImg();
 
 
+	adder.deselectAllImages = function () {
+		$('.image-choice.selected').removeClass('selected');
+	};  // End adder.deselectAllImages()
+
+
 	adder.getCellNode = function ( position, grid ) {
-		return grid[ position.col ][ position.row ];
+		return grid[ position.row ][ position.col ];
 	};  // End adder.getCellNode()
 
 
@@ -95,6 +102,7 @@ adder.addImageMode 	= function () {
 
 	TODO: Tab should just increase the cell number
 	*/
+		var numCols = grid[ position.row ].length
 
 		if 		( direction === 'right' ) 	{ position.col++ }
 		else if ( direction === 'left' ) 	{ position.col-- }
@@ -103,49 +111,82 @@ adder.addImageMode 	= function () {
 		else if ( direction === 'next' ) 	{
 			// Navigate to the next cell
 			position.col++
-			if ( position.col > (adder.numCols - 1) ) {
+			if ( position.col > (numCols - 1) ) {
 				position.col = 0;
 				position.row++;
 			}
 		}
 
-		position.col = position.col % adder.numCols;
-		position.col = position.row % adder.numRows;
+		position.col = position.col % numCols;
+		position.row = position.row % adder.numRows;
 
-		// Change the nodes
-		adder.selectImgByPos( position, adder.imgGrid );
+		// They can only ever get to -1, so the math works
+		if ( position.col < 0 ) { position.col += numCols }
+		if ( position.row < 0 ) { position.row += numCols }
+
+		var imgNode = adder.getCellNode( position, adder.imgGrid );
+		if ( imgNode === undefined ) {
+			position.row = adder.imgGrid.length - 1;
+			position.col = adder.imgGrid[ position.row ].length - 1;
+			imgNode = adder.getCellNode( position, adder.imgGrid );
+		}
+
+		adder.selectImg( imgNode );
+
+		// // Change the nodes
+		// var imgNode = adder.selectImgByPos( position, adder.imgGrid );
+
+		// // If there was no image there, which would happen if there were
+		// // more images in the row above than the row below
+		// if ( imgNode === undefined ) {
+		// 	position.col = numCols - 1;
+		// 	imgNode = adder.selectImgByPos( position, adder.imgGrid );
+		// }
 
 		return position;
 	};  // End adder.keyboardNavChoices()
 
+	// $('.image-choice').on( 'keypress', function ( evnt ) {
+	// 	console.log('bleh');
 
-	// adder.activateChoiceSelection = function () {
+	// 	var key = evnt.keyCode || evnt.which;
 
-	// 	adder.viewer.CodeMirror.addEventListener( 'keyup', function ( evnt ) {
-	// 		var key = evnt.keyCode || evnt.which;
+	// 	var direction;
+	// 	if ( key === 40) { direction = 'down' }
+	// 	else if ( key === 39) { direction = 'right' }
+	// 	else if ( key === 37) { direction = 'left' }
+	// 	else if ( key === 38) { direction = 'up' }
 
-	// 		if ( key === 9 ) {  // tab
-	// 			// Change this to use the right grid using the adder mode
-	// 			adder.activateKeyboardNav( adder.imgGrid );
-	// 		}
-	// 	});  // End adder.activateChoiceSelection()
+	// 	adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
 
-
-	// 	// return ??
-	// };  // End on viewer keyup
-	
-	// $(window).on('keydown', function (e) {
-	//     if (e.keyCode === 37) // left
-	//         moveLeft();
-	//     else if (e.keyCode === 38) // up
-	//         moveUp();
-	//     else if (e.keyCode === 39) // right
-	//         moveRight();
-	//     else if (e.keyCode === 40) // down
-	//         moveDown();
-	//     highlightImage();
 	// });
+// document.addEventListener( 'keypress', function () { console.log(document.activeElement) } );
+// document.addEventListener( 'click', function () { console.log(document.activeElement) } );
 
+	document.addEventListener( 'keydown', function ( evnt ) {
+		console.log('bleh');
+
+		var key 			= evnt.keyCode || evnt.which;
+		var selectedImage 	= $('.image-choice.selected')[0];
+
+		if ( selectedImage !== undefined ) {
+			var direction;
+
+			if ( key === 40) { direction = 'down' }
+			else if ( key === 39) { direction = 'right' }
+			else if ( key === 37) { direction = 'left' }
+			else if ( key === 38) { direction = 'up' }
+
+			if ( direction !== undefined ) {
+				adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
+			}
+
+			// evnt.preventDefault();
+			// evnt.stopPropagation();
+		}
+
+
+	});
 
 	// =============
 	// PICKER
@@ -159,6 +200,21 @@ adder.addImageMode 	= function () {
 		var imgNode 				= document.createElement('img');
 		parentNode.appendChild( imgNode );
 		imgNode.src 				= imgFilePath;
+
+		// imgNode.addEventListener( 'keypress', function ( evnt ) {
+		// 	console.log('bleh');
+
+		// 	var key = evnt.keyCode || evnt.which;
+
+		// 	var direction;
+		// 	if ( key === 40) { direction = 'down' }
+		// 	else if ( key === 39) { direction = 'right' }
+		// 	else if ( key === 37) { direction = 'left' }
+		// 	else if ( key === 38) { direction = 'up' }
+
+		// 	adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
+
+		// });
 
 		return imgNode;
 	};  // End adder.addImage()

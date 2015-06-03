@@ -188,7 +188,7 @@ image http://jsfiddle.net/0bmws0me/1/ (from ThePendulum something),
 but maybe we want the images to be their proper size?
 */
 #icd-images-picker {
-	background-color: tomato;
+	background-color: tan;
 
 	display: flex;
 	justify-content: flex-start;
@@ -230,3 +230,10 @@ but maybe we want the images to be their proper size?
 	background-color: firebrick;
 }
 
+
+/* --------------------- */
+/* --- TEST --- */
+/* --------------------- */
+.icd :focus {
+	border: 3px solid rgb( 0, 0, 0 ) !important;
+}

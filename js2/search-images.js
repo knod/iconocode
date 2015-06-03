@@ -50,11 +50,11 @@ var makeImage = function( imageObj ) {
 document.addEventListener( 'keydown', function (evnt) {
 	var key = evnt.keyCode || evnt.which;
 
-		if (evnt.keyCode === 13) {
-			var icon = 
+	if (evnt.keyCode === 13) {
+		var icon = 
 
-			replaceWith(adder.defaultImages[0]);
-		}
+		replaceWith(adder.defaultImages[0]);
+	}
 
 } );
 

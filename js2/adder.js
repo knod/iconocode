@@ -119,6 +119,6 @@ and it messed something up?
 adder.addAdder();
 
 
-document.addEventListener( 'keypress', adder.showAdder );  // End show adder event listener
+// document.addEventListener( 'keypress', adder.showAdder );  // End show adder event listener
 
 // };  // End adder.buildAdder()
