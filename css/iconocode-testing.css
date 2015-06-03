@@ -61,20 +61,20 @@ since I can't figure out shapes right now
 	significant width to show shape, for example !!!! */
 /* Process? */
 /* diamond is only one with different height? */
-.icd.verb .icon-body {
-	background: khaki;
+.icd .verb .icon-body, .icd .verb.icon-body {
+	background: darkolivegreen;
 }
 /* Process? */
-.icd.square .icon-body {
+.icd .square .icon-body {
 	background-color: firebrick;
 }
 /* Data? */
 .icd.noun .icon-body {
-	background-color: lightblue;
+	background-color: navy;
 }
 /* Message */
-.icd.message .icon-body {
-	background-color: sandybrown;
+.icd .message .icon-body {
+	background-color: maroon;
 }
 
 
@@ -133,18 +133,24 @@ be scrollable... make it position: relative?
 }
 
 /* --- VIEWER --- */
-.icd.adder-icon-viewer-container {
+.icd .adder-icon-viewer-container {
 	padding: .2rem .5rem 0 .5rem;
 	/* To make room for horizontal scroll bar */
 	height: 2.5rem;
 }
-.icd.adder-icon-viewer {
+.icd .adder-icon-viewer {
 	position: absolute;
 	top: 50%;
 	transform: translate( 0, -50% );
 
 	color: rgb( 140, 140, 140 );
 }
+.icd .CodeMirror img {
+
+	max-height: 1rem;
+
+}
+
 
 /* --- PICKERS --- */
 .icd.adder-picker {
@@ -155,7 +161,7 @@ be scrollable... make it position: relative?
 
 /* --- TYPE PICKER --- */
 #icd-types-picker {
-	background-color: teal;
+	background-color: darkkhaki;
 }
 
 .icd.type-choice {

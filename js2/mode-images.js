@@ -3,6 +3,7 @@
 Creates everything to do with the images mode?
 
 TODO:
+- Checkout http://jsfiddle.net/g9HMf/3/ for grid navigation with scrolling
 
 
 Affects:
@@ -16,6 +17,65 @@ adder.sections 	= { tabs: null, viewer: null, pickers: null };
 
 adder.addImageMode 	= function () {
 /* Enclose and name so it can be called in order */
+
+	// ====================
+	// Grid
+	// ====================
+	adder.grid = [];
+
+	// ====================
+	// Navigation
+	// ====================
+	// http://jsfiddle.net/g9HMf/3/
+	var position = { x: 0, y: 0 };
+	var imgGrid = [];
+
+	function highlightImage( x, y ) {
+	    $('.image-choice').removeClass('selected');
+	    imgGrid[y][x].addClass('selected');
+	}
+
+    $('.row').each(function () {
+        imgGrid.push([]);
+        $('.day, .date', this).each(function () {
+            imgGrid[imgGrid.length - 1].push($(this));
+        });
+    });
+    highlightImage( position.x, position.y );
+
+
+	$(window).on('keydown', function (e) {
+	    if (e.keyCode === 37) // left
+	        moveLeft();
+	    else if (e.keyCode === 38) // up
+	        moveUp();
+	    else if (e.keyCode === 39) // right
+	        moveRight();
+	    else if (e.keyCode === 40) // down
+	        moveDown();
+	    highlightImage();
+	});
+
+	function moveLeft() {
+	    position.x--;
+	    if (position.x < 0) position.x = 0;
+	}
+
+	function moveUp() {
+	    position.y--;
+	    if (position.y < 0) position.y = 0;
+	}
+
+	function moveRight() {
+	    position.x++;
+	    if (position.x >= imgGrid[0].length) position.x = imgGrid[0].length - 1;
+	}
+
+	function moveDown() {
+	    position.y++;
+	    if (position.y >= imgGrid.length) position.y = imgGrid.length - 1;
+	}
+
 
 	// =============
 	// PICKER
@@ -62,7 +122,7 @@ adder.addImageMode 	= function () {
 		var imgs 					= adder.defaultImages;
 		for ( var imgi = 0; imgi < imgs.length; imgi++ ) {
 			var img 		= imgs[ imgi ];
-			var filePath 	= img.folder + img.fileName;
+			var filePath 	= img.folderPath + img.fileName;
 			adder.addImageChoice( filePath, imagePicker );
 		}
 

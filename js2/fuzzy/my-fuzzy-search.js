@@ -8,6 +8,7 @@
 * http://codereview.stackexchange.com/questions/23899/faster-javascript-fuzzy-string-matching-function
 * - If we want to optimize, look at that (also
 * 	if we want to optimize, put regex in fuzzy-search)
+* - Allow searching using multiple words separated by a ","
 * 
 */
 
@@ -78,7 +79,7 @@ var FuzzySearcher = function () {
 			// Get possible match data for each word in turn
 			matcher.matchedTermClass = searcher.termClass;
 			// In case user has changed this to something like '<span>'
-			var matchTagName = searcher.matchTagName.replace( /[<>]/g, '' )
+			var matchTagName = searcher.matchTagName.replace( /[<> ]/g, '' )
 			var aMatch = matcher.toNode( terms[ termi ], query, queryRegex, matchTagName );
 			if ( aMatch !== null ) {
 				matchArray.push( aMatch );
@@ -98,7 +99,7 @@ var FuzzySearcher = function () {
 		// A utils script, but then it's less self-contained. Which
 		// I gues it isn't anymore anyway :(
 		var tagName 		= tagName || searcher.searchTagName;
-		tagName = tagName.replace( /[<>]/g, '' );
+		tagName = tagName.replace( /[<> ]/g, '' );
 
 		var node 			= document.createElement( tagName );
 		result.node 		= node;
@@ -116,7 +117,6 @@ var FuzzySearcher = function () {
 
 		return result;
 	};  // End searcher.search()
-
 
 	return searcher;
 };  // End FuzzySearcher()
