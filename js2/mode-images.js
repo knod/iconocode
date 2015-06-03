@@ -21,67 +21,97 @@ adder.addImageMode 	= function () {
 	// ====================
 	// Grid
 	// ====================
-	adder.grid = [];
 
-	// ====================
-	// Navigation
-	// ====================
-	// http://jsfiddle.net/g9HMf/3/
+	// // ====================
+	// // Navigation
+	// // ====================
+	// // http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
 	var position = { x: 0, y: 0 };
-	var imgGrid = [];
 
-	function highlightImage( x, y ) {
-	    $('.image-choice').removeClass('selected');
-	    imgGrid[y][x].addClass('selected');
-	}
+	adder.selectImg = function ( imgNode ) {
+	/*
 
-    $('.row').each(function () {
-        imgGrid.push([]);
-        $('.day, .date', this).each(function () {
-            imgGrid[imgGrid.length - 1].push($(this));
-        });
-    });
-    highlightImage( position.x, position.y );
+	*/
+		$('.image-choice.selected').removeClass('selected');
+		$(imgNode).addClass('selected');
+
+	};  // adder.selectImg();
 
 
-	$(window).on('keydown', function (e) {
-	    if (e.keyCode === 37) // left
-	        moveLeft();
-	    else if (e.keyCode === 38) // up
-	        moveUp();
-	    else if (e.keyCode === 39) // right
-	        moveRight();
-	    else if (e.keyCode === 40) // down
-	        moveDown();
-	    highlightImage();
-	});
+	adder.chooseImg = function ( imgNode ) {
 
-	function moveLeft() {
-	    position.x--;
-	    if (position.x < 0) position.x = 0;
-	}
+		var filePath = $('.image-choice.selected').attr('src');
+		console.log('chooseImg():', filePath);
 
-	function moveUp() {
-	    position.y--;
-	    if (position.y < 0) position.y = 0;
-	}
 
-	function moveRight() {
-	    position.x++;
-	    if (position.x >= imgGrid[0].length) position.x = imgGrid[0].length - 1;
-	}
 
-	function moveDown() {
-	    position.y++;
-	    if (position.y >= imgGrid.length) position.y = imgGrid.length - 1;
-	}
+		// Deselect anything that's selected
+		$('.image-choice.selected').removeClass('selected');
+
+	};  // End adder.chooseImg()
+
+	// var imgGrid = [];
+
+	// function highlightImage( x, y ) {
+	//     $('.image-choice').removeClass('selected');
+	//     imgGrid[y][x].addClass('selected');
+	// }
+
+ 	// highlightImage( position.x, position.y );
+
+
+	// $(window).on('keydown', function (e) {
+	//     if (e.keyCode === 37) // left
+	//         moveLeft();
+	//     else if (e.keyCode === 38) // up
+	//         moveUp();
+	//     else if (e.keyCode === 39) // right
+	//         moveRight();
+	//     else if (e.keyCode === 40) // down
+	//         moveDown();
+	//     highlightImage();
+	// });
+
+	// function moveLeft() {
+	//     position.x--;
+	//     if (position.x < 0) position.x = 0;
+	// }
+
+	// function moveUp() {
+	//     position.y--;
+	//     if (position.y < 0) position.y = 0;
+	// }
+
+	// function moveRight() {
+	//     position.x++;
+	//     if (position.x >= imgGrid[0].length) position.x = imgGrid[0].length - 1;
+	// }
+
+	// function moveDown() {
+	//     position.y++;
+	//     if (position.y >= imgGrid.length) position.y = imgGrid.length - 1;
+	// }
 
 
 	// =============
 	// PICKER
 	// =============
+	adder.addImage 			= function ( imgFilePath, parentNode ) {
+	/*
+
+	Just create, return, and add an image node with the specified path
+	*/
+
+		var imgNode 				= document.createElement('img');
+		parentNode.appendChild( imgNode );
+		imgNode.src 				= imgFilePath;
+
+		return imgNode;
+	};  // End adder.addImage()
+
+
 	adder.addImageChoice 	= function ( imgFilePath, parentNode ) {
-	/* ( str, Node, Node ) -> new Node
+	/* ( str, Node ) -> new Node
 
 	Maybe way to do image size to maximize image http://jsfiddle.net/0bmws0me/1/
 	(from TheP... something), but maybe we want the images to be their proper size?
@@ -91,11 +121,13 @@ adder.addImageMode 	= function () {
 		// parentNode.appendChild( imgContainer );
 		// imgContainer.className 	= prefix + ' image-choice-container';
 
-		var img 				= document.createElement('img');
-		// imgContainer.appendChild( img );
-		parentNode.appendChild( img );
-		img.className 			= prefix + ' image-choice';
-		img.src 				= imgFilePath;
+		var imgNode = adder.addImage( imgFilePath, parentNode );
+		$(imgNode).addClass('image-choice');
+		// var imgNode 				= document.createElement('img');
+		// // imgContainer.appendChild( img );
+		// parentNode.appendChild( imgNode );
+		// imgNode.className 			= prefix + ' image-choice';
+		// imgNode.src 				= imgFilePath;
 		// No id?
 		// Will use src of clicked image to add correct image
 		// No label?
@@ -103,28 +135,74 @@ adder.addImageMode 	= function () {
 		// TODO: add when clicked
 
 		// return imgContainer;
-		return img;
+		return imgNode;
 	}  // End adder.addChoice()
 
 
-	adder.addImagePicker = function ( parentNode ) {
+	adder.numCols = 5;
+	adder.addImgRow 		= function ( rowNum, allImgObjs, parentNode ) {
 	/*
+	* 
+	* Adds a row of image nodes to the imagePicker node, adds a row array
+	* to the adder.imgGrid.
+	*/
 
-	Offers a selection of types for new icons
+		var rowNode 		= document.createElement( 'div' );
+		rowNode.className 	= 'image-picker-row';
+		rowNode.id 			= 'picker_row_' + rowNum;
+
+		// This is what the grid will actully use to access selections
+		var rowArray 		= [];
+
+		var numCols = adder.numCols;
+		for ( var coli = 0; coli < numCols; coli++ ) {
+			// Mathematically get the index using the column and row
+			var cellNum = coli + ( numCols * rowNum );
+			var img 	= allImgObjs[ cellNum ];
+
+			// For when we run out of images early at the end
+			if ( img !== undefined ) {
+				var filePath 	= img.folderPath + img.fileName;
+				var imgNode 	= adder.addImageChoice( filePath, rowNode );
+
+				rowArray.push( imgNode );
+			}
+		}
+
+		adder.imgGrid.push( rowArray );
+		parentNode.appendChild( rowNode );
+
+		return rowArray;
+	};  // End adder.addImgRow()
+
+
+	adder.addGrid = function ( allImgObjs, parentNode ) {
+		adder.imgGrid = [];
+
+		// Get the right number of rows for the given number of images
+		var numRows = Math.ceil( allImgObjs.length / adder.numCols )
+		for ( var rowi = 0; rowi < numRows; rowi++ ) {
+			adder.addImgRow( rowi, allImgObjs, parentNode );
+		}
+
+		return adder.imgGrid;
+	};  // End adder.addGrid()
+
+
+	adder.imgGrid = [];
+	adder.addImagePicker 	= function ( parentNode ) {
+	/*
+	* 
+	* Offers a selection of types for new icons
 	*/
 		// --- PICKER --- \\
 		var imagePicker 			= adder.createPicker( 'images' );  // In adder.js atm
 		adder.modes.images.section 	= imagePicker;
 		parentNode.appendChild( imagePicker );
 
-		// Add images to the DOM
+		// Add images to the DOM (will also add custom images in future)
 		adder.modes.images.choices 	= adder.defaultImages;
-		var imgs 					= adder.defaultImages;
-		for ( var imgi = 0; imgi < imgs.length; imgi++ ) {
-			var img 		= imgs[ imgi ];
-			var filePath 	= img.folderPath + img.fileName;
-			adder.addImageChoice( filePath, imagePicker );
-		}
+		adder.addGrid( adder.modes.images.choices, imagePicker );
 
 		return imagePicker;
 	};  // End adder.addTypePicker()

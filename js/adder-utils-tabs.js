@@ -31,7 +31,7 @@ Show a tab as being active, do it's action
 	}  // end for each tab
 
 	// Activate this tab
-	selectedTab.classList.add( 'active' );
+	selectedTab.classList.add( 'selected' );
 
 	// Reveal the element that's in the data-toShow
 	selectedTab.toShow.style.display = 'flex';

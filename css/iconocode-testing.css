@@ -86,7 +86,9 @@ since I can't figure out shapes right now
 	border-right: 1px solid rgb( 150, 150, 150 );
 }
 .icd.tab.last { border-right: none; }
-.icd.tab.active { background-color: rgb( 165, 165, 165 ); }
+.icd.tab.selected { background-color: rgb( 165, 165, 165 ) }
+/* This instead? */
+.icd .selected { background-color: rgb( 165, 165, 165 ) }
 
 
 /* =================== */
