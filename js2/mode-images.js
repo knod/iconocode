@@ -26,14 +26,14 @@ adder.addImageMode 	= function () {
 	// ====================
 	adder.chooseImg = function ( imgNode ) {
 
-		var filePath = $('.image-choice.selected').attr('src');
+		var filePath = imgNode.attr('src');
 		console.log('chooseImg():', filePath);
 
 
 
 		// Deselect anything that's selected
-		$('.image-choice.selected').removeClass('selected');
-
+		// $('.image-choice.selected').removeClass('selected');
+		return imgNode;
 	};  // End adder.chooseImg()
 
 
@@ -49,13 +49,20 @@ adder.addImageMode 	= function () {
 		$(imgNode).addClass('selected');
 		// Takes focus off of last thing, puts it on this thing
 		imgNode.focus();
-
+		return imgNode;
 	};  // adder.selectImg();
 
 
-	adder.deselectAllImages = function () {
-		$('.image-choice.selected').removeClass('selected');
-	};  // End adder.deselectAllImages()
+	adder.deselectAllImageChoices = function () {
+	// Not sure this is needed anymore
+		return $('.image-choice.selected').removeClass('selected');
+	};  // End adder.deselectAllImageChoices()
+
+
+	adder.backToSearcbar = function ( selectedElem ) {
+		adder.searchBar.focus();
+		return $(selectedElem).removeClass('selected');
+	};  // End adder.backToSearcbar()
 
 
 	adder.getCellNode = function ( position, grid ) {
@@ -73,6 +80,7 @@ adder.addImageMode 	= function () {
 	};  // End adder.selectImgByPos()
 
 	adder.choicesJustActivated;
+	adder.searchBar;
 	adder.activateKeyboardNav = function ( grid ) {
 	/*
 
@@ -83,6 +91,7 @@ adder.addImageMode 	= function () {
 	TODO: Implement that ASAP
 
 	*/
+		adder.searchBar = $(':focus')[0];
 		adder.position = { col: 0, row: 0 };
 		// Change the nodes
 		// Maybe this function should be taken out. This is the only
@@ -98,6 +107,35 @@ adder.addImageMode 	= function () {
 	};  // adder.activateKeyboardNav()
 
 
+	var incrementPosition 	= function ( position, direction, numCols ) {
+	/* ( {}, str ) -> {}
+
+	Just changes position values based on direction, no further adjusments
+	*/
+		if 		( direction === 'right' ) 	{ position.col++ }
+		else if ( direction === 'left' ) 	{ position.col-- }
+		else if ( direction === 'down' ) 	{ position.row++ }
+		else if ( direction === 'up' ) 		{ position.row-- }
+		else if ( direction === 'next' ) 	{
+			// // Navigate to the next cell
+			// position.col++
+			// // If you're at the end of a row, go to the next one
+			// if ( position.col > (numCols - 1) ) {
+			// 	position.col = 0;
+			// 	position.row++;
+			// }
+			// ??: There must be a more clever way to do this. Something with:?
+			// var cellNum = coli + ( numCols * rowNum );
+			var newColPos 	= position.col + 1;
+			// One above 0-index numCols will result in 1, all others in 0
+			position.row 	+= Math.max( 0, (newColPos - (numCols - 1)) );
+			position.col 	= newColPos % numCols;
+		}
+
+		return position;
+	};  // End incrementPosition()
+
+
 	adder.keyboardNavChoices = function ( position, direction, grid ) {
 	/*
 
@@ -110,20 +148,7 @@ adder.addImageMode 	= function () {
 	*/
 		var numCols = grid[ position.row ].length
 
-		if 		( direction === 'right' ) 	{ position.col++ }
-		else if ( direction === 'left' ) 	{ position.col-- }
-		else if ( direction === 'down' ) 	{ position.row++ }
-		else if ( direction === 'up' ) 		{ position.row-- }
-		else if ( direction === 'next' ) 	{
-			// Navigate to the next cell
-			position.col++
-			// console.log(position.col, numCols - 1)
-			if ( position.col > (numCols - 1) ) {
-				position.col = 0;
-				position.row++;
-			}
-			// debugger;
-		}
+		position = incrementPosition( position, direction, numCols );
 
 		position.col = position.col % numCols;
 		position.row = position.row % adder.numRows;
@@ -169,16 +194,32 @@ adder.addImageMode 	= function () {
 			else if ( key === 37) { direction = 'left' }
 			else if ( key === 38) { direction = 'up' }
 			else if ( key ===  9) { // tab			
-			// TODO:  Didn't I want tab to tab through modes and modes' modes? How do I
+			// TODO: ??: Didn't I want tab to tab through modes and modes' modes? How do I
 			// not have tabbings interfere with each other?
+
+				// Maybe something about fixing focus changed this, but now this
+				// state check seems to malfunction. With the check, tab
+				// has to be pressed twice to work
+
 				// Don't move if it's the tab that activates the choice selection
-				if ( adder.choicesJustActivated !== true ) {
+				// if ( adder.choicesJustActivated !== true ) {
 					direction = 'next';
-				} else {
-					adder.choicesJustActivated = false;
-				}
+				// } else {
+				// 	adder.choicesJustActivated = false;
+				// 	console.log(false);
+				// }
+			} else if (key === 13) { // Enter
+				// Get selected image before removing that marker
+				var selectedImage = $('.image-choice.selected')[0]
+
+				// Bring everything back to where it last was in the search bar
+				adder.backToSearcbar( selectedImage );
+				// Add the icon to the viewer in place of whatever text is there
+				adder.chooseImg( selectedImage );
+
 			} else if (key === 27) { // ESC
-				
+				// Just bring everything back to the search bar
+				adder.backToSearcbar( selectedImage );
 			}
 
 			if ( direction !== undefined ) {

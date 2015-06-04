@@ -51,9 +51,9 @@ document.addEventListener( 'keydown', function (evnt) {
 	var key = evnt.keyCode || evnt.which;
 
 	if (evnt.keyCode === 13) {
-		var icon = 
+		var icon;
 
-		replaceWith(adder.defaultImages[0]);
+		// replaceWith(adder.defaultImages[0]);
 	}
 
 } );
