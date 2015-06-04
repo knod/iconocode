@@ -55,12 +55,22 @@ Really a code mirror instance
 Working example: http://jsfiddle.net/8fjpbc5L/
 */
 
+	// ==================
+	// MODE
+	// ==================
+	// My own mode!
+	// This mode has to be defined before the editor gets created
+	CodeMirror.defineSimpleMode("icd", {
+		// The only thing that breaks up a token atm is a ';'
+		start: [ {regex: /.*?;/i, token: "search-terms"} ]
+	});
+
 	// ===============
 	// EDITOR
 	// ===============
 	var cmEditor = CodeMirror( parentNode,
 		{
-			mode: 			"text", // text or text/html = cm-m-null class on span
+			mode: 			"icd", // text or text/html = cm-m-null class on span
 			value: 			"What does this variable do?",
 			theme: 			"monokai",
 			lineNumbers: 	false,
@@ -120,6 +130,8 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 			adder.activateKeyboardNav( adder.imgGrid );
 		}
 	});
+
+
 
 
 	return cmEditor;

@@ -6,7 +6,16 @@ TODO:
 - For grid navigation with scrolling, checkout:
 	http://stackoverflow.com/questions/4884839/how-do-i-get-a-element-to-scroll-into-view-using-jquery
 	or https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+- Look at js .scrollIntoView() or jQuery $.scrollTo()
 
+Notes:
+- With codemirror flattenSpans set to true (by default), I can add a class to a
+	set of consecutive words by marking them with .markText(). I'm not sure if I
+	can then get that text as a token, but I can at least get the text from
+	inside that class and use it for searching, or for showing when an image (or,
+	in future, icon) is deleted. Just don't add any styles to the .markText() class
+	- I think I need individual spans in order to be able to do this, which, right
+	now, means javascript mode.
 
 
 Affects:
@@ -25,15 +34,65 @@ adder.addImageMode 	= function () {
 	// Choosing
 	// ====================
 	adder.chooseImg = function ( imgNode ) {
+	/* ( node ) -> ?
 
-		var filePath = imgNode.attr('src');
-		console.log('chooseImg():', filePath);
+	Hide text and show image where text was
+	Returns new node? what does it return?
+	*/
+		// --- DOM NODE --- \\
+		var newNode 		= document.createElement('img');
+		newNode.className 	= 'icon-part'
+		// Not implemented yet. Not necessary? Or do we want access to the search terms?
+		// newNode.dataset['object'] = imgNode.dataset['object'];
+		// Where to get the image
+		var filePath 		= $(imgNode).attr('src');
+		newNode.src 		= filePath;
 
+		// --- CODEMIRROR EDITOR --- \\
+		var editor 		= adder.viewer;
+		var wordRange 	= editor.findWordAt( editor.getCursor() );
+		// var word 		= editor.getRange( wordRange.anchor, wordRange.head );
+		// console.log(word);
+		// If .markText() is used, editor.getTokenAt({line: #, ch: #})
+		// will still get the correct text. Marker doesn't interfere with that.
+		var inViewer 	= editor.markText( wordRange.anchor, wordRange.head,
+			{className: "teal", replacedWith: newNode
+				// clearOnEnter doesn't unclear on exit, need to find some other
+				// way for actual icons.
+				// , clearOnEnter: true  // experiment
+				, handleMouseEvents: true // think I will need this
+				, addToHistory: true
+			}
+		);
+
+		return inViewer;
+		// // Originally from iconocode1, iconocode.js
+		// // Hide text and put an element over it
+		// var editor = adder.viewer;
+		// var wordRange 	= editor.findWordAt( editor.getCursor() );
+		// var word 		= editor.getRange(wordRange.anchor, wordRange.head);
+		// // console.log(word);
+
+		// var imageNode 	= adder.addImage( filePath, parentNode );
+		// var imageDOM = document.createElement( "img" );
+
+		// var imgPath = imageObj.folderPath + imageObj.fileName;
+		// imageDOM.src = imgPath;
+		// imageDOM.className = "inline";
+
+		// // Actually, have to make text invisible, but width of
+		// // icon, put icon in not in the middle of the text
+		// // so that code will still be read correctly?
+		// var identifierElem = editor.markText( wordRange.anchor, wordRange.head,
+		// 	{className: "teal", replacedWith: imageDOM}
+		// );
+
+		// return identifierElem;
 
 
 		// Deselect anything that's selected
 		// $('.image-choice.selected').removeClass('selected');
-		return imgNode;
+		// return imgNode;
 	};  // End adder.chooseImg()
 
 
@@ -125,7 +184,7 @@ adder.addImageMode 	= function () {
 
 			// position.col++
 			// // If you're at the end of a row, go to the first position in the next one
-			// if ( position.col > (numCols - 1) ) { position.col = 0; position.row++; }
+			// if ( position.col > (numCols - 1) ) { position.row++; position.col = 0; }
 
 			// ??: More clever, less clear?
 			var newColPos 	= position.col + 1;
@@ -233,7 +292,6 @@ adder.addImageMode 	= function () {
 
 	Just create, return, and add an image node with the specified path
 	*/
-
 		var imgNode 				= document.createElement('img');
 		parentNode.appendChild( imgNode );
 		imgNode.src 				= imgFilePath;
