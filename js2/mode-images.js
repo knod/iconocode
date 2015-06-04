@@ -1,12 +1,23 @@
 /* mode-images.js
 
 Creates everything to do with the images mode?
+Effects:
+adder.modes.images - { tab: null, section: null, choices: [] }
+
+Makes use of:
+adder.sections 	= { tabs: null, viewer: null, pickers: null };
 
 TODO:
 - For grid navigation with scrolling, checkout:
 	http://stackoverflow.com/questions/4884839/how-do-i-get-a-element-to-scroll-into-view-using-jquery
 	or https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
 - Look at js .scrollIntoView() or jQuery $.scrollTo()
+- Convert to select image container instead of image itself
+- Hovering should do the same thing as navigating to a choice with the keyboard does
+- When a term is too long, the second to last letter should be '-' and the rest of
+	the word should be hidden. When hovered over or selected with the keyboard,
+	the rest of the word should appear (as should the other search terms or matches).
+	That sounds super complicated.
 
 Notes:
 - With codemirror flattenSpans set to true (by default), I can add a class to a
@@ -16,13 +27,6 @@ Notes:
 	in future, icon) is deleted. Just don't add any styles to the .markText() class
 	- I think I need individual spans in order to be able to do this, which, right
 	now, means javascript mode.
-
-
-Affects:
-adder.modes.images - { tab: null, section: null, choices: [] }
-
-Makes use of:
-adder.sections 	= { tabs: null, viewer: null, pickers: null };
 */
 
 'use strict'
@@ -56,9 +60,9 @@ adder.addImageMode 	= function () {
 		// If .markText() is used, editor.getTokenAt({line: #, ch: #})
 		// will still get the correct text. Marker doesn't interfere with that.
 		var inViewer 	= editor.markText( wordRange.anchor, wordRange.head,
-			{className: "teal", replacedWith: newNode
-				// clearOnEnter doesn't unclear on exit, need to find some other
-				// way for actual icons.
+			// I don't think classname matters when using 'replaceWith'
+			{className: 'chosen-image', replacedWith: newNode
+				// clearOnEnter doesn't unclear on exit, need other way
 				// , clearOnEnter: true  // experiment
 				, handleMouseEvents: true // think I will need this
 				, addToHistory: true
@@ -240,8 +244,11 @@ adder.addImageMode 	= function () {
 	Navigating through image choices. Maybe through any choices,
 	with the keyboard
 	Can just be var?
+
+	TODO: Move this into ImageChoice.js
 	*/
 		var key 			= evnt.keyCode || evnt.which;
+		// TODO: try using target instead;
 		var selectedImage 	= $('.image-choice.selected')[0];
 
 		if ( selectedImage !== undefined ) {
@@ -284,52 +291,14 @@ adder.addImageMode 	= function () {
 	// 	adder.imgKeyHandler( evnt );
 	// });
 
+	/**/
+
+
 	// =============
 	// PICKER
 	// =============
-	adder.addImage 			= function ( imgFilePath, parentNode ) {
-	/*
 
-	Just create, return, and add an image node with the specified path
-	*/
-		var imgNode 				= document.createElement('img');
-		parentNode.appendChild( imgNode );
-		imgNode.src 				= imgFilePath;
-
-		return imgNode;
-	};  // End adder.addImage()
-
-
-	adder.addImageChoice 	= function ( imgFilePath, parentNode ) {
-	/* ( str, Node ) -> new Node
-
-	Maybe way to do image size to maximize image http://jsfiddle.net/0bmws0me/1/
-	(from TheP... something), but maybe we want the images to be their proper size?
-	*/
-
-		// var imgContainer 		= document.createElement('div');
-		// parentNode.appendChild( imgContainer );
-		// imgContainer.className 	= prefix + ' image-choice-container';
-
-		var imgNode = adder.addImage( imgFilePath, parentNode );
-		$(imgNode).addClass('image-choice');
-
-		// Allows image to recieve focus (not a usual thing for images)
-		imgNode.tabIndex = '0';
-		// No id?
-		// Will use src of clicked image to add correct image
-		// No label?
-
-		// TODO: add when clicked
-		imgNode.addEventListener( 'keydown', function ( evnt ) {
-			adder.imgKeyHandler( evnt );
-		});
-
-		// return imgContainer;
-		return imgNode;
-	}  // End adder.addChoice()
-
-
+	// --- GRID --- \\
 	adder.numCols = 5;
 	adder.numRows;
 	adder.addImgRow 		= function ( rowNum, allImgObjs, parentNode ) {
@@ -354,8 +323,9 @@ adder.addImageMode 	= function () {
 
 			// For when we run out of images early at the end
 			if ( img !== undefined ) {
-				var filePath 	= img.folderPath + img.fileName;
-				var imgNode 	= adder.addImageChoice( filePath, rowNode );
+
+				var imgChoice 	= new adder.ImgChoice( img, rowNode );
+				var imgNode 	= imgChoice.node;
 
 				rowArray.push( imgNode );
 			}
@@ -383,6 +353,7 @@ adder.addImageMode 	= function () {
 
 
 	adder.imgGrid = [];
+	// --- PICKER --- \\
 	adder.addImagePicker 	= function ( parentNode ) {
 	/*
 	* 
@@ -414,7 +385,7 @@ adder.addImageMode 	= function () {
 
 		var typeTab 		 = adder.createTabInGroup(
 			args.group, args.type, args.label, args.toShow, args.parentObj
-		);
+		);  // in tab utils
 		parent.appendChild( typeTab );
 
 		return typeTab;

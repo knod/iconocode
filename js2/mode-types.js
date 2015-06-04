@@ -35,6 +35,16 @@ adder.addTypeMode = function () {
 		// Will use typeToAdd to set the type of the icon to add
 		typeContainer.dataset['typeToAdd'] = typeName;
 
+		typeContainer.addEventListener( 'click', function ( evnt ) {
+			adder.typeSelected = true;
+			// Use this to add type to viewer
+			typeContainer.dataset['typeToAdd'];
+			// adder.viewer.
+
+			// If it's the first time, go to image mode
+		} );  // end on click
+
+
 		// The label for the thing
 		var typeText 					= document.createTextNode( typeName );
 		typeContainer.appendChild( typeText );
@@ -94,9 +104,6 @@ adder.addTypeMode = function () {
 		var typePicker 				= adder.createPicker( 'types' );  // In adder.js atm
 		adder.modes.types.section 	= typePicker;
 		parent.appendChild( typePicker );
-
-		// Temporary so other functionality is testable
-		typePicker.addEventListener( 'click', function () {adder.typeSelected = true;} );
 
 		var iconPrefix 				= 'adder-type-choice';
 		adder.addVerbChoice( typePicker, iconPrefix );

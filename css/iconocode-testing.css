@@ -32,6 +32,22 @@ since I can't figure out shapes right now
 	background-color: rgba(0, 0, 0, 0);
 }
 
+/* --- LISTS --- */
+.icd ol, .icd ul, .icd li {
+	padding: 0;
+	background-color: lightgray;
+}
+.icd ol, .icd ul, .icd li {
+	margin: 0;
+}
+.icd li {
+	list-style: none;
+}
+
+.icd .selected {
+	background-color: rgb( 165, 165, 165 );
+}
+
 .icd .icon-container .icon-body {
 	position: relative;
 	margin: 0 auto;
@@ -195,34 +211,77 @@ but maybe we want the images to be their proper size?
 	align-items: flex-start;
 	flex-wrap: wrap;
 
-	padding-left: 2.5%;
-	padding-top: 2.5%;
+	padding: 2.5%;
 
 	overflow: scroll;
 }
 
+.icd .image-picker-row {
+	display: flex;
+	position: relative;
+	/* Don't do this: justify-content: space-around; */
+	/* Fills inside padding */
+	width: 100%;
+}
+
+/* IMG CHOICES */
 .icd .image-choice-container {
 	/* Not really sure about this stuff */
-    /*display: flex;
-    justify-content: center;
-    align-items: center;
+	position: relative;
 
-    width: 15%;
-    margin-right: 5%;
-    margin-bottom: 5%;*/
-}
-.icd .image-choice {
-	max-width: 15%;
-	margin: 2.5%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+
+	box-sizing: border-box;
+
+	/* width is 20% - (margin * 2) */
+	width: 17.6%; 
+	/* height auto-fits */
+	margin: 1.2%;
 
 	border: 1px solid gray;
 }
-.icd .image-choice:hover {
+.icd .image-choice-container:hover,
+.icd .image-choice-container .selected {
 	border: 1px solid white;
 }
-.icd .image-choice:active {
+.icd .image-choice-container:active {
 	border: 1px solid darkseagreen;
 }
+
+.icd .image-choice {
+	max-width: 100%;
+	max-height: 2.5rem;
+	margin: .2rem;
+	height: auto;
+}
+
+.icd .image-tag-list-container {
+	position: relative;
+	align-self: flex-end;
+
+	width: 100%;
+	height: 1.1rem;
+	font-size: 12px;
+}
+.icd .image-tag-list-container ol {
+	/* So that excess will hang out of the box */
+	position: absolute;
+	white-space: nowrap;
+	min-width: 100%;
+	width: auto;
+}
+.icd .image-tag-list-container li {
+	padding: .1rem;
+}
+.icd .image-tag-list-container .fuzzy-matched-letter {
+	font-weight: bold;
+	font-color: firebrick;
+}
+
+
 
 
 /* --- COLOR PICKER --- */

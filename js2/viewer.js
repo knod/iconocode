@@ -44,6 +44,15 @@ CodeMirror addons to try:
 
 Lazy search?:
 http://codepen.io/atwulf/pen/vczhJ
+
+
+TODO:
+- Ask stack overflow questions:
+	How to match the first occurance of each letter of a string? (answer self)
+	How to get the CodeMirror DOM node? (right now using parent class)
+	How to set the id of a CodeMirror DOM node?
+	How to get the CodeMirror text area DOM node?
+- Answer CodeMirror forum questions
 */
 
 'use strict'
@@ -74,11 +83,14 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 			value: 			"What does this variable do?",
 			theme: 			"monokai",
 			lineNumbers: 	false,
-			addModeClass: 	true
+			addModeClass: 	true,
+			showCursorWhenSelecting: true,
+			tabindex: 		0,
+			resetSelectionOnContextMenu: false
 		}
 	);
 
-	adder.viewer = cmEditor;
+	adder.viewer 		= cmEditor;
 
 	// var searcher = CodeMirror( parentNode,
 	// 	{
@@ -91,6 +103,10 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 
 	// adder.searcher = searcher;
 
+
+	// =====================
+	// ONE LINE HIGH
+	// =====================
 	// cmEditor.setSize( '100%', cmEditor.defaultTextHeight() + 2 * 4);
 	cmEditor.setSize( '100%', '100%');
 	// searcher.setSize( '100%', '100%');
@@ -109,19 +125,10 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	//     return true;
 	// });
 
-	// and then hide ugly horizontal scrollbar
-	cmEditor.on("change", function(instance, change) {
-	    // $(".CodeMirror-hscrollbar").css('display', 'none');
-	    // (!) this code is using jQuery and the selector is quite imperfect if
-	    // you're using more than one CodeMirror on your page. you're free to
-	    // change it appealing to your page structure.
-	});
 
-	// the following line fixes a bug I've encountered in CodeMirror 3.1
-	$(".CodeMirror-scroll").css('overflow', 'hidden');
-	// jQuery again! be careful with selector or move this to .css file
-
-
+	// ======================
+	// KEY MAPPING
+	// ======================
 	// Tab in this 'search bar' navigates to selecting choices
 	cmEditor.setOption("extraKeys", {
 	// http://codemirror.net/doc/manual.html#keymaps
@@ -132,6 +139,18 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	});
 
 
+	// =================
+	// EVENTS
+	// =================
+	cmEditor.on("inputRead", function(instance, change) {
+		console.log('instance: ', instance)
+		console.log('change: ', change)
+		adder.runSearch();
+	});
+
+	// the following line fixes a bug I've encountered in CodeMirror 3.1
+	$(".icd .adder .CodeMirror-scroll").css('overflow', 'hidden');
+	// jQuery again! be careful with selector or move this to .css file
 
 
 	return cmEditor;

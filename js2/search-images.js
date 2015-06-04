@@ -10,53 +10,30 @@ multiple lists for images.
 // Take the form of [{ fileName: '', searchTerms: [], folderPath: '' }, ...]
 var imageObjArray = adder.defaultImages;
 
-
-var replaceWith = function ( imageObj ) {
-// From iconocode1, iconocode.js
-// Insert an image or replace  selected text with an image. I think.
-// At least the first one
-	var editor = adder.viewer;
-	var wordRange 	= editor.findWordAt( editor.getCursor() );
-	var word 		= editor.getRange(wordRange.anchor, wordRange.head);
-	// console.log(word);
-
-	var imageDOM = document.createElement( "img" );
-
-	var imgPath = imageObj.folderPath + imageObj.fileName;
-	imageDOM.src = imgPath;
-	imageDOM.className = "inline";
-
-	// Actually, have to make text invisible, but width of
-	// icon, put icon in not in the middle of the text
-	// so that code will still be read correctly?
-	var identifierElem = editor.markText( wordRange.anchor, wordRange.head,
-		{className: "teal", replacedWith: imageDOM}
-	 );
-
-	return identifierElem;
-};  // End replaceWith()
+var fuzzySearcher = new FuzzySearcher();
 
 
-var makeImage = function( imageObj ) {
-/*
-*/
-	var container = document.createElement();
+adder.runSearch = function () {};
 
 
-};  // End makeImage()
+// document.addEventListener( 'keyup', function (evnt) {
+
+// 	var target = evnt.target;
+
+// 	if ( target.tagName === 'TEXTAREA' ) {
+		
 
 
+// 	}
+// 	var key = evnt.keyCode || evnt.which;
 
-document.addEventListener( 'keydown', function (evnt) {
-	var key = evnt.keyCode || evnt.which;
+// 	if (evnt.keyCode === 13) {
+// 		var icon;
 
-	if (evnt.keyCode === 13) {
-		var icon;
+// 		// replaceWith(adder.defaultImages[0]);
+// 	}
 
-		// replaceWith(adder.defaultImages[0]);
-	}
-
-} );
+// } );
 
 
 /*

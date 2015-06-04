@@ -22,7 +22,7 @@ var FuzzySearcher = function () {
 	var result = { node: null, matchingElements: [], matchingTerms: [], matchesData: [] }
 
 	// Defaults
-	searcher.searchTagName 	= 'ol';  // ol because of ranking?
+	// searcher.searchTagName 	= 'ol';  // ol because of ranking?
 	searcher.matchTagName 	= 'li';
 	searcher.containerClass = 'fuzzy-matches';
 	searcher.termClass 		= 'fuzzy-matched-term';
@@ -91,17 +91,17 @@ var FuzzySearcher = function () {
 	};  // End searcher.getMatches()
 
 
-	searcher.toNode 	= function( terms, query, tagName ) {
+	searcher.toNode 	= function( terms, query ) {
 	/* ( [str], str, str ) -> {} */
 		result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
 
 		// TODO: Validator should be separate from the two scripts. Need
 		// A utils script, but then it's less self-contained. Which
 		// I gues it isn't anymore anyway :(
-		var tagName 		= tagName || searcher.searchTagName;
-		tagName = tagName.replace( /[<> ]/g, '' );
+		// var tagName 		= tagName || searcher.searchTagName;
+		// tagName = tagName.replace( /[<> ]/g, '' );
 
-		var node 			= document.createElement( tagName );
+		var node 			= document.createDocumentFragment();
 		result.node 		= node;
 		node.className 		= searcher.containerClass;
 

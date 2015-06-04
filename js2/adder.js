@@ -80,7 +80,7 @@ a creating a new icon (if process wasn't completed).
 	// Prevent moving on to other tabs till type is selected
 	adder.typeSelected = false;
 	// Testing
-	// adder.typeSelected = true;
+	adder.typeSelected = true;
 
 	// Make adder visible
 	// adder.node.style.display = 'auto';
