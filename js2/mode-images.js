@@ -199,7 +199,7 @@ adder.addImageMode 	= function () {
 
 				// Maybe something about fixing focus changed this, but now this
 				// state check seems to malfunction. With the check, tab
-				// has to be pressed twice to work
+				// has to be pressed twice to work. Why is this?
 
 				// Don't move if it's the tab that activates the choice selection
 				// if ( adder.choicesJustActivated !== true ) {
