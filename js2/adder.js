@@ -118,7 +118,43 @@ and it messed something up?
 
 adder.addAdder();
 
-
 // document.addEventListener( 'keypress', adder.showAdder );  // End show adder event listener
 
 // };  // End adder.buildAdder()
+
+
+// =================================
+// AFTER INITIALIZATION?
+// =================================
+// ===============
+// FOCUS HISTORY
+// ===============
+// LEAVE THIS FOR LATER, when we've actually decided it's worth it
+adder.focusTrace 	= [];
+adder.focusState 	= 'going in';  // can also be 'coming out'
+
+// // This can't be so simple. Multiple images recieve focus, you
+// // can't undo all that.
+// adder.changeFocusTrace = function ( evnt ) {
+
+// 	if ( adder.focusState === 'going in' ) {
+// 		adder.focusTrace.push( evnt.target );
+// 	} else {
+// 		adder.focusTrace.pop();
+// 	}
+// 	console.log(adder.focusTrace)
+// 	return adder.focusTrace;
+// };  // End adder.changeFocusTrace()
+
+// // This won't work on document, because 'focus' doesn't bubble
+// document.addEventListener( 'focus', function (evnt) {
+// 	adder.changeFocusTrace( evnt );
+// });
+
+/* Pseudo:
+To each element that is in the focus tree, add a 'focus-tree' class
+	Add a focus tree number too?
+To each element that is in the focus tree, add a 'focusin' event
+	listener and a 'focusout' event listener
+Tie that to the functions that deal with tracing the focus tree
+*/

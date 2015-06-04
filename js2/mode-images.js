@@ -47,10 +47,8 @@ adder.addImageMode 	= function () {
 	*/
 		$('.image-choice.selected').removeClass('selected');
 		$(imgNode).addClass('selected');
-		// TODO: ??: How do I focus on a freaking image?!
-		// $('.image-choice.selected')[0].contentWindow.focus();
-		// $($('.image-choice.selected')[0]).attr('tabIndex', 0);
-		// console.log($(":focus"))
+		// Takes focus off of last thing, puts it on this thing
+		imgNode.focus();
 
 	};  // adder.selectImg();
 
@@ -71,7 +69,7 @@ adder.addImageMode 	= function () {
 		var node = adder.getCellNode( position, adder.imgGrid );
 		adder.selectImg( node );
 
-		return position;
+		return node;
 	};  // End adder.selectImgByPos()
 
 	adder.choicesJustActivated;
@@ -80,16 +78,16 @@ adder.addImageMode 	= function () {
 
 	Trigger this when the user wants to navigate the choices with the keyboard
 	(Triggered by 'tab' kyepress?)
+
+	Holy moly focus: http://jsfiddle.net/bnr5xnc7/4/
+	TODO: Implement that ASAP
+
 	*/
-
-		// Take focus off of wherever it is that has focus
-
-		$(':focus').blur();  // Take focus of whatever element has focus
-
 		adder.position = { col: 0, row: 0 };
 		// Change the nodes
 		// Maybe this function should be taken out. This is the only
 		// place it's used so far
+		// This will remove focus from the editor
 		adder.selectImgByPos( adder.position, grid );
 
 		// Prevent 'tab' from going to the next element on the
@@ -148,26 +146,15 @@ adder.addImageMode 	= function () {
 		return position;
 	};  // End adder.keyboardNavChoices()
 
-	// ??: Why won't this work?! Because it doesn't have focus?
-	// $('.image-choice').on( 'keypress', function ( evnt ) {
-	// 	console.log('bleh');
-
-	// 	var key = evnt.keyCode || evnt.which;
-
-	// 	var direction;
-	// 	if ( key === 40) { direction = 'down' }
-	// 	else if ( key === 39) { direction = 'right' }
-	// 	else if ( key === 37) { direction = 'left' }
-	// 	else if ( key === 38) { direction = 'up' }
-
-	// 	adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
-
-	// });
 	// document.addEventListener( 'keypress', function () { console.log(document.activeElement) } );
 	// document.addEventListener( 'click', function () { console.log(document.activeElement) } );
 
-	document.addEventListener( 'keydown', function ( evnt ) {
-
+	adder.imgKeyHandler = function ( evnt ) {
+	/* ( int ) -> Node
+	Navigating through image choices. Maybe through any choices,
+	with the keyboard
+	Can just be var?
+	*/
 		var key 			= evnt.keyCode || evnt.which;
 		var selectedImage 	= $('.image-choice.selected')[0];
 
@@ -190,6 +177,8 @@ adder.addImageMode 	= function () {
 				} else {
 					adder.choicesJustActivated = false;
 				}
+			} else if (key === 27) { // ESC
+				
 			}
 
 			if ( direction !== undefined ) {
@@ -197,7 +186,13 @@ adder.addImageMode 	= function () {
 			}
 		}
 
-	});
+		return $('.image-choice.selected')[0];
+	};  // End adder.imgKeyHandler
+
+
+	// document.addEventListener( 'keydown', function ( evnt ) {
+	// 	adder.imgKeyHandler( evnt );
+	// });
 
 	// =============
 	// PICKER
@@ -211,16 +206,6 @@ adder.addImageMode 	= function () {
 		var imgNode 				= document.createElement('img');
 		parentNode.appendChild( imgNode );
 		imgNode.src 				= imgFilePath;
-
-		// imgNode.addEventListener( 'keypress', function ( evnt ) {
-		// 	var key = evnt.keyCode || evnt.which;
-		// 	var direction;
-		// 	if ( key === 40) { direction = 'down' }
-		// 	else if ( key === 39) { direction = 'right' }
-		// 	else if ( key === 37) { direction = 'left' }
-		// 	else if ( key === 38) { direction = 'up' }
-		// 	adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
-		// });
 
 		return imgNode;
 	};  // End adder.addImage()
@@ -239,16 +224,17 @@ adder.addImageMode 	= function () {
 
 		var imgNode = adder.addImage( imgFilePath, parentNode );
 		$(imgNode).addClass('image-choice');
-		// var imgNode 				= document.createElement('img');
-		// // imgContainer.appendChild( img );
-		// parentNode.appendChild( imgNode );
-		// imgNode.className 			= prefix + ' image-choice';
-		// imgNode.src 				= imgFilePath;
+
+		// Allows image to recieve focus (not a usual thing for images)
+		imgNode.tabIndex = '0';
 		// No id?
 		// Will use src of clicked image to add correct image
 		// No label?
 
 		// TODO: add when clicked
+		imgNode.addEventListener( 'keydown', function ( evnt ) {
+			adder.imgKeyHandler( evnt );
+		});
 
 		// return imgContainer;
 		return imgNode;
