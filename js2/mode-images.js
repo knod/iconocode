@@ -99,9 +99,13 @@ adder.addImageMode 	= function () {
 		// This will remove focus from the editor
 		adder.selectImgByPos( adder.position, grid );
 
-		// Prevent 'tab' from going to the next element on the
-		// first press... how...?
-		adder.choicesJustActivated = true;
+		// // Prevent 'tab' from going to the next element on the
+		// // first press... how...?
+
+		// // Maybe something about fixing focus changed this, but now this
+		// // state check seems to malfunction. With the check, tab
+		// // has to be pressed twice to work. Why is this?
+		// adder.choicesJustActivated = true;
 
 		return adder.position;
 	};  // adder.activateKeyboardNav()
@@ -117,15 +121,13 @@ adder.addImageMode 	= function () {
 		else if ( direction === 'down' ) 	{ position.row++ }
 		else if ( direction === 'up' ) 		{ position.row-- }
 		else if ( direction === 'next' ) 	{
-			// // Navigate to the next cell
+			// Navigate to the next cell
+
 			// position.col++
-			// // If you're at the end of a row, go to the next one
-			// if ( position.col > (numCols - 1) ) {
-			// 	position.col = 0;
-			// 	position.row++;
-			// }
-			// ??: There must be a more clever way to do this. Something with:?
-			// var cellNum = coli + ( numCols * rowNum );
+			// // If you're at the end of a row, go to the first position in the next one
+			// if ( position.col > (numCols - 1) ) { position.col = 0; position.row++; }
+
+			// ??: More clever, less clear?
 			var newColPos 	= position.col + 1;
 			// One above 0-index numCols will result in 1, all others in 0
 			position.row 	+= Math.max( 0, (newColPos - (numCols - 1)) );
@@ -193,22 +195,10 @@ adder.addImageMode 	= function () {
 			else if ( key === 39) { direction = 'right' }
 			else if ( key === 37) { direction = 'left' }
 			else if ( key === 38) { direction = 'up' }
-			else if ( key ===  9) { // tab			
 			// TODO: ??: Didn't I want tab to tab through modes and modes' modes? How do I
-			// not have tabbings interfere with each other?
-
-				// Maybe something about fixing focus changed this, but now this
-				// state check seems to malfunction. With the check, tab
-				// has to be pressed twice to work. Why is this?
-
-				// Don't move if it's the tab that activates the choice selection
-				// if ( adder.choicesJustActivated !== true ) {
-					direction = 'next';
-				// } else {
-				// 	adder.choicesJustActivated = false;
-				// 	console.log(false);
-				// }
-			} else if (key === 13) { // Enter
+			// not have tabbings interfere with each other
+			else if ( key ===  9) { direction = 'next'; }  // tab
+			else if ( key === 13) { // Enter
 				// Get selected image before removing that marker
 				var selectedImage = $('.image-choice.selected')[0]
 
