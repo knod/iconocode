@@ -54,6 +54,10 @@ adder.addViewer = function ( parentNode ) {
 Really a code mirror instance
 Working example: http://jsfiddle.net/8fjpbc5L/
 */
+
+	// ===============
+	// EDITOR
+	// ===============
 	var cmEditor = CodeMirror( parentNode,
 		{
 			mode: 			"text", // text or text/html = cm-m-null class on span
