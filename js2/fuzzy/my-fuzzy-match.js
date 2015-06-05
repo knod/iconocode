@@ -147,29 +147,31 @@ var FuzzyMatcher = function ( context ) {
 	* 
 	* Returns null if no match is found
 	*/
-		var result_ 	= result;
-		result_.term 	= term; result_.query 	= query;
+		var result 	= result;
+		result.term 	= term; result.query 	= query;
+		// Should include this?
+		result.node = null;
 
 		// Create the provided element, or a default one
 
 		var matches 	= matcher.getMatch( term, query, queryRegex );
 		if ( matches !== null ) {
 
-			result_.matchArray 	= matches;
-			result_.score 		= matcher.calcScore( matches );
+			result.matchArray 	= matches;
+			result.score 		= matcher.calcScore( matches );
 
 			var htmlTag 		= matcher.sanitizeTagName( tagName );
 			var html 			= matcher.buildHTML( matches );
-			result_.htmlString 	= '<' + htmlTag + ' class="' +
+			result.htmlString 	= '<' + htmlTag + ' class="' +
 					matcher.matchedTermClass +
 					'">' + html + '</' + htmlTag + '>';
 
 		// ??: If there wasn't a match, what do I return?
 		}  else {
-			result_ = null;  // ??
+			result = null;  // ??
 		} // end if match
 
-		return result_;
+		return result;
 	};  // End matcher.toString()
 
 
@@ -218,6 +220,8 @@ var FuzzyMatcher = function ( context ) {
 	*/
 		result = {};
 		result.term 	= term; result.query 	= query;
+		// Should include this?
+		result.htmlString = null;
 
 		// Create the provided element, or a default one
 		var nodeTag = matcher.sanitizeTagName( tagName );
@@ -246,16 +250,26 @@ var FuzzyMatcher = function ( context ) {
 
 
 	matcher.matchComparator = function(m1, m2) {
-	/* This is in here because in here is where the test properties are created */
+	/* This is in here because in here is where the test properties are created 
+	TODO: Add alphabetical effect if scores still match
+	*/
 		var diff = m2.score - m1.score;
 
 		// If the scores are the same
 		if ( m1.score === m2.score ) {
 			// Add the number of letters before the first match
+			// Don't contaminate .score
 			m2.altScore = m2.score - $(m2.node).contents()[0].length;
 			m1.altScore = m1.score - $(m1.node).contents()[0].length;
 
 			diff = m2.altScore - m1.altScore;
+
+			// If they still match, sort alphabetically...?
+			if ( m1.altScore === m2.altScore ) {
+				// Compare letters
+				// console.log( parseInt(m2.term) - parseInt(m1.term) );
+				// console.log( m2.term > m1.term );
+			}
 		}
 
 		return diff;

@@ -18,6 +18,7 @@ TODO:
 	the word should be hidden. When hovered over or selected with the keyboard,
 	the rest of the word should appear (as should the other search terms or matches).
 	That sounds super complicated.
+- Make images and grid separately, so image nodes can be handed to .setGrid().
 
 ??:
 - How to replace a whole token instead of just a word? Maybe turn it into a
@@ -68,7 +69,9 @@ adder.addImageMode 	= function () {
 		var inViewer 	= editor.markText( wordRange.anchor, wordRange.head,
 			// I don't think classname matters when using 'replaceWith'
 			{className: 'chosen-image', replacedWith: newNode
-				// clearOnEnter doesn't unclear on exit, need other way
+				// TODO: clearOnEnter doesn't unclear on exit, need other way
+				// Look at http://codemirror.net/doc/manual.html#events ('beforeCursorEnter' and 'clear')
+				// Also cm.findMarks({},{})[0].lines[0].text
 				// , clearOnEnter: true  // experiment
 				, handleMouseEvents: true // think I will need this
 				, addToHistory: true
@@ -278,6 +281,20 @@ adder.addImageMode 	= function () {
 	// =============
 
 	// --- GRID --- \\
+	adder.allImageNodes = [];
+	adder.createImageChoiceNodes = function ( imgObjects ) {
+
+		var imgNodes_ = adder.allImageNodes;
+		for ( var obji = 0; obji < imgObjects.length; obji++ ) {
+			imgNodes_.push( new adder.ImgChoice( imgObj ) );
+		}
+
+
+
+	};  // End adder.createImageChoiceNodes()
+
+
+
 	adder.numCols = 5;
 	adder.numRows;
 	adder.addImgRow 		= function ( rowNum, allImgObjs, parentNode ) {
@@ -298,12 +315,12 @@ adder.addImageMode 	= function () {
 		for ( var coli = 0; coli < numCols; coli++ ) {
 			// Mathematically get the index using the column and row
 			var cellNum = coli + ( numCols * rowNum );
-			var img 	= allImgObjs[ cellNum ];
+			var imgObj 	= allImgObjs[ cellNum ];
 
 			// For when we run out of images early at the end
-			if ( img !== undefined ) {
+			if ( imgObj !== undefined ) {
 
-				var imgChoice 	= new adder.ImgChoice( img, rowNode );
+				var imgChoice 	= new adder.ImgChoice( imgObj, rowNode );
 				var imgNode 	= imgChoice.node;
 
 				rowArray.push( imgNode );
@@ -317,8 +334,10 @@ adder.addImageMode 	= function () {
 	};  // End adder.addImgRow()
 
 
-	adder.addGrid = function ( allImgObjs, parentNode ) {
+	adder.setGrid 			= function ( allImgObjs, parentNode ) {
+		// Reset the grid and the grid container each time
 		adder.imgGrid 	= [];
+		$(parentNode).empty();
 
 		// Get the right number of rows for the given number of images
 		adder.numRows 	= Math.ceil( allImgObjs.length / adder.numCols )
@@ -328,7 +347,7 @@ adder.addImageMode 	= function () {
 		}
 
 		return adder.imgGrid;
-	};  // End adder.addGrid()
+	};  // End adder.setGrid()
 
 
 	adder.imgGrid = [];
@@ -345,7 +364,7 @@ adder.addImageMode 	= function () {
 
 		// Add images to the DOM (will also add custom images in future)
 		adder.modes.images.choices 	= adder.defaultImages;
-		adder.addGrid( adder.modes.images.choices, imagePicker );
+		adder.setGrid( adder.modes.images.choices, imagePicker );
 
 		return imagePicker;
 	};  // End adder.addTypePicker()

@@ -1,6 +1,10 @@
 /* ICD-Image.js
 
 Builds an image node correctly for insertion into an icon
+
+TODO:
+- Convert everything in every script to use .searchTerms
+	instead of the whole imgObject
 */
 
 'use strict';
@@ -66,7 +70,10 @@ adder.ImgChoice = function ( imgObj, parentNode ) {
 		var filePath 	= imgObj.folderPath + imgObj.fileName;
 		var imgNode 	= imgChoice.addImage( filePath, imgContainer );
 		$(imgNode).addClass('image-choice');
-		$(imgNode).data('terms', imgObj.searchTerms);
+		// TODO: ??: I don't really need the whole imgObj, but if I don't pass that
+		// around, how do I keep hold of terms. This is getting really convoluted
+		$(imgNode).data('object', imgObj);
+		// Will later also have .data('matchData') and .data('score')
 
 		// Allows image to recieve focus (not a usual thing for images)
 		imgNode.tabIndex = '0';
