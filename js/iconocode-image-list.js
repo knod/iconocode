@@ -18,7 +18,7 @@ adder.addImgList 	= function () {
 		{ fileName: 'book-icon-yellow.png', searchTerms: [ 'book', 'reading', 'open', 'yellow' ] },
 		{ fileName: 'js-yellow.png', searchTerms: [ 'js', 'javascript', 'acronym', 'text', 'letters', 'yellow' ] },
 		{ fileName: 'mouse.png', searchTerms: [ 'mouse', 'pointer', 'cursor', 'computer', 'black' ] },
-		{ fileName: 'plus.png', searchTerms: [ 'plus', 'yellow' ] },
+		{ fileName: 'plus.png', searchTerms: [ 'plus', 'math', 'add', 'yellow' ] },
 		{ fileName: 'search-white.png', searchTerms: [ 'search', 'magnifying', 'glass', 'white', 'gray' ] },
 		{ fileName: 'tongue-face.png', searchTerms: [ 'tongue-face', 'face', 'emoticon', 'funny', 'tongue', 'smiley', 'yellow', 'red', 'pink' ] },
 	];  // End adder.defaultImages[]

@@ -276,9 +276,9 @@ but maybe we want the images to be their proper size?
 .icd .image-tag-list-container li {
 	padding: .1rem;
 }
-.icd .image-tag-list-container .fuzzy-matched-letter {
+.icd.icon-adder .fuzzy-matched-letter {
 	font-weight: bold;
-	font-color: firebrick;
+	color: darkred;
 }
 
 

@@ -32,11 +32,15 @@ console.log('------------')
 			for ( var coli = 0; coli < imgGrid[rowi].length; coli++ ) {
 				// Get the search terms for that image
 				var imgNode = imgGrid[ rowi ][ coli ];
-				var terms 	= $(imgNode).data('object').searchTerms;
+				var terms 	= $(imgNode).data('terms');
 				
 				// Search within each of those and do stuff with the results
-				var matchData = fuzzySearcher.toNode( terms, query );
-				console.log(matchData);  // So far so good!
+				var matchData 	= fuzzySearcher.toNode( terms, query );
+				var list 		= $(imgNode).parent().find('ol')[0];
+				$(list).empty();
+				list.appendChild( matchData.node );
+
+				// console.log(list);  // So far so good!
 
 			}
 		}
