@@ -71,7 +71,8 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// This mode has to be defined before the editor gets created
 	CodeMirror.defineSimpleMode("icd", {
 		// The only thing that breaks up a token atm is a ';'
-		start: [ {regex: /.*?;/i, token: "search-terms"} ]
+		// From rewt: [^;\n]*;? (https://regex101.com/r/pC5lB2/5)
+		start: [ {regex: /[^;\n]*;?/i, token: "search-terms"} ]
 	});
 
 	// ===============
@@ -143,9 +144,9 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// EVENTS
 	// =================
 	cmEditor.on("inputRead", function(instance, change) {
-		console.log('instance: ', instance)
-		console.log('change: ', change)
-		adder.runSearch();
+		// console.log('instance: ', instance)
+		// console.log('change: ', change)
+		adder.runSearch( adder.imgGrid );
 	});
 
 	// the following line fixes a bug I've encountered in CodeMirror 3.1

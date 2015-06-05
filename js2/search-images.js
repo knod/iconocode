@@ -13,27 +13,49 @@ var imageObjArray = adder.defaultImages;
 var fuzzySearcher = new FuzzySearcher();
 
 
-adder.runSearch = function () {};
+adder.runSearch = function ( imgGrid ) {
+
+	var cmEditor = adder.viewer;
+
+	// Get the text in the current token
+	cmEditor.getCursor()
+	var token = cmEditor.getTokenAt( cmEditor.getCursor() );
+	// console.log('token:', token);
+console.log('------------')
+	if ( token.string.length > 0 ) {
+
+		// Remove any semicolons, though actually they shouldn't be there until
+		// the search is completed
+		var query = token.string.replace( /;/, '' );
+
+		for ( var rowi = 0; rowi < imgGrid.length; rowi++ ) {
+			for ( var coli = 0; coli < imgGrid[rowi].length; coli++ ) {
+				// Get the search terms for that image
+				var imgNode = imgGrid[ rowi ][ coli ];
+				var terms 	= $(imgNode).data('object').searchTerms;
+				
+				// Search within each of those and do stuff with the results
+				var matchData = fuzzySearcher.toNode( terms, query );
+				console.log(matchData);  // So far so good!
+
+			}
+		}
 
 
-// document.addEventListener( 'keyup', function (evnt) {
+		// for ( var imgObji = 0; imgObji < imageObjArray.length; imgObji++ ) {
+		// 	var imgObj = imageObjArray[ imgObji ];
 
-// 	var target = evnt.target;
+		// 	var terms = 
 
-// 	if ( target.tagName === 'TEXTAREA' ) {
+		// 	var matchData = fuzzySearcher.toNode( terms, query );
+		// };
 		
+	}
 
 
-// 	}
-// 	var key = evnt.keyCode || evnt.which;
+};
 
-// 	if (evnt.keyCode === 13) {
-// 		var icon;
 
-// 		// replaceWith(adder.defaultImages[0]);
-// 	}
-
-// } );
 
 
 /*

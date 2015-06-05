@@ -19,6 +19,12 @@ TODO:
 	the rest of the word should appear (as should the other search terms or matches).
 	That sounds super complicated.
 
+??:
+- How to replace a whole token instead of just a word? Maybe turn it into a
+	single word first and then erase it? In that case, maybe when the user
+	deletes the icon, don't show the text from before because that will
+	require remembering what the text looked like before the switch.
+
 Notes:
 - With codemirror flattenSpans set to true (by default), I can add a class to a
 	set of consecutive words by marking them with .markText(). I'm not sure if I
@@ -70,33 +76,6 @@ adder.addImageMode 	= function () {
 		);
 
 		return inViewer;
-		// // Originally from iconocode1, iconocode.js
-		// // Hide text and put an element over it
-		// var editor = adder.viewer;
-		// var wordRange 	= editor.findWordAt( editor.getCursor() );
-		// var word 		= editor.getRange(wordRange.anchor, wordRange.head);
-		// // console.log(word);
-
-		// var imageNode 	= adder.addImage( filePath, parentNode );
-		// var imageDOM = document.createElement( "img" );
-
-		// var imgPath = imageObj.folderPath + imageObj.fileName;
-		// imageDOM.src = imgPath;
-		// imageDOM.className = "inline";
-
-		// // Actually, have to make text invisible, but width of
-		// // icon, put icon in not in the middle of the text
-		// // so that code will still be read correctly?
-		// var identifierElem = editor.markText( wordRange.anchor, wordRange.head,
-		// 	{className: "teal", replacedWith: imageDOM}
-		// );
-
-		// return identifierElem;
-
-
-		// Deselect anything that's selected
-		// $('.image-choice.selected').removeClass('selected');
-		// return imgNode;
 	};  // End adder.chooseImg()
 
 
