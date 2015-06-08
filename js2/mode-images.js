@@ -8,6 +8,9 @@ Makes use of:
 adder.sections 	= { tabs: null, viewer: null, pickers: null };
 
 TODO:
+	NOW:
+- !!! Convert to hide and rearrange images instead of removing them from the DOM
+	LATER:
 - For grid navigation with scrolling, checkout:
 	http://stackoverflow.com/questions/4884839/how-do-i-get-a-element-to-scroll-into-view-using-jquery
 	or https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
@@ -19,6 +22,7 @@ TODO:
 	the rest of the word should appear (as should the other search terms or matches).
 	That sounds super complicated.
 - Make images and grid separately, so image nodes can be handed to .setGrid().
+
 
 ??:
 - How to replace a whole token instead of just a word? Maybe turn it into a
@@ -281,76 +285,133 @@ adder.addImageMode 	= function () {
 	// =============
 
 	// --- GRID --- \\
-	adder.allImageNodes = [];
-	adder.createImageChoiceNodes = function ( imgObjects ) {
-
-		var imgNodes_ = adder.allImageNodes;
-		for ( var obji = 0; obji < imgObjects.length; obji++ ) {
-			imgNodes_.push( new adder.ImgChoice( imgObj ) );
-		}
-
-
-
-	};  // End adder.createImageChoiceNodes()
-
-
+	// TODO: ??: Problem, we're doing two things here, building a js
+	// array grid and building the DOM. We need to figure out how to just pick one
 
 	adder.numCols = 5;
 	adder.numRows;
-	adder.addImgRow 		= function ( rowNum, allImgObjs, parentNode ) {
-	/*
+
+	adder.imgGrid = [];
+	adder.originalImageChoiceNodes 	= []
+
+	adder.createImageChoiceNodes = function ( imgObjects ) {
+	/* ( [{}] ) -> [ Node ]
 	* 
-	* Adds a row of image nodes to the imagePicker node, adds a row array
-	* to the adder.imgGrid.
+	* Creates an array of all the nodes. Individual arrays for
+	* filtered choices will be made separately later
 	*/
 
-		var rowNode 		= document.createElement( 'div' );
-		rowNode.className 	= 'image-picker-row';
-		rowNode.id 			= 'picker_row_' + rowNum;
+		for ( var obji = 0; obji < imgObjects.length; obji++ ) {
+			var imgObj 			= imgObjects[ obji ];
+			var imgChoiceObj 	= new adder.ImgChoice( imgObj )
+			var imgNode 		= imgChoiceObj.image;
 
+			adder.originalImageChoiceNodes.push( imgNode );
+		}
+
+		// When you need the container, get the parent
+		return adder.originalImageChoiceNodes;
+	};  // End adder.createImageChoiceNodes()
+
+
+	adder.addCell 		= function ( pos, imgNodes, rowNode, rowArray ) {
+	/* ( {col:, row:}, [Node], Node ) -> Node
+
+	Can be used by both .addImageRow and .setImageRow
+	Returns what? Cell node? Row node?
+	*/
+		// Mathematically get the index using the column and row
+		var cellNum 	= pos.col + ( adder.numCols * pos.row );
+		var imgNode 	= imgNodes[ cellNum ];
+
+		// At the end, when we run out of images, skip this
+		if ( imgNode !== undefined ) {
+			var imgContainer 	= imgNode.parentNode;
+			// Not great. This is the only node that has to be attached outside its instantiation
+			rowNode.appendChild( imgContainer );
+			// Because this is in this 'if', we can't do it in .setImgRow()
+			rowArray.push( imgNode );
+		}
+
+		return imgNode;
+	};  // End adder.addCell()
+
+
+	adder.setImageRow 		= function ( rowNum, imgNodes ) {
+	/*
+	* 
+	* Puts imgNodes in each row by order of appearance.
+	*/
+		var rowNode = document.getElementById( ('picker_row_' + rowNum) );
 		// This is what the grid will actully use to access selections
 		var rowArray 		= [];
 
-		var numCols = adder.numCols;
-		for ( var coli = 0; coli < numCols; coli++ ) {
-			// Mathematically get the index using the column and row
-			var cellNum = coli + ( numCols * rowNum );
-			var imgObj 	= allImgObjs[ cellNum ];
-
-			// For when we run out of images early at the end
-			if ( imgObj !== undefined ) {
-
-				var imgChoice 	= new adder.ImgChoice( imgObj, rowNode );
-				var imgNode 	= imgChoice.node;
-
-				rowArray.push( imgNode );
-			}
+		var numCols_ = adder.numCols;
+		for ( var coli = 0; coli < numCols_; coli++ ) {
+			adder.addCell( {col: coli, row: rowNum}, imgNodes,
+													rowNode, rowArray );
 		}
-
-		adder.imgGrid.push( rowArray );
-		parentNode.appendChild( rowNode );
 
 		return rowArray;
-	};  // End adder.addImgRow()
+	};  // End adder.setImageRow()
 
 
-	adder.setGrid 			= function ( allImgObjs, parentNode ) {
-		// Reset the grid and the grid container each time
-		adder.imgGrid 	= [];
-		$(parentNode).empty();
+	adder.setGrid 			= function ( imgNodes, grid ) {
+	/* ( [Node], Node ) -> [[Node]]
+	* 
+	* Sets up a grid each time based on the order of imgNodes in their array.
+	* Would it be better to not have to pass in a parent node?
+	*/
+		grid = [];
 
 		// Get the right number of rows for the given number of images
-		adder.numRows 	= Math.ceil( allImgObjs.length / adder.numCols )
+		// (in case this has changed. Not sure how to handle that change though)
+		adder.numRows 	= Math.ceil( imgNodes.length / adder.numCols )
 		var numRows 	= adder.numRows;
 		for ( var rowi = 0; rowi < numRows; rowi++ ) {
-			adder.addImgRow( rowi, allImgObjs, parentNode );
+
+			var row = adder.setImageRow( rowi, imgNodes );
+			grid.push(row);
+
 		}
 
-		return adder.imgGrid;
+		return grid;
 	};  // End adder.setGrid()
 
 
-	adder.imgGrid = [];
+	adder.addImageRow 		= function ( rowNum, parentNode ) {
+	/*
+	* 
+	* Just adds row elements
+	*/
+		var rowNode 		= document.createElement( 'div' );
+		parentNode.appendChild( rowNode );
+		rowNode.className 	= 'image-picker-row';
+		rowNode.id 			= 'picker_row_' + rowNum;
+
+		return rowNode;
+	};  // End adder.addImageRow()
+
+
+	adder.createGrid 			= function ( imgNodes, parentNode ) {
+	/* ( [Node], Node ) -> [[Node]]
+	* 
+	* Same as .setGrid(), just for initial creation because that has to be separate
+	*/
+		adder.imgGrid 	= [];
+
+		// Get the right number of rows for the given number of images
+		adder.numRows 	= Math.ceil( imgNodes.length / adder.numCols )
+		var numRows 	= adder.numRows;
+		for ( var rowi = 0; rowi < numRows; rowi++ ) {
+			adder.addImageRow( rowi, parentNode );
+		}
+		adder.imgGrid = adder.setGrid( imgNodes );
+
+		return adder.imgGrid;
+	};  // End adder.createGrid()
+
+
 	// --- PICKER --- \\
 	adder.addImagePicker 	= function ( parentNode ) {
 	/*
@@ -364,7 +425,10 @@ adder.addImageMode 	= function () {
 
 		// Add images to the DOM (will also add custom images in future)
 		adder.modes.images.choices 	= adder.defaultImages;
-		adder.setGrid( adder.modes.images.choices, imagePicker );
+		var imgObjs 				= adder.modes.images.choices;
+		var imgChoiceNodes 			= adder.createImageChoiceNodes( imgObjs );
+		// Create a grid using an array of all the image elements
+		adder.createGrid( imgChoiceNodes, imagePicker );
 
 		return imagePicker;
 	};  // End adder.addTypePicker()

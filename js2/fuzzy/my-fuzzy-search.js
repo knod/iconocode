@@ -91,9 +91,12 @@ var FuzzySearcher = function () {
 	};  // End searcher.getMatches()
 
 
-	searcher.toNode 	= function( terms, query ) {
+	searcher.toNode 	= function( termsOriginal, query ) {
 	/* ( [str], str, str ) -> {} */
 		result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
+		// Make sure we can never change terms array
+		var terms = termsOriginal.slice();
+
 
 		// TODO: Validator should be separate from the two scripts. Need
 		// A utils script, but then it's less self-contained. Which

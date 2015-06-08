@@ -5,6 +5,7 @@ multiple lists for images.
 
 TODO:
 - Make sure ALWAYS to not assign a new value to .data('terms')
+- Search only through previous matches
 
 */
 
@@ -15,6 +16,23 @@ TODO:
 var imageObjArray = adder.defaultImages;
 
 var fuzzySearcher = new FuzzySearcher();
+
+
+adder.resetChoiceData = function ( choiceNodes ) {
+/* 
+* Reset choices so stuff won't be competing against old scores
+* and matchData
+*/
+	for ( var nodei = 0; nodei < choiceNodes.length; nodei++ ) {
+		$choiceNode = $(choiceNodes[ nodei ])
+
+		$choiceNode.data( 'matchData', null );
+		$choiceNode.data( 'score', -1000 );
+		$choiceNode.data( 'altScore', -1000 );
+	}
+
+	return choiceNodes;
+};  // adder.resetChoices()
 
 
 adder.addMatchingChoice = function ( choiceNode, matchData ) {
@@ -32,32 +50,29 @@ adder.addMatchingChoice = function ( choiceNode, matchData ) {
 	return choiceNode;
 };  // End adder.addMatchingChoice()
 
-
-adder.findMatches = function ( nodeGrid, query ) {
+var toTest = null;
+adder.findMatches = function ( nodeArray, query ) {
 /* ( [[Node]], { col, row } ) -> new [ Nodes ]
 
-Finds nodes in nodeGrid that match the query, changes
+Finds nodes in nodeArray that match the query, changes
 each of those nodes, and returns the list of matching nodes
 */
 	var matchingChoices = [];
+	for ( var nodei = 0; nodei < nodeArray.length; nodei++ ) {
+		// Get the search terms for that image
+		var choiceNode 	= nodeArray[ nodei ];
 
-	for ( var rowi = 0; rowi < nodeGrid.length; rowi++ ) {
-		for ( var coli = 0; coli < nodeGrid[rowi].length; coli++ ) {
-			// Get the search terms for that image
-			var choiceNode 	= nodeGrid[ rowi ][ coli ];
-			var terms 		= $(choiceNode).data('object').searchTerms;
-			
-			// Search using terms
-			var matchData 	= fuzzySearcher.toNode( terms, query );
+		var terms 		= $(choiceNode).data('searchTerms');
+		console.log('terms:', terms)
+		// Search using terms
+		var matchData 	= fuzzySearcher.toNode( terms, query );
 
-			// Make sure only images with matching terms are shown
-			if (matchData.matchingTerms.length > 0) {
-				// Adds to and changes choiceNode
-				adder.addMatchingChoice( choiceNode, matchData );
-				matchingChoices.push( choiceNode )
-			}
-
-		}  // end for col
+		// Make sure only images with matching terms are shown
+		if (matchData.matchingTerms.length > 0) {
+			// Adds to and changes choiceNode
+			adder.addMatchingChoice( choiceNode, matchData );
+			matchingChoices.push( choiceNode )
+		}
 	}  // end for row
 
 	return matchingChoices;
@@ -84,14 +99,9 @@ the list based on that, highest ranking first on the list
 		var matchingNode 	= matchingNodes[ matchi ];
 		// Contains .altScore or .score
 		var topMatchData 	= $(matchingNode).data('matchData').matchesData[0];
+		var score = topMatchData.score;
+		console.log(score);
 
-		var score;
-		// Alt score is the true score if it exists. It should be called something else...
-		if ( topMatchData.altScore !== undefined ) {
-			score = topMatchData.altScore;
-		} else {
-			score = topMatchData.score;
-		}
 		// Give the node its score
 		$(matchingNode).data('score', score)
 	}  // end for each matching node
@@ -125,12 +135,14 @@ TODO: untangle adding grids and rows so this isn't neccessary
 };  // End adder.getNodeObjs()
 
 
-adder.runSearch = function ( nodeGrid, parentNode ) {
+adder.runSearch = function ( nodeArray, parentNode ) {
 /* ( [[Node]] ) -> new [[Node]]
 
 
 */
-console.log('------------')
+console.log('------------');//console.log(nodeArray);
+	// Make sure we never alter nodeArray
+	var cloneArray = nodeArray.slice();
 	var cmEditor = adder.viewer;
 
 	// Get the text in the current token
@@ -138,20 +150,19 @@ console.log('------------')
 	var token 	= cmEditor.getTokenAt( cmEditor.getCursor() );
 	var grid 	= null;
 
+
 	if ( token.string.length > 0 ) {
 		// Remove any semicolons, though actually they shouldn't be there until
 		// the search is completed
 		var query 			= token.string.replace( /;/, '' );
 
 		// Will put matchData on each matching node
-		var matchingChoices = adder.findMatches( nodeGrid, query );
+		var matchingChoices = adder.findMatches( cloneArray, query );
 		// Put them in order by score of their top matching term
 		adder.rankMatches( matchingChoices );
 
-		// Get objects, because that's what setGrid takes right now
-		var imgObjs 		= adder.getNodeObjs( matchingChoices );
 		// Put them in the DOM
-		grid = adder.setGrid( imgObjs, parentNode );
+		grid = adder.setGrid( matchingChoices, adder.imgGrid );
 
 	}  // End if query is 1 or more letters
 

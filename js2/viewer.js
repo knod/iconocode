@@ -146,7 +146,7 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	cmEditor.on("inputRead", function(instance, change) {
 		// console.log('instance: ', instance)
 		// console.log('change: ', change)
-		adder.runSearch( adder.imgGrid, adder.modes.images.section );
+		adder.runSearch( adder.originalImageChoiceNodes, adder.modes.images.section );
 	});
 
 	// the following line fixes a bug I've encountered in CodeMirror 3.1
