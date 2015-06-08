@@ -13,7 +13,8 @@ window.addEventListener( 'load', function () {
 	var terms = [
 		'Update payment method', 'See payment statistics',
 		'Shopping cart', 'Recently bought', 'Check out',
-		'Check in', 'ca', 'caa', 'cana', 'crabapple'
+		'Check in', 'ca', 'caa', 'cana', 'crabapple',
+		'face', 'pacman', 'black', 'acronym', 'search'
 	];
 
 

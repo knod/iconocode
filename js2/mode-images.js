@@ -278,15 +278,58 @@ adder.addImageMode 	= function () {
 	// =============
 
 	// --- GRID --- \\
+	adder.imgGrid = [];
 	adder.numCols = 5;
 	adder.numRows;
+
+
+	adder.updateImageRow 	= function ( rowNum, imageArray ) {
+
+		var rowNode		= document.getElementById('picker_row_' + rowNum);
+
+		// This is what the grid will actully use to access selections
+		var rowArray 	= [];
+
+		var numCols_ 	= adder.numCols;
+		for ( var coli = 0; coli < numCols_; coli++ ) {
+			// Mathematically get the index using the column and row
+			var cellNum = coli + ( numCols_ * rowNum );
+			var imgNode = imageArray[ cellNum ];
+
+			// Test if we run out of image nodes (happens at the end sometimes)
+			if ( imgNode !== undefined ) {
+				rowNode.appendChild( imgNode.parentNode );
+				rowArray.push( imgNode );
+			}
+		}
+
+		return rowArray;
+	};  // End adder.updateImageRow()
+
+
+	adder.updateImageGrid 	= function ( imageArray ) {
+
+		var grid = [];
+
+		// Get the right number of rows for the given number of images
+		adder.numRows 	= Math.ceil( imageArray.length / adder.numCols )
+		var numRows 	= adder.numRows;
+		for ( var rowi = 0; rowi < numRows; rowi++ ) {
+			var rowArray = adder.updateImageRow( rowi, imageArray );
+			grid.push( rowArray );
+		}
+
+		adder.imgGrid = grid;
+		return adder.imgGrid;
+	};  // End adder.updateGrid()
+
+
 	adder.addImgRow 		= function ( rowNum, allImgObjs, parentNode ) {
 	/*
 	* 
 	* Adds a row of image nodes to the imagePicker node, adds a row array
 	* to the adder.imgGrid.
 	*/
-
 		var rowNode 		= document.createElement( 'div' );
 		rowNode.className 	= 'image-picker-row';
 		rowNode.id 			= 'picker_row_' + rowNum;
@@ -331,7 +374,6 @@ adder.addImageMode 	= function () {
 	};  // End adder.addGrid()
 
 
-	adder.imgGrid = [];
 	// --- PICKER --- \\
 	adder.addImagePicker 	= function ( parentNode ) {
 	/*
