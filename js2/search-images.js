@@ -11,6 +11,8 @@ TODO:
 
 'use strict'
 
+adder.hideUnmatched 	= function ( choiceArray ) {};  // End adder.hideUnmatched()
+
 
 adder.updateChoiceList 	= function ( choiceNode, query ) {
 /*
@@ -54,6 +56,11 @@ Updates the visible search terms for all choices.
 			adder.updateChoiceList( choiceNode, query );
 			// List to be ranked
 			choiceNodes.push(choiceNode);
+
+			// If it didn't match, hide it. Still in DOM though.
+			if ( $(choiceNode).data('matchData').matchesData[0] === undefined ) {
+				$(choiceNode).parent().hide();
+			}
 		}
 	}
 
@@ -69,6 +76,7 @@ Updates the visible search terms for all choices.
 		// !!!: TODO: This is terrible. I have to dig way down deep
 		var match2 = $(node2).data('matchData').matchesData[0];
 		var match1 = $(node1).data('matchData').matchesData[0];
+
 		// If either of the nodes had no matches, somehow put them at the bottom
 		// of the rankings
 		if ( match2 === undefined ) { match2 = {score: -1000, term: 'z', matchArray: ['z']}; }
