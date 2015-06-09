@@ -52,14 +52,17 @@ Updates the visible search terms for all choices.
 	for ( var rowi = 0; rowi < choiceGrid.length; rowi++ ) {
 		for ( var coli = 0; coli < choiceGrid[rowi].length; coli++ ) {
 			// Change the visible search terms for that image
-			var choiceNode = choiceGrid[ rowi ][ coli ];
+			// var choiceNode = choiceGrid[ rowi ][ coli ];
+			var choiceNode = document.getElementById( 'image_choice_row' + rowi + '_col' + coli );
 			adder.updateChoiceList( choiceNode, query );
 			// List to be ranked
 			choiceNodes.push(choiceNode);
 
-			// If it didn't match, hide it. Still in DOM though.
+			// If it didn't match, hide it (it'll still be in the DOM)
 			if ( $(choiceNode).data('matchData').matchesData[0] === undefined ) {
 				$(choiceNode).parent().hide();
+			} else {  // Otherwise make sure it's visible
+				$(choiceNode).parent().show();
 			}
 		}
 	}

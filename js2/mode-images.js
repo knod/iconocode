@@ -40,6 +40,8 @@ Notes:
 adder.addImageMode 	= function () {
 /* Enclose and name so it can be called in order */
 
+	adder.imageChoices = [];
+
 	// ====================
 	// Choosing
 	// ====================
@@ -108,7 +110,8 @@ adder.addImageMode 	= function () {
 
 
 	adder.getCellNode = function ( position, grid ) {
-		return grid[ position.row ][ position.col ];
+		// return grid[ position.row ][ position.col ];
+		return document.getElementById( 'image_choice_row' + position.row + '_col' + position.col );
 	};  // End adder.getCellNode()
 
 
@@ -190,7 +193,9 @@ adder.addImageMode 	= function () {
 
 	TODO: Tab should just increase the cell number
 	*/
-		var numCols = grid[ position.row ].length
+		// var numCols = grid[ position.row ].length
+		// console.log( $('#picker_row_' + position.row).children().toArray() )
+		var numCols = $('#picker_row_' + position.row).children().toArray().length;
 
 		position = incrementPosition( position, direction, numCols );
 
@@ -202,12 +207,18 @@ adder.addImageMode 	= function () {
 		if ( position.row < 0 ) { position.row += adder.numRows }
 
 		var imgNode = adder.getCellNode( position, adder.imgGrid );
+
 		// If we've hit a position that doesn't exist in the grid
-		if ( imgNode === undefined ) {
-			// Go to the last existing position in the grid
-			position.row = adder.imgGrid.length - 1;
-			position.col = adder.imgGrid[ position.row ].length - 1;
-			imgNode = adder.getCellNode( position, adder.imgGrid );
+		if ( imgNode === null ) {  // if using node ID, get back null instead of undefined
+			// http://stackoverflow.com/questions/5275098/a-css-selector-to-get-last-visible-div
+			imgNode = $('#icd-images-picker img:visible:last')[0];
+
+			// // Go to the last existing position in the grid
+			// // How to get last visible image node?
+			// // position.row = adder.imgGrid.length - 1;
+			// position.row 	= Math.floor(adder.imageChoices.length / numCols);
+			// position.col 	= adder.imgGrid[ position.row ].length - 1;
+			// imgNode 		= adder.getCellNode( position, adder.imgGrid );
 		}
 
 		adder.selectImg( imgNode );
@@ -299,6 +310,8 @@ adder.addImageMode 	= function () {
 			// Test if we run out of image nodes (happens at the end sometimes)
 			if ( imgNode !== undefined ) {
 				rowNode.appendChild( imgNode.parentNode );
+				imgNode.id 		= 'image_choice_row' + rowNum + '_col' + coli;
+
 				rowArray.push( imgNode );
 			}
 		}
@@ -348,7 +361,9 @@ adder.addImageMode 	= function () {
 
 				var imgChoice 	= new adder.ImgChoice( img, rowNode );
 				var imgNode 	= imgChoice.node;
+				imgNode.id 		= 'image_choice_row' + rowNum + '_col' + coli;
 
+				adder.imageChoices.push( imgNode );
 				rowArray.push( imgNode );
 			}
 		}
