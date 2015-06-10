@@ -109,9 +109,37 @@ adder.addImageMode 	= function () {
 	};  // End adder.backToSearcbar()
 
 
-	adder.getCellNode = function ( position, grid ) {
+	adder.getCellNode = function ( position, rowIdPrefix ) {
 		// return grid[ position.row ][ position.col ];
-		return document.getElementById( 'image_choice_row' + position.row + '_col' + position.col );
+
+		// // Eventually?
+		// var imgNode = document.getElementById( rowIdPrefix + '_row' + position.row + '_col' + position.col );
+
+		var imgNode = document.getElementById( 'image_choice_row' + position.row + '_col' + position.col );
+		// // If we've hit a position that doesn't exist in the grid
+		// if ( imgNode === null || $(imgNode).is(":visible") === false ) {  // if using node ID, get back null instead of undefined
+
+		// 	var lastVisibleImage = $('#icd-images-picker img:visible:last')[0]
+
+		// 	// !!!: ??:
+		// 	// If we're at the last image and we're pressing right or down...? Then what?
+		// 	// How do we get the correct position. If down, we need to get the one at the top that's visible
+		// 	// If right, then we need to get the one that is leftmost on that row
+		// 	// http://stackoverflow.com/questions/5275098/a-css-selector-to-get-last-visible-div
+		// 	imgNode = lastVisibleImage;
+		// 	position.row = $(imgNode).data( 'row' );
+		// 	position.col = $(imgNode).data( 'col' );
+
+		// 	// // Go to the last existing position in the grid
+		// 	// // How to get last visible image node?
+		// 	// // position.row = adder.imgGrid.length - 1;
+		// 	// position.row 	= Math.floor(adder.imageChoices.length / numCols);
+		// 	// position.col 	= adder.imgGrid[ position.row ].length - 1;
+		// 	// imgNode 		= adder.getCellNode( position, adder.imgGrid );
+		// }
+
+
+		return imgNode;
 	};  // End adder.getCellNode()
 
 
@@ -175,6 +203,7 @@ adder.addImageMode 	= function () {
 			// ??: More clever, less clear?
 			var newColPos 	= position.col + 1;
 			// One above 0-index numCols will result in 1, all others in 0
+			// Increase row if past the last column
 			position.row 	+= Math.max( 0, (newColPos - (numCols - 1)) );
 			position.col 	= newColPos % numCols;
 		}
@@ -191,43 +220,46 @@ adder.addImageMode 	= function () {
 	Make universal so variable types can use it too?
 	Triggered by 'tab' keypress?
 
-	TODO: Tab should just increase the cell number
+	TODO: Tab should just increase the cell number, Make contingency for no nodes being visible
 	*/
 		// var numCols = grid[ position.row ].length
-		// console.log( $('#picker_row_' + position.row).children().toArray() )
-		var numCols = $('#picker_row_' + position.row).children().toArray().length;
+		// console.log( $('#image_choice_row' + position.row).children().toArray() )
+		var numCols 			= $('#image_choice_row' + position.row).children().toArray().length;
 
 		position = incrementPosition( position, direction, numCols );
 
-		position.col = position.col % numCols;
-		position.row = position.row % adder.numRows;
+		var colPos = position.col, rowPos = position.row;
 
+		// If you're at the end of something, go to its beginning
+		colPos = colPos % numCols;
+		rowPos = rowPos % adder.numRows;
+
+		// If you're before the start of a row or column, go to the end of it
 		// They can only ever get to -1, so the math works
-		if ( position.col < 0 ) { position.col += numCols }
-		if ( position.row < 0 ) { position.row += adder.numRows }
+		if ( colPos < 0 ) { colPos += numCols }
+		if ( rowPos < 0 ) { rowPos += adder.numRows }
 
+		// Make sure not to go past the last row with visible elements
+		// Wait until now to make sure row number is a valid row	
+		var $imgPicker 			= $('#image_choice_row' + rowPos).parent();
+ 		// !!!: TODO: Make contingency for no nodes being visible
+		var lastVisibleChoice 	= $imgPicker.find('img:visible:last')[0],
+			lastRow 			= $(lastVisibleChoice).data( 'row' ),
+			lastCol 			= $(lastVisibleChoice).data( 'col' );
+		// If you're on the last row, but have gone past the last column (&
+			// I'm no longer sure how that can happen because of the .max thing)
+		if ( rowPos >= lastRow && colPos > lastCol ) {
+			rowPos = lastRow; colPos = lastCol;
+		}
+		position.row = rowPos; position.col = colPos;
 		var imgNode = adder.getCellNode( position, adder.imgGrid );
 
-		// If we've hit a position that doesn't exist in the grid
-		if ( imgNode === null ) {  // if using node ID, get back null instead of undefined
-			// http://stackoverflow.com/questions/5275098/a-css-selector-to-get-last-visible-div
-			imgNode = $('#icd-images-picker img:visible:last')[0];
-
-			// // Go to the last existing position in the grid
-			// // How to get last visible image node?
-			// // position.row = adder.imgGrid.length - 1;
-			// position.row 	= Math.floor(adder.imageChoices.length / numCols);
-			// position.col 	= adder.imgGrid[ position.row ].length - 1;
-			// imgNode 		= adder.getCellNode( position, adder.imgGrid );
-		}
 
 		adder.selectImg( imgNode );
 
 		return position;
 	};  // End adder.keyboardNavChoices()
 
-	// document.addEventListener( 'keypress', function () { console.log(document.activeElement) } );
-	// document.addEventListener( 'click', function () { console.log(document.activeElement) } );
 
 	adder.imgKeyHandler = function ( evnt ) {
 	/* ( int ) -> Node
@@ -241,7 +273,9 @@ adder.addImageMode 	= function () {
 		// TODO: try using target instead;
 		var selectedImage 	= $('.image-choice.selected')[0];
 
+		// If we're in the image picker choices section already
 		if ( selectedImage !== undefined ) {
+			// adder.makeCurrentChoiceGrid( selectedImage.parentNode.parentNode.parentNode, 'image_choice' );
 			// Prevents tab from cycling through other DOM stuff
 			evnt.preventDefault();
 
@@ -277,12 +311,6 @@ adder.addImageMode 	= function () {
 	};  // End adder.imgKeyHandler
 
 
-	// document.addEventListener( 'keydown', function ( evnt ) {
-	// 	adder.imgKeyHandler( evnt );
-	// });
-
-	/**/
-
 
 	// =============
 	// PICKER
@@ -296,7 +324,7 @@ adder.addImageMode 	= function () {
 
 	adder.updateImageRow 	= function ( rowNum, imageArray ) {
 
-		var rowNode		= document.getElementById('picker_row_' + rowNum);
+		var rowNode		= document.getElementById('image_choice_row' + rowNum);
 
 		// This is what the grid will actully use to access selections
 		var rowArray 	= [];
@@ -311,6 +339,10 @@ adder.addImageMode 	= function () {
 			if ( imgNode !== undefined ) {
 				rowNode.appendChild( imgNode.parentNode );
 				imgNode.id 		= 'image_choice_row' + rowNum + '_col' + coli;
+				// Used if need to get row and col from element rather than when
+				// need to access element using row and col numbers
+				$(imgNode).data('row', rowNum);
+				$(imgNode).data('col', coli);
 
 				rowArray.push( imgNode );
 			}
@@ -345,7 +377,7 @@ adder.addImageMode 	= function () {
 	*/
 		var rowNode 		= document.createElement( 'div' );
 		rowNode.className 	= 'image-picker-row';
-		rowNode.id 			= 'picker_row_' + rowNum;
+		rowNode.id 			= 'image_choice_row' + rowNum;
 
 		// This is what the grid will actully use to access selections
 		var rowArray 		= [];
@@ -362,6 +394,8 @@ adder.addImageMode 	= function () {
 				var imgChoice 	= new adder.ImgChoice( img, rowNode );
 				var imgNode 	= imgChoice.node;
 				imgNode.id 		= 'image_choice_row' + rowNum + '_col' + coli;
+				$(imgNode).data('row', rowNum);
+				$(imgNode).data('col', coli);
 
 				adder.imageChoices.push( imgNode );
 				rowArray.push( imgNode );
