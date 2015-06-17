@@ -223,16 +223,13 @@ adder.addImageMode 	= function () {
 
 
 	adder.keyboardNavChoices = function ( position, direction, grid ) {
-	/*
+	/* ( {}, str, [[Node]] ) -> {}
 
-	??: How to do initial navigation to selections?
+	Allows keyboard navigation and selection of images
 
-	Make universal so Variable Types can use it too?
-	Triggered by 'tab' keypress?
-
-	TODO: Tab should just increase the cell number, Make contingency for no nodes being visible
+	TODO: Make universal so Variable Types can use it too?
+	??: Triggered by 'tab' keypress?
 	*/
-
 
 		// Need max number of columns for navigation with tab key to work
 		var numPrevCols 	= $('#image_choice_row' + position.row).children().toArray().length;
@@ -243,9 +240,9 @@ adder.addImageMode 	= function () {
 		var currPosition 	= incrementPosition( position, direction, numPrevCols );
 		var currRowNum 		= currPosition.row, currColNum = currPosition.col;
 
-		// =========
+		// ==================
 		// ROW
-		// =========
+		// ==================
 		// Make sure not to go past the last row with visible elements
 		// Use row 0 so that we know we're using a valid row number
 		var $imgPicker 			= $('#image_choice_row0').parent();
@@ -255,15 +252,14 @@ adder.addImageMode 	= function () {
 
 		currRowNum = wrapPosition( currRowNum, lastRowNum );
 
-
-		// =========
+		// ==================
 		// COL
-		// =========
+		// ==================
 		// Now use the number of columns in the correct row
 		var lastColNum = ($('#image_choice_row' + currRowNum).children().toArray().length) - 1;
 
 		// Basically, in case user pressed up or down to get to the last row
-		// Otherwise the modulo thing below will do things we don't want
+		// Without this the modulo thing below will do things we don't want
 		if ( currRowNum !== prevRowNum ) {
 			// If the previous selection was past the last possible item in this row
 			if ( currColNum > lastColNum ) {
@@ -273,71 +269,15 @@ adder.addImageMode 	= function () {
 		}
 		
 		currColNum = wrapPosition( currColNum, lastColNum );
-		// // If you're before the start of a row or column, go to the end of it
-		// if ( currColNum < 0 ) { currColNum = lastColNum }
-		// // No matter what, if right is pressed on the last col item, go to first col item
-		// currColNum = currColNum % (lastColNum + 1)
-		// // Otherwise, just keep the current col number
 
 
-		// // If this is true, it means we came from a row above, one that had more columns
-		// // so we always want to go to the last item
-		// if ( currColNum > lastColNum ) { currColNum = lastColNum }
-
-		// If this happens, I'm confused
-		if ( currRowNum === lastRowNum && currColNum > lastColNum ) { console.log('currColNum>numRowCols:', currColNum) }
-
-
-
-
-
-
-
-
-		// // var numCols = grid[ position.row ].length
-		// // console.log( $('#image_choice_row' + position.row).children().toArray() )
-		// var numCols 			= $('#image_choice_row' + position.row).children().toArray().length;
-
-		// position = incrementPosition( position, direction, numCols );
-
-		// var currColNum = position.col, rowPos = position.row;
-
-		// // If you're at the end of something, go to its beginning
-		// currColNum = currColNum % numCols;
-		// rowPos = rowPos % adder.numRows;
-
-		// // If you're before the start of a row or column, go to the end of it
-		// // They can only ever get to -1, so the math works
-		// if ( currColNum < 0 ) { currColNum += numCols }
-		// if ( rowPos < 0 ) { rowPos += adder.numRows }
-
-		// // Make sure not to go past the last row with visible elements
-		// // Wait until now to make sure row number is a valid row	
-		// var $imgPicker 			= $('#image_choice_row' + rowPos).parent();
- 	// 	// !!!: TODO: Make contingency for no nodes being visible
-		// var lastVisibleChoice 	= $imgPicker.find('img:visible:last')[0],
-		// 	lastRow 			= $(lastVisibleChoice).data( 'row' ),
-		// 	lastCol 			= $(lastVisibleChoice).data( 'col' );
-		// // If you're on the last row, but have gone past the last column (&
-		// 	// I'm no longer sure how that can happen because of the .max thing)
-		// if ( rowPos > lastRow ) {rowPos = lastRow;}
-		// if ( rowPos === lastRow && currColNum > lastCol ) {
-		// 	currColNum = lastCol;
-		// }
-
-
-
-
+		// ==================
+		// USE NEW VALUES
+		// ==================
 		// Set persistent values of object
 		position.row = currRowNum; position.col = currColNum;
 		// Use object values to get correct node
 		var imgNode = adder.getCellNode( position, adder.imgGrid );
-		// Test
-		if ( imgNode === null ) { 
-			console.log('lastRow:', lastRowNum, 'lastCol:', lastColNum)
-			console.log('rowPos:', currRowNum, 'currColNum:', currColNum)
-		}
-
 		adder.selectImg( imgNode );
 
 		return position;
