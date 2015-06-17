@@ -110,35 +110,7 @@ adder.addImageMode 	= function () {
 
 
 	adder.getCellNode = function ( position, rowIdPrefix ) {
-		// return grid[ position.row ][ position.col ];
-
-		// // Eventually?
-		// var imgNode = document.getElementById( rowIdPrefix + '_row' + position.row + '_col' + position.col );
-
 		var imgNode = document.getElementById( 'image_choice_row' + position.row + '_col' + position.col );
-		// // If we've hit a position that doesn't exist in the grid
-		// if ( imgNode === null || $(imgNode).is(":visible") === false ) {  // if using node ID, get back null instead of undefined
-
-		// 	var lastVisibleImage = $('#icd-images-picker img:visible:last')[0]
-
-		// 	// !!!: ??:
-		// 	// If we're at the last image and we're pressing right or down...? Then what?
-		// 	// How do we get the correct position. If down, we need to get the one at the top that's visible
-		// 	// If right, then we need to get the one that is leftmost on that row
-		// 	// http://stackoverflow.com/questions/5275098/a-css-selector-to-get-last-visible-div
-		// 	imgNode = lastVisibleImage;
-		// 	position.row = $(imgNode).data( 'row' );
-		// 	position.col = $(imgNode).data( 'col' );
-
-		// 	// // Go to the last existing position in the grid
-		// 	// // How to get last visible image node?
-		// 	// // position.row = adder.imgGrid.length - 1;
-		// 	// position.row 	= Math.floor(adder.imageChoices.length / numCols);
-		// 	// position.col 	= adder.imgGrid[ position.row ].length - 1;
-		// 	// imgNode 		= adder.getCellNode( position, adder.imgGrid );
-		// }
-
-
 		return imgNode;
 	};  // End adder.getCellNode()
 
