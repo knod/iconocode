@@ -40,6 +40,8 @@ Notes:
 adder.addImageMode 	= function () {
 /* Enclose and name so it can be called in order */
 
+	adder.imageChoices = [];
+
 	// ====================
 	// Choosing
 	// ====================
@@ -107,8 +109,37 @@ adder.addImageMode 	= function () {
 	};  // End adder.backToSearcbar()
 
 
-	adder.getCellNode = function ( position, grid ) {
-		return grid[ position.row ][ position.col ];
+	adder.getCellNode = function ( position, rowIdPrefix ) {
+		// return grid[ position.row ][ position.col ];
+
+		// // Eventually?
+		// var imgNode = document.getElementById( rowIdPrefix + '_row' + position.row + '_col' + position.col );
+
+		var imgNode = document.getElementById( 'image_choice_row' + position.row + '_col' + position.col );
+		// // If we've hit a position that doesn't exist in the grid
+		// if ( imgNode === null || $(imgNode).is(":visible") === false ) {  // if using node ID, get back null instead of undefined
+
+		// 	var lastVisibleImage = $('#icd-images-picker img:visible:last')[0]
+
+		// 	// !!!: ??:
+		// 	// If we're at the last image and we're pressing right or down...? Then what?
+		// 	// How do we get the correct position. If down, we need to get the one at the top that's visible
+		// 	// If right, then we need to get the one that is leftmost on that row
+		// 	// http://stackoverflow.com/questions/5275098/a-css-selector-to-get-last-visible-div
+		// 	imgNode = lastVisibleImage;
+		// 	position.row = $(imgNode).data( 'row' );
+		// 	position.col = $(imgNode).data( 'col' );
+
+		// 	// // Go to the last existing position in the grid
+		// 	// // How to get last visible image node?
+		// 	// // position.row = adder.imgGrid.length - 1;
+		// 	// position.row 	= Math.floor(adder.imageChoices.length / numCols);
+		// 	// position.col 	= adder.imgGrid[ position.row ].length - 1;
+		// 	// imgNode 		= adder.getCellNode( position, adder.imgGrid );
+		// }
+
+
+		return imgNode;
 	};  // End adder.getCellNode()
 
 
@@ -158,65 +189,100 @@ adder.addImageMode 	= function () {
 
 	Just changes position values based on direction, no further adjusments
 	*/
-		if 		( direction === 'right' ) 	{ position.col++ }
-		else if ( direction === 'left' ) 	{ position.col-- }
-		else if ( direction === 'down' ) 	{ position.row++ }
-		else if ( direction === 'up' ) 		{ position.row-- }
+		// Don't change actual position values
+		var newPos = { col: position.col, row: position.row };
+
+		if 		( direction === 'right' ) 	{ newPos.col++ }
+		else if ( direction === 'left' ) 	{ newPos.col-- }
+		else if ( direction === 'down' ) 	{ newPos.row++ }
+		else if ( direction === 'up' ) 		{ newPos.row-- }
 		else if ( direction === 'next' ) 	{
-			// Navigate to the next cell
-
-			// position.col++
-			// // If you're at the end of a row, go to the first position in the next one
-			// if ( position.col > (numCols - 1) ) { position.row++; position.col = 0; }
-
-			// ??: More clever, less clear?
-			var newColPos 	= position.col + 1;
-			// One above 0-index numCols will result in 1, all others in 0
-			position.row 	+= Math.max( 0, (newColPos - (numCols - 1)) );
-			position.col 	= newColPos % numCols;
+			newPos.col++
+			// If you're at the end of a row, go to the first position in the next one
+			if ( newPos.col > (numCols - 1) ) { newPos.row++; newPos.col = 0; }
 		}
 
-		return position;
+		return newPos;
 	};  // End incrementPosition()
 
 
-	adder.keyboardNavChoices = function ( position, direction, grid ) {
-	/*
+	var wrapPosition = function ( currPos, lastPossiblePos ) {
+	/* ( int, int ) -> Int
 
-	??: How to do initial navigation to selections?
-
-	Make universal so variable types can use it too?
-	Triggered by 'tab' keypress?
-
-	TODO: Tab should just increase the cell number
+	Works for rows or columms, makes sure the numbers wrap around
 	*/
-		var numCols = grid[ position.row ].length
+		var newPos 	= currPos;
+		// If currPos is before the beginning, put it at the end
+		if ( currPos < 0 ) { newPos = lastPossiblePos; }
+		// If the lastPossiblePos is exceeded, go to the first item
+		// Want to use +1 for modulo. Try out the math if you don't believe me.
+		newPos 		= newPos % (lastPossiblePos + 1);
 
-		position = incrementPosition( position, direction, numCols );
+		return newPos;
+	};  // End wrapPosition()
 
-		position.col = position.col % numCols;
-		position.row = position.row % adder.numRows;
 
-		// They can only ever get to -1, so the math works
-		if ( position.col < 0 ) { position.col += numCols }
-		if ( position.row < 0 ) { position.row += adder.numRows }
+	adder.keyboardNavChoices = function ( position, direction, grid ) {
+	/* ( {}, str, [[Node]] ) -> {}
 
-		var imgNode = adder.getCellNode( position, adder.imgGrid );
-		// If we've hit a position that doesn't exist in the grid
-		if ( imgNode === undefined ) {
-			// Go to the last existing position in the grid
-			position.row = adder.imgGrid.length - 1;
-			position.col = adder.imgGrid[ position.row ].length - 1;
-			imgNode = adder.getCellNode( position, adder.imgGrid );
+	Allows keyboard navigation and selection of images
+
+	TODO: Make universal so Variable Types can use it too?
+	??: Triggered by 'tab' keypress?
+	*/
+
+		// Need max number of columns for navigation with tab key to work
+		var numPrevCols 	= $('#image_choice_row' + position.row).children().toArray().length;
+		// So we can compare the previous row number to the current row number later
+		var prevRowNum 		= position.row;
+		// If the row gotten is the last row and has fewer than the full number of columns
+		// incrementpPosition() will bring the column number to the beginning of the column
+		var currPosition 	= incrementPosition( position, direction, numPrevCols );
+		var currRowNum 		= currPosition.row, currColNum = currPosition.col;
+
+		// ==================
+		// ROW
+		// ==================
+		// Make sure not to go past the last row with visible elements
+		// Use row 0 so that we know we're using a valid row number
+		var $imgPicker 			= $('#image_choice_row0').parent();
+ 		// Contingency for no nodes being visible
+		var lastVisibleChoice 	= $imgPicker.find('img:visible:last')[0],
+			lastRowNum 			= parseInt($(lastVisibleChoice).data( 'row' ));  // Need to parse int?
+
+		currRowNum = wrapPosition( currRowNum, lastRowNum );
+
+		// ==================
+		// COL
+		// ==================
+		// Now use the number of columns in the correct row
+		var lastColNum = ($('#image_choice_row' + currRowNum).children().toArray().length) - 1;
+
+		// Basically, in case user pressed up or down to get to the last row
+		// Without this the modulo thing below will do things we don't want
+		if ( currRowNum !== prevRowNum ) {
+			// If the previous selection was past the last possible item in this row
+			if ( currColNum > lastColNum ) {
+				// Go to the last possible item
+				currColNum = lastColNum
+			}
 		}
+		
+		currColNum = wrapPosition( currColNum, lastColNum );
 
+
+		// ==================
+		// USE NEW VALUES
+		// ==================
+		// Set persistent values of object
+		position.row = currRowNum; position.col = currColNum;
+		// Use object values to get correct node
+		var imgNode = adder.getCellNode( position, adder.imgGrid );
 		adder.selectImg( imgNode );
 
 		return position;
 	};  // End adder.keyboardNavChoices()
 
-	// document.addEventListener( 'keypress', function () { console.log(document.activeElement) } );
-	// document.addEventListener( 'click', function () { console.log(document.activeElement) } );
 
 	adder.imgKeyHandler = function ( evnt ) {
 	/* ( int ) -> Node
@@ -230,7 +296,9 @@ adder.addImageMode 	= function () {
 		// TODO: try using target instead;
 		var selectedImage 	= $('.image-choice.selected')[0];
 
+		// If we're in the image picker choices section already
 		if ( selectedImage !== undefined ) {
+			// adder.makeCurrentChoiceGrid( selectedImage.parentNode.parentNode.parentNode, 'image_choice' );
 			// Prevents tab from cycling through other DOM stuff
 			evnt.preventDefault();
 
@@ -266,30 +334,73 @@ adder.addImageMode 	= function () {
 	};  // End adder.imgKeyHandler
 
 
-	// document.addEventListener( 'keydown', function ( evnt ) {
-	// 	adder.imgKeyHandler( evnt );
-	// });
-
-	/**/
-
 
 	// =============
 	// PICKER
 	// =============
 
 	// --- GRID --- \\
+	adder.imgGrid = [];
 	adder.numCols = 5;
 	adder.numRows;
+
+
+	adder.updateImageRow 	= function ( rowNum, imageArray ) {
+
+		var rowNode		= document.getElementById('image_choice_row' + rowNum);
+
+		// This is what the grid will actully use to access selections
+		var rowArray 	= [];
+
+		var numCols_ 	= adder.numCols;
+		for ( var coli = 0; coli < numCols_; coli++ ) {
+			// Mathematically get the index using the column and row
+			var cellNum = coli + ( numCols_ * rowNum );
+			var imgNode = imageArray[ cellNum ];
+
+			// Test if we run out of image nodes (happens at the end sometimes)
+			if ( imgNode !== undefined ) {
+				rowNode.appendChild( imgNode.parentNode );
+				imgNode.id 		= 'image_choice_row' + rowNum + '_col' + coli;
+				// Used if need to get row and col from element rather than when
+				// need to access element using row and col numbers
+				$(imgNode).data('row', rowNum);
+				$(imgNode).data('col', coli);
+
+				rowArray.push( imgNode );
+			}
+		}
+
+		return rowArray;
+	};  // End adder.updateImageRow()
+
+
+	adder.updateImageGrid 	= function ( imageArray ) {
+
+		var grid = [];
+
+		// Get the right number of rows for the given number of images
+		adder.numRows 	= Math.ceil( imageArray.length / adder.numCols )
+		var numRows 	= adder.numRows;
+		for ( var rowi = 0; rowi < numRows; rowi++ ) {
+			var rowArray = adder.updateImageRow( rowi, imageArray );
+			grid.push( rowArray );
+		}
+
+		adder.imgGrid = grid;
+		return adder.imgGrid;
+	};  // End adder.updateGrid()
+
+
 	adder.addImgRow 		= function ( rowNum, allImgObjs, parentNode ) {
 	/*
 	* 
 	* Adds a row of image nodes to the imagePicker node, adds a row array
 	* to the adder.imgGrid.
 	*/
-
 		var rowNode 		= document.createElement( 'div' );
 		rowNode.className 	= 'image-picker-row';
-		rowNode.id 			= 'picker_row_' + rowNum;
+		rowNode.id 			= 'image_choice_row' + rowNum;
 
 		// This is what the grid will actully use to access selections
 		var rowArray 		= [];
@@ -305,7 +416,11 @@ adder.addImageMode 	= function () {
 
 				var imgChoice 	= new adder.ImgChoice( img, rowNode );
 				var imgNode 	= imgChoice.node;
+				imgNode.id 		= 'image_choice_row' + rowNum + '_col' + coli;
+				$(imgNode).data('row', rowNum);
+				$(imgNode).data('col', coli);
 
+				adder.imageChoices.push( imgNode );
 				rowArray.push( imgNode );
 			}
 		}
@@ -331,7 +446,6 @@ adder.addImageMode 	= function () {
 	};  // End adder.addGrid()
 
 
-	adder.imgGrid = [];
 	// --- PICKER --- \\
 	adder.addImagePicker 	= function ( parentNode ) {
 	/*
