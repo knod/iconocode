@@ -1,40 +1,40 @@
 /* mode-images.js
-
-Creates everything to do with the images mode?
-Effects:
-adder.modes.images - { tab: null, section: null, choices: [] }
-
-Makes use of:
-adder.sections 	= { tabs: null, viewer: null, pickers: null };
-
-TODO:
-- For grid navigation with scrolling, checkout:
-	http://stackoverflow.com/questions/4884839/how-do-i-get-a-element-to-scroll-into-view-using-jquery
-	or https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-- Look at js .scrollIntoView() or jQuery $.scrollTo()
-- Convert to select image container instead of image itself
-- Hovering should do the same thing as navigating to a choice with the keyboard does
-- When a term is too long, the second to last letter should be '-' and the rest of
-	the word should be hidden. When hovered over or selected with the keyboard,
-	the rest of the word should appear (as should the other search terms or matches).
-	That sounds super complicated.
-- Handle semicolon being added by user into the text of the 'searchBar'
-- !!!: Semicolon appearing when image is selected while no text is in the search bar
-
-??:
-- How to replace a whole token instead of just a word? Maybe turn it into a
-	single word first and then erase it? In that case, maybe when the user
-	deletes the icon, don't show the text from before because that will
-	require remembering what the text looked like before the switch.
-
-Notes:
-- With codemirror flattenSpans set to true (by default), I can add a class to a
-	set of consecutive words by marking them with .markText(). I'm not sure if I
-	can then get that text as a token, but I can at least get the text from
-	inside that class and use it for searching, or for showing when an image (or,
-	in future, icon) is deleted. Just don't add any styles to the .markText() class
-	- I think I need individual spans in order to be able to do this, which, right
-	now, means javascript mode.
+* 
+* Creates everything to do with the images mode?
+* Effects:
+* adder.modes.images - { tab: null, section: null, choices: [] }
+* 
+* Makes use of:
+* adder.sections 	= { tabs: null, viewer: null, pickers: null };
+* 
+* TODO:
+* - For grid navigation with scrolling, checkout:
+* 	http://stackoverflow.com/questions/4884839/how-do-i-get-a-element-to-scroll-into-view-using-jquery
+* 	or https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+* - Look at js .scrollIntoView() or jQuery $.scrollTo()
+* - Convert to select image container instead of image itself
+* - Hovering should do the same thing as navigating to a choice with the keyboard does
+* - When a term is too long, the second to last letter should be '-' and the rest of
+* 	the word should be hidden. When hovered over or selected with the keyboard,
+* 	the rest of the word should appear (as should the other search terms or matches).
+* 	That sounds super complicated.
+* - Handle semicolon being added by user into the text of the 'searchBar'
+* - !!!: Semicolon appearing when image is selected while no text is in the search bar
+* 
+* ??:
+* - How to replace a whole token instead of just a word? Maybe turn it into a
+* 	single word first and then erase it? In that case, maybe when the user
+* 	deletes the icon, don't show the text from before because that will
+* 	require remembering what the text looked like before the switch.
+* 
+* Notes:
+* - With codemirror flattenSpans set to true (by default), I can add a class to a
+* 	set of consecutive words by marking them with .markText(). I'm not sure if I
+* 	can then get that text as a token, but I can at least get the text from
+* 	inside that class and use it for searching, or for showing when an image (or,
+* 	in future, icon) is deleted. Just don't add any styles to the .markText() class
+* 	- I think I need individual spans in order to be able to do this, which, right
+* 	now, means javascript mode.
 */
 
 'use strict'

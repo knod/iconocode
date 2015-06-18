@@ -1,12 +1,12 @@
 /* search-images.js
-
-Trying to implement fuzzy search functionality with
-multiple lists for images.
-
-TODO:
-- Hide images that have no matching terms
-- Rank images by how closely they match the query
-- Re-order images to appear by rank of match
+* 
+* Trying to implement fuzzy search functionality with
+* multiple lists for images.
+* 
+* TODO:
+* - Hide images that have no matching terms
+* - Rank images by how closely they match the query
+* - Re-order images to appear by rank of match
 */
 
 'use strict'

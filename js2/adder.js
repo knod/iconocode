@@ -1,14 +1,13 @@
 /* adder.js
-
-TODO:
-- Change what you can type in the viewer depending on mode? Or
-	change to appropriate tab if text appears to be a mismatch
-	with mode (for example, if you're in the Types mode)
-
-
-Makes use of:
-adder.sections 	= { tabs: null, viewer: null, pickers: null };
-
+* TODO:
+* - Change what you can type in the viewer depending on mode? Or
+* 	change to appropriate tab if text appears to be a mismatch
+* 	with mode (for example, if you're in the Types mode)
+* 
+* 
+* Makes use of:
+* adder.sections 	= { tabs: null, viewer: null, pickers: null };
+* 
 */
 
 'use strict'
