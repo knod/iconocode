@@ -63,6 +63,8 @@ adder.addViewer = function ( parentNode ) {
 Really a code mirror instance
 Working example: http://jsfiddle.net/8fjpbc5L/
 */
+	
+	adder.searchBar;
 
 	// ==================
 	// MODE
@@ -153,6 +155,7 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	$(".icd .adder .CodeMirror-scroll").css('overflow', 'hidden');
 	// jQuery again! be careful with selector or move this to .css file
 
+	adder.searchBar = $('.icd .adder .CodeMirror')[0];
 
 	return cmEditor;
 };  // End adder.addViewer()

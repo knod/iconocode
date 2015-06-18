@@ -45,7 +45,7 @@ adder.addImageMode 	= function () {
 	// ====================
 	// Choosing
 	// ====================
-	adder.chooseImg = function ( imgNode ) {
+	adder.chooseImage = function ( imgNode ) {
 	/* ( node ) -> ?
 
 	Hide text and show image where text was
@@ -78,14 +78,14 @@ adder.addImageMode 	= function () {
 		);
 
 		return inViewer;
-	};  // End adder.chooseImg()
+	};  // End adder.chooseImage()
 
 
 	// ====================
 	// Navigation
 	// ====================
 	// http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
-	adder.selectImg = function ( imgNode ) {
+	adder.selectImage = function ( imgNode ) {
 	/*
 
 	*/
@@ -94,7 +94,7 @@ adder.addImageMode 	= function () {
 		// Takes focus off of last thing, puts it on this thing
 		imgNode.focus();
 		return imgNode;
-	};  // adder.selectImg();
+	};  // adder.selectImage();
 
 
 	adder.deselectAllImageChoices = function () {
@@ -103,10 +103,11 @@ adder.addImageMode 	= function () {
 	};  // End adder.deselectAllImageChoices()
 
 
-	adder.backToSearcbar = function ( selectedElem ) {
-		adder.searchBar.focus();
+	adder.backToSearchbar = function ( selectedElem ) {
+		adder.searchBar.focus();  // assigned in viewer.js
+		// TODO: put cursor in a logical place. Not sure how CodeMirror does that.
 		return $(selectedElem).removeClass('selected');
-	};  // End adder.backToSearcbar()
+	};  // End adder.backToSearchbar()
 
 
 	adder.getCellNode = function ( position, rowIdPrefix ) {
@@ -116,16 +117,15 @@ adder.addImageMode 	= function () {
 
 
 	adder.position;
-	adder.selectImgByPos = function ( position, grid ) {
+	adder.selectImageByPos = function ( position, grid ) {
 		// Change the nodes
 		var node = adder.getCellNode( position, adder.imgGrid );
-		adder.selectImg( node );
+		adder.selectImage( node );
 
 		return node;
-	};  // End adder.selectImgByPos()
+	};  // End adder.selectImageByPos()
 
 	adder.choicesJustActivated;
-	adder.searchBar;
 	adder.activateKeyboardNav = function ( grid ) {
 	/*
 
@@ -136,13 +136,12 @@ adder.addImageMode 	= function () {
 	TODO: Implement that ASAP
 
 	*/
-		adder.searchBar = $(':focus')[0];
 		adder.position = { col: 0, row: 0 };
 		// Change the nodes
 		// Maybe this function should be taken out. This is the only
 		// place it's used so far
 		// This will remove focus from the editor
-		adder.selectImgByPos( adder.position, grid );
+		adder.selectImageByPos( adder.position, grid );
 
 		// // Prevent 'tab' from going to the next element on the
 		// // first press... how...?
@@ -250,7 +249,7 @@ adder.addImageMode 	= function () {
 		position.row = currRowNum; position.col = currColNum;
 		// Use object values to get correct node
 		var imgNode = adder.getCellNode( position, adder.imgGrid );
-		adder.selectImg( imgNode );
+		adder.selectImage( imgNode );
 
 		return position;
 	};  // End adder.keyboardNavChoices()
@@ -288,13 +287,13 @@ adder.addImageMode 	= function () {
 				var selectedImage = $('#icd-images-picker .selected').find('.image-choice')[0];
 
 				// Bring everything back to where it last was in the search bar
-				adder.backToSearcbar( selectedImage );
+				adder.backToSearchbar( selectedImage );
 				// Add the icon to the viewer in place of whatever text is there
-				adder.chooseImg( selectedImage );
+				adder.chooseImage( selectedImage );
 
 			} else if (key === 27) { // ESC
 				// Just bring everything back to the search bar
-				adder.backToSearcbar( selectedImage );
+				adder.backToSearchbar( selectedImage );
 			}
 
 			if ( direction !== undefined ) {
@@ -434,26 +433,26 @@ adder.addImageMode 	= function () {
 		adder.addGrid( adder.modes.images.choices, imagePicker );
 
 
-		imagePicker.addEventListener( 'hover', function ( evnt ) {
+		imagePicker.addEventListener( 'mouseover', function ( evnt ) {
 
-			var $target = $(evnt.target);
-			var $parent = $target.parent();
+			var $target 	= $(evnt.target);
+			var $ancestor 	= $target.closest('.image-choice-container');
 
-			if ( $target.hasClass('image-choice-container') ||
-					$parent.hasClass('image-choice-container') ) {
-				console.log( 'is container' );
+			// Visually indicate selection of image
+			if ( $ancestor.length > 0 ) {
+				adder.selectImage($ancestor.find('.image-choice')[0]);
 			}
+			// TODO: Show all matching terms at full length
 
 		} );
 
 		imagePicker.addEventListener( 'click', function ( evnt ) {
 
-			var $target = $(evnt.target);
-			var $parent = $target.parent();
+			var $target 	= $(evnt.target);
+			var $ancestor 	= $target.closest('.image-choice-container');
 
-			if ( $target.hasClass('image-choice-container') ||
-					$parent.hasClass('image-choice-container') ) {
-				console.log( 'is container' );
+			if ( $ancestor.length > 0 ) {
+				adder.chooseImage($ancestor.find('.image-choice')[0]);
 			}
 
 		} );
