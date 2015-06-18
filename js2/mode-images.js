@@ -62,9 +62,12 @@ adder.addImageMode 	= function () {
 
 		// --- CODEMIRROR EDITOR --- \\
 		var editor 		= adder.viewer;
+		var cursorPos 	= editor.getCursor()
+
+		editor.replaceRange( ';', cursorPos, cursorPos );
 
 		// There is only one line
-		var token 		= editor.getTokenAt( editor.getCursor() ),
+		var token 		= editor.getTokenAt( cursorPos ),
 			start 		= { line: 0, ch: token.start },
 			end 		= { line: 0, ch: token.end }
 

@@ -121,6 +121,7 @@ adder.runSearch 		= function ( choiceGrid ) {
 	var token = cmEditor.getTokenAt( cmEditor.getCursor() );
 	// console.log('token:', token);
 console.log('------------')
+console.log(token)
 	if ( token.string.length > 0 ) {
 
 		// Sanitize query (maybe not necessary. TODO: test removal of this later)
