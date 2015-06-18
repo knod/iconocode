@@ -179,7 +179,7 @@ be scrollable... make it position: relative?
 
 
 /* --- TYPE PICKER --- */
-#icd-types-picker {
+#icd_types_picker {
 	background-color: darkkhaki;
 }
 
@@ -204,7 +204,7 @@ be scrollable... make it position: relative?
 image http://jsfiddle.net/0bmws0me/1/ (from ThePendulum something),
 but maybe we want the images to be their proper size?
 */
-#icd-images-picker {
+#icd_images_picker {
 	background-color: tan;
 
 	display: flex;
@@ -286,7 +286,7 @@ but maybe we want the images to be their proper size?
 
 
 /* --- COLOR PICKER --- */
-#icd-colors-picker {
+#icd_colors_picker {
 	background-color: firebrick;
 }
 

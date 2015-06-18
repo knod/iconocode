@@ -59,7 +59,7 @@ Returns a picker node with custom properties. Hides the node.
 Should go somewhere else, not in adder.js
 */
 	var picker 		 = document.createElement('div');
-	picker.id 		 = prefix + '-' + pickerType + '-picker';
+	picker.id 		 = prefix + '_' + pickerType + '_picker';
 	picker.className = 'adder-picker';
 
 	// Hide all pickers on start

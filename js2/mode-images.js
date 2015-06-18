@@ -118,7 +118,7 @@ adder.addImageMode 	= function () {
 	/*
 
 	*/
-		$('#icd-images-picker .selected').removeClass('selected');
+		$('#icd_images_picker .selected').removeClass('selected');
 		$(imgNode).parent().addClass('selected');
 		// Takes focus off of last thing, puts it on this thing
 		imgNode.focus();
@@ -128,7 +128,7 @@ adder.addImageMode 	= function () {
 
 	adder.deselectAllImageChoices = function () {
 	// Not sure this is needed anymore
-		return $('#icd-images-picker .selected').removeClass('selected');
+		return $('#icd_images_picker .selected').removeClass('selected');
 	};  // End adder.deselectAllImageChoices()
 
 
@@ -294,7 +294,7 @@ adder.addImageMode 	= function () {
 	*/
 		var key 			= evnt.keyCode || evnt.which;
 		// TODO: try using target instead;
-		var selectedImage 	= $('#icd-images-picker .selected').find('.image-choice')[0];
+		var selectedImage 	= $('#icd_images_picker .selected').find('.image-choice')[0];
 
 		// If we're in the image picker choices section already
 		if ( selectedImage !== undefined ) {
@@ -313,7 +313,7 @@ adder.addImageMode 	= function () {
 			else if ( key ===  9) { direction = 'next'; }  // tab
 			else if ( key === 13) { // Enter
 				// Get selected image before removing that marker
-				var selectedImage = $('#icd-images-picker .selected').find('.image-choice')[0];
+				var selectedImage = $('#icd_images_picker .selected').find('.image-choice')[0];
 				// Add the icon to the viewer in place of whatever text is there
 				// Will return focus to the search bar
 				adder.chooseImage( selectedImage );
@@ -328,7 +328,7 @@ adder.addImageMode 	= function () {
 			}
 		}
 
-		return $('#icd-images-picker .selected').find('.image-choice')[0];
+		return $('#icd_images_picker .selected').find('.image-choice')[0];
 	};  // End adder.imgKeyHandler
 
 
