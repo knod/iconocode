@@ -18,6 +18,8 @@ TODO:
 	the word should be hidden. When hovered over or selected with the keyboard,
 	the rest of the word should appear (as should the other search terms or matches).
 	That sounds super complicated.
+- Handle semicolon being added into the text of the 'searchBar'
+- !!!: Semicolon appearing when image is selected while no text is in the search bar
 
 ??:
 - How to replace a whole token instead of just a word? Maybe turn it into a
@@ -64,20 +66,25 @@ adder.addImageMode 	= function () {
 		var editor 		= adder.viewer;
 		var cursorPos 	= editor.getCursor()
 
-		editor.replaceRange( ';', cursorPos, cursorPos );
-
 		// There is only one line
 		var token 		= editor.getTokenAt( cursorPos ),
 			start 		= { line: 0, ch: token.start },
 			end 		= { line: 0, ch: token.end }
+
+		// Make sure the token is ended appropriately
+		editor.replaceRange( ';', end, end );
+		// Get the new end of the token, including the end symbol
+		token 		= editor.getTokenAt( cursorPos )
+		end 		= { line: 0, ch: token.end }
+		console.log(token)
 
 		var inViewer 	= editor.markText( start, end,
 			// I don't think classname matters when using 'replaceWith'
 			{className: 'chosen-image', replacedWith: newNode
 				// clearOnEnter doesn't unclear on exit, need other way
 				// , clearOnEnter: true  // experiment
-				, handleMouseEvents: true // think I will need this
-				, addToHistory: true
+				, handleMouseEvents: 	true // think I will need this
+				, addToHistory: 		true
 			}
 		);
 

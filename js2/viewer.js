@@ -53,6 +53,7 @@ TODO:
 	How to set the id of a CodeMirror DOM node?
 	How to get the CodeMirror text area DOM node?
 - Answer CodeMirror forum questions
+- Add undo to search bar somehow
 */
 
 'use strict'
