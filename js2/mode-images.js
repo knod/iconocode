@@ -62,12 +62,13 @@ adder.addImageMode 	= function () {
 
 		// --- CODEMIRROR EDITOR --- \\
 		var editor 		= adder.viewer;
-		var wordRange 	= editor.findWordAt( editor.getCursor() );
-		// var word 		= editor.getRange( wordRange.anchor, wordRange.head );
-		// console.log(word);
-		// If .markText() is used, editor.getTokenAt({line: #, ch: #})
-		// will still get the correct text. Marker doesn't interfere with that.
-		var inViewer 	= editor.markText( wordRange.anchor, wordRange.head,
+
+		// There is only one line
+		var token 		= editor.getTokenAt( editor.getCursor() ),
+			start 		= { line: 0, ch: token.start },
+			end 		= { line: 0, ch: token.end }
+
+		var inViewer 	= editor.markText( start, end,
 			// I don't think classname matters when using 'replaceWith'
 			{className: 'chosen-image', replacedWith: newNode
 				// clearOnEnter doesn't unclear on exit, need other way
@@ -76,6 +77,21 @@ adder.addImageMode 	= function () {
 				, addToHistory: true
 			}
 		);
+
+		// var wordRange 	= editor.findWordAt( editor.getCursor() );
+		// // var word 		= editor.getRange( wordRange.anchor, wordRange.head );
+		// // console.log(word);
+		// // If .markText() is used, editor.getTokenAt({line: #, ch: #})
+		// // will still get the correct text. Marker doesn't interfere with that.
+		// var inViewer 	= editor.markText( wordRange.anchor, wordRange.head,
+		// 	// I don't think classname matters when using 'replaceWith'
+		// 	{className: 'chosen-image', replacedWith: newNode
+		// 		// clearOnEnter doesn't unclear on exit, need other way
+		// 		// , clearOnEnter: true  // experiment
+		// 		, handleMouseEvents: true // think I will need this
+		// 		, addToHistory: true
+		// 	}
+		// );
 
 		return inViewer;
 	};  // End adder.chooseImage()
