@@ -74,9 +74,9 @@ adder.addImageMode 	= function () {
 		// Make sure the token is ended appropriately
 		editor.replaceRange( ';', end, end );
 		// Get the new end of the token, including the end symbol
-		token 		= editor.getTokenAt( cursorPos )
+		token 		= editor.getTokenAt( editor.getCursor() )
+		start 		= { line: 0, ch: token.start }
 		end 		= { line: 0, ch: token.end }
-		// console.log(token)
 
 		var inViewer 	= editor.markText( start, end,
 			// I don't think classname matters when using 'replaceWith'
