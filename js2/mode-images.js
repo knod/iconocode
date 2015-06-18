@@ -89,8 +89,8 @@ adder.addImageMode 	= function () {
 	/*
 
 	*/
-		$('.image-choice.selected').removeClass('selected');
-		$(imgNode).addClass('selected');
+		$('#icd-images-picker .selected').removeClass('selected');
+		$(imgNode).parent().addClass('selected');
 		// Takes focus off of last thing, puts it on this thing
 		imgNode.focus();
 		return imgNode;
@@ -99,7 +99,7 @@ adder.addImageMode 	= function () {
 
 	adder.deselectAllImageChoices = function () {
 	// Not sure this is needed anymore
-		return $('.image-choice.selected').removeClass('selected');
+		return $('#icd-images-picker .selected').removeClass('selected');
 	};  // End adder.deselectAllImageChoices()
 
 
@@ -266,7 +266,7 @@ adder.addImageMode 	= function () {
 	*/
 		var key 			= evnt.keyCode || evnt.which;
 		// TODO: try using target instead;
-		var selectedImage 	= $('.image-choice.selected')[0];
+		var selectedImage 	= $('#icd-images-picker .selected').find('.image-choice')[0];
 
 		// If we're in the image picker choices section already
 		if ( selectedImage !== undefined ) {
@@ -285,7 +285,7 @@ adder.addImageMode 	= function () {
 			else if ( key ===  9) { direction = 'next'; }  // tab
 			else if ( key === 13) { // Enter
 				// Get selected image before removing that marker
-				var selectedImage = $('.image-choice.selected')[0]
+				var selectedImage = $('#icd-images-picker .selected').find('.image-choice')[0];
 
 				// Bring everything back to where it last was in the search bar
 				adder.backToSearcbar( selectedImage );
@@ -302,7 +302,7 @@ adder.addImageMode 	= function () {
 			}
 		}
 
-		return $('.image-choice.selected')[0];
+		return $('#icd-images-picker .selected').find('.image-choice')[0];
 	};  // End adder.imgKeyHandler
 
 
@@ -432,6 +432,32 @@ adder.addImageMode 	= function () {
 		// Add images to the DOM (will also add custom images in future)
 		adder.modes.images.choices 	= adder.defaultImages;
 		adder.addGrid( adder.modes.images.choices, imagePicker );
+
+
+		imagePicker.addEventListener( 'hover', function ( evnt ) {
+
+			var $target = $(evnt.target);
+			var $parent = $target.parent();
+
+			if ( $target.hasClass('image-choice-container') ||
+					$parent.hasClass('image-choice-container') ) {
+				console.log( 'is container' );
+			}
+
+		} );
+
+		imagePicker.addEventListener( 'click', function ( evnt ) {
+
+			var $target = $(evnt.target);
+			var $parent = $target.parent();
+
+			if ( $target.hasClass('image-choice-container') ||
+					$parent.hasClass('image-choice-container') ) {
+				console.log( 'is container' );
+			}
+
+		} );
+
 
 		return imagePicker;
 	};  // End adder.addTypePicker()

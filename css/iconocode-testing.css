@@ -173,7 +173,8 @@ be scrollable... make it position: relative?
 /* --- PICKERS --- */
 .icd .adder-picker {
 	height: 9rem;
-	width: 100%;
+	/* for some reason makes images oversized */
+	/*width: 100%;*/
 }
 
 

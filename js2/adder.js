@@ -61,7 +61,7 @@ Should go somewhere else, not in adder.js
 */
 	var picker 		 = document.createElement('div');
 	picker.id 		 = prefix + '-' + pickerType + '-picker';
-	picker.className = prefix + ' adder-picker';
+	picker.className = 'adder-picker';
 
 	// Hide all pickers on start
 	picker.style.display = 'none';
