@@ -21,8 +21,8 @@ Show a tab as being active, do it's action
 		currTab.classList.remove( 'active-tab' );
 
 		// Hide associated elements
-		// console.log(currTab.toShow)
-		currTab.toShow.style.display = 'none';
+		// console.log($(currTab).data('toShow'))
+		$(currTab).data('toShow').style.display = 'none';
 		// console.log(currTab.dataset['toShow'])
 		// currTab.dataset['toShow'].style.display = 'none';
 		// var toShow = document.getElementById( currTab.dataset['toShow'] )
@@ -34,7 +34,7 @@ Show a tab as being active, do it's action
 	selectedTab.classList.add( 'active-tab' );
 
 	// Reveal the element that's in the data-toShow
-	selectedTab.toShow.style.display = 'flex';
+	$(selectedTab).data('toShow').style.display = 'flex';
 	// var toShow = document.getElementById( selectedTab.dataset['toShow'] )
 	// toShow.style.display = 'inline-block';
 
@@ -80,7 +80,7 @@ is clicked.
 	// !!! Make this better !!!
 	// Element that will be revealed
 	// Can't store it in regular dataset as that just stores a string
-	tab.toShow = toShow;
+	$(tab).data('toShow', toShow);
 	// console.log(tab.toShow)
 	// Seems weird to use jquery randomly in here all of a sudden
 	// $(tab).data( 'toShow', toShow );
