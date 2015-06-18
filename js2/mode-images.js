@@ -76,7 +76,7 @@ adder.addImageMode 	= function () {
 		// Get the new end of the token, including the end symbol
 		token 		= editor.getTokenAt( cursorPos )
 		end 		= { line: 0, ch: token.end }
-		console.log(token)
+		// console.log(token)
 
 		var inViewer 	= editor.markText( start, end,
 			// I don't think classname matters when using 'replaceWith'
@@ -102,6 +102,9 @@ adder.addImageMode 	= function () {
 		// 		, addToHistory: true
 		// 	}
 		// );
+
+		// Bring everything back to where it last was in the search bar
+		adder.backToSearchbar( adder.viewer );
 
 		return inViewer;
 	};  // End adder.chooseImage()
@@ -129,10 +132,10 @@ adder.addImageMode 	= function () {
 	};  // End adder.deselectAllImageChoices()
 
 
-	adder.backToSearchbar = function ( selectedElem ) {
-		adder.searchBar.focus();  // assigned in viewer.js
+	adder.backToSearchbar = function ( cmEditor ) {
+		cmEditor.focus();  // assigned in viewer.js
 		// TODO: put cursor in a logical place. Not sure how CodeMirror does that.
-		return $(selectedElem).removeClass('selected');
+		return $('.selected').removeClass('selected');
 	};  // End adder.backToSearchbar()
 
 
@@ -311,15 +314,13 @@ adder.addImageMode 	= function () {
 			else if ( key === 13) { // Enter
 				// Get selected image before removing that marker
 				var selectedImage = $('#icd-images-picker .selected').find('.image-choice')[0];
-
-				// Bring everything back to where it last was in the search bar
-				adder.backToSearchbar( selectedImage );
 				// Add the icon to the viewer in place of whatever text is there
+				// Will return focus to the search bar
 				adder.chooseImage( selectedImage );
 
 			} else if (key === 27) { // ESC
 				// Just bring everything back to the search bar
-				adder.backToSearchbar( selectedImage );
+				adder.backToSearchbar( adder.viewer );
 			}
 
 			if ( direction !== undefined ) {
