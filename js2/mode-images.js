@@ -294,7 +294,7 @@ adder.addImageMode 	= function () {
 	*/
 		var key 			= evnt.keyCode || evnt.which;
 		// TODO: try using target instead;
-		var selectedImage 	= $('#icd_images_picker .selected').find('.images-choice')[0];
+		var selectedImage 	= $('#icd_images_picker .selected').find('.image-choice')[0];
 
 		// If we're in the image picker choices section already
 		if ( selectedImage !== undefined ) {
@@ -313,7 +313,7 @@ adder.addImageMode 	= function () {
 			else if ( key ===  9) { direction = 'next'; }  // tab
 			else if ( key === 13) { // Enter
 				// Get selected image before removing that marker
-				var selectedImage = $('#icd_images_picker .selected').find('.images-choice')[0];
+				var selectedImage = $('#icd_images_picker .selected').find('.image-choice')[0];
 				// Add the icon to the viewer in place of whatever text is there
 				// Will return focus to the search bar
 				adder.chooseImage( selectedImage );
@@ -328,7 +328,7 @@ adder.addImageMode 	= function () {
 			}
 		}
 
-		return $('#icd_images_picker .selected').find('.images-choice')[0];
+		return $('#icd_images_picker .selected').find('.image-choice')[0];
 	};  // End adder.imgKeyHandler
 
 
@@ -463,11 +463,11 @@ adder.addImageMode 	= function () {
 		imagePicker.addEventListener( 'mouseover', function ( evnt ) {
 
 			var $target 	= $(evnt.target);
-			var $ancestor 	= $target.closest('.images-choice-container');
+			var $ancestor 	= $target.closest('.image-choice-container');
 
 			// Visually indicate selection of image
 			if ( $ancestor.length > 0 ) {
-				adder.selectImage($ancestor.find('.images-choice')[0]);
+				adder.selectImage($ancestor.find('.image-choice')[0]);
 			}
 			// TODO: Show all matching terms at full length
 
@@ -476,10 +476,10 @@ adder.addImageMode 	= function () {
 		imagePicker.addEventListener( 'click', function ( evnt ) {
 
 			var $target 	= $(evnt.target);
-			var $ancestor 	= $target.closest('.images-choice-container');
+			var $ancestor 	= $target.closest('.image-choice-container');
 
 			if ( $ancestor.length > 0 ) {
-				adder.chooseImage($ancestor.find('.images-choice')[0]);
+				adder.chooseImage($ancestor.find('.image-choice')[0]);
 			}
 
 		} );
