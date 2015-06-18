@@ -18,7 +18,7 @@ Show a tab as being active, do it's action
 	for ( var tabi = 0; tabi < allTabs.length; tabi++ ) {
 		var currTab = allTabs[ tabi ]
 		// Remove 'active' styles
-		currTab.classList.remove( 'active' );
+		currTab.classList.remove( 'active-tab' );
 
 		// Hide associated elements
 		// console.log(currTab.toShow)
@@ -31,12 +31,16 @@ Show a tab as being active, do it's action
 	}  // end for each tab
 
 	// Activate this tab
-	selectedTab.classList.add( 'selected' );
+	selectedTab.classList.add( 'active-tab' );
 
 	// Reveal the element that's in the data-toShow
 	selectedTab.toShow.style.display = 'flex';
 	// var toShow = document.getElementById( selectedTab.dataset['toShow'] )
 	// toShow.style.display = 'inline-block';
+
+	// Focus on the search bar
+	$('.selected').removeClass('selected');
+	adder.viewer.focus()
 
 	return selectedTab;
 };  // End adder.activateMode()

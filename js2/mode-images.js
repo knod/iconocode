@@ -18,7 +18,7 @@ TODO:
 	the word should be hidden. When hovered over or selected with the keyboard,
 	the rest of the word should appear (as should the other search terms or matches).
 	That sounds super complicated.
-- Handle semicolon being added into the text of the 'searchBar'
+- Handle semicolon being added by user into the text of the 'searchBar'
 - !!!: Semicolon appearing when image is selected while no text is in the search bar
 
 ??:

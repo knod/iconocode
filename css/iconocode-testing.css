@@ -44,7 +44,7 @@ since I can't figure out shapes right now
 	list-style: none;
 }
 
-.icd .selected {
+.icd .selected, .icd .active-tab {
 	background-color: rgb( 165, 165, 165 );
 }
 
@@ -295,5 +295,5 @@ but maybe we want the images to be their proper size?
 /* --- TEST --- */
 /* --------------------- */
 .icd :focus {
-	border: 3px solid rgb( 0, 0, 0 ) !important;
+	/*border: 3px solid rgb( 0, 0, 0 ) !important;*/
 }

@@ -11,6 +11,9 @@ and cm.getWrapperElement() )
 
 
 TODO:
+- Make text into placeholder text instead
+
+DONE:
 - Prevent people from typing in stuff that will make new spans in
 CodeMirror...
 
