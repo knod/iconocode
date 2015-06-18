@@ -217,7 +217,7 @@ but maybe we want the images to be their proper size?
 	overflow: scroll;
 }
 
-.icd .image-picker-row {
+.icd .images-picker-row {
 	display: flex;
 	position: relative;
 	/* Don't do this: justify-content: space-around; */

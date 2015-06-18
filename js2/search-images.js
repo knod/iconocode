@@ -4,6 +4,9 @@
 * multiple lists for images.
 * 
 * TODO:
+* - Use list of choices instead of grid of choices
+* 
+* DONE:
 * - Hide images that have no matching terms
 * - Rank images by how closely they match the query
 * - Re-order images to appear by rank of match
@@ -53,7 +56,7 @@ Updates the visible search terms for all choices.
 		for ( var coli = 0; coli < choiceGrid[rowi].length; coli++ ) {
 			// Change the visible search terms for that image
 			// var choiceNode = choiceGrid[ rowi ][ coli ];
-			var choiceNode = document.getElementById( 'image_choice_row' + rowi + '_col' + coli );
+			var choiceNode = document.getElementById( 'images_choice_row' + rowi + '_col' + coli );
 			adder.updateChoiceList( choiceNode, query );
 			// List to be ranked
 			choiceNodes.push(choiceNode);

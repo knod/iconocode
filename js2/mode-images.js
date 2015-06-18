@@ -140,7 +140,7 @@ adder.addImageMode 	= function () {
 
 
 	adder.getCellNode = function ( position, rowIdPrefix ) {
-		var imgNode = document.getElementById( 'image_choice_row' + position.row + '_col' + position.col );
+		var imgNode = document.getElementById( 'images_choice_row' + position.row + '_col' + position.col );
 		return imgNode;
 	};  // End adder.getCellNode()
 
@@ -232,7 +232,7 @@ adder.addImageMode 	= function () {
 	*/
 
 		// Need max number of columns for navigation with tab key to work
-		var numPrevCols 	= $('#image_choice_row' + position.row).children().toArray().length;
+		var numPrevCols 	= $('#images_choice_row' + position.row).children().toArray().length;
 		// So we can compare the previous row number to the current row number later
 		var prevRowNum 		= position.row;
 		// If the row gotten is the last row and has fewer than the full number of columns
@@ -245,7 +245,7 @@ adder.addImageMode 	= function () {
 		// ==================
 		// Make sure not to go past the last row with visible elements
 		// Use row 0 so that we know we're using a valid row number
-		var $imgPicker 			= $('#image_choice_row0').parent();
+		var $imgPicker 			= $('#images_choice_row0').parent();
  		// Contingency for no nodes being visible
 		var lastVisibleChoice 	= $imgPicker.find('img:visible:last')[0],
 			lastRowNum 			= parseInt($(lastVisibleChoice).data( 'row' ));  // Need to parse int?
@@ -256,7 +256,7 @@ adder.addImageMode 	= function () {
 		// COL
 		// ==================
 		// Now use the number of columns in the correct row
-		var lastColNum = ($('#image_choice_row' + currRowNum).children().toArray().length) - 1;
+		var lastColNum = ($('#images_choice_row' + currRowNum).children().toArray().length) - 1;
 
 		// Basically, in case user pressed up or down to get to the last row
 		// Without this the modulo thing below will do things we don't want
@@ -294,11 +294,11 @@ adder.addImageMode 	= function () {
 	*/
 		var key 			= evnt.keyCode || evnt.which;
 		// TODO: try using target instead;
-		var selectedImage 	= $('#icd_images_picker .selected').find('.image-choice')[0];
+		var selectedImage 	= $('#icd_images_picker .selected').find('.images-choice')[0];
 
 		// If we're in the image picker choices section already
 		if ( selectedImage !== undefined ) {
-			// adder.makeCurrentChoiceGrid( selectedImage.parentNode.parentNode.parentNode, 'image_choice' );
+			// adder.makeCurrentChoiceGrid( selectedImage.parentNode.parentNode.parentNode, 'images_choice' );
 			// Prevents tab from cycling through other DOM stuff
 			evnt.preventDefault();
 
@@ -313,7 +313,7 @@ adder.addImageMode 	= function () {
 			else if ( key ===  9) { direction = 'next'; }  // tab
 			else if ( key === 13) { // Enter
 				// Get selected image before removing that marker
-				var selectedImage = $('#icd_images_picker .selected').find('.image-choice')[0];
+				var selectedImage = $('#icd_images_picker .selected').find('.images-choice')[0];
 				// Add the icon to the viewer in place of whatever text is there
 				// Will return focus to the search bar
 				adder.chooseImage( selectedImage );
@@ -328,7 +328,7 @@ adder.addImageMode 	= function () {
 			}
 		}
 
-		return $('#icd_images_picker .selected').find('.image-choice')[0];
+		return $('#icd_images_picker .selected').find('.images-choice')[0];
 	};  // End adder.imgKeyHandler
 
 
@@ -345,7 +345,7 @@ adder.addImageMode 	= function () {
 
 	adder.updateImageRow 	= function ( rowNum, imageArray ) {
 
-		var rowNode		= document.getElementById('image_choice_row' + rowNum);
+		var rowNode		= document.getElementById('images_choice_row' + rowNum);
 
 		// This is what the grid will actully use to access selections
 		var rowArray 	= [];
@@ -359,7 +359,7 @@ adder.addImageMode 	= function () {
 			// Test if we run out of image nodes (happens at the end sometimes)
 			if ( imgNode !== undefined ) {
 				rowNode.appendChild( imgNode.parentNode );
-				imgNode.id 		= 'image_choice_row' + rowNum + '_col' + coli;
+				imgNode.id 		= 'images_choice_row' + rowNum + '_col' + coli;
 				// Used if need to get row and col from element rather than when
 				// need to access element using row and col numbers
 				$(imgNode).data('row', rowNum);
@@ -397,8 +397,8 @@ adder.addImageMode 	= function () {
 	* to the adder.imgGrid.
 	*/
 		var rowNode 		= document.createElement( 'div' );
-		rowNode.className 	= 'image-picker-row';
-		rowNode.id 			= 'image_choice_row' + rowNum;
+		rowNode.className 	= 'images-picker-row';
+		rowNode.id 			= 'images_choice_row' + rowNum;
 
 		// This is what the grid will actully use to access selections
 		var rowArray 		= [];
@@ -414,7 +414,7 @@ adder.addImageMode 	= function () {
 
 				var imgChoice 	= new adder.ImgChoice( img, rowNode );
 				var imgNode 	= imgChoice.node;
-				imgNode.id 		= 'image_choice_row' + rowNum + '_col' + coli;
+				imgNode.id 		= 'images_choice_row' + rowNum + '_col' + coli;
 				$(imgNode).data('row', rowNum);
 				$(imgNode).data('col', coli);
 
@@ -463,11 +463,11 @@ adder.addImageMode 	= function () {
 		imagePicker.addEventListener( 'mouseover', function ( evnt ) {
 
 			var $target 	= $(evnt.target);
-			var $ancestor 	= $target.closest('.image-choice-container');
+			var $ancestor 	= $target.closest('.images-choice-container');
 
 			// Visually indicate selection of image
 			if ( $ancestor.length > 0 ) {
-				adder.selectImage($ancestor.find('.image-choice')[0]);
+				adder.selectImage($ancestor.find('.images-choice')[0]);
 			}
 			// TODO: Show all matching terms at full length
 
@@ -476,10 +476,10 @@ adder.addImageMode 	= function () {
 		imagePicker.addEventListener( 'click', function ( evnt ) {
 
 			var $target 	= $(evnt.target);
-			var $ancestor 	= $target.closest('.image-choice-container');
+			var $ancestor 	= $target.closest('.images-choice-container');
 
 			if ( $ancestor.length > 0 ) {
-				adder.chooseImage($ancestor.find('.image-choice')[0]);
+				adder.chooseImage($ancestor.find('.images-choice')[0]);
 			}
 
 		} );
