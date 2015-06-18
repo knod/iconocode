@@ -40,7 +40,6 @@ adder.Grid = function ( pickerName, maxCols, choiceNodes ) {
 		// Give the choice node its id and position data
 		for ( var nodei = 0; nodei < rowNodes.length; nodei++ ) {
 			var node = rowNodes[ nodei ];
-			console.log(node)
 
 			// If it's undefined it means we've run out of nodes (bottom row)
 			if ( node !== undefined ) {
@@ -103,7 +102,7 @@ for ( var imgi = 0; imgi < allImageObjs.length; imgi++ ) {
 	var imgObj = allImageObjs[ imgi ]
 	var parent = document.createDocumentFragment();
 
-	var imgChoice 	= new adder.ImgChoice( imgObj, parent );
+	var imgChoice 	= new adder.ImgChoice2( imgObj, parent );
 	imageChoiceNodesTest.push( imgChoice.node );
 }
 

@@ -5,7 +5,7 @@ Builds an image node correctly for insertion into an icon
 
 'use strict';
 
-adder.ImgChoice = function ( imgObj, parentNode ) {
+adder.ImgChoice2 = function ( imgObj, parentNode ) {
 
 	var imgChoice = {};
 
