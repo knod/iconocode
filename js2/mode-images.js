@@ -129,7 +129,7 @@ adder.addImageMode 	= function () {
 		$('#icd_images_picker .selected').removeClass('selected');
 		var $imgContainer = $(imgContainer);
 		$imgContainer.addClass('selected');
-// console.trace($imgContainer);
+
 		// Takes focus off of last thing, puts it on this thing's actual choice
 		var infoHolder = $imgContainer.find('.image-choice')[0];
 		infoHolder.focus();
@@ -162,7 +162,6 @@ adder.addImageMode 	= function () {
 	adder.position;
 	adder.selectImageByPos = function ( position, grid ) {
 		// Change the nodes
-		// var node = adder.getCellNode( position, adder.imgGrid );
 		var node = adder.getCellNode( position );
 		adder.selectImage( node );
 
@@ -248,6 +247,7 @@ adder.addImageMode 	= function () {
 
 		// Need max number of columns for navigation with tab key to work
 		var numPrevCols 	= $('#images_choice_row' + position.row).children().toArray().length;
+		var maxCols 		= $('#images_choice_row' + position.row).children().toArray().length;
 		// So we can compare the previous row number to the current row number later
 		var prevRowNum 		= position.row;
 		// If the row gotten is the last row and has fewer than the full number of columns
@@ -263,17 +263,17 @@ adder.addImageMode 	= function () {
 		// Use row 0 so that we know we're using a valid row number
 		var $imgPicker 			= $('#images_choice_row0').parent();
  		// Contingency for no nodes being visible
-		var $lastVisibleChoice 	= $imgPicker.find('img:visible:last'),
-			$lastContainer 		= $lastVisibleChoice.closest('.image-choice-container'),
-			lastRowNum 			= parseInt($lastContainer.data( 'row' ));  // Need to parse int?
+		var $lastVisibleCont = $imgPicker.find('.image-choice-container:visible:last'),
+			lastRowNum 		 = parseInt($lastVisibleCont.data( 'row' ));  // Need to parse int?
 
 		currRowNum = wrapPosition( currRowNum, lastRowNum );
 
 		// ==================
 		// COL
 		// ==================
-		// Now use the number of columns in the correct row
-		var lastColNum = ($('#images_choice_row' + currRowNum).children().toArray().length) - 1;
+		// Now use the number of columns in the correct row (is there a shorter way?)
+		var $lastRowCont 		= $('#images_choice_row' + currRowNum).find('.image-choice-container:visible:last'),
+			lastColNum 			= $lastRowCont.data('col');
 
 		// Basically, in case user pressed up or down to get to the last row
 		// Without this the modulo thing below will do things we don't want
@@ -284,7 +284,7 @@ adder.addImageMode 	= function () {
 				currColNum = lastColNum
 			}
 		}
-		
+
 		currColNum = wrapPosition( currColNum, lastColNum );
 
 
@@ -360,7 +360,7 @@ adder.addImageMode 	= function () {
 	adder.numRows;
 
 	adder.updateImageGrid 	= function ( imageArray ) {
-		
+
 		var maxCols = 5;
 		adder.imageGridObj.set( 'images', maxCols, imageArray );
 

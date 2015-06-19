@@ -11,6 +11,7 @@
 * 
 * TODO:
 * - Make text into placeholder text instead
+* - When search bar is given focus, deselect anything that's selected
 * 
 * DONE:
 * - Prevent people from typing in stuff that will make new spans in
