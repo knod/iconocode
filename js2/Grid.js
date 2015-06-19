@@ -92,9 +92,10 @@ adder.Grid = function ( pickerName, maxCols, choiceNodes ) {
 // *************************************************
 // Testing
 // *************************************************
-var pickerName = 'images';
-var maxCols = 5;
-var imageChoiceNodesTest = [];
+// --- IMAGES --- \\
+var picker1 				= 'images';
+var maxCols1 				= 5;
+var imageChoiceNodesTest 	= [];
 
 var allImageObjs = adder.defaultImages
 
@@ -107,6 +108,22 @@ for ( var imgi = 0; imgi < allImageObjs.length; imgi++ ) {
 }
 
 // Test in console:
-// var myGrid = adder.Grid( pickerName, maxCols, imageChoiceNodesTest );
+// var myGrid = adder.Grid( picker1, maxCols1, imageChoiceNodesTest );
+
+
+// --- TYPES --- \\
+// Not working, have to adjust how types container works in general to make
+// it work.
+var picker2 				= 'types';
+var maxCols2 				= 3;
+
+// Test in console: 
+// var verbThing 				= adder.addVerbChoice( document.createDocumentFragment(), 'icd' ),
+// 	nounThing				= adder.addNounChoice( document.createDocumentFragment(), 'icd' ),
+// 	messageThing			= adder.addMessageChoice( document.createDocumentFragment(), 'icd' );
+
+// var typeChoiceNodesTest 	= [ verbThing, nounThing, messageThing ]
+// var typeGrid = adder.Grid( picker2, maxCols2, typeChoiceNodesTest );
+
 
 

@@ -22,16 +22,16 @@ adder.addTypeMode = function () {
 	// =============
 	// PICKER
 	// =============
-	adder.addTypeChoice 	= function ( typeName, parent, explanation ) {
+	adder.addTypeChoice 	= function ( typeName, parentNode, explanation ) {
 	/* ( str, Node, Node ) -> new Node
 
 	*/
 		var typeContainer 				= document.createElement('div');
-		parent.appendChild( typeContainer );
+		parentNode.appendChild( typeContainer );
 		adder.modes.types.choices[ typeName ] = typeContainer;
 
-		typeContainer.className 		= prefix + ' type-choice';
-		typeContainer.id 				= prefix + ' choice-' + typeName;
+		typeContainer.className 		= prefix + ' type-choice-container';
+		typeContainer.id 				= prefix + '_choice_' + typeName;
 		// Will use typeToAdd to set the type of the icon to add
 		typeContainer.dataset['typeToAdd'] = typeName;
 
@@ -53,13 +53,13 @@ adder.addTypeMode = function () {
 	}  // End adder.addTypeChoice()
 
 
-	adder.addVerbChoice 	= function ( parent, iconPrefix ) {
-	/*
+	adder.addVerbChoice 	= function ( parentNode, iconPrefix ) {
+	/* ( Node, str ) -> new Node
 
 	*/
-		var verbType = adder.addTypeChoice( 'verb', parent, 'does things' );
+		var verbType = adder.addTypeChoice( 'verb', parentNode, 'changes data' );
 
-		var verbIcon = new Icon( iconPrefix + '-verb');
+		var verbIcon = new Icon( iconPrefix + '-verb' );
 		verbIcon.createNew( {}, verbType );
 		verbIcon.setType( 'verb' );
 
@@ -67,13 +67,13 @@ adder.addTypeMode = function () {
 	};  // End adder.addVerbChoice()
 
 
-	adder.addNounChoice 	= function ( parent, iconPrefix ) {
-	/*
+	adder.addNounChoice 	= function ( parentNode, iconPrefix ) {
+	/* ( Node, str ) -> new Node
 
 	*/
-		var nounType = adder.addTypeChoice( 'noun', parent, 'is done to' );
+		var nounType = adder.addTypeChoice( 'noun', parentNode, 'is set, gotten, and changed' );
 
-		var nounIcon = new Icon( iconPrefix + '-noun');
+		var nounIcon = new Icon( iconPrefix + '-noun' );
 		nounIcon.createNew( {}, nounType );
 		nounIcon.setType( 'noun' );
 
@@ -81,13 +81,13 @@ adder.addTypeMode = function () {
 	};  // End adder.addNounChoice()
 
 
-	adder.addMessageChoice 	= function ( parent, iconPrefix ) {
-	/*
+	adder.addMessageChoice 	= function ( parentNode, iconPrefix ) {
+	/* ( Node, str ) -> new Node
 
 	*/
-		var messageType = adder.addTypeChoice( 'message', parent, 'tells you things' );
+		var messageType = adder.addTypeChoice( 'message', parentNode, 'tells you things' );
 
-		var messageIcon = new Icon( iconPrefix + '-message');
+		var messageIcon = new Icon( iconPrefix + '-message' );
 		messageIcon.createNew( {}, messageType );
 		messageIcon.setType( 'message' );
 
@@ -95,24 +95,34 @@ adder.addTypeMode = function () {
 	};  // End adder.addMessageChoice()
 
 
-	adder.addTypePicker 	= function ( parent ) {
-	/*
+	adder.addTypePicker 	= function ( parentNode ) {
+	/* ( Node ) -> new Node
 
 	Offers a selection of types for new icons
 	*/
 		// --- PICKER --- \\
 		var typePicker 				= adder.createPicker( 'types' );  // In adder.js atm
 		adder.modes.types.section 	= typePicker;
-		parent.appendChild( typePicker );
+		parentNode.appendChild( typePicker );
 
 		var iconPrefix 				= 'adder-type-choice';
-		adder.addVerbChoice( typePicker, iconPrefix );
-		adder.addNounChoice( typePicker, iconPrefix );
-		adder.addMessageChoice( typePicker, iconPrefix );
+		// adder.addVerbChoice( typePicker, iconPrefix );
+		// adder.addNounChoice( typePicker, iconPrefix );
+		// adder.addMessageChoice( typePicker, iconPrefix );
+
+		var verbNode  	= adder.addVerbChoice( document.createDocumentFragment(), iconPrefix ),
+			nounNode 	= adder.addNounChoice( document.createDocumentFragment(), iconPrefix ),
+			messageNode = adder.addMessageChoice( document.createDocumentFragment(), iconPrefix );
+
+		var typeChoicesNodes = [ verbNode, nounNode, messageNode ];
+
+
+		var numCols = 3;
+		var typeGrid = new adder.Grid( 'types', numCols, typeChoicesNodes );
 
 
 		// Now that they're all in DOM, fetch them easily to do stuff to them
-		var allChoices	 	= document.getElementsByClassName( 'type-choice' );
+		var allChoices	 	= document.getElementsByClassName( 'type-choice-container' );
 		var numChoices 		= allChoices.length;
 
 		// --- Last Styling --- \\
@@ -136,7 +146,7 @@ adder.addTypeMode = function () {
 	// =============
 	// TAB
 	// =============
-	adder.addTypeTab 	= function ( parent ) {
+	adder.addTypeTab 	= function ( parentNode ) {
 
 		// For my own clarity
 		var args = {
@@ -147,7 +157,7 @@ adder.addTypeMode = function () {
 		var typeTab 		 = adder.createTabInGroup(
 			args.group, args.type, args.label, args.toShow, args.parentObj
 		);
-		parent.appendChild( typeTab );
+		parentNode.appendChild( typeTab );
 
 		return typeTab;
 	};  // End adder.addTypeTab()

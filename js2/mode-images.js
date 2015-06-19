@@ -115,14 +115,26 @@ adder.addImageMode 	= function () {
 	// ====================
 	// http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
 	adder.selectImage = function ( imgNode ) {
+		// $('#icd_images_picker .selected').removeClass('selected');
+		// $(imgNode).parent().addClass('selected');
+		// // Takes focus off of last thing, puts it on this thing
+		// imgNode.focus();
+		// return imgNode;
+	};  // adder.selectImage();
+
+	adder.selectImage = function ( imgContainer ) {
 	/*
 
 	*/
 		$('#icd_images_picker .selected').removeClass('selected');
-		$(imgNode).parent().addClass('selected');
-		// Takes focus off of last thing, puts it on this thing
-		imgNode.focus();
-		return imgNode;
+		var $imgContainer = $(imgContainer);
+		$imgContainer.addClass('selected');
+// console.trace($imgContainer);
+		// Takes focus off of last thing, puts it on this thing's actual choice
+		var infoHolder = $imgContainer.find('.image-choice')[0];
+		infoHolder.focus();
+
+		return imgContainer;
 	};  // adder.selectImage();
 
 
@@ -140,15 +152,18 @@ adder.addImageMode 	= function () {
 
 
 	adder.getCellNode = function ( position, rowIdPrefix ) {
-		var imgNode = document.getElementById( 'images_choice_row' + position.row + '_col' + position.col );
-		return imgNode;
+		var imgNode   = document.getElementById( 'images_choice_row' + position.row + '_col' + position.col );
+		var container = $(imgNode).closest('.image-choice-container');
+
+		return container;
 	};  // End adder.getCellNode()
 
 
 	adder.position;
 	adder.selectImageByPos = function ( position, grid ) {
 		// Change the nodes
-		var node = adder.getCellNode( position, adder.imgGrid );
+		// var node = adder.getCellNode( position, adder.imgGrid );
+		var node = adder.getCellNode( position );
 		adder.selectImage( node );
 
 		return node;
@@ -237,6 +252,7 @@ adder.addImageMode 	= function () {
 		var prevRowNum 		= position.row;
 		// If the row gotten is the last row and has fewer than the full number of columns
 		// incrementpPosition() will bring the column number to the beginning of the column
+
 		var currPosition 	= incrementPosition( position, direction, numPrevCols );
 		var currRowNum 		= currPosition.row, currColNum = currPosition.col;
 
@@ -247,8 +263,9 @@ adder.addImageMode 	= function () {
 		// Use row 0 so that we know we're using a valid row number
 		var $imgPicker 			= $('#images_choice_row0').parent();
  		// Contingency for no nodes being visible
-		var lastVisibleChoice 	= $imgPicker.find('img:visible:last')[0],
-			lastRowNum 			= parseInt($(lastVisibleChoice).data( 'row' ));  // Need to parse int?
+		var $lastVisibleChoice 	= $imgPicker.find('img:visible:last'),
+			$lastContainer 		= $lastVisibleChoice.closest('.image-choice-container'),
+			lastRowNum 			= parseInt($lastContainer.data( 'row' ));  // Need to parse int?
 
 		currRowNum = wrapPosition( currRowNum, lastRowNum );
 
@@ -342,105 +359,33 @@ adder.addImageMode 	= function () {
 	adder.numCols = 5;
 	adder.numRows;
 
-
-	adder.updateImageRow 	= function ( rowNum, imageArray ) {
-
-		var rowNode		= document.getElementById('images_choice_row' + rowNum);
-
-		// This is what the grid will actully use to access selections
-		var rowArray 	= [];
-
-		var numCols_ 	= adder.numCols;
-		for ( var coli = 0; coli < numCols_; coli++ ) {
-			// Mathematically get the index using the column and row
-			var cellNum = coli + ( numCols_ * rowNum );
-			var imgNode = imageArray[ cellNum ];
-
-			// Test if we run out of image nodes (happens at the end sometimes)
-			if ( imgNode !== undefined ) {
-				rowNode.appendChild( imgNode.parentNode );
-				imgNode.id 		= 'images_choice_row' + rowNum + '_col' + coli;
-				// Used if need to get row and col from element rather than when
-				// need to access element using row and col numbers
-				$(imgNode).data('row', rowNum);
-				$(imgNode).data('col', coli);
-
-				rowArray.push( imgNode );
-			}
-		}
-
-		return rowArray;
-	};  // End adder.updateImageRow()
-
-
 	adder.updateImageGrid 	= function ( imageArray ) {
+		
+		var maxCols = 5;
+		adder.imageGridObj.set( 'images', maxCols, imageArray );
 
-		var grid = [];
-
-		// Get the right number of rows for the given number of images
-		adder.numRows 	= Math.ceil( imageArray.length / adder.numCols )
-		var numRows 	= adder.numRows;
-		for ( var rowi = 0; rowi < numRows; rowi++ ) {
-			var rowArray = adder.updateImageRow( rowi, imageArray );
-			grid.push( rowArray );
-		}
-
-		adder.imgGrid = grid;
-		return adder.imgGrid;
+		return adder.imageGridObj;
 	};  // End adder.updateGrid()
 
 
-	adder.addImgRow 		= function ( rowNum, allImgObjs, parentNode ) {
-	/*
-	* 
-	* Adds a row of image nodes to the imagePicker node, adds a row array
-	* to the adder.imgGrid.
-	*/
-		var rowNode 		= document.createElement( 'div' );
-		rowNode.className 	= 'images-picker-row';
-		rowNode.id 			= 'images_choice_row' + rowNum;
-
-		// This is what the grid will actully use to access selections
-		var rowArray 		= [];
-
-		var numCols = adder.numCols;
-		for ( var coli = 0; coli < numCols; coli++ ) {
-			// Mathematically get the index using the column and row
-			var cellNum = coli + ( numCols * rowNum );
-			var img 	= allImgObjs[ cellNum ];
-
-			// For when we run out of images early at the end
-			if ( img !== undefined ) {
-
-				var imgChoice 	= new adder.ImgChoice( img, rowNode );
-				var imgNode 	= imgChoice.node;
-				imgNode.id 		= 'images_choice_row' + rowNum + '_col' + coli;
-				$(imgNode).data('row', rowNum);
-				$(imgNode).data('col', coli);
-
-				adder.imageChoices.push( imgNode );
-				rowArray.push( imgNode );
-			}
-		}
-
-		adder.imgGrid.push( rowArray );
-		parentNode.appendChild( rowNode );
-
-		return rowArray;
-	};  // End adder.addImgRow()
-
-
+	adder.imageGridObj;
 	adder.addGrid = function ( allImgObjs, parentNode ) {
-		adder.imgGrid 	= [];
 
-		// Get the right number of rows for the given number of images
-		adder.numRows 	= Math.ceil( allImgObjs.length / adder.numCols )
-		var numRows 	= adder.numRows;
-		for ( var rowi = 0; rowi < numRows; rowi++ ) {
-			adder.addImgRow( rowi, allImgObjs, parentNode );
+		var maxCols 			= 5,
+			allImageObjs 		= adder.defaultImages,
+			imageChoicesNodes 	= [];
+
+		for ( var imgi = 0; imgi < allImageObjs.length; imgi++ ) {
+			var imgObj = allImageObjs[ imgi ]
+			var parent = document.createDocumentFragment();
+
+			var imgChoice 	= new adder.ImgChoice2( imgObj, parent );
+			imageChoicesNodes.push( imgChoice.node );
 		}
 
-		return adder.imgGrid;
+		adder.imageGridObj = new adder.Grid( 'images', maxCols, imageChoicesNodes );
+
+		return adder.imageGridObj;
 	};  // End adder.addGrid()
 
 
@@ -467,7 +412,8 @@ adder.addImageMode 	= function () {
 
 			// Visually indicate selection of image
 			if ( $ancestor.length > 0 ) {
-				adder.selectImage($ancestor.find('.image-choice')[0]);
+				// adder.selectImage($ancestor.find('.image-choice')[0]);
+				adder.selectImage( $ancestor[0] );
 			}
 			// TODO: Show all matching terms at full length
 

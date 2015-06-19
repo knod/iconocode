@@ -183,17 +183,21 @@ be scrollable... make it position: relative?
 	background-color: darkkhaki;
 }
 
-.icd .type-choice {
+.icd .types-picker-row {
+	width: 100%;
+}
+
+.icd .type-choice-container {
 	text-align: center;
 	margin-top: 5%;
 	/* Why does this go out of the parent? */
 	height: 95%;
 }
-.icd .type-choice .icon-container {
+.icd .type-choice-container .icon-container {
 	display: block;
 	margin-top: .7rem;
 }
-.icd .type-choice .icon-body {
+.icd .type-choice-container .icon-body {
 	height: calc(1.2rem * 2);
 	min-width: calc(1.5rem * 2);
 }
