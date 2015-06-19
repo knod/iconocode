@@ -149,9 +149,10 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// EVENTS
 	// =================
 	cmEditor.on("inputRead", function(instance, change) {
-		// console.log('instance: ', instance)
-		// console.log('change: ', change)
-		adder.runSearch( adder.imgGrid );
+
+		// adder.runSearch( adder.imgGrid );
+		adder.runSearch( adder.imageGridObj.choiceContainers );
+		
 	});
 
 	// the following line fixes a bug I've encountered in CodeMirror 3.1

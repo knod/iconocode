@@ -3,7 +3,7 @@
 Creates everything to do with the types mode?
 
 TODO:
-
+- Add proper id as last argument in new Icon() creation
 
 Affects:
 adder.modes.types - { tab: null, section: null, choices: {} }

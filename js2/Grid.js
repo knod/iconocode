@@ -5,7 +5,7 @@
 */
 
 
-adder.Grid = function ( pickerName, maxCols, choiceNodes ) {
+adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
 /* ( str, int, [Nodes] ) -> {}
 * 
 * 
@@ -13,33 +13,26 @@ adder.Grid = function ( pickerName, maxCols, choiceNodes ) {
 
 	var thisGrid = {};
 
-	thisGrid.choiceNodes 	= choiceNodes;
-	thisGrid.rowNodes 		= [];
+	thisGrid.choiceContainers 	= choiceContainers,
+		thisGrid.rowNodes 		= [];
+
+	var parentNode 	= document.getElementById( 'icd_' + pickerName + '_picker' ),
+		prefix 		= pickerName;  // For clarity
 
 
 	// ========================
-	// CREATION
+	// UPDATING
 	// ========================
-	thisGrid.setRow = function ( pickerName, rowNum, rowNodes ) {
+	thisGrid.setRow = function ( prefix, rowNum, rowChoiceContainers ) {
 	/* ( int, [Nodes], Node ) -> Node
 	* 
 	* Adds a row of choice nodes to the Picker node
 	*/
-		var rowNode 		= document.createElement( 'div' );
-
-		var parentNode = document.getElementById( 'icd_' + pickerName + '_picker' )
-		parentNode.appendChild( rowNode );
-
-		rowNode.className 	= pickerName + '-picker-row';
-		rowNode.id 			= pickerName + '_choice_row' + rowNum;
-
-		// // This is what the grid will actully use to access selections or navigate?
-		// // Not sure this is needed
-		// var rowArray 		= [];
+		rowNode = document.getElementById( prefix + '_choice_row' + rowNum );
 
 		// Give the choice node its id and position data
-		for ( var nodei = 0; nodei < rowNodes.length; nodei++ ) {
-			var node = rowNodes[ nodei ];
+		for ( var nodei = 0; nodei < rowChoiceContainers.length; nodei++ ) {
+			var node = rowChoiceContainers[ nodei ];
 
 			// If it's undefined it means we've run out of nodes (bottom row)
 			if ( node !== undefined ) {
@@ -50,19 +43,25 @@ adder.Grid = function ( pickerName, maxCols, choiceNodes ) {
 				$(node).data('col', nodei);  // TODO: check if this is used
 			}
 
+			// Add choice the first time around
+			if ( $(node).data('choice') === undefined ) {
+				var choice = $(node).find('.icd-adder-choice')[0];
+				$(node).data('choice', choice )
+			}
+
 		}
 
 		return rowNode;
 	};  // End thisGrid.addRow()
 
 
-	thisGrid.set 	= function ( pickerName, maxCols, choiceNodes ) {
+	thisGrid.set 	= function ( prefix, maxCols, choiceContainers ) {
 	/**/
 		var rowNodes = [];
 
 		// Get the right number of rows for the given number of choices, each time
 		// Takes into account having a non-evenly divided number
-		var numRows = Math.ceil( choiceNodes.length / maxCols )
+		var numRows = Math.ceil( choiceContainers.length / maxCols )
 
 		for ( var rowi = 0; rowi < numRows; rowi++ ) {
 
@@ -70,10 +69,10 @@ adder.Grid = function ( pickerName, maxCols, choiceNodes ) {
 			var startIndx 	= maxCols * rowi,
 			// Use maxCols because .slice() doesn't include the last item
 				endIndx		= startIndx + maxCols;
-			var rowNodes 	= choiceNodes.slice( startIndx, endIndx );
+			var rowChoices 	= choiceContainers.slice( startIndx, endIndx );
 
 			// Add a row to the DOM, then add the row's node to the list
-			var rowNode = thisGrid.setRow( pickerName, rowi, rowNodes );
+			var rowNode = thisGrid.setRow( prefix, rowi, rowChoices );
 			rowNodes.push( rowNode );
 
 		}
@@ -83,7 +82,44 @@ adder.Grid = function ( pickerName, maxCols, choiceNodes ) {
 	};  // End thisGrid.set()
 
 
-	thisGrid.set( pickerName, maxCols, choiceNodes );
+	// ========================
+	// CREATION
+	// ========================
+	var createRow 	= function ( prefix, rowNum, parentNode ) {
+	/* ( str, int ) -> Nodes */
+		var rowNode 		= document.createElement( 'div' );
+
+		parentNode.appendChild( rowNode );
+
+		rowNode.className 	= prefix + '-picker-row';
+		rowNode.id 			= prefix + '_choice_row' + rowNum;
+
+		return rowNode;
+	};  // End createRow()
+
+
+	var createGrid 	= function ( prefix, maxCols, parentNode ) {
+	/* ( str, int ) -> [Nodes] */
+
+		var rowNodes = [];
+
+		// Get the right number of rows for the given number of choices, each time
+		// Takes into account having a non-evenly divided number
+		var numRows = Math.ceil( choiceContainers.length / maxCols )
+
+		for ( var rowi = 0; rowi < numRows; rowi++ ) {
+			// Add a row to the DOM, then add the row's node to the list
+			var rowNode = createRow( prefix, rowi, parentNode );
+			rowNodes.push( rowNode );
+		}
+
+		thisGrid.rowNodes = rowNodes;
+		return rowNodes;
+	};  // End createGrid()
+
+
+	createGrid( prefix, maxCols, parentNode );
+	thisGrid.set( prefix, maxCols, choiceContainers );
 
 	return thisGrid;
 };  // End adder.Grid {}
@@ -92,38 +128,38 @@ adder.Grid = function ( pickerName, maxCols, choiceNodes ) {
 // *************************************************
 // Testing
 // *************************************************
-// --- IMAGES --- \\
-var picker1 				= 'images';
-var maxCols1 				= 5;
-var imageChoiceNodesTest 	= [];
+// // --- IMAGES --- \\
+// var picker1 				= 'images';
+// var maxCols1 				= 5;
+// var imageChoiceNodesTest 	= [];
 
-var allImageObjs = adder.defaultImages
+// var allImageObjs = adder.defaultImages
 
-for ( var imgi = 0; imgi < allImageObjs.length; imgi++ ) {
-	var imgObj = allImageObjs[ imgi ]
-	var parent = document.createDocumentFragment();
+// for ( var imgi = 0; imgi < allImageObjs.length; imgi++ ) {
+// 	var imgObj = allImageObjs[ imgi ]
+// 	var parent = document.createDocumentFragment();
 
-	var imgChoice 	= new adder.ImgChoice2( imgObj, parent );
-	imageChoiceNodesTest.push( imgChoice.node );
-}
+// 	var imgChoice 	= new adder.ImgChoice2( imgObj, parent );
+// 	imageChoiceNodesTest.push( imgChoice.node );
+// }
 
-// Test in console:
-// var myGrid = adder.Grid( picker1, maxCols1, imageChoiceNodesTest );
+// // Test in console:
+// // var myGrid = adder.Grid( picker1, maxCols1, imageChoiceNodesTest );
 
 
-// --- TYPES --- \\
-// Not working, have to adjust how types container works in general to make
-// it work.
-var picker2 				= 'types';
-var maxCols2 				= 3;
+// // --- TYPES --- \\
+// // Not working, have to adjust how types container works in general to make
+// // it work.
+// var picker2 				= 'types';
+// var maxCols2 				= 3;
 
-// Test in console: 
-// var verbThing 				= adder.addVerbChoice( document.createDocumentFragment(), 'icd' ),
-// 	nounThing				= adder.addNounChoice( document.createDocumentFragment(), 'icd' ),
-// 	messageThing			= adder.addMessageChoice( document.createDocumentFragment(), 'icd' );
+// // Test in console: 
+// // var verbThing 				= adder.addVerbChoice( document.createDocumentFragment(), 'icd' ),
+// // 	nounThing				= adder.addNounChoice( document.createDocumentFragment(), 'icd' ),
+// // 	messageThing			= adder.addMessageChoice( document.createDocumentFragment(), 'icd' );
 
-// var typeChoiceNodesTest 	= [ verbThing, nounThing, messageThing ]
-// var typeGrid = adder.Grid( picker2, maxCols2, typeChoiceNodesTest );
+// // var typeChoiceNodesTest 	= [ verbThing, nounThing, messageThing ]
+// // var typeGrid = adder.Grid( picker2, maxCols2, typeChoiceNodesTest );
 
 
 

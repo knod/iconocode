@@ -66,6 +66,7 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		var filePath 	= imgObj.folderPath + imgObj.fileName;
 		var imgNode 	= imgChoice.addImage( filePath, imgContainer );
 		$(imgNode).addClass('image-choice');
+		$(imgNode).addClass('icd-adder-choice');
 		$(imgNode).data('terms', imgObj.searchTerms);
 
 		// Allows image to recieve focus (not a usual thing for images)
