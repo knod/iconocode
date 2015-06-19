@@ -88,21 +88,6 @@ adder.addImageMode 	= function () {
 			}
 		);
 
-		// var wordRange 	= editor.findWordAt( editor.getCursor() );
-		// // var word 		= editor.getRange( wordRange.anchor, wordRange.head );
-		// // console.log(word);
-		// // If .markText() is used, editor.getTokenAt({line: #, ch: #})
-		// // will still get the correct text. Marker doesn't interfere with that.
-		// var inViewer 	= editor.markText( wordRange.anchor, wordRange.head,
-		// 	// I don't think classname matters when using 'replaceWith'
-		// 	{className: 'chosen-image', replacedWith: newNode
-		// 		// clearOnEnter doesn't unclear on exit, need other way
-		// 		// , clearOnEnter: true  // experiment
-		// 		, handleMouseEvents: true // think I will need this
-		// 		, addToHistory: true
-		// 	}
-		// );
-
 		// Bring everything back to where it last was in the search bar
 		adder.backToSearchbar( adder.viewer );
 
@@ -114,13 +99,6 @@ adder.addImageMode 	= function () {
 	// Navigation
 	// ====================
 	// http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
-	adder.selectImage = function ( imgNode ) {
-		// $('#icd_images_picker .selected').removeClass('selected');
-		// $(imgNode).parent().addClass('selected');
-		// // Takes focus off of last thing, puts it on this thing
-		// imgNode.focus();
-		// return imgNode;
-	};  // adder.selectImage();
 
 	adder.selectImage = function ( imgContainer ) {
 	/*
@@ -176,14 +154,12 @@ adder.addImageMode 	= function () {
 	(Triggered by 'tab' kyepress?)
 
 	Holy moly focus: http://jsfiddle.net/bnr5xnc7/4/
-	TODO: Implement that ASAP
 
 	*/
 		adder.position = { col: 0, row: 0 };
-		// Change the nodes
+		// Change the nodes. Will remove focus from the editor
 		// Maybe this function should be taken out. This is the only
 		// place it's used so far
-		// This will remove focus from the editor
 		adder.selectImageByPos( adder.position, grid );
 
 		// // Prevent 'tab' from going to the next element on the
@@ -203,7 +179,7 @@ adder.addImageMode 	= function () {
 
 	Just changes position values based on direction, no further adjusments
 	*/
-		// Don't change actual position values
+		// Don't change actual position values, need the old ones
 		var newPos = { col: position.col, row: position.row };
 
 		if 		( direction === 'right' ) 	{ newPos.col++ }
@@ -307,7 +283,7 @@ adder.addImageMode 	= function () {
 	with the keyboard
 	Can just be var?
 
-	TODO: Move this into ImageChoice.js
+	TODO: Move this into ImageChoice.js or Grid.js
 	*/
 		var key 			= evnt.keyCode || evnt.which;
 		// TODO: try using target instead;

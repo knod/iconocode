@@ -5,6 +5,8 @@
 * 
 * TODO:
 * - Use list of choices instead of grid of choices
+* - Allow searching with multiple search terms (can use this for 'folder'
+* 	navigation)
 * 
 * DONE:
 * - Hide images that have no matching terms

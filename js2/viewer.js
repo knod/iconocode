@@ -11,7 +11,8 @@
 * 
 * TODO:
 * - Make text into placeholder text instead
-* - When search bar is given focus, deselect anything that's selected
+* - When search bar is given focus, deselect anything that's selected (it's
+* 	an issue when the search bar is clicked into instead of some keyboard input)
 * 
 * DONE:
 * - Prevent people from typing in stuff that will make new spans in
