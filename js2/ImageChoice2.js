@@ -5,7 +5,7 @@ Builds an image node correctly for insertion into an icon
 
 'use strict';
 
-adder.ImgChoice = function ( imgObj, parentNode ) {
+adder.ImgChoice2 = function ( imgObj, parentNode ) {
 
 	var imgChoice = {};
 
@@ -67,7 +67,6 @@ adder.ImgChoice = function ( imgObj, parentNode ) {
 		var imgNode 	= imgChoice.addImage( filePath, imgContainer );
 		$(imgNode).addClass('image-choice');
 		$(imgNode).addClass('icd-adder-choice');
-
 		$(imgNode).data('terms', imgObj.searchTerms);
 
 		// Allows image to recieve focus (not a usual thing for images)
@@ -84,7 +83,7 @@ adder.ImgChoice = function ( imgObj, parentNode ) {
 		// --- TERM LIST --- \\
 		imgChoice.addImgTagList( imgObj, imgContainer )
 
-		imgChoice.node = imgNode;
+		imgChoice.node = imgContainer;
 		return imgNode;
 	}  // End adder.addChoice()
 

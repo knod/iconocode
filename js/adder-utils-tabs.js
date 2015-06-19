@@ -74,7 +74,7 @@ is clicked.
 	parentObj.tab 	= tab;
 
 	// Identification
-	tab.id 			= prefix + '-' + tabType + '-tab';
+	tab.id 			= prefix + '_' + tabType + '_tab';
 	tab.className 	= prefix + ' tab adder-' + group + '-tab';
 
 	// !!! Make this better !!!

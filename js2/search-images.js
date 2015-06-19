@@ -1,70 +1,92 @@
 /* search-images.js
-
-Trying to implement fuzzy search functionality with
-multiple lists for images.
-
-TODO:
-- Hide images that have no matching terms
-- Rank images by how closely they match the query
-- Re-order images to appear by rank of match
+* 
+* Trying to implement fuzzy search functionality with
+* multiple lists for images.
+* 
+* TODO:
+* - Use list of choices instead of grid of choices
+* - Allow searching with multiple search terms (can use this for 'folder'
+* 	navigation)
+* 
+* DONE:
+* - Hide images that have no matching terms
+* - Rank images by how closely they match the query
+* - Re-order images to appear by rank of match
 */
 
 'use strict'
 
+var fuzzySearcher 	= new FuzzySearcher();
+
 adder.hideUnmatched 	= function ( choiceArray ) {};  // End adder.hideUnmatched()
 
 
-adder.updateChoiceList 	= function ( choiceNode, query ) {
+adder.updateChoiceList 	= function ( choiceContainer, query ) {
 /*
 
 Runs the search for matches on each choiceNode. Shows just
 matching terms. Doesn't get rid of search terms.
 */
-	var terms 			= $(choiceNode).data('terms');
-	var fuzzySearcher 	= new FuzzySearcher();
-	
+	var choiceNode 	= $(choiceContainer).data('choice');
+	var terms 		= $(choiceNode).data('terms');
+
 	// Get match data and store it in the node
 	var matchData 	= fuzzySearcher.toNode( terms, query );
-	$(choiceNode).data('matchData', matchData);
-// 	console.log('term:', $(choiceNode).data('matchData').matchesData[0].term)
-// // if (($(choiceNode).data('matchData').matchesData[0].score) !== undefined )){
-// 	console.log('score:',$(choiceNode).data('matchData').matchesData[0].score)
-// //}
-// // if ($(choiceNode).data('matchData').matchesData[0].altScore && $(choiceNode).data('matchData').matchesData[0].altScore>-100 ){
-// 	console.log('altScore:',$(choiceNode).data('matchData').matchesData[0].altScore)
-// // }
+	$(choiceContainer).data('matchData', matchData);
+
 	// Re-make list of terms with styled list elements
-	var list 		= $(choiceNode).parent().find('ol')[0];
+	var list 		= $(choiceContainer).find('ol')[0];
 	$(list).empty();
 	list.appendChild( matchData.node );
 
-	return choiceNode
+	return choiceContainer
 };  // End adder.updateChoiceList()
 
 
-adder.updateChoiceLists = function ( choiceGrid, query ) {
-/* ( [[Node]], str ) -> [Node]
+adder.updateChoiceLists = function ( choiceContainers, query ) {
+/* ( [Node], str ) -> [Node]
 
 Updates the visible search terms for all choices.
 */
-	var choiceNodes = [];
+	var newChoiceOrder = [];
 
-	for ( var rowi = 0; rowi < choiceGrid.length; rowi++ ) {
-		for ( var coli = 0; coli < choiceGrid[rowi].length; coli++ ) {
-			// Change the visible search terms for that image
-			// var choiceNode = choiceGrid[ rowi ][ coli ];
-			var choiceNode = document.getElementById( 'image_choice_row' + rowi + '_col' + coli );
-			adder.updateChoiceList( choiceNode, query );
-			// List to be ranked
-			choiceNodes.push(choiceNode);
+	for ( var nodei = 0; nodei < choiceContainers.length; nodei++ ) {
+		// Change the visible search terms for that image
+		// var choiceNode = choiceContainers[ rowi ][ coli ];
+		// var choiceContainer = document.getElementById( 'images_choice_row' + rowi + '_col' + coli ),
+		// 	choiceNode 		= $(choiceContainer).find('.image-choice');
+		var choiceContainer = choiceContainers[ nodei ];
 
-			// If it didn't match, hide it (it'll still be in the DOM)
-			if ( $(choiceNode).data('matchData').matchesData[0] === undefined ) {
-				$(choiceNode).parent().hide();
-			} else {  // Otherwise make sure it's visible
-				$(choiceNode).parent().show();
-			}
+		adder.updateChoiceList( choiceContainer, query );
+		// List to be ranked
+		newChoiceOrder.push(choiceContainer);
+
+		// If it didn't match, hide it (it'll still be in the DOM)
+		if ( $(choiceContainer).data('matchData').matchesData[0] === undefined ) {
+			$(choiceContainer).hide();
+		} else {  // Otherwise make sure it's visible
+			$(choiceContainer).show();
 		}
+	}
+
+	for ( var rowi = 0; rowi < choiceContainers.length; rowi++ ) {
+		// for ( var coli = 0; coli < choiceContainers[rowi].length; coli++ ) {
+		// 	// Change the visible search terms for that image
+		// 	// var choiceNode = choiceContainers[ rowi ][ coli ];
+		// 	var choiceContainer = document.getElementById( 'images_choice_row' + rowi + '_col' + coli ),
+		// 		choiceNode 		= $(choiceContainer).find('.image-choice');
+
+		// 	adder.updateChoiceList( choiceNode, query );
+		// 	// List to be ranked
+		// 	choiceContainers.push(choiceNode);
+
+		// 	// If it didn't match, hide it (it'll still be in the DOM)
+		// 	if ( $(choiceNode).data('matchData').matchesData[0] === undefined ) {
+		// 		$(choiceNode).parent().hide();
+		// 	} else {  // Otherwise make sure it's visible
+		// 		$(choiceNode).parent().show();
+		// 	}
+		// }
 	}
 
 	var matchComparator = function ( node1, node2 ) {
@@ -107,21 +129,23 @@ Updates the visible search terms for all choices.
 		return sortResult;
 	};  // End matchComparator()
 
-	choiceNodes.sort( matchComparator );
-	return choiceNodes;
+	newChoiceOrder.sort( matchComparator );
+	return newChoiceOrder;
 };  // End adder.updateChoiceLists()
 
 
-adder.runSearch 		= function ( choiceGrid ) {
+adder.runSearch 		= function ( choiceContainers ) {
+/* ( [Nodes] ) -> Nodes
+*/
 
 	var cmEditor = adder.viewer;
 
 	// Get the text in the current token
 	cmEditor.getCursor()
 	var token = cmEditor.getTokenAt( cmEditor.getCursor() );
-	// console.log('token:', token);
+
 console.log('------------')
-console.log(token)
+
 	if ( token.string.length > 0 ) {
 
 		// Sanitize query (maybe not necessary. TODO: test removal of this later)
@@ -129,12 +153,12 @@ console.log(token)
 		var query = token.string.replace( /;/, '' );
 
 		// Choice nodes sorted by rank:
-		var choiceArray = adder.updateChoiceLists( choiceGrid, query );
+		var choiceArray = adder.updateChoiceLists( choiceContainers, query );
 		adder.updateImageGrid( choiceArray );
 
 	}
 
-	return choiceGrid;
+	return choiceContainers;
 };
 
 

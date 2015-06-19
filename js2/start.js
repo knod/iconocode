@@ -1,15 +1,14 @@
 /* start.js
-
-Gets the adder object set up
-
-Functionality:
-https://docs.google.com/document/d/1noMJaJN5vGC80BwIqofgU7YU2JPu_gqkylPBSmIA_LU/edit
-
-Diagram:
-https://drive.draw.io/#G0B5hKyz4A3fV6U05YMmhqSmlQT2c
-http://imgur.com/VKdysVg,G9i7w35#1
-
-Create picker node first, then create tab and send the picker to the tab
+* Gets the adder object set up
+* 
+* Functionality:
+* https://docs.google.com/document/d/1noMJaJN5vGC80BwIqofgU7YU2JPu_gqkylPBSmIA_LU/edit
+* 
+* Diagram:
+* https://drive.draw.io/#G0B5hKyz4A3fV6U05YMmhqSmlQT2c
+* http://imgur.com/VKdysVg,G9i7w35#1
+* 
+* Create picker node first, then create tab and send the picker to the tab
 */
 
 'use strict'

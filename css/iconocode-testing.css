@@ -1,6 +1,6 @@
 /* iconocode-testing.css
-Testing with backgrounds instead of shapes
-since I can't figure out shapes right now
+* Testing with backgrounds instead of shapes
+* since I can't figure out shapes right now
 */
 
 /*iconocode.css*/
@@ -179,21 +179,25 @@ be scrollable... make it position: relative?
 
 
 /* --- TYPE PICKER --- */
-#icd-types-picker {
+#icd_types_picker {
 	background-color: darkkhaki;
 }
 
-.icd .type-choice {
+.icd .types-picker-row {
+	width: 100%;
+}
+
+.icd .type-choice-container {
 	text-align: center;
 	margin-top: 5%;
 	/* Why does this go out of the parent? */
 	height: 95%;
 }
-.icd .type-choice .icon-container {
+.icd .type-choice-container .icon-container {
 	display: block;
 	margin-top: .7rem;
 }
-.icd .type-choice .icon-body {
+.icd .type-choice-container .icon-body {
 	height: calc(1.2rem * 2);
 	min-width: calc(1.5rem * 2);
 }
@@ -204,7 +208,7 @@ be scrollable... make it position: relative?
 image http://jsfiddle.net/0bmws0me/1/ (from ThePendulum something),
 but maybe we want the images to be their proper size?
 */
-#icd-images-picker {
+#icd_images_picker {
 	background-color: tan;
 
 	display: flex;
@@ -217,7 +221,7 @@ but maybe we want the images to be their proper size?
 	overflow: scroll;
 }
 
-.icd .image-picker-row {
+.icd .images-picker-row {
 	display: flex;
 	position: relative;
 	/* Don't do this: justify-content: space-around; */
@@ -286,7 +290,7 @@ but maybe we want the images to be their proper size?
 
 
 /* --- COLOR PICKER --- */
-#icd-colors-picker {
+#icd_colors_picker {
 	background-color: firebrick;
 }
 
