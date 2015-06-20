@@ -5,7 +5,7 @@
 */
 
 
-adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
+adder.Grid = function ( modeName, maxCols, choiceContainers ) {
 /* ( str, int, [Nodes] ) -> {}
 * 
 * 
@@ -16,8 +16,8 @@ adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
 	thisGrid.choiceContainers 	= choiceContainers,
 		thisGrid.rowNodes 		= [];
 
-	var parentNode 	= document.getElementById( 'icd_' + pickerName + '_picker' ),
-		prefix 		= pickerName;  // For clarity
+	var parentNode 	= document.getElementById( 'icd_' + modeName + '_picker' ),
+		prefix 		= modeName;  // For clarity
 
 
 	// ========================
@@ -120,6 +120,10 @@ adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
 
 	createGrid( prefix, maxCols, parentNode );
 	thisGrid.set( prefix, maxCols, choiceContainers );
+
+	adder.setupGridNavigation( thisGrid, modeName );
+
+	adder.modes[ modeName ].grid = thisGrid;
 
 	return thisGrid;
 };  // End adder.Grid {}

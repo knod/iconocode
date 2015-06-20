@@ -101,232 +101,12 @@ adder.addImageMode 	= function () {
 	// ====================
 	// Navigation
 	// ====================
-	// http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
-
-	adder.selectImage = function ( imgContainer ) {
-	/*
-
-	*/
-		$('#icd_images_picker .selected').removeClass('selected');
-		var $imgContainer = $(imgContainer);
-		$imgContainer.addClass('selected');
-
-		// Takes focus off of last thing, puts it on this thing's actual choice
-		var infoHolder = $imgContainer.find('.image-choice')[0];
-		infoHolder.focus();
-
-		return imgContainer;
-	};  // adder.selectImage();
-
-
-	adder.deselectAllImageChoices = function () {
-	// Not sure this is needed anymore
-		return $('#icd_images_picker .selected').removeClass('selected');
-	};  // End adder.deselectAllImageChoices()
-
 
 	adder.backToSearchbar = function ( cmEditor ) {
 		cmEditor.focus();  // assigned in viewer.js
 		// TODO: put cursor in a logical place. Not sure how CodeMirror does that.
 		return $('.selected').removeClass('selected');
 	};  // End adder.backToSearchbar()
-
-
-	adder.getCellNode = function ( position, rowIdPrefix ) {
-		var imgNode   = document.getElementById( 'images_choice_row' + position.row + '_col' + position.col );
-		var container = $(imgNode).closest('.image-choice-container');
-
-		return container;
-	};  // End adder.getCellNode()
-
-
-	adder.position;
-	adder.selectImageByPos = function ( position, grid ) {
-		// Change the nodes
-		var node = adder.getCellNode( position );
-		adder.selectImage( node );
-
-		return node;
-	};  // End adder.selectImageByPos()
-
-	adder.choicesJustActivated;
-	adder.activateKeyboardNav = function ( grid ) {
-	/*
-
-	Trigger this when the user wants to navigate the choices with the keyboard
-	(Triggered by 'tab' kyepress?)
-
-	Holy moly focus: http://jsfiddle.net/bnr5xnc7/4/
-
-	*/
-		adder.position = { col: 0, row: 0 };
-		// Change the nodes. Will remove focus from the editor
-		// Maybe this function should be taken out. This is the only
-		// place it's used so far
-		adder.selectImageByPos( adder.position, grid );
-
-		// // Prevent 'tab' from going to the next element on the
-		// // first press... how...?
-
-		// // Maybe something about fixing focus changed this, but now this
-		// // state check seems to malfunction. With the check, tab
-		// // has to be pressed twice to work. Why is this?
-		// adder.choicesJustActivated = true;
-
-		return adder.position;
-	};  // adder.activateKeyboardNav()
-
-
-	var incrementPosition 	= function ( position, direction, numCols ) {
-	/* ( {}, str ) -> {}
-
-	Just changes position values based on direction, no further adjusments
-	*/
-		// Don't change actual position values, need the old ones
-		var newPos = { col: position.col, row: position.row };
-
-		if 		( direction === 'right' ) 	{ newPos.col++ }
-		else if ( direction === 'left' ) 	{ newPos.col-- }
-		else if ( direction === 'down' ) 	{ newPos.row++ }
-		else if ( direction === 'up' ) 		{ newPos.row-- }
-		else if ( direction === 'next' ) 	{
-			newPos.col++
-			// If you're at the end of a row, go to the first position in the next one
-			if ( newPos.col > (numCols - 1) ) { newPos.row++; newPos.col = 0; }
-		}
-
-		return newPos;
-	};  // End incrementPosition()
-
-
-	var wrapPosition = function ( currPos, lastPossiblePos ) {
-	/* ( int, int ) -> Int
-
-	Works for rows or columms, makes sure the numbers wrap around
-	*/
-		var newPos 	= currPos;
-		// If currPos is before the beginning, put it at the end
-		if ( currPos < 0 ) { newPos = lastPossiblePos; }
-		// If the lastPossiblePos is exceeded, go to the first item
-		// Want to use +1 for modulo. Try out the math if you don't believe me.
-		newPos 		= newPos % (lastPossiblePos + 1);
-
-		return newPos;
-	};  // End wrapPosition()
-
-
-	adder.keyboardNavChoices = function ( position, direction, grid ) {
-	/* ( {}, str, [[Node]] ) -> {}
-
-	Allows keyboard navigation and selection of images
-
-	TODO: Make universal so Variable Types can use it too?
-	??: Triggered by 'tab' keypress?
-	*/
-
-		// Need max number of columns for navigation with tab key to work
-		var numPrevCols 	= $('#images_choice_row' + position.row).children().toArray().length;
-		var maxCols 		= $('#images_choice_row' + position.row).children().toArray().length;
-		// So we can compare the previous row number to the current row number later
-		var prevRowNum 		= position.row;
-		// If the row gotten is the last row and has fewer than the full number of columns
-		// incrementpPosition() will bring the column number to the beginning of the column
-
-		var currPosition 	= incrementPosition( position, direction, numPrevCols );
-		var currRowNum 		= currPosition.row, currColNum = currPosition.col;
-
-		// ==================
-		// ROW
-		// ==================
-		// Make sure not to go past the last row with visible elements
-		// Use row 0 so that we know we're using a valid row number
-		var $imgPicker 			= $('#images_choice_row0').parent();
- 		// Contingency for no nodes being visible
-		var $lastVisibleCont = $imgPicker.find('.image-choice-container:visible:last'),
-			lastRowNum 		 = parseInt($lastVisibleCont.data( 'row' ));  // Need to parse int?
-
-		currRowNum = wrapPosition( currRowNum, lastRowNum );
-
-		// ==================
-		// COL
-		// ==================
-		// Now use the number of columns in the correct row (is there a shorter way?)
-		var $lastRowCont 		= $('#images_choice_row' + currRowNum).find('.image-choice-container:visible:last'),
-			lastColNum 			= $lastRowCont.data('col');
-
-		// Basically, in case user pressed up or down to get to the last row
-		// Without this the modulo thing below will do things we don't want
-		if ( currRowNum !== prevRowNum ) {
-			// If the previous selection was past the last possible item in this row
-			if ( currColNum > lastColNum ) {
-				// Go to the last possible item
-				currColNum = lastColNum
-			}
-		}
-
-		currColNum = wrapPosition( currColNum, lastColNum );
-
-
-		// ==================
-		// USE NEW VALUES
-		// ==================
-		// Set persistent values of object
-		position.row = currRowNum; position.col = currColNum;
-		// Use object values to get correct node
-		var imgNode = adder.getCellNode( position, adder.imgGrid );
-		adder.selectImage( imgNode );
-
-		return position;
-	};  // End adder.keyboardNavChoices()
-
-
-	adder.imgKeyHandler = function ( evnt ) {
-	/* ( int ) -> Node
-	Navigating through image choices. Maybe through any choices,
-	with the keyboard
-	Can just be var?
-
-	TODO: Move this into ImageChoice.js or Grid.js
-	*/
-		var key 			= evnt.keyCode || evnt.which;
-		// TODO: try using target instead;
-		var selectedImage 	= $('#icd_images_picker .selected').find('.image-choice')[0];
-
-		// If we're in the image picker choices section already
-		if ( selectedImage !== undefined ) {
-			// adder.makeCurrentChoiceGrid( selectedImage.parentNode.parentNode.parentNode, 'images_choice' );
-			// Prevents tab from cycling through other DOM stuff
-			evnt.preventDefault();
-
-			var direction;
-
-			if ( key === 40) { direction = 'down' }
-			else if ( key === 39) { direction = 'right' }
-			else if ( key === 37) { direction = 'left' }
-			else if ( key === 38) { direction = 'up' }
-			// TODO: ??: Didn't I want tab to tab through modes and modes' modes? How do I
-			// not have tabbings interfere with each other
-			else if ( key ===  9) { direction = 'next'; }  // tab
-			else if ( key === 13) { // Enter
-				// Get selected image before removing that marker
-				var selectedImage = $('#icd_images_picker .selected').find('.image-choice')[0];
-				// Add the icon to the viewer in place of whatever text is there
-				// Will return focus to the search bar
-				adder.chooseImage( selectedImage );
-
-			} else if (key === 27) { // ESC
-				// Just bring everything back to the search bar
-				adder.backToSearchbar( adder.viewer );
-			}
-
-			if ( direction !== undefined ) {
-				adder.keyboardNavChoices( adder.position, direction, adder.imgGrid);
-			}
-		}
-
-		return $('#icd_images_picker .selected').find('.image-choice')[0];
-	};  // End adder.imgKeyHandler
-
 
 
 	// =============
@@ -362,6 +142,7 @@ adder.addImageMode 	= function () {
 			imageChoicesNodes.push( imgChoice.node );
 		}
 
+		// Now this is being kept in two places (also in adder.modes[ modeName ].grid)
 		adder.imageGridObj = new adder.Grid( 'images', maxCols, imageChoicesNodes );
 
 		return adder.imageGridObj;
@@ -391,8 +172,7 @@ adder.addImageMode 	= function () {
 
 			// Visually indicate selection of image
 			if ( $ancestor.length > 0 ) {
-				// adder.selectImage($ancestor.find('.image-choice')[0]);
-				adder.selectImage( $ancestor[0] );
+				adder.imageGridObj.selectImage( $ancestor[0] );
 			}
 			// TODO: Show all matching terms at full length
 

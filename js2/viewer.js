@@ -142,7 +142,8 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// http://codemirror.net/doc/manual.html#keymaps
 		Tab: function() {
 			// Change this to use the right grid using the adder mode
-			adder.activateKeyboardNav( adder.imgGrid );
+			var activeGrid = adder.modes[ adder.activeMode ].grid;
+			activeGrid.activateKeyboardNav();
 		}
 	});
 
@@ -152,8 +153,9 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// =================
 	cmEditor.on("inputRead", function(instance, change) {
 
-		// adder.runSearch( adder.imgGrid );
-		adder.runSearch( adder.imageGridObj.choiceContainers );
+		// adder.runSearch( adder.imageGridObj.choiceContainers );
+		var activeGrid = adder.modes[ adder.activeMode ].grid;
+		adder.runSearch( activeGrid.choiceContainers )
 		
 	});
 
