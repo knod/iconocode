@@ -71,7 +71,7 @@ adder.addTypeMode = function () {
 	/* ( Node, str ) -> new Node
 
 	*/
-		var nounType = adder.addTypeChoice( 'noun', parentNode, 'is set, gotten, and changed' );
+		var nounType = adder.addTypeChoice( 'noun', parentNode, 'is accessed and changed' );
 
 		var nounIcon = new Icon( iconPrefix + '-noun' );
 		nounIcon.createNew( {}, nounType );
@@ -150,7 +150,7 @@ adder.addTypeMode = function () {
 
 		// For my own clarity
 		var args = {
-			group: 'mode', type: 'types', label: 'Variable Type',
+			group: 'mode', type: 'types', label: 'Purpose',
 			toShow: adder.modes.types.section, parentObj: adder.modes.types
 		};
 

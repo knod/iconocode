@@ -61,7 +61,7 @@ Handles tab clicking
 
 
 // --- Tabs themselves --- \\
-adder.createTabInGroup 	= function ( group, modeName, tab, toShow, parentObj ) {
+adder.createTabInGroup 	= function ( group, modeName, tabLabel, toShow, parentObj ) {
 /* ( str ) -> Node
 
 Returns div with a 'tab' class, a 'adder-'group'-tab' class,
@@ -83,8 +83,8 @@ is clicked.
 	$(tab).data('mode', modeName );
 
 	// Text in the tab
-	var tabNode = document.createTextNode( tab );
-	tab.appendChild( tabNode );
+	var tabLabelNode = document.createTextNode( tabLabel );
+	tab.appendChild( tabLabelNode );
 
 	// Can't use adder.activateMode directly because an argument can't be passed here
 	tab.addEventListener( 'click', adder.tabClicked );
