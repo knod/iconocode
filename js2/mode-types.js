@@ -1,17 +1,17 @@
 /* mode-types.js
-
-Creates everything to do with the types mode?
-
-TODO:
-- Add proper id as last argument in new Icon() creation
-
-Affects:
-adder.modes.types - { tab: null, section: null, choices: {} }
-
-Makes use of:
-// Can't move on until a type is selected
-adder.typeSelected 		= false;
-adder.sections 	= { tabs: null, viewer: null, pickers: null };
+* 
+* Creates everything to do with the types mode?
+* 
+* Affects:
+* adder.modes.types - { tab: null, section: null, choices: {} }
+* Makes use of:
+* // Can't move on until a type is selected
+* adder.typeSelected 		= false;
+* adder.sections 	= { tabs: null, viewer: null, pickers: null };
+* 
+* TODO:
+* - Add proper id as last argument in new Icon() creation
+* 
 */
 
 'use strict'

@@ -1,9 +1,9 @@
 /* mode-images.js
 * 
 * Creates everything to do with the images mode?
-* Effects:
-* adder.modes.images - { tab: null, section: null, choices: [] }
 * 
+* Affects:
+* adder.modes.images - { tab: null, section: null, choices: [] }
 * Makes use of:
 * adder.sections 	= { tabs: null, viewer: null, pickers: null };
 * 
@@ -12,13 +12,16 @@
 * 	http://stackoverflow.com/questions/4884839/how-do-i-get-a-element-to-scroll-into-view-using-jquery
 * 	or https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
 * - Look at js .scrollIntoView() or jQuery $.scrollTo()
-* - Convert to select image container instead of image itself
-* - Hovering should do the same thing as navigating to a choice with the keyboard does
+* 	- I think .focus() takes care of the scrolling
 * - When a term is too long, the second to last letter should be '-' and the rest of
 * 	the word should be hidden. When hovered over or selected with the keyboard,
 * 	the rest of the word should appear (as should the other search terms or matches).
 * 	That sounds super complicated.
 * - Handle semicolon being added by user into the text of the 'searchBar'
+* 
+* DONE:
+* - Convert to select image container instead of image itself
+* - Hovering should do the same thing as navigating to a choice with the keyboard does
 * - !!!: Semicolon appearing when image is selected while no text is in the search bar
 * 
 * ??:
