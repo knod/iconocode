@@ -13,25 +13,27 @@ Somehow based on mode?
 
 adder.setupGridNavigation = function ( thisGrid, modeName ) {
 
+	var modeType_ = thisGrid.modeType;
+
 	// ====================
 	// Navigation
 	// ====================
 	// http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
 
-	thisGrid.selectImage = function ( imgContainer ) {
+	thisGrid.selectChoice = function ( choiceContainer ) {
 	/*
 
 	*/
-		$('#icd_images_picker .selected').removeClass('selected');
-		var $imgContainer = $(imgContainer);
-		$imgContainer.addClass('selected');
+		$('#icd_' + modeType_ + '_picker .selected').removeClass('selected');
+		var $choiceContainer = $(choiceContainer);
+		$choiceContainer.addClass('selected');
 
 		// Takes focus off of last thing, puts it on this thing's actual choice
-		var infoHolder = $imgContainer.find('.image-choice')[0];
+		var infoHolder = $choiceContainer.find('.icd-adder-choice')[0];
 		infoHolder.focus();
 
-		return imgContainer;
-	};  // thisGrid.selectImage();
+		return choiceContainer;
+	};  // thisGrid.selectChoice();
 
 
 	// Should keep this in here? It's kind of more general
@@ -51,13 +53,13 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 
 
 	thisGrid.position;
-	thisGrid.selectImageByPos = function ( position, grid ) {
+	thisGrid.selectChoiceByPos = function ( position, grid ) {
 		// Change the nodes
 		var node = thisGrid.getCellNode( position );
-		thisGrid.selectImage( node );
+		thisGrid.selectChoice( node );
 
 		return node;
-	};  // End thisGrid.selectImageByPos()
+	};  // End thisGrid.selectChoiceByPos()
 
 
 	thisGrid.activateKeyboardNav = function () {
@@ -75,7 +77,7 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 		// Change the nodes. Will remove focus from the editor
 		// Maybe this function should be taken out. This is the only
 		// place it's used so far
-		thisGrid.selectImageByPos( thisGrid.position );
+		thisGrid.selectChoiceByPos( thisGrid.position );
 
 		// // Prevent 'tab' from going to the next element on the
 		// // first press... how...?
@@ -186,7 +188,7 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 		position.row = currRowNum; position.col = currColNum;
 		// Use object values to get correct node
 		var imgNode = thisGrid.getCellNode( position, adder.imgGrid );
-		thisGrid.selectImage( imgNode );
+		thisGrid.selectChoice( imgNode );
 
 		return position;
 	};  // End thisGrid.keyboardNavChoices()
@@ -198,15 +200,15 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 	with the keyboard
 	Can just be var?
 
-	TODO: Move this into ImageChoice.js or Grid.js
+	TODO: Move this into ChoiceChoice.js or Grid.js
 	*/
 		var key 			= evnt.keyCode || evnt.which;
 		// TODO: try using target instead;
-		var selectedImage 	= $('#icd_images_picker .selected').find('.image-choice')[0];
+		var selectedChoice 	= $('#icd_images_picker .selected').find('.image-choice')[0];
 
 		// If we're in the image picker choices section already
-		if ( selectedImage !== undefined ) {
-			// adder.makeCurrentChoiceGrid( selectedImage.parentNode.parentNode.parentNode, 'images_choice' );
+		if ( selectedChoice !== undefined ) {
+			// adder.makeCurrentChoiceGrid( selectedChoice.parentNode.parentNode.parentNode, 'images_choice' );
 			// Prevents tab from cycling through other DOM stuff
 			evnt.preventDefault();
 
@@ -221,14 +223,14 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 			else if ( key ===  9) { direction = 'next'; }  // tab
 			else if ( key === 13) { // Enter
 				// Get selected image before removing that marker
-				var selectedImage = $('#icd_images_picker .selected').find('.image-choice')[0];
+				var selectedChoice = $('#icd_images_picker .selected').find('.image-choice')[0];
 				// Add the icon to the viewer in place of whatever text is there
 				// Will return focus to the search bar
-				adder.chooseImage( selectedImage );
+				adder.chooseChoice( selectedChoice );
 
 			} else if (key === 27) { // ESC
 				// Just bring everything back to the search bar
-				adder.backToSearchbar( adder.viewer );
+				adder.backToSearchbar( adder.viewer );  // In mode-images.js as of 06/20/15
 			}
 
 			if ( direction !== undefined ) {

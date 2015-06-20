@@ -172,7 +172,7 @@ adder.addImageMode 	= function () {
 
 			// Visually indicate selection of image
 			if ( $ancestor.length > 0 ) {
-				adder.imageGridObj.selectImage( $ancestor[0] );
+				adder.imageGridObj.selectChoice( $ancestor[0] );
 			}
 			// TODO: Show all matching terms at full length
 
