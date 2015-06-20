@@ -44,9 +44,10 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 	// };  // End thisGrid.backToSearchbar()
 
 
-	thisGrid.getCellNode = function ( position, rowIdPrefix ) {
-		var imgNode   = document.getElementById( 'images_choice_row' + position.row + '_col' + position.col );
-		var container = $(imgNode).closest('.image-choice-container');
+	thisGrid.getCellNode = function ( position ) {
+		var rowId 	  = modeType_ + '_choice_row' + position.row + '_col' + position.col,
+			choicNode = document.getElementById( rowId ),
+			container = $(choicNode).closest('.icd-choice-container');
 
 		return container;
 	};  // End thisGrid.getCellNode()
@@ -226,7 +227,7 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 				var selectedChoice = $('#icd_images_picker .selected').find('.image-choice')[0];
 				// Add the icon to the viewer in place of whatever text is there
 				// Will return focus to the search bar
-				adder.chooseChoice( selectedChoice );
+				adder.chooseImage( selectedChoice );
 
 			} else if (key === 27) { // ESC
 				// Just bring everything back to the search bar
