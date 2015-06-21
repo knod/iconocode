@@ -1,17 +1,17 @@
 /* mode-types.js
-
-Creates everything to do with the types mode?
-
-TODO:
-- Add proper id as last argument in new Icon() creation
-
-Affects:
-adder.modes.types - { tab: null, section: null, choices: {} }
-
-Makes use of:
-// Can't move on until a type is selected
-adder.typeSelected 		= false;
-adder.sections 	= { tabs: null, viewer: null, pickers: null };
+* 
+* Creates everything to do with the types mode?
+* 
+* Affects:
+* adder.modes.types - { tab: null, section: null, choices: {} }
+* Makes use of:
+* // Can't move on until a type is selected
+* adder.typeSelected 		= false;
+* adder.sections 	= { tabs: null, viewer: null, pickers: null };
+* 
+* TODO:
+* - Add proper id as last argument in new Icon() creation
+* 
 */
 
 'use strict'
@@ -71,7 +71,7 @@ adder.addTypeMode = function () {
 	/* ( Node, str ) -> new Node
 
 	*/
-		var nounType = adder.addTypeChoice( 'noun', parentNode, 'is set, gotten, and changed' );
+		var nounType = adder.addTypeChoice( 'noun', parentNode, 'is accessed and changed' );
 
 		var nounIcon = new Icon( iconPrefix + '-noun' );
 		nounIcon.createNew( {}, nounType );
@@ -150,7 +150,7 @@ adder.addTypeMode = function () {
 
 		// For my own clarity
 		var args = {
-			group: 'mode', type: 'types', label: 'Variable Type',
+			group: 'mode', type: 'types', label: 'Purpose',
 			toShow: adder.modes.types.section, parentObj: adder.modes.types
 		};
 

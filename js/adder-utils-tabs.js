@@ -9,38 +9,37 @@ adder.activateMode 		= function ( selectedTab ) {
 
 Show a tab as being active, do it's action
 */
+	// Stop if user clicks on the currently active tab
+	if ( selectedTab === adder.activeTab ) { return; }
+
+	// =================
+	// DEACTIVATE CURRENT (TODO: but only in same tab level)
+	// =================
+	// Focus on the search bar (TODO: focusing on the searchbar should unselect any selections)
+	adder.viewer.focus()
+	// Unselect anything that's currently selected
+	$('.selected').removeClass('selected');
+
+	var $activeTab = $('.active-tab');
+	// First time round, there is nothing with .active-tab. Maybe change that?
+	if ( $activeTab[0] !== undefined ) {
+		// Hide associated element
+		$($activeTab.data('toShow')).hide();
+		// Remove styling
+		$activeTab.removeClass('active-tab');
+	}
+
+	// ==================
+	// ACTIVATE NEW
+	// ==================
+	$(selectedTab).addClass( 'active-tab' );
+	// Reveal the related element
+	$(selectedTab).data('toShow').style.display = 'flex';
+
 	// Set active
 	adder.activeTab = selectedTab
+	adder.activeMode = $(selectedTab).data('mode');
 
-	// Deactivate all
-	var allTabs = selectedTab.parentNode.children;
-
-	for ( var tabi = 0; tabi < allTabs.length; tabi++ ) {
-		var currTab = allTabs[ tabi ]
-		// Remove 'active' styles
-		currTab.classList.remove( 'active-tab' );
-
-		// Hide associated elements
-		// console.log($(currTab).data('toShow'))
-		$(currTab).data('toShow').style.display = 'none';
-		// console.log(currTab.dataset['toShow'])
-		// currTab.dataset['toShow'].style.display = 'none';
-		// var toShow = document.getElementById( currTab.dataset['toShow'] )
-		// toShow.style.display = 'none';
-
-	}  // end for each tab
-
-	// Activate this tab
-	selectedTab.classList.add( 'active-tab' );
-
-	// Reveal the element that's in the data-toShow
-	$(selectedTab).data('toShow').style.display = 'flex';
-	// var toShow = document.getElementById( selectedTab.dataset['toShow'] )
-	// toShow.style.display = 'inline-block';
-
-	// Focus on the search bar
-	$('.selected').removeClass('selected');
-	adder.viewer.focus()
 
 	return selectedTab;
 };  // End adder.activateMode()
@@ -62,7 +61,7 @@ Handles tab clicking
 
 
 // --- Tabs themselves --- \\
-adder.createTabInGroup 	= function ( group, tabType, tabText, toShow, parentObj ) {
+adder.createTabInGroup 	= function ( group, modeName, tabLabel, toShow, parentObj ) {
 /* ( str ) -> Node
 
 Returns div with a 'tab' class, a 'adder-'group'-tab' class,
@@ -74,25 +73,18 @@ is clicked.
 	parentObj.tab 	= tab;
 
 	// Identification
-	tab.id 			= prefix + '_' + tabType + '_tab';
+	tab.id 			= prefix + '_' + modeName + '_tab';
 	tab.className 	= prefix + ' tab adder-' + group + '-tab';
 
 	// !!! Make this better !!!
 	// Element that will be revealed
 	// Can't store it in regular dataset as that just stores a string
 	$(tab).data('toShow', toShow);
-	// console.log(tab.toShow)
-	// Seems weird to use jquery randomly in here all of a sudden
-	// $(tab).data( 'toShow', toShow );
-	// console.log( $(tab).data('toShow') )
-	// 	tab.dataset[ 'toShow' ] = toShow;  // Doesn't work, stored as a string
-	// // console.log(tab.dataset[ 'toShow' ])
-	// tab.dataset['toShow'].style.display = 'none';
-	// tab.dataset[ 'toShow' ] = prefix + '-' + tabType + '-picker';
+	$(tab).data('mode', modeName );
 
 	// Text in the tab
-	var tabTextNode = document.createTextNode( tabText );
-	tab.appendChild( tabTextNode );
+	var tabLabelNode = document.createTextNode( tabLabel );
+	tab.appendChild( tabLabelNode );
 
 	// Can't use adder.activateMode directly because an argument can't be passed here
 	tab.addEventListener( 'click', adder.tabClicked );

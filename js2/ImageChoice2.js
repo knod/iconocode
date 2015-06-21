@@ -25,6 +25,7 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		var list 		= document.createElement('ol');
 		tagContainer.appendChild( list );
 		list.className 	= 'image-tag-list';
+		$(list).addClass('icd-choice-tag-list')
 		list.style.position = 'absolute';
 
 		var listItem 	= document.createElement('li');
@@ -61,6 +62,7 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		var imgContainer 		= document.createElement('div');
 		parentNode.appendChild( imgContainer );
 		imgContainer.className 	= 'image-choice-container';
+		$(imgContainer).addClass( 'icd-choice-container' );
 
 		// --- IMAGE NODE --- \\
 		var filePath 	= imgObj.folderPath + imgObj.fileName;
@@ -77,7 +79,8 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 
 		// TODO: add when clicked
 		imgNode.addEventListener( 'keydown', function ( evnt ) {
-			adder.imgKeyHandler( evnt );
+			// adder.imgKeyHandler( evnt );
+			adder.modes.images.grid.imgKeyHandler( evnt, adder.chooseImage );
 		});
 
 		// --- TERM LIST --- \\

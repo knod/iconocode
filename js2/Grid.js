@@ -5,7 +5,7 @@
 */
 
 
-adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
+adder.Grid = function ( modeName, maxCols, choiceContainers ) {
 /* ( str, int, [Nodes] ) -> {}
 * 
 * 
@@ -14,21 +14,23 @@ adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
 	var thisGrid = {};
 
 	thisGrid.choiceContainers 	= choiceContainers,
-		thisGrid.rowNodes 		= [];
+		thisGrid.rowNodes 		= [],
+		thisGrid.modeType 		= modeName,
+		thisGrid.choiceFunction = adder.chooseImage;
 
-	var parentNode 	= document.getElementById( 'icd_' + pickerName + '_picker' ),
-		prefix 		= pickerName;  // For clarity
+	var parentNode 	= document.getElementById( 'icd_' + modeName + '_picker' ),
+		modeType_ 	= thisGrid.modeType;  // For clarity
 
 
 	// ========================
 	// UPDATING
 	// ========================
-	thisGrid.setRow = function ( prefix, rowNum, rowChoiceContainers ) {
+	thisGrid.setRow = function ( modeType_, rowNum, rowChoiceContainers ) {
 	/* ( int, [Nodes], Node ) -> Node
 	* 
 	* Adds a row of choice nodes to the Picker node
 	*/
-		rowNode = document.getElementById( prefix + '_choice_row' + rowNum );
+		rowNode = document.getElementById( modeType_ + '_choice_row' + rowNum );
 
 		// Give the choice node its id and position data
 		for ( var nodei = 0; nodei < rowChoiceContainers.length; nodei++ ) {
@@ -55,7 +57,7 @@ adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
 	};  // End thisGrid.addRow()
 
 
-	thisGrid.set 	= function ( prefix, maxCols, choiceContainers ) {
+	thisGrid.set 	= function ( modeType_, maxCols, choiceContainers ) {
 	/**/
 		var rowNodes = [];
 
@@ -72,7 +74,7 @@ adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
 			var rowChoices 	= choiceContainers.slice( startIndx, endIndx );
 
 			// Add a row to the DOM, then add the row's node to the list
-			var rowNode = thisGrid.setRow( prefix, rowi, rowChoices );
+			var rowNode = thisGrid.setRow( modeType_, rowi, rowChoices );
 			rowNodes.push( rowNode );
 
 		}
@@ -85,20 +87,20 @@ adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
 	// ========================
 	// CREATION
 	// ========================
-	var createRow 	= function ( prefix, rowNum, parentNode ) {
+	var createRow 	= function ( modeType_, rowNum, parentNode ) {
 	/* ( str, int ) -> Nodes */
 		var rowNode 		= document.createElement( 'div' );
 
 		parentNode.appendChild( rowNode );
 
-		rowNode.className 	= prefix + '-picker-row';
-		rowNode.id 			= prefix + '_choice_row' + rowNum;
+		rowNode.className 	= modeType_ + '-picker-row';
+		rowNode.id 			= modeType_ + '_choice_row' + rowNum;
 
 		return rowNode;
 	};  // End createRow()
 
 
-	var createGrid 	= function ( prefix, maxCols, parentNode ) {
+	var createGrid 	= function ( modeType_, maxCols, parentNode ) {
 	/* ( str, int ) -> [Nodes] */
 
 		var rowNodes = [];
@@ -109,7 +111,7 @@ adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
 
 		for ( var rowi = 0; rowi < numRows; rowi++ ) {
 			// Add a row to the DOM, then add the row's node to the list
-			var rowNode = createRow( prefix, rowi, parentNode );
+			var rowNode = createRow( modeType_, rowi, parentNode );
 			rowNodes.push( rowNode );
 		}
 
@@ -118,8 +120,12 @@ adder.Grid = function ( pickerName, maxCols, choiceContainers ) {
 	};  // End createGrid()
 
 
-	createGrid( prefix, maxCols, parentNode );
-	thisGrid.set( prefix, maxCols, choiceContainers );
+	createGrid( modeType_, maxCols, parentNode );
+	thisGrid.set( modeType_, maxCols, choiceContainers );
+
+	adder.setupGridNavigation( thisGrid, modeName );
+
+	adder.modes[ modeName ].grid = thisGrid;
 
 	return thisGrid;
 };  // End adder.Grid {}

@@ -28,10 +28,10 @@ adder.node 	 		= null;
 adder.viewer 		= null;
 adder.sections 		= { tabs: null, viewer: null, pickers: null };
 adder.modes  		= {
-	types: { tab: null, section: null, choices: {} }, // verb, noun, message
+	types: { tab: null, section: null, choices: {}, grid: {} }, // verb, noun, message
 
 	// Not comfortable that choices is a list and not an object
-	images: { tab: null, section: null, choices: [] }, // img list
+	images: { tab: null, section: null, choices: [], grid: {} }, // img list
 
 	colors: {
 		tab: null,
@@ -40,7 +40,8 @@ adder.modes  		= {
 			section: null,
 			inDocument: { tab: null, section: null, choices: [] },
 			custom: { tab: null, section: null, choices: [] } // color picker?
-		}  // end colors.modes {}
+		},  // end colors.modes {}
+		grid: {}
 	}  // end modes.colors{}
 }  // end adder.modes{}
 
