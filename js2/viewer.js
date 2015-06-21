@@ -151,9 +151,8 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// =================
 	// EVENTS
 	// =================
-	cmEditor.on("inputRead", function(instance, change) {
+	cmEditor.on("change", function(instance, change) {
 
-		// adder.runSearch( adder.imageGridObj.choiceContainers );
 		var activeGrid = adder.modes[ adder.activeMode ].grid;
 		adder.runSearch( activeGrid.choiceContainers )
 		

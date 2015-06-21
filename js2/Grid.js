@@ -1,7 +1,9 @@
 /* Grid.js
 * 
-* Handles a grid of choices/options that
-* are selectable and choosable
+* Handles a grid of choices/options that are selectable and choosable
+* 
+* TODO:
+* How to restore choices to original order when all search text is gone?
 */
 
 
