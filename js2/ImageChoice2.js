@@ -80,7 +80,7 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		// TODO: add when clicked
 		imgNode.addEventListener( 'keydown', function ( evnt ) {
 			// adder.imgKeyHandler( evnt );
-			adder.modes.images.grid.imgKeyHandler( evnt );
+			adder.modes.images.grid.imgKeyHandler( evnt, adder.chooseImage );
 		});
 
 		// --- TERM LIST --- \\

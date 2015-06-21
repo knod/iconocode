@@ -58,14 +58,14 @@ adder.addImageMode 	= function () {
 
 	!!!: Now not working at beginning of search bar! wtf?!
 	*/
-		// --- DOM NODE --- \\
 		var newNode 		= document.createElement('img');
 		newNode.className 	= 'icon-part'
 		// Not implemented yet. Not necessary? Or do we want access to the search terms?
 		// newNode.dataset['object'] = imgNode.dataset['object'];
-		// Where to get the image
-		var filePath 		= $(imgNode).attr('src');
-		newNode.src 		= filePath;
+
+		// Set same image file path
+		var filePath 	 = $(imgNode).attr('src');
+		newNode.src 	 = filePath;
 
 		// --- CODEMIRROR EDITOR --- \\
 		var editor 		= adder.viewer;

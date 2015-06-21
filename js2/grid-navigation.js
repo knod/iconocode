@@ -54,7 +54,7 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 
 
 	thisGrid.position;
-	thisGrid.selectChoiceByPos = function ( position, grid ) {
+	thisGrid.selectChoiceByPos = function ( position ) {
 		// Change the nodes
 		var node = thisGrid.getCellNode( position );
 		thisGrid.selectChoice( node );
@@ -92,6 +92,9 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 	};  // thisGrid.activateKeyboardNav()
 
 
+	// =================
+	// POSITION VALUES
+	// =================
 	var incrementPosition 	= function ( position, direction, numCols ) {
 	/* ( {}, str ) -> {}
 
@@ -130,7 +133,10 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 	};  // End wrapPosition()
 
 
-	thisGrid.keyboardNavChoices = function ( position, direction, grid ) {
+	// ====================
+	// USE INPUT
+	// ====================
+	thisGrid.keyboardNavChoices = function ( position, direction ) {
 	/* ( {}, str, [[Node]] ) -> {}
 
 	Allows keyboard navigation and selection of images
@@ -140,14 +146,13 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 	*/
 
 		// Need max number of columns for navigation with tab key to work
-		var numPrevCols 	= $('#images_choice_row' + position.row).children().toArray().length;
-		var maxCols 		= $('#images_choice_row' + position.row).children().toArray().length;
+		var maxCols 		= $('#' + modeType_ + '_choice_row' + position.row).children().toArray().length;
 		// So we can compare the previous row number to the current row number later
 		var prevRowNum 		= position.row;
 		// If the row gotten is the last row and has fewer than the full number of columns
 		// incrementpPosition() will bring the column number to the beginning of the column
 
-		var currPosition 	= incrementPosition( position, direction, numPrevCols );
+		var currPosition 	= incrementPosition( position, direction, maxCols );
 		var currRowNum 		= currPosition.row, currColNum = currPosition.col;
 
 		// ==================
@@ -155,9 +160,9 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 		// ==================
 		// Make sure not to go past the last row with visible elements
 		// Use row 0 so that we know we're using a valid row number
-		var $imgPicker 			= $('#images_choice_row0').parent();
+		var $choicePicker 	= $('#' + modeType_ + '_choice_row0').parent();
  		// Contingency for no nodes being visible
-		var $lastVisibleCont = $imgPicker.find('.image-choice-container:visible:last'),
+		var $lastVisibleCont = $choicePicker.find('.icd-choice-container:visible:last'),
 			lastRowNum 		 = parseInt($lastVisibleCont.data( 'row' ));  // Need to parse int?
 
 		currRowNum = wrapPosition( currRowNum, lastRowNum );
@@ -166,7 +171,7 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 		// COL
 		// ==================
 		// Now use the number of columns in the correct row (is there a shorter way?)
-		var $lastRowCont 		= $('#images_choice_row' + currRowNum).find('.image-choice-container:visible:last'),
+		var $lastRowCont 		= $('#' + modeType_ + '_choice_row' + currRowNum).find('.icd-choice-container:visible:last'),
 			lastColNum 			= $lastRowCont.data('col');
 
 		// Basically, in case user pressed up or down to get to the last row
@@ -188,14 +193,14 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 		// Set persistent values of object
 		position.row = currRowNum; position.col = currColNum;
 		// Use object values to get correct node
-		var imgNode = thisGrid.getCellNode( position, adder.imgGrid );
-		thisGrid.selectChoice( imgNode );
+		var choiceNode = thisGrid.getCellNode( position );
+		thisGrid.selectChoice( choiceNode );
 
 		return position;
 	};  // End thisGrid.keyboardNavChoices()
 
 
-	thisGrid.imgKeyHandler = function ( evnt ) {
+	thisGrid.imgKeyHandler = function ( evnt, choosingFunc ) {
 	/* ( int ) -> Node
 	Navigating through image choices. Maybe through any choices,
 	with the keyboard
@@ -205,7 +210,7 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 	*/
 		var key 			= evnt.keyCode || evnt.which;
 		// TODO: try using target instead;
-		var selectedChoice 	= $('#icd_images_picker .selected').find('.image-choice')[0];
+		var selectedChoice 	= $('#icd_' + modeType_ + '_picker .selected').find('.icd-adder-choice')[0];
 
 		// If we're in the image picker choices section already
 		if ( selectedChoice !== undefined ) {
@@ -221,13 +226,11 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 			else if ( key === 38) { direction = 'up' }
 			// TODO: ??: Didn't I want tab to tab through modes and modes' modes? How do I
 			// not have tabbings interfere with each other
-			else if ( key ===  9) { direction = 'next'; }  // tab
-			else if ( key === 13) { // Enter
-				// Get selected image before removing that marker
-				var selectedChoice = $('#icd_images_picker .selected').find('.image-choice')[0];
+			else if ( key ===  9) { direction = 'next'; }  // TAB
+			else if ( key === 13) { // ENTER
 				// Add the icon to the viewer in place of whatever text is there
 				// Will return focus to the search bar
-				adder.chooseImage( selectedChoice );
+				choosingFunc( selectedChoice );
 
 			} else if (key === 27) { // ESC
 				// Just bring everything back to the search bar
@@ -235,14 +238,12 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 			}
 
 			if ( direction !== undefined ) {
-				thisGrid.keyboardNavChoices( thisGrid.position, direction, adder.imgGrid);
+				thisGrid.keyboardNavChoices( thisGrid.position, direction );
 			}
 		}
 
-		return $('#icd_images_picker .selected').find('.image-choice')[0];
+		return $('#icd_' + modeType_ + '_picker .selected').find('.icd-adder-choice')[0];
 	};  // End thisGrid.imgKeyHandler
-
-
 
 
 

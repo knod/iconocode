@@ -14,8 +14,9 @@ adder.Grid = function ( modeName, maxCols, choiceContainers ) {
 	var thisGrid = {};
 
 	thisGrid.choiceContainers 	= choiceContainers,
-		thisGrid.rowNodes 		= []
-		thisGrid.modeType 		= modeName;
+		thisGrid.rowNodes 		= [],
+		thisGrid.modeType 		= modeName,
+		thisGrid.choiceFunction = adder.chooseImage;
 
 	var parentNode 	= document.getElementById( 'icd_' + modeName + '_picker' ),
 		modeType_ 	= thisGrid.modeType;  // For clarity
