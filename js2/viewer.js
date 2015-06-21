@@ -152,10 +152,9 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// EVENTS
 	// =================
 	cmEditor.on("change", function(instance, change) {
-
+		// When text is added or deleted (anything else?) search the mode's choices
 		var activeGrid = adder.modes[ adder.activeMode ].grid;
 		adder.runSearch( activeGrid.choiceContainers )
-		
 	});
 
 	// the following line fixes a bug I've encountered in CodeMirror 3.1

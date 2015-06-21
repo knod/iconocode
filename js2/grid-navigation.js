@@ -1,14 +1,17 @@
 /* grid-navigation.js
-
-Sets Grid object properties for navigation of the grid
-(using just keyboard input, or also mouse?)
-
-Just wanted to break Grid up into different files
-
-Affects: Grid
-Makes use of: arguments
-
-Somehow based on mode?
+* 
+* Sets Grid object properties for navigation of the grid
+* (using just keyboard input, or also mouse?)
+* 
+* Just wanted to break Grid up into different files
+* 
+* Affects: Grid
+* Makes use of: arguments
+* 
+* TODO:
+* - If only one icon matches a search, automatically select that
+* 	icon (but then focus would have to be on that element and
+* 	pressing 'delete' would need to refocus in search bar?)
 */
 
 adder.setupGridNavigation = function ( thisGrid, modeName ) {
@@ -200,7 +203,7 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 	};  // End thisGrid.keyboardNavChoices()
 
 
-	thisGrid.imgKeyHandler = function ( evnt, choosingFunc ) {
+	thisGrid.gridKeyHandler = function ( evnt, choosingFunc ) {
 	/* ( int ) -> Node
 	Navigating through image choices. Maybe through any choices,
 	with the keyboard

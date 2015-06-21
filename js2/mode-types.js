@@ -22,16 +22,16 @@ adder.addTypeMode = function () {
 	// =============
 	// PICKER
 	// =============
-	adder.addTypeChoice 	= function ( typeName, parentNode, explanation ) {
+	adder.addTypeChoiceContainer = function ( typeName, parentNode, explanation ) {
 	/* ( str, Node, Node ) -> new Node
 
 	*/
-		var typeContainer 				= document.createElement('div');
+		var typeContainer 		= document.createElement('div');
 		parentNode.appendChild( typeContainer );
 		adder.modes.types.choices[ typeName ] = typeContainer;
 
-		typeContainer.className 		= prefix + ' type-choice-container';
-		typeContainer.id 				= prefix + '_choice_' + typeName;
+		typeContainer.className = 'icd-choice-container type-choice-container';
+		typeContainer.id 		= prefix + '_choice_' + typeName;
 		// Will use typeToAdd to set the type of the icon to add
 		typeContainer.dataset['typeToAdd'] = typeName;
 
@@ -46,53 +46,29 @@ adder.addTypeMode = function () {
 
 
 		// The label for the thing
-		var typeText 					= document.createTextNode( typeName );
+		var typeText 			= document.createTextNode( typeName );
 		typeContainer.appendChild( typeText );
 
 		return typeContainer;
-	}  // End adder.addTypeChoice()
+	}  // End adder.addTypeChoiceContainer()
 
 
-	adder.addVerbChoice 	= function ( parentNode, iconPrefix ) {
-	/* ( Node, str ) -> new Node
 
+	adder.addTypeChoice = function ( typeName, description, parentNode ) {
+	/*
 	*/
-		var verbType = adder.addTypeChoice( 'verb', parentNode, 'changes data' );
 
-		var verbIcon = new Icon( iconPrefix + '-verb' );
-		verbIcon.createNew( {}, verbType );
-		verbIcon.setType( 'verb' );
+		var typeContainer = adder.addTypeChoiceContainer( typeName, parentNode, description );
 
-		return verbType;
-	};  // End adder.addVerbChoice()
+		var typeIcon = new Icon( 'adder-type-choice-' + typeName );
+		typeIcon.createNew( {}, typeContainer );
+		typeIcon.setType( typeName );
 
+		$(typeContainer).data('choice', typeIcon.node );
+		$(typeIcon.node).data('terms', [typeName]);
 
-	adder.addNounChoice 	= function ( parentNode, iconPrefix ) {
-	/* ( Node, str ) -> new Node
-
-	*/
-		var nounType = adder.addTypeChoice( 'noun', parentNode, 'is accessed and changed' );
-
-		var nounIcon = new Icon( iconPrefix + '-noun' );
-		nounIcon.createNew( {}, nounType );
-		nounIcon.setType( 'noun' );
-
-		return nounType;
-	};  // End adder.addNounChoice()
-
-
-	adder.addMessageChoice 	= function ( parentNode, iconPrefix ) {
-	/* ( Node, str ) -> new Node
-
-	*/
-		var messageType = adder.addTypeChoice( 'message', parentNode, 'tells you things' );
-
-		var messageIcon = new Icon( iconPrefix + '-message' );
-		messageIcon.createNew( {}, messageType );
-		messageIcon.setType( 'message' );
-
-		return messageType;
-	};  // End adder.addMessageChoice()
+		return typeContainer;
+	};  // End adder.addTypeChoice()
 
 
 	adder.addTypePicker 	= function ( parentNode ) {
@@ -106,15 +82,12 @@ adder.addTypeMode = function () {
 		parentNode.appendChild( typePicker );
 
 		var iconPrefix 				= 'adder-type-choice';
-		// adder.addVerbChoice( typePicker, iconPrefix );
-		// adder.addNounChoice( typePicker, iconPrefix );
-		// adder.addMessageChoice( typePicker, iconPrefix );
 
-		var verbNode  	= adder.addVerbChoice( document.createDocumentFragment(), iconPrefix ),
-			nounNode 	= adder.addNounChoice( document.createDocumentFragment(), iconPrefix ),
-			messageNode = adder.addMessageChoice( document.createDocumentFragment(), iconPrefix );
+		var verbContainer  	 = adder.addTypeChoice( 'verb', 'changes data', document.createDocumentFragment() ),
+			nounContainer 	 = adder.addTypeChoice( 'noun', 'is accessed and changed', document.createDocumentFragment() ),
+			messageContainer = adder.addTypeChoice( 'message', 'tells you things', document.createDocumentFragment() );
 
-		var typeChoicesNodes = [ verbNode, nounNode, messageNode ];
+		var typeChoicesNodes = [ verbContainer, nounContainer, messageContainer ];
 
 
 		var numCols = 3;
