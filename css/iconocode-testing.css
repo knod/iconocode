@@ -6,6 +6,10 @@
 /*iconocode.css*/
 
 .icd {
+	font-size: 1rem;
+}
+
+.icd, .icd div {
 	padding: 0;
 	margin: 0;
 
@@ -15,7 +19,6 @@
 
 	/* Need to decide on font */
 	font-family: monospace;
-	font-size: 1rem;
 	font-weight: normal;
 }
 
