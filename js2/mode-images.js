@@ -67,22 +67,34 @@ adder.addImageMode 	= function () {
 		var filePath 	 = $(imgNode).attr('src');
 		newNode.src 	 = filePath;
 
-		// --- CODEMIRROR EDITOR --- \\
+		// ===================
+		// EDITOR CONTENTS
+		// ===================
+		// --- GET SEARCH TERMS --- \\
 		var editor 		= adder.viewer;
-		var cursorPos 	= editor.getCursor()
+		var cursorPos 	= editor.getCursor();
 
 		// There is only one line
-		var token 		= editor.getTokenAt( cursorPos ),
-			start 		= { line: 0, ch: token.start },
-			end 		= { line: 0, ch: token.end }
-console.log(token)
+		var token 		= editor.getTokenAt( cursorPos );
+
+		// Fix not being able to replace token when at/before the start of token
+		if ( token.string === '' ) {
+			cursorPos.ch 	+= 1;
+			token 			= editor.getTokenAt( cursorPos );
+		}
+
+		var start 	= { line: 0, ch: token.start },
+			end 	= { line: 0, ch: token.end };
+
 		// Make sure the token is ended appropriately
 		editor.replaceRange( ';', end, end );
 		// Get the new end of the token, including the end symbol
-		token 		= editor.getTokenAt( editor.getCursor() )
-		start 		= { line: 0, ch: token.start }
-		end 		= { line: 0, ch: token.end }
-console.log(token)
+		// ??: I don't remember why I have to get the cursor again
+		token 	= editor.getTokenAt( editor.getCursor() );  // Why does this not end up at original cursorPos?
+		end 	= { line: 0, ch: token.end };
+		start 	= { line: 0, ch: token.start };  // Is this needed?
+
+		// --- PLACE MARKER --- \\
 		var inViewer 	= editor.markText( start, end,
 			// I don't think classname matters when using 'replaceWith'
 			{className: 'chosen-image', replacedWith: newNode
@@ -93,6 +105,9 @@ console.log(token)
 			}
 		);
 
+		// ===================
+		// RE-FOCUS
+		// ===================
 		// Bring everything back to where it last was in the search bar
 		adder.backToSearchbar( adder.viewer );
 
