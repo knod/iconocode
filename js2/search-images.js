@@ -4,28 +4,28 @@
 * multiple lists for images.
 * 
 * TODO:
-* - Use list of choices instead of grid of choices
 * - Allow searching with multiple search terms (can use this for 'folder'
 * 	navigation)
+* - Generalize a bunch of stuff, then specify other stuff for specific
+* 	modes?
 * 
 * DONE:
 * - Hide images that have no matching terms
 * - Rank images by how closely they match the query
 * - Re-order images to appear by rank of match
+* - Use list of choices instead of grid of choices
 */
 
 'use strict'
 
 var fuzzySearcher 	= new FuzzySearcher();
 
-adder.hideUnmatched 	= function ( choiceArray ) {};  // End adder.hideUnmatched()
 
-
-adder.updateChoiceList 	= function ( choiceContainer, query ) {
+adder.matchQuery 		= function ( choiceContainer, query ) {
 /*
 
-Runs the search for matches on each choiceNode. Shows just
-matching terms. Doesn't get rid of search terms.
+Runs the search for matches on a container's node. Doesn't
+get rid of the node's terms
 */
 	var choiceNode 	= $(choiceContainer).data('choice');
 	var terms 		= $(choiceNode).data('terms');
@@ -34,6 +34,19 @@ matching terms. Doesn't get rid of search terms.
 	var matchData 	= fuzzySearcher.toNode( terms, query );
 	$(choiceContainer).data('matchData', matchData);
 
+	return matchData;
+};  //  End adder.matchQuery()
+
+
+adder.updateChoiceList 	= function ( choiceContainer, query ) {
+/*
+
+Runs the search for matches on each choiceNode. Shows just
+matching terms. Doesn't get rid of search terms.
+*/
+	var matchData = adder.matchQuery( choiceContainer, query );
+
+	// !!!: HERE'S THE THING THAT'S NOT GENERAL
 	// Re-make list of terms with styled list elements
 	var list 		= $(choiceContainer).find('ol')[0];
 	$(list).empty();
@@ -43,24 +56,22 @@ matching terms. Doesn't get rid of search terms.
 };  // End adder.updateChoiceList()
 
 
-adder.updateChoiceLists = function ( choiceContainers, query ) {
+adder.updateContainerList = function ( choiceContainers, query ) {
 /* ( [Node], str ) -> [Node]
 
 Updates the visible search terms for all choices.
 */
+	// List to be ranked
 	var newChoiceOrder = [];
 
 	for ( var nodei = 0; nodei < choiceContainers.length; nodei++ ) {
-		// Change the visible search terms for that image
-		// var choiceNode = choiceContainers[ rowi ][ coli ];
-		// var choiceContainer = document.getElementById( 'images_choice_row' + rowi + '_col' + coli ),
-		// 	choiceNode 		= $(choiceContainer).find('.image-choice');
-		var choiceContainer = choiceContainers[ nodei ];
 
+		var choiceContainer = choiceContainers[ nodei ];
+		// Change the visible search terms for that image
 		adder.updateChoiceList( choiceContainer, query );
-		// List to be ranked
 		newChoiceOrder.push(choiceContainer);
 
+		// !!!: THIS ISN'T GENERALIZED EITHER
 		// If it didn't match, hide it (it'll still be in the DOM)
 		if ( $(choiceContainer).data('matchData').matchesData[0] === undefined ) {
 			$(choiceContainer).hide();
@@ -69,25 +80,6 @@ Updates the visible search terms for all choices.
 		}
 	}
 
-	for ( var rowi = 0; rowi < choiceContainers.length; rowi++ ) {
-		// for ( var coli = 0; coli < choiceContainers[rowi].length; coli++ ) {
-		// 	// Change the visible search terms for that image
-		// 	// var choiceNode = choiceContainers[ rowi ][ coli ];
-		// 	var choiceContainer = document.getElementById( 'images_choice_row' + rowi + '_col' + coli ),
-		// 		choiceNode 		= $(choiceContainer).find('.image-choice');
-
-		// 	adder.updateChoiceList( choiceNode, query );
-		// 	// List to be ranked
-		// 	choiceContainers.push(choiceNode);
-
-		// 	// If it didn't match, hide it (it'll still be in the DOM)
-		// 	if ( $(choiceNode).data('matchData').matchesData[0] === undefined ) {
-		// 		$(choiceNode).parent().hide();
-		// 	} else {  // Otherwise make sure it's visible
-		// 		$(choiceNode).parent().show();
-		// 	}
-		// }
-	}
 
 	var matchComparator = function ( node1, node2 ) {
 	/* This is in here because in here is where the test properties are created 
@@ -131,7 +123,7 @@ Updates the visible search terms for all choices.
 
 	newChoiceOrder.sort( matchComparator );
 	return newChoiceOrder;
-};  // End adder.updateChoiceLists()
+};  // End adder.updateContainerList()
 
 
 adder.runSearch 		= function ( choiceContainers ) {
@@ -153,7 +145,7 @@ console.log('------------')
 		var query = token.string.replace( /;/, '' );
 
 		// Choice nodes sorted by rank:
-		var choiceArray = adder.updateChoiceLists( choiceContainers, query );
+		var choiceArray = adder.updateContainerList( choiceContainers, query );
 		adder.updateImageGrid( choiceArray );
 
 	}
