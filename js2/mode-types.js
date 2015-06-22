@@ -19,6 +19,39 @@
 adder.addTypeMode = function () {
 /* Enclose and name so it can be called in order */
 
+	var iconObj_;
+
+	// ===============
+	// ACTIVATING TYPE
+	// ================
+	var chooseType = function ( chosenNode ) {
+
+		var $textContainer = $(adder.searchBarContainer);  // created in viewer.js
+		// Remove all possible previous type classes
+		$textContainer.removeClass( 'verb' );
+		$textContainer.removeClass( 'noun' );
+		$textContainer.removeClass( 'message' );
+
+		var purpose = $(chosenNode).data('terms')[0]
+		// Add the new class
+		$textContainer.addClass( purpose )
+
+		// If it's the first time, switch modes automatically
+		if ( adder.typeSelected === false ) {
+			adder.activateMode( adder.modes.images.tab );
+			// Don't do this again
+			adder.typeSelected = true;
+		}
+
+		// Re-set result type (images won't work the same as this)
+		adder.result.type = purpose;
+
+		// Bring everything back to where it last was in the search bar
+		adder.backToSearchbar( adder.viewer );
+
+		return $textContainer[0];
+	};  // End chooseType()
+
 	// =============
 	// PICKER
 	// =============
@@ -33,17 +66,15 @@ adder.addTypeMode = function () {
 		typeContainer.className = 'icd-choice-container type-choice-container';
 		typeContainer.id 		= prefix + '_choice_' + typeName;
 		// Will use typeToAdd to set the type of the icon to add
-		typeContainer.dataset['typeToAdd'] = typeName;
+		$(typeContainer).data('typeToAdd', typeName);
 
 		typeContainer.addEventListener( 'click', function ( evnt ) {
 			adder.typeSelected = true;
 			// Use this to add type to viewer
 			typeContainer.dataset['typeToAdd'];
-			// adder.viewer.
 
 			// If it's the first time, go to image mode
 		} );  // end on click
-
 
 		// The label for the thing
 		var typeText 			= document.createTextNode( typeName );
@@ -63,9 +94,21 @@ adder.addTypeMode = function () {
 		var typeIcon = new Icon( 'adder-type-choice-' + typeName );
 		typeIcon.createNew( {}, typeContainer );
 		typeIcon.setType( typeName );
+		
+		var $iconBody = $(typeIcon.node).find('.icon-body')
+		// For searching, though that's not happening right now
+		$(typeContainer).data('choice', $iconBody[0] );
+		$iconBody.data('terms', [typeName]);
 
-		$(typeContainer).data('choice', typeIcon.node );
-		$(typeIcon.node).data('terms', [typeName]);
+		// For keyboard navigation. Right now on icon body, may change later
+		$iconBody.addClass('icd-adder-choice');
+		$iconBody[0].tabIndex = 0;
+		$iconBody[0].addEventListener( 'keydown', function ( evnt ) {
+			adder.modes.types.grid.gridKeyHandler( evnt, chooseType );
+		});
+
+		// For setting the searchbar type
+		$iconBody.data( 'typeToAdd', typeName );
 
 		return typeContainer;
 	};  // End adder.addTypeChoice()

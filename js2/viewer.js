@@ -161,7 +161,8 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	$(".icd .adder .CodeMirror-scroll").css('overflow', 'hidden');
 	// jQuery again! be careful with selector or move this to .css file
 
-	adder.searchBar = $('.icd .adder .CodeMirror')[0];
+	adder.editorNode 		 = $('.icd.icon-adder .CodeMirror')[0];
+	adder.searchBarContainer = $('.icd.icon-adder .CodeMirror-code')[0];
 
 	return cmEditor;
 };  // End adder.addViewer()
