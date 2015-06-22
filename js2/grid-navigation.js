@@ -34,7 +34,8 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 		// Takes focus off of last thing, puts it on this thing's actual choice
 		var infoHolder = $choiceContainer.find('.icd-adder-choice')[0];
 		infoHolder.focus();
-
+// console.log(document.activeElement)
+// debugger;
 		return choiceContainer;
 	};  // thisGrid.selectChoice();
 

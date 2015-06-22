@@ -17,6 +17,9 @@ var prefix 	= 'icd';
 
 var adder 	= {};
 
+// Thing to build final icon with
+adder.result 		= { type: 'verb', imgList: [], searchTerms: [] };
+
 // State
 adder.typeSelected 	= false;
 adder.activeMode 	= null;
@@ -26,8 +29,9 @@ adder.node 	 		= null;
 
 // Inside the adder
 adder.viewer 		= null;
-adder.sections 		= { tabs: null, viewer: null, pickers: null };
+adder.sections 		= { commands: null, tabs: null, viewer: null, pickers: null };
 adder.modes  		= {
+
 	types: { tab: null, section: null, choices: {}, grid: {} }, // verb, noun, message
 
 	// Not comfortable that choices is a list and not an object

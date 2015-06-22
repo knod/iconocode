@@ -80,19 +80,23 @@
 	significant width to show shape, for example !!!! */
 /* Process? */
 /* diamond is only one with different height? */
-.icd .verb .icon-body, .icd .verb.icon-body {
+.icd .verb .icon-body, .icd .verb.icon-body,
+.icd .CodeMirror .verb {
 	background: darkolivegreen;
 }
 /* Process? */
-.icd .square .icon-body {
+.icd .square .icon-body,
+.icd .CodeMirror .square {
 	background-color: firebrick;
 }
 /* Data? */
-.icd .noun .icon-body {
+.icd .noun .icon-body,
+.icd .CodeMirror .noun {
 	background-color: navy;
 }
 /* Message */
-.icd .message .icon-body {
+.icd .message .icon-body,
+.icd .CodeMirror .message {
 	background-color: maroon;
 }
 
@@ -188,6 +192,7 @@ be scrollable... make it position: relative?
 
 .icd .types-picker-row {
 	width: 100%;
+	height: 75%;
 }
 
 .icd .type-choice-container {

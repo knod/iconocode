@@ -41,7 +41,6 @@ Add the adder element
 	var pickerCont 			= document.createElement( 'section' );
 	adderNode_.appendChild( pickerCont );
 	adder.sections.pickers 	= pickerCont;
-
 	pickerCont.className 	= prefix + ' adder-pickers-container';
 
 
@@ -79,10 +78,10 @@ a creating a new icon (if process wasn't completed).
 	// Prevent moving on to other tabs till type is selected
 	adder.typeSelected = false;
 	// Testing
-	adder.typeSelected = true;
+	// adder.typeSelected = true;
 
 	// Make adder visible
-	// adder.node.style.display = 'auto';
+	adder.node.style.display = 'auto';
 
 	// Make "Type" tab active
 	adder.activateMode( adder.modes.types.tab );

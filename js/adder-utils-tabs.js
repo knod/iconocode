@@ -21,7 +21,7 @@ Show a tab as being active, do it's action
 	$('.selected').removeClass('selected');
 
 	var $activeTab = $('.active-tab');
-	// First time round, there is nothing with .active-tab. Maybe change that?
+	// First time around, there is nothing with .active-tab. Maybe change that?
 	if ( $activeTab[0] !== undefined ) {
 		// Hide associated element
 		$($activeTab.data('toShow')).hide();
