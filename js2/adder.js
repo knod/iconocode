@@ -20,10 +20,17 @@ adder.addAdder 	= function () {
 Add the adder element
 */
 
-	var adderNode_ 		= document.createElement('div');
+	var adderNode_ 		 = document.createElement('div');
 	document.body.appendChild( adderNode_ );
-	adder.node 			= adderNode_;
+	adder.node 			 = adderNode_;
 	adderNode_.className = prefix + ' icon-adder';
+
+
+	adder.sections.commands = adder.addCommands( adderNode_ );
+	// var commandsContainer 		= document.createElement('section');
+	// adderNode_.appendChild( commandsContainer );
+	// adder.sections.commands 	= commandsContainer;
+	// commandsContainer.className = prefix + ' adder-commands-container';
 
 
 	var tabContainer 		= document.createElement('section');

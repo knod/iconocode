@@ -84,7 +84,7 @@ var Icon = function ( varName ) {
 		var numNodes 	= imgNodes.length;
 		for ( var nodei = 0; nodei < numNodes; nodei++ ) {
 			var $imgNode = $(imgNodes[nodei]);
-			console.log($imgNode);
+
 			$imgNode.clone().appendTo( $(parentNode) );
 			imgNamesStr += $imgNode.data('name');
 		}

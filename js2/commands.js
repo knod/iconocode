@@ -6,7 +6,7 @@
 
 'use strict'
 
-adder.addCommands = function () {
+adder.addCommands = function ( parentNode ) {
 
 	var commands = {};
 
@@ -15,9 +15,23 @@ adder.addCommands = function () {
 	// SAVING AN ICON
 	// ================================
 
-	commands.constructIcon = function () {
+	commands.constructIcon = function ( variableName, purpose, imageNodes ) {
+	/* ( str, str, [Nodes] ) -> {}
+	* 
+	* Creates, sets, and saves an icon with the given values.
+	*/
+		var iconObj = new Icon( variableName );
+		// Placeholder... Not sure this works this way anymore
+		// Need to create marker
+		iconObj.createNew( document.createDocumentFragment() );
+		iconObj.setType( purpose , iconObj.container );
 
-	};  // End commands.constructIcon
+		iconObj.setImages( imageNodes, iconObj.body );
+
+		iconObj.save( icd.map );
+
+		return iconObj;
+	};  // End commands.constructIcon()
 
 
 	commands.apply = function ( variableName ) {
@@ -29,7 +43,7 @@ adder.addCommands = function () {
 	* of the text with that icon.
 	*/
 
-		commands.constructIcon();
+		commands.constructIcon( 'testX', 'verb', [] );
 	};  // End commands.apply()
 
 
@@ -38,7 +52,7 @@ adder.addCommands = function () {
 		var control = document.createElement('i');
 		parentNode.appendChild( control )
 		// Fontawesome class
-		$(control).addClass( 'fa check-square-o fa-lg' );
+		$(control).addClass( 'fa fa-check-square command' );
 		$(control).addClass( 'apply' );
 
 		control.addEventListener( 'click', function () {
@@ -70,7 +84,7 @@ adder.addCommands = function () {
 		var control = document.createElement('i');
 		parentNode.appendChild( control )
 		// Fontawesome class
-		$(control).addClass( 'fa fa-times-circle fa-lg' );
+		$(control).addClass( 'fa fa-times-circle command' );
 		$(control).addClass( 'exit' );
 
 		control.addEventListener( 'click', function () {
@@ -83,5 +97,21 @@ adder.addCommands = function () {
 	};  // End commands.addExit()
 
 
-	return commands;
-};  // End adder.addCommands {}
+	commands.addCommands = function ( parentNode ) {
+		var commandsContainer 		= document.createElement('section');
+		parentNode.appendChild( commandsContainer );
+		commandsContainer.className = 'adder-commands-container';
+
+		// On left
+		var exitNode = commands.addExit( commandsContainer );
+		// On right
+		var applyContainer = commands.addApply( commandsContainer );
+
+		return commandsContainer;
+	};  // End commands.addCommands()
+
+
+	var container = commands.addCommands( parentNode )
+
+	return container;
+};  // End adder.addCommands()

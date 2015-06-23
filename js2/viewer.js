@@ -13,6 +13,13 @@
 * - Make text into placeholder text instead
 * - When search bar is given focus, deselect anything that's selected (it's
 * 	an issue when the search bar is clicked into instead of some keyboard input)
+* - Style stuff to look nice. No idea how to do this, especially since
+* 	there's a div with no class under CodeMirror-scroll that has
+* 	position: absolute, but is still taking up a bunch of space and updates
+* 	itself to do so, so that I can't seem to change it. And since two
+* 	scrollbars keep appearing, and probably other stuff. And since
+* 	$(".icd.icon-adder .CodeMirror-scroll").css('overflow', 'hidden');
+* 	seems to not work.
 * 
 * DONE:
 * - Prevent people from typing in stuff that will make new spans in
@@ -68,7 +75,59 @@ adder.addViewer = function ( parentNode ) {
 Really a code mirror instance
 Working example: http://jsfiddle.net/8fjpbc5L/
 */
-	
+	var thisViewer = {}
+
+
+	thisViewer.constructIcon = function ( variableName, purpose, imageNodes ) {
+	/* ( str, str, [Nodes] ) -> {}
+	* 
+	* Creates, sets, and saves an icon with the given values.
+	*/
+		var iconObj = new Icon( variableName );
+		// Placeholder... Not sure this works this way anymore
+		// Need to create marker
+		iconObj.createNew( document.createDocumentFragment() );
+		iconObj.setType( purpose , iconObj.container );
+
+		iconObj.setImages( imageNodes, iconObj.body );
+
+		iconObj.save( icd.map );
+
+		return iconObj;
+	};  // End thisViewer.constructIcon()
+
+
+	thisViewer.apply = function ( variableName ) {
+	/* 
+	* 
+	* Set the icon for the given variable.
+	* Save the icon in a library somewhere and link the icon
+	* element with the variable name's text. Replace any occurances
+	* of the text with that icon.
+	*/
+
+		thisViewer.constructIcon( 'testX', 'verb', [] );
+	};  // End thisViewer.apply()
+
+
+	thisViewer.addApply = function ( parentNode, classes ) {
+
+		var control = document.createElement('i');
+		parentNode.appendChild( control )
+		// Fontawesome class
+		$(control).addClass( 'fa fa-check-square command' );
+		$(control).addClass( 'apply' );
+
+		control.addEventListener( 'click', function () {
+
+
+
+		} );
+
+		return control;
+	};  // End thisViewer.addApply()
+
+
 	adder.searchBar;
 
 	// ==================
@@ -116,7 +175,7 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// ONE LINE HIGH
 	// =====================
 	// cmEditor.setSize( '100%', cmEditor.defaultTextHeight() + 2 * 4);
-	cmEditor.setSize( '100%', '100%');
+	cmEditor.setSize( 'auto', '100%');
 	// searcher.setSize( '100%', '100%');
 	// 200 is the preferable width of text field in pixels,
 	// 4 is default CM padding (which depends on the theme you're using)
@@ -158,11 +217,24 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	});
 
 	// the following line fixes a bug I've encountered in CodeMirror 3.1
-	$(".icd .adder .CodeMirror-scroll").css('overflow', 'hidden');
+	$(".icd.icon-adder .CodeMirror-scroll").css('overflow', 'hidden');
 	// jQuery again! be careful with selector or move this to .css file
 
 	adder.editorNode 		 = $('.icd.icon-adder .CodeMirror')[0];
 	adder.searchBarContainer = $('.icd.icon-adder .CodeMirror-code')[0];
+	// adder.searchBarContainer.style.display = 'flex';
+
+	// --- STYLING --- \\
+	// To display apply properly
+	$(".icd.icon-adder .CodeMirror").css('display', 'flex');
+	// I don't like the current horizontal scroll bar space
+	$('.icd.icon-adder .CodeMirror-hscrollbar')[0].style['minHeight'] = '10px';
+	$('.icd.icon-adder .CodeMirror-hscrollbar')[0].style.height = '10px';
+
+	adder.sections.viewer.style.display = 'flex';
+	adder.sections.viewer.style['alignItems'] = 'flex-start';
+	adder.sections.viewer.style['justifyContent'] = 'space-between';
+	var applier 			 = thisViewer.addApply( adder.sections.viewer );
 
 	return cmEditor;
 };  // End adder.addViewer()

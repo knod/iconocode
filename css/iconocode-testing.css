@@ -9,7 +9,7 @@
 	font-size: 1rem;
 }
 
-.icd, .icd div {
+.icd, .icd div, .icd section {
 	padding: 0;
 	margin: 0;
 
@@ -324,13 +324,39 @@ but maybe we want the images to be their proper size?
 /* --------------------------------------- */
 /* --- COMMANDS --- */
 /* --------------------------------------- */
+.icd .adder-commands-container {
+	display: flex;
+	justify-content: space-between;
+	padding: 1% 2%;
+}
+
+.icd .command {
+	line-height: .85rem;
+	border-radius: 23%;
+}
+
 .icd .apply {
 	color: mediumseagreen;
-	background-color: mediumseagreen;
+	background-color: forestgreen;
+
 }
+.icd .apply:hover { color: forestgreen; background-color: mediumseagreen; }
+.icd .apply:active { color: palegreen; background-color: mediumseagreen; }
+
 .icd .exit {
 	color: tomato;
-	background-color: tomato;
+	background-color: crimson;
+
+	border-radius: 50%;
+}
+.icd .exit:hover { color: crimson; background-color: tomato; }
+.icd .exit:active { color: salmon; background-color: tomato; }
+
+/* Why does this one have a gap in its background when there's a lot of text? */
+.icd .adder-icon-viewer-container .apply {
+	margin-top: 3px;
+	/* Only with a lot of text: Weird spacing, but closes the background gap */
+	/*width: 1.3rem;*/
 }
 
 
