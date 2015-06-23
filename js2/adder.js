@@ -68,13 +68,16 @@ Should go somewhere else, not in adder.js
 };  // End adder.createPicker()
 
 
-adder.showAdder = function () {
+adder.showAdder = function ( variableName ) {
 /*
 
 Right now, no previous state is saved. Should probably add that.
 Whenever adder is shown again, it starts the process of making
 a creating a new icon (if process wasn't completed).
 */
+	// Variable name to be replaced by the icon constructed
+	adder.variableName = variableName;
+
 	// Prevent moving on to other tabs till type is selected
 	adder.typeSelected = false;
 	// Testing
