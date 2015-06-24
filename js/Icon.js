@@ -21,7 +21,7 @@ var Icon = function ( varName ) {
 	// data-id?
 	// made up of its image names perhaps? That way we can more easily tell if there's a repeat?
 	newIcon.id;
-	newIcon.tags;  // data-tags? classes?
+	newIcon.tags = [];  // data-tags? classes?
 
 	newIcon.path;  // svg path?
 	newIcon.width;
@@ -76,15 +76,35 @@ var Icon = function ( varName ) {
 	};  // End newIcon.setType()
 
 
-	newIcon.setImages 	= function ( imgNodes, parentNode ) {
+	newIcon.addTerms 	= function ( partNode ) {
+	/* 
+	* 
+	* Get the search terms on the node and add them to the icon
+	*/
+		newIcon.tags.push( $(partNode).data('terms') );
+
+		return partNode;
+	};  // End newIcon.addTerms()
+
+
+	newIcon.setImages 	= function ( partNodes, parentNode ) {
+	/* 
+	* 
+	* Gets all the parts of the icon and, using the $data 'terms',
+	* builds the icon with its search terms. Also sets the id
+	* of the icon using the image names.
+	* !!!: That's a lot for one function to do
+	*/
+		// TODO: Add way to add in the text nodes as well
 
 		// How to construct this? Use a 'name' data property in image's node
 		var imgNamesStr = '';
 		// Always a good idea to use length with node list loops
-		var numNodes 	= imgNodes.length;
+		var numNodes 	= partNodes.length;
 		for ( var nodei = 0; nodei < numNodes; nodei++ ) {
-			var $imgNode = $(imgNodes[nodei]);
+			var $imgNode = $(partNodes[nodei]);
 
+			// Deeply copy the image and add it to the icon
 			$imgNode.clone().appendTo( $(parentNode) );
 			imgNamesStr += $imgNode.data('name');
 		}

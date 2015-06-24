@@ -21,6 +21,7 @@ adder.addCommands = function ( parentNode ) {
 	* Creates, sets, and saves an icon with the given values.
 	*/
 		var iconObj = new Icon( variableName );
+		console.log(iconObj)
 		// Placeholder... Not sure this works this way anymore
 		// Need to create marker
 		iconObj.createNew( document.createDocumentFragment() );
@@ -34,7 +35,19 @@ adder.addCommands = function ( parentNode ) {
 	};  // End commands.constructIcon()
 
 
-	commands.apply = function ( variableName ) {
+	commands.getParts = function () {
+	/*
+	* 
+	* This should be able to include text as well as images
+	*/
+		var $textContainer 	= $(adder.searchBarContainer);  // created in viewer.js
+		// Gives Node array, looping is dangerous
+
+		return $textContainer.find('.icon-part');
+	};  // End commands.getParts()
+
+
+	commands.applyIcon = function () {
 	/* 
 	* 
 	* Set the icon for the given variable.
@@ -43,11 +56,39 @@ adder.addCommands = function ( parentNode ) {
 	* of the text with that icon.
 	*/
 
-		commands.constructIcon( 'testX', 'verb', [] );
-	};  // End commands.apply()
+		// Get parts of the icon to feed to the Icon object function
+		var partNodes 	= commands.getParts();
+		var purpose 	= adder.result.type;
+		var varName 	= adder.variableName;
+
+		// Create the icon
+		var iconObj 	= commands.constructIcon( varName, purpose, partNodes );
+
+		// Replace all occurances of the variable name in the text with a clone
+		// of the iconNode (CodeMirror TextMarker). For now just add it to the doc.
+		console.log( iconObj )
+		document.body.appendChild( iconObj.container );
+
+		// Set something to continue looking for any times it's added in the text?
+		// Set autocomplete stuff?
+
+		return iconObj;
+	};  // End commands.applyIcon()
+
+
+	commands.preserveText = function () {
+	/* 
+	* 
+	* Give each piece of text in the viewer a class that will allow it to
+	* be retrieved for insertion into the final icon. Give the
+	* text node a $data of 'terms' as well, made up of its contents
+	*/
+
+	};  // End commands.labelText()
 
 
 	commands.addApply = function ( parentNode, classes ) {
+		/**/
 
 		var control = document.createElement('i');
 		parentNode.appendChild( control )
@@ -55,10 +96,9 @@ adder.addCommands = function ( parentNode ) {
 		$(control).addClass( 'fa fa-check-square command' );
 		$(control).addClass( 'apply' );
 
-		control.addEventListener( 'click', function () {
-
-
-
+		control.addEventListener( 'click', function ( evnt ) {
+			// comands.preserveText()
+			commands.applyIcon();
 		} );
 
 		return control;
