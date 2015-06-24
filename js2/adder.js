@@ -3,6 +3,7 @@
 * - Change what you can type in the viewer depending on mode? Or
 * 	change to appropriate tab if text appears to be a mismatch
 * 	with mode (for example, if you're in the Types mode)
+* - At the start, make sure to select a whole word
 * 
 * 
 * Makes use of:
@@ -20,10 +21,17 @@ adder.addAdder 	= function () {
 Add the adder element
 */
 
-	var adderNode_ 		= document.createElement('div');
+	var adderNode_ 		 = document.createElement('div');
 	document.body.appendChild( adderNode_ );
-	adder.node 			= adderNode_;
+	adder.node 			 = adderNode_;
 	adderNode_.className = prefix + ' icon-adder';
+
+
+	adder.sections.commands = adder.addCommands( adderNode_ );
+	// var commandsContainer 		= document.createElement('section');
+	// adderNode_.appendChild( commandsContainer );
+	// adder.sections.commands 	= commandsContainer;
+	// commandsContainer.className = prefix + ' adder-commands-container';
 
 
 	var tabContainer 		= document.createElement('section');
@@ -68,13 +76,16 @@ Should go somewhere else, not in adder.js
 };  // End adder.createPicker()
 
 
-adder.showAdder = function () {
+adder.showAdder = function ( variableName ) {
 /*
 
 Right now, no previous state is saved. Should probably add that.
 Whenever adder is shown again, it starts the process of making
 a creating a new icon (if process wasn't completed).
 */
+	// Variable name to be replaced by the icon constructed
+	adder.variableName = variableName;
+
 	// Prevent moving on to other tabs till type is selected
 	adder.typeSelected = false;
 	// Testing

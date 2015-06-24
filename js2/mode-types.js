@@ -92,10 +92,10 @@ adder.addTypeMode = function () {
 		var typeContainer = adder.addTypeChoiceContainer( typeName, parentNode, description );
 
 		var typeIcon = new Icon( 'adder-type-choice-' + typeName );
-		typeIcon.createNew( {}, typeContainer );
-		typeIcon.setType( typeName );
+		typeIcon.createNew( typeContainer );
+		typeIcon.setType( typeName, typeIcon.container );
 		
-		var $iconBody = $(typeIcon.node).find('.icon-body')
+		var $iconBody = $(typeIcon.container).find('.icon-body')
 		// For searching, though that's not happening right now
 		$(typeContainer).data('choice', $iconBody[0] );
 		$iconBody.data('terms', [typeName]);

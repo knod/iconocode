@@ -9,7 +9,7 @@
 	font-size: 1rem;
 }
 
-.icd, .icd div {
+.icd, .icd div, .icd section {
 	padding: 0;
 	margin: 0;
 
@@ -81,25 +81,35 @@
 /* Process? */
 /* diamond is only one with different height? */
 .icd .verb .icon-body, .icd .verb.icon-body,
-.icd .CodeMirror .verb {
+.icd .CodeMirror .verb,
+.icon-container.verb {
 	background: darkolivegreen;
 }
 /* Process? */
 .icd .square .icon-body,
-.icd .CodeMirror .square {
+.icd .CodeMirror .square,
+.icon-container.square {
 	background-color: firebrick;
 }
 /* Data? */
 .icd .noun .icon-body,
-.icd .CodeMirror .noun {
+.icd .CodeMirror .noun,
+.icon-container.noun {
 	background-color: navy;
 }
 /* Message */
 .icd .message .icon-body,
-.icd .CodeMirror .message {
+.icd .CodeMirror .message,
+.icon-container.message {
 	background-color: maroon;
 }
-
+/* Because shit is messed up right now */
+.icd .icon-container.verb,
+.icd .icon-container.square,
+.icd .icon-container.noun,
+.icd .icon-container.message {
+	background: none;
+}
 
 /* =================== */
 /* ALL TABS */
@@ -144,7 +154,10 @@ be scrollable... make it position: relative?
 	border-bottom: 1px solid rgb( 150, 150, 150 );
 }
 
+
+/* --------------------------------------- */
 /* --- TABS --- */
+/* --------------------------------------- */
 /* This messes up all the spacing calculation */
 .icd .adder-mode-tabs {
 	position:static;
@@ -157,7 +170,10 @@ be scrollable... make it position: relative?
 	/*width: 50%;*/
 }
 
+
+/* --------------------------------------- */
 /* --- VIEWER --- */
+/* --------------------------------------- */
 .icd .adder-icon-viewer-container {
 	padding: .2rem .5rem 0 .5rem;
 	/* To make room for horizontal scroll bar */
@@ -177,7 +193,9 @@ be scrollable... make it position: relative?
 }
 
 
+/* --------------------------------------- */
 /* --- PICKERS --- */
+/* --------------------------------------- */
 .icd .adder-picker {
 	height: 9rem;
 	/* for some reason makes images oversized */
@@ -296,11 +314,51 @@ but maybe we want the images to be their proper size?
 
 
 
-
 /* --- COLOR PICKER --- */
 #icd_colors_picker {
 	background-color: firebrick;
 }
+
+
+
+/* --------------------------------------- */
+/* --- COMMANDS --- */
+/* --------------------------------------- */
+.icd .adder-commands-container {
+	display: flex;
+	justify-content: space-between;
+	padding: 1% 2%;
+}
+
+.icd .command {
+	line-height: .85rem;
+	border-radius: 23%;
+}
+
+.icd .apply {
+	color: mediumseagreen;
+	background-color: forestgreen;
+
+}
+.icd .apply:hover { color: forestgreen; background-color: mediumseagreen; }
+.icd .apply:active { color: palegreen; background-color: mediumseagreen; }
+
+.icd .exit {
+	color: tomato;
+	background-color: crimson;
+
+	border-radius: 50%;
+}
+.icd .exit:hover { color: crimson; background-color: tomato; }
+.icd .exit:active { color: salmon; background-color: tomato; }
+
+/* Why does this one have a gap in its background when there's a lot of text? */
+.icd .adder-icon-viewer-container .apply {
+	margin-top: 3px;
+	/* Only with a lot of text: Weird spacing, but closes the background gap */
+	/*width: 1.3rem;*/
+}
+
 
 
 /* --------------------- */
@@ -308,4 +366,9 @@ but maybe we want the images to be their proper size?
 /* --------------------- */
 .icd :focus {
 	/*border: 3px solid rgb( 0, 0, 0 ) !important;*/
+}
+
+.Icon-test {
+	max-width: 1rem;
+	max-height: 1rem;
 }
