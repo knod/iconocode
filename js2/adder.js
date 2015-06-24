@@ -3,6 +3,7 @@
 * - Change what you can type in the viewer depending on mode? Or
 * 	change to appropriate tab if text appears to be a mismatch
 * 	with mode (for example, if you're in the Types mode)
+* - At the start, make sure to select a whole word
 * 
 * 
 * Makes use of:

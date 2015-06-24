@@ -6,6 +6,8 @@
 
 'use strict'
 
+// This'll get an error at start because it's not instantiated in the right
+// order, but everything will actually work when stuff is run.
 adder.addCommands = function ( parentNode ) {
 
 	var commands = {};
@@ -71,6 +73,14 @@ adder.addCommands = function ( parentNode ) {
 
 		// Set something to continue looking for any times it's added in the text?
 		// Set autocomplete stuff?
+
+		// Maybe also check if there's a conflict? What kind of conflicts can there be?
+			/* 
+			* - That variable name already has an icon (but they're changing
+			* 	it, so just a confirmation that they want to change it?)
+			* - That set of images and text is already being used for an icon
+			* 	(no two variable names should be able to have the same exact icon?)
+			*/ 
 
 		return iconObj;
 	};  // End commands.applyIcon()

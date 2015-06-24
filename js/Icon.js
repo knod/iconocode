@@ -24,7 +24,7 @@ var Icon = function ( varName ) {
 	newIcon.tags = [];  // data-tags? classes?
 
 	newIcon.path;  // svg path?
-	newIcon.width;
+	newIcon.width;  // !!!: Don't need this if we're using markers
 	newIcon.borderColor;
 	newIcon.borderShape;
 
