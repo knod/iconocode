@@ -19,6 +19,7 @@ var adder 	= {};
 
 // Name selected for creating an icon
 adder.variableName 	= '';
+adder.originEditior = null;
 // Thing to build final icon with
 adder.result 		= { type: 'verb', imgList: [], searchTerms: [] };
 
@@ -60,7 +61,6 @@ window.addEventListener( 'load', function () {
 
 	adder.addAdder();  // adder.js
 
-
 	adder.addTypeMode();  // mode-types.js
 	adder.addImageMode();  // mode-images.js
 	// No idea how to do coloring things
@@ -73,7 +73,7 @@ window.addEventListener( 'load', function () {
 
 	// This should happen from an event, of course
 	// 'default' is there for testing
-	adder.showAdder( 'default' );  // adder.js
+	adder.showAdder( 'x', 'default' );  // adder.js
 
 
 });  // End on load ()

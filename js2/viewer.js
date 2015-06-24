@@ -148,7 +148,7 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 		{
 			mode: 			"icd", // text or text/html = cm-m-null class on span
 			value: 			"What does this variable do?",
-			theme: 			"monokai",
+			// theme: 			"monokai",
 			lineNumbers: 	false,
 			addModeClass: 	true,
 			showCursorWhenSelecting: true,

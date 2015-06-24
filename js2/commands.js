@@ -70,6 +70,8 @@ adder.addCommands = function ( parentNode ) {
 		// of the iconNode (CodeMirror TextMarker). For now just add it to the doc.
 		console.log( iconObj )
 		document.body.appendChild( iconObj.container );
+		// Regex for finding just words in js? Use codemirror tokens instead?
+
 
 		// Set something to continue looking for any times it's added in the text?
 		// Set autocomplete stuff?
