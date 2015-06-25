@@ -45,33 +45,19 @@ var IcdUpdater = function ( utils, iconMap ) {
 	// };  // End updater.changeHandler()
 
 
-	updater.markUnmarked = function ( token, lineNum, editor ) {
+	updater.markUnmarked = function ( token, lineNum, iconMap, editor ) {
 	/* 
 	* 
 	*/
-		var tokenStart = { line: lineNum, ch: token.start  };
+		var tokenStart 	= { line: lineNum, ch: token.start  };
 
-		var markArray = editor.findMarksAt( tokenStart )
+		var markArray 	= editor.findMarksAt( tokenStart ),
+			mark 		= null;
 		// console.log(markArray)
 		// Need a better test in case there are other marks there
 		if ( markArray.length === 0 ) {
-
-			markVar( token, lineNum, iconMap, editor );
-
-			// var iconObj = getVarIcon( token.string, iconMap );
-			// var nodeClone = $(iconObj.container).clone()[0];
-
-			// var tokenEnd = { line: lineNum, ch: token.end };
-
-			// // --- PLACE MARKER --- \\
-			// var mark = editor.markText( tokenStart, tokenEnd,
-			// 	// I don't think classname matters when using 'replaceWith'
-			// 	{className: 'iconated', replacedWith: nodeClone
-			// 		, handleMouseEvents: 	true // think I will need this
-			// 		, addToHistory: 		true
-			// 	}
-			// );
-
+			// Actually mark the variable's token
+			mark = markVar( token, lineNum, iconMap, editor );
 		}
 
 		return mark;
@@ -100,7 +86,7 @@ var IcdUpdater = function ( utils, iconMap ) {
 		// If the user's just moved out of a variable token
 		if ( (currType !== oldType) && (oldType === 'variable') ) {
 			// Mark the text with an icon, hiding the visible text (if not already)
-			updater.markUnmarked( oldToken_, updater.oldCursorPos.line, edInstance )
+			updater.markUnmarked( oldToken_, updater.oldCursorPos.line, iconMap, edInstance )
 
 		}
 

@@ -53,6 +53,7 @@ var IcdUtils = function () {
 			}
 		);
 
+		return mark;
 	};  // End newUtils.markVar()
 
 

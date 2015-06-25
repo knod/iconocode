@@ -11,7 +11,7 @@
 // =====================
 var IcdMap = function () {
 
-	var icdMap = {}
+	var icdMap = {};
 
 	var iconTest1  	= new Icon( 'test2' );
 	iconTest1.createNew( document.body );
