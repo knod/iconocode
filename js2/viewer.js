@@ -221,6 +221,7 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// jQuery again! be careful with selector or move this to .css file
 
 	adder.editorNode 		 = $('.icd.icon-adder .CodeMirror')[0];
+	// TODO: Try this: adder.editorNode = cmEditor.getWrapperElement();
 	adder.searchBarContainer = $('.icd.icon-adder .CodeMirror-code')[0];
 	// adder.searchBarContainer.style.display = 'flex';
 

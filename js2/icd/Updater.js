@@ -17,9 +17,11 @@ var IcdUpdater = function ( utils, iconMap ) {
 
 	// Values for the first test
 	updater.oldToken 		= { type: null };
+	updater.oldCursorPos 	= { line: null, ch: null };
 
 	// Needs varName, mapObj
-	var getVarIcon = utils.getVarIcon;
+	var getVarIcon 	= utils.getVarIcon;
+	var markVar 	= utils.markVar;
 
 	// updater.changeHandler = function ( evnt ) {
 		// /* 
@@ -43,6 +45,39 @@ var IcdUpdater = function ( utils, iconMap ) {
 	// };  // End updater.changeHandler()
 
 
+	updater.markUnmarked = function ( token, lineNum, editor ) {
+	/* 
+	* 
+	*/
+		var tokenStart = { line: lineNum, ch: token.start  };
+
+		var markArray = editor.findMarksAt( tokenStart )
+		// console.log(markArray)
+		// Need a better test in case there are other marks there
+		if ( markArray.length === 0 ) {
+
+			markVar( token, lineNum, iconMap, editor );
+
+			// var iconObj = getVarIcon( token.string, iconMap );
+			// var nodeClone = $(iconObj.container).clone()[0];
+
+			// var tokenEnd = { line: lineNum, ch: token.end };
+
+			// // --- PLACE MARKER --- \\
+			// var mark = editor.markText( tokenStart, tokenEnd,
+			// 	// I don't think classname matters when using 'replaceWith'
+			// 	{className: 'iconated', replacedWith: nodeClone
+			// 		, handleMouseEvents: 	true // think I will need this
+			// 		, addToHistory: 		true
+			// 	}
+			// );
+
+		}
+
+		return mark;
+	};  // End updater.markUnmarked()
+
+
 	updater.cursorMovementHandler = function ( edInstance ) {
 	/* ( CodeMirror ) -> ??
 	* 
@@ -53,30 +88,24 @@ var IcdUpdater = function ( utils, iconMap ) {
 	* 	cursor, as when they've first opened the editor
 	*/
 		console.log('cursor moved')
-		var cursorPos 	= edInstance.getCursor();
+		var currCursorPos 	= edInstance.getCursor();
 		// The old token needs to be a variable type
 		var oldToken_ 	= updater.oldToken,
-			oldType_ 	= oldToken_.type;
+			oldType 	= oldToken_.type;
 
 		// Get type of token and text of token
-		var currToken 	= edInstance.getTokenAt( cursorPos ),
+		var currToken 	= edInstance.getTokenAt( currCursorPos ),
 			currType 	= currToken.type;
 
 		// If the user's just moved out of a variable token
-		if ( (currType !== oldType_) && (oldType_ === 'variable') ) {
-			
-			var markArray = edInstance.findMarksAt( {line: 0, ch: oldToken_.start  } )
-			// console.log(markArray)
-			// Need a better test in case there are other marks there
-			if ( markArray.length === 0 ) {
-
-				var iconObj = getVarIcon( oldToken_.string, iconMap );
-				console.log(iconObj);
-			}
+		if ( (currType !== oldType) && (oldType === 'variable') ) {
+			// Mark the text with an icon, hiding the visible text (if not already)
+			updater.markUnmarked( oldToken_, updater.oldCursorPos.line, edInstance )
 
 		}
 
-		updater.oldToken = currToken;
+		updater.oldToken 		= currToken;
+		updater.oldCursorPos 	= currCursorPos;
 
 		return true;
 	};  // End updater.cursorMovementHandler()

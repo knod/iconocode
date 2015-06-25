@@ -18,9 +18,10 @@ var Iconocode = function () {
 
 	var icd = {};
 
+	icd.map = new IcdMap();
+
 	icd.utils = new IcdUtils();
 
-	icd.map = new IcdMap();
 	icd.adder = {};  // Must integrate main start.js with this
 	icd.updater = new IcdUpdater( icd.utils, icd.map );
 
