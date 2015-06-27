@@ -148,7 +148,7 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 		{
 			mode: 			"icd", // text or text/html = cm-m-null class on span
 			value: 			"What does this variable do?",
-			theme: 			"monokai",
+			// theme: 			"monokai",
 			lineNumbers: 	false,
 			addModeClass: 	true,
 			showCursorWhenSelecting: true,
@@ -221,6 +221,7 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// jQuery again! be careful with selector or move this to .css file
 
 	adder.editorNode 		 = $('.icd.icon-adder .CodeMirror')[0];
+	// TODO: Try this: adder.editorNode = cmEditor.getWrapperElement();
 	adder.searchBarContainer = $('.icd.icon-adder .CodeMirror-code')[0];
 	// adder.searchBarContainer.style.display = 'flex';
 

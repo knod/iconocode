@@ -4,7 +4,13 @@
 * 	change to appropriate tab if text appears to be a mismatch
 * 	with mode (for example, if you're in the Types mode)
 * - At the start, make sure to select a whole word
-* 
+* - Make sure the selected text isn't nothing
+* 	??: How to do that when cursor is at the start of a token? (
+* 		getting token at cursor when at start, will not get the
+* 		following token)
+* 	??: How to get the word under a right click?
+* 		Check: resetSelectionOnContextMenu in manual, though I
+* 			don't really like that behavior.
 * 
 * Makes use of:
 * adder.sections 	= { tabs: null, viewer: null, pickers: null };
@@ -76,15 +82,32 @@ Should go somewhere else, not in adder.js
 };  // End adder.createPicker()
 
 
-adder.showAdder = function ( variableName ) {
-/*
-
-Right now, no previous state is saved. Should probably add that.
-Whenever adder is shown again, it starts the process of making
-a creating a new icon (if process wasn't completed).
+adder.showAdder = function ( edInst, iconMap ) {
+/* 
+* 
+* Right now, no previous state is saved. Should probably add that.
+* Whenever adder is shown again, it starts the process of making
+* a creating a new icon (if process wasn't completed).
+* 
+* adder.result 		= {
+* 	// Icon stuff created in adder
+* 	type: 'verb', imgList: [], searchTerms: [],
+* 	// Token stuff brought in from outside
+* 	token: null, lineNum: null, iconMap: null, editor: null
+* };
 */
+	// Get all external data needed from cursorPosition
+	var cursorPos 	= edInst.getCursor();
+
+	var result_ 	= adder.result;
+	console.log(result_);
+	result_.editor	= edInst;
+	result_.lineNum = cursorPos.line;
+	result_.token 	= edInst.getTokenAt( cursorPos );
+	result_.iconMap = iconMap;
 	// Variable name to be replaced by the icon constructed
-	adder.variableName = variableName;
+	result_.varName = result_.token.string;
+	// adder.variableName = token.string;
 
 	// Prevent moving on to other tabs till type is selected
 	adder.typeSelected = false;

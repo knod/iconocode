@@ -23,7 +23,7 @@ adder.addCommands = function ( parentNode ) {
 	* Creates, sets, and saves an icon with the given values.
 	*/
 		var iconObj = new Icon( variableName );
-		console.log(iconObj)
+
 		// Placeholder... Not sure this works this way anymore
 		// Need to create marker
 		iconObj.createNew( document.createDocumentFragment() );
@@ -57,19 +57,22 @@ adder.addCommands = function ( parentNode ) {
 	* element with the variable name's text. Replace any occurances
 	* of the text with that icon.
 	*/
+		var result_ = adder.result;
 
 		// Get parts of the icon to feed to the Icon object function
 		var partNodes 	= commands.getParts();
-		var purpose 	= adder.result.type;
-		var varName 	= adder.variableName;
+		var purpose 	= result_.type;
+		var varName 	= result_.token.string;
 
 		// Create the icon
 		var iconObj 	= commands.constructIcon( varName, purpose, partNodes );
 
 		// Replace all occurances of the variable name in the text with a clone
 		// of the iconNode (CodeMirror TextMarker). For now just add it to the doc.
-		console.log( iconObj )
-		document.body.appendChild( iconObj.container );
+				// console.log( iconObj )
+				// document.body.appendChild( iconObj.container );
+		// Regex for finding just words in js? Use codemirror tokens instead?
+
 
 		// Set something to continue looking for any times it's added in the text?
 		// Set autocomplete stuff?
@@ -80,7 +83,11 @@ adder.addCommands = function ( parentNode ) {
 			* 	it, so just a confirmation that they want to change it?)
 			* - That set of images and text is already being used for an icon
 			* 	(no two variable names should be able to have the same exact icon?)
-			*/ 
+			*/
+
+		// !!!: currently using global, need local
+		// Takes: token, lineNum, iconMap, editor
+		icd.utils.markVar( result_.token, result_.lineNum, result_.iconMap, result_.editor  );
 
 		return iconObj;
 	};  // End commands.applyIcon()

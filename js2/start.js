@@ -17,10 +17,19 @@ var prefix 	= 'icd';
 
 var adder 	= {};
 
-// Name selected for creating an icon
-adder.variableName 	= '';
+// // Name selected for creating an icon
+// adder.variableName 	= '';
+// adder.originEditior = null;
+
 // Thing to build final icon with
-adder.result 		= { type: 'verb', imgList: [], searchTerms: [] };
+adder.result 		= {
+	// Icon stuff created in adder
+	type: 'verb', imgList: [], searchTerms: [],
+	// Token stuff brought in from outside
+	varName: '', token: null, lineNum: null, iconMap: null, editor: null
+};
+// Fed in from outside, I think?
+adder.utils 		= null;
 
 // State
 adder.typeSelected 	= false;
@@ -60,7 +69,6 @@ window.addEventListener( 'load', function () {
 
 	adder.addAdder();  // adder.js
 
-
 	adder.addTypeMode();  // mode-types.js
 	adder.addImageMode();  // mode-images.js
 	// No idea how to do coloring things
@@ -71,9 +79,9 @@ window.addEventListener( 'load', function () {
 	// Has to be after others I think
 	adder.addViewer( adder.sections.viewer );
 
-	// This should happen from an event, of course
-	// 'default' is there for testing
-	adder.showAdder( 'default' );  // adder.js
+	// // This should happen from an event, of course
+	// // 'default' is there for testing
+	// adder.showAdder( 'default', 'x' );  // adder.js
 
 
 });  // End on load ()

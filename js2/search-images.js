@@ -133,7 +133,6 @@ adder.runSearch 		= function ( choiceContainers ) {
 	var cmEditor = adder.viewer;
 
 	// Get the text in the current token
-	cmEditor.getCursor()
 	var token = cmEditor.getTokenAt( cmEditor.getCursor() );
 
 console.log('------------')
