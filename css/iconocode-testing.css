@@ -5,10 +5,6 @@
 
 /*iconocode.css*/
 
-.icd {
-	font-size: 1rem;
-}
-
 .icd, .icd div, .icd section {
 	padding: 0;
 	margin: 0;
@@ -51,6 +47,10 @@
 	background-color: rgb( 165, 165, 165 );
 }
 
+
+/* ================== */
+/* ICON */
+/* ================== */
 .icd .icon-container .icon-body {
 	position: relative;
 	margin: 0 auto;
@@ -65,10 +65,7 @@
 	border: none;
 }
 
-
-/* ================== */
 /* SHAPES */
-/* ================== */
 .icd .before-icon-body,
 .icd .after-icon-body {
 	width: 0;
@@ -82,6 +79,7 @@
 /* diamond is only one with different height? */
 .icd .verb .icon-body, .icd .verb.icon-body,
 .icd .CodeMirror .verb,
+/* For testing */
 .icon-container.verb {
 	background: darkolivegreen;
 }
@@ -110,6 +108,19 @@
 .icd .icon-container.message {
 	background: none;
 }
+
+/* MOUSEOVER TEXT */
+.icd .variable-name {
+	/*display: block;*/
+	display: none;
+	position: absolute;
+	
+	padding: 0 .2rem;
+	background-color: rgb(255, 255, 255);
+	text-shadow: none;
+	color: black;
+}
+
 
 /* =================== */
 /* ALL TABS */
@@ -145,6 +156,7 @@ be scrollable... make it position: relative?
 	background-color: rgb( 200, 200, 200 );
 	border-right: 1px solid rgb( 150, 150, 150 );
 	border-left: 1px solid rgb( 150, 150, 150 );
+	font-size: 1rem
 }
 
 .icd.icon-adder section {

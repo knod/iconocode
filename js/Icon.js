@@ -18,6 +18,7 @@ var Icon = function ( varName ) {
 
 	newIcon.container 	= null;
 	newIcon.body 		= null;
+	newIcon.mouseoverNode = null;
 	// data-id?
 	// made up of its image names perhaps? That way we can more easily tell if there's a repeat?
 	newIcon.id;
@@ -80,6 +81,8 @@ var Icon = function ( varName ) {
 	/* 
 	* 
 	* Get the search terms on the node and add them to the icon
+	* TODO: Just do newIcon.tags = someList; List will be
+	* 	constructed elsewhere
 	*/
 		newIcon.tags.push( $(partNode).data('terms') );
 
@@ -205,6 +208,24 @@ var Icon = function ( varName ) {
 	};
 
 
+	newIcon.addNameText = function ( varName, parentNode ) {
+	/*
+	* 
+	* Add text that will show when the icon is moused over
+	*/
+		var nameContainer 	= document.createElement( 'div' );
+		parentNode.appendChild( nameContainer );
+		newIcon.mouseoverNode = nameContainer;
+
+		$(nameContainer).addClass( 'variable-name' );
+
+		var nameText 		= document.createTextNode( varName );
+		nameContainer.appendChild( nameText );
+
+		return nameContainer;
+	};  // End newIcon.addNameText()
+
+
 	newIcon.createNew 	= function ( parentNode ) {
 	/* 
 	* 
@@ -241,12 +262,52 @@ var Icon = function ( varName ) {
 		hider2.appendChild(after);
 		after.className  = prefix + ' after-icon-body';
 
+
+		// --- Mouseover text --- \\		
+		newIcon.addNameText( varName, container );
+
 		return container;
 	};  // End newIcon.create()
 
 	return newIcon;
 };  // End Icon {}
 
+
+// --- MOUSEOVER ICON --- \\
+// TODO: put this somewhere sensical
+var iconMouseoverHandler = function ( mouseoverNode ) {
+/* 
+* 
+*/
+	mouseoverNode.style.display = 'block';
+};  // End iconMouseoverHandler()
+
+var iconMouseoutHandler  = function ( mouseoverNode ) {
+/* 
+* 
+*/
+	mouseoverNode.style.display = 'none';
+};  // End iconMouseoutHandler()
+
+document.addEventListener( 'mouseover', function (evnt) {
+
+	var $closestCont = $(evnt.target).closest( '.icon-container' )
+
+	if ( $closestCont[0] !== undefined ) {
+		var nameCont = $closestCont.find( '.variable-name' )[0]
+		iconMouseoverHandler( nameCont );
+	}
+} );
+
+document.addEventListener( 'mouseout', function (evnt) {
+
+	var $closestCont = $(evnt.target).closest( '.icon-container' )
+
+	if ( $closestCont[0] !== undefined ) {
+		var nameCont = $closestCont.find( '.variable-name' )[0]
+		iconMouseoutHandler( nameCont );
+	}
+} );
 
 
 // TESTING
