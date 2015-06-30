@@ -351,12 +351,12 @@ but maybe we want the images to be their proper size?
 .icd .command {
 	line-height: .85rem;
 	border-radius: 23%;
+	min-width: 0.75rem; min-height: 0.75rem;
 }
 
 .icd .apply {
 	color: mediumseagreen;
 	background-color: forestgreen;
-
 }
 .icd .apply:hover { color: forestgreen; background-color: mediumseagreen; }
 .icd .apply:active { color: palegreen; background-color: mediumseagreen; }

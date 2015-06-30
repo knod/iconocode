@@ -28,7 +28,6 @@ adder.addCommands = function ( parentNode ) {
 		// Need to create marker
 		iconObj.createNew( document.createDocumentFragment() );
 		iconObj.setType( purpose , iconObj.container );
-
 		iconObj.setImages( imageNodes, iconObj.body );
 
 		iconObj.save( icd.map );

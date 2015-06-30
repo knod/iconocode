@@ -67,6 +67,10 @@ adder.addImageMode 	= function () {
 		var filePath 	 = $(imgNode).attr('src');
 		newNode.src 	 = filePath;
 
+		// Add data (terms and name, I think)
+		$(newNode).data('terms', $(imgNode).data('terms'));
+		$(newNode).data('name', $(imgNode).data('name'));
+
 		// ===================
 		// EDITOR CONTENTS
 		// ===================

@@ -1,6 +1,8 @@
 /* icon-map.js
 * 
-* 
+* TODO:
+* - Make icons deletable
+* - Make icons editable
 * 
 */
 

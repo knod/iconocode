@@ -73,7 +73,7 @@ var IcdUpdater = function ( utils, iconMap ) {
 	* ??: How to handle if user wants to add an icon, but hasn't moved the
 	* 	cursor, as when they've first opened the editor
 	*/
-		console.log('cursor moved')
+		// console.log('cursor moved')
 		var currCursorPos 	= edInstance.getCursor();
 		// The old token needs to be a variable type
 		var oldToken_ 	= updater.oldToken,
