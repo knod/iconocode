@@ -17,25 +17,41 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 	Adds the list that all the search terms will be added to
 	It's a list because later we'll show query matches there and
 	they'll be a list too.
+
+	imgObj should already have its .searchTerms property filled in
 	*/
 		var tagContainer 		= document.createElement('div');
 		parentNode.appendChild( tagContainer );
-		tagContainer.className 	= 'image-tag-list-container';
+		tagContainer.className 	= 'image-tag-list-container icd-tag-list-container';
 
-		var list 		= document.createElement('ol');
-		tagContainer.appendChild( list );
-		list.className 	= 'image-tag-list';
-		$(list).addClass('icd-choice-tag-list')
-		list.style.position = 'absolute';
+		var tagList 		= document.createElement('ol');
+		tagContainer.appendChild( tagList );
+		tagList.className 	= 'image-tag-list';
+		$(tagList).addClass('icd-choice-tag-list')
+		tagList.style.position = 'absolute';
 
-		var listItem 	= document.createElement('li');
-		list.appendChild( listItem );
-		listItem.className = 'image-tag';
+		// Add all the search terms in a list
+		var searchTerms = imgObj.searchTerms;
+		for ( var termi = 0; termi < searchTerms.length; termi++ ) {
 
-		var firstTerm 	= document.createTextNode( imgObj.searchTerms[0] );
-		listItem.appendChild( firstTerm );
 
-		return list;
+			var listItem 	= document.createElement('li');
+			tagList.appendChild( listItem );
+			listItem.className = 'image-tag';
+
+			var term = document.createTextNode( searchTerms[ termi ] )
+			listItem.appendChild( term );
+
+		}
+
+
+		// Hide them to start with
+		// tagContainer.style.display = 'none';
+
+		// // var firstTerm 	= document.createTextNode( imgObj.searchTerms[0] );
+		// listItem.appendChild( firstTerm );
+
+		return tagContainer;
 	};  // End imgChoice.addImgTagList()
 
 
@@ -61,6 +77,8 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		// --- CONTAINER --- \\
 		var imgContainer 		= document.createElement('div');
 		parentNode.appendChild( imgContainer );
+		imgChoice.node = imgContainer;
+
 		imgContainer.className 	= 'image-choice-container';
 		$(imgContainer).addClass( 'icd-choice-container' );
 
@@ -85,9 +103,11 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		});
 
 		// --- TERM LIST --- \\
-		imgChoice.addImgTagList( imgObj, imgContainer )
+		imgChoice.addImgTagList( imgObj, imgContainer );
 
-		imgChoice.node = imgContainer;
+		// If image is selected, show list of tags
+			// In css
+
 		return imgNode;
 	}  // End adder.addChoice()
 
