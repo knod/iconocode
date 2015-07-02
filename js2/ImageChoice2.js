@@ -34,7 +34,6 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		var searchTerms = imgObj.searchTerms;
 		for ( var termi = 0; termi < searchTerms.length; termi++ ) {
 
-
 			var listItem 	= document.createElement('li');
 			tagList.appendChild( listItem );
 			listItem.className = 'image-tag';

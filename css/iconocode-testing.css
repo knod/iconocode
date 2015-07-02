@@ -49,13 +49,79 @@
 
 
 /* ================== */
-/* ICON */
+/* ICON (!!! Moved to purposes/purposes.css !!!) */
 /* ================== */
+
+/* !!! SHAPE EXPERIMENT */
+/* Starting point: http://jsfiddle.net/2az358rq/5/ */
+	.icd.icon-container {
+		border: none;
+		padding: 0px 7px;
+		vertical-align: middle;
+	}
+
+	.icd.icon-container .icon-body {
+		position: relative;
+		margin: 0 auto;
+
+		/*height: 100%;*/
+		height: 1.3rem;
+		/*min-width: 3rem;*/
+		border: 2px solid rgb( 220, 220, 220);
+		background-color: rgba(0, 0, 0, 0); 
+		border-left: none;
+		border-right: none;
+		/*width:300px;*/
+	}
+
+	/* ================== */
+	/* SHAPES */
+	/* ================== */
+	.icon-container.verb .icon-body::before,
+	.icon-container.verb .icon-body::after {
+		content: '';
+		border: 2px solid rgb( 220, 220, 220);
+		border-top: none;
+		border-right: none;
+		/* Height and width based on body/container height? */
+		height: calc(1.2rem/1.55);
+		width: calc(1.2rem/1.55);
+		/* margin-top: 50%; */
+		display: inline-block;
+		/* vertical-align: middle; */
+
+		position: absolute;
+		top: 7%;
+	}
+
+/* !!! This isn't showing up in chrome at all, though it works if I do it manually in there */
+	.adder-picker .icon-container.verb .icon-body::before,
+	.adder-picker .icon-container.verb .icon-body::after, {
+	  /* Height and width based on body/container height? */
+	  	/* Height in .icd .type-choice-container .icon-body: height: calc(1.3rem * 2); */
+	  height: calc(2.6rem/1.55);
+	  width: calc(2.6rem/1.55);
+	  margin-top:-6px;
+	}
+
+	.icon-container.verb .icon-body::before {
+		transform: rotate(45deg);
+		/*margin-right:-18px;*/
+		left: -7px;
+	}
+	.icon-container.verb .icon-body::after {
+		/*margin-left:-18px;*/
+		transform: rotate(-135deg);
+		right: -7px;
+	}
+/* !!! END SHAPE EXPERIMENT */
+
+
 .icd .icon-container .icon-body {
 	position: relative;
 	margin: 0 auto;
 
-	height: 1.2rem;
+	/*height: 1.2rem;*/
 	min-width: 1.5rem;
 }
 
@@ -81,7 +147,7 @@
 .icd .CodeMirror .verb,
 /* For testing */
 .icon-container.verb {
-	background: darkolivegreen;
+	/*background: darkolivegreen;*/
 }
 /* Process? */
 .icd .square .icon-body,
@@ -242,7 +308,7 @@ be scrollable... make it position: relative?
 	margin-top: .7rem;
 }
 .icd .type-choice-container .icon-body {
-	height: calc(1.2rem * 2);
+	height: calc(1.3rem * 2);
 	min-width: calc(1.5rem * 2);
 }
 
@@ -398,7 +464,9 @@ Can't use position absolute for other reasons
 */
 .icon-part {
 /* Inheriting and 100% don't work */
-	max-height: 1.3rem;
+	/*max-height: 1.3rem;*/
+	/* !!! FOR BORDER EXPERIMENT */
+	max-height: 1.05rem;
 }
 .CodeMirror .icon-container {
 	height: 1.3rem;

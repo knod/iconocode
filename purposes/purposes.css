@@ -1,0 +1,39 @@
+/*purposes.css*/
+
+.icd.svg-test.icon-container {
+	position: relative;
+	/* How to make height match editor line height? */
+	height: 1.3rem;
+	min-width: 5rem;
+	width: 3rem;
+
+	/* Make border invisible later */
+	/* border: 2px solid rgba(200, 150, 150, 1); */
+	padding: 0;
+	overflow: visible;
+}
+
+.icd.svg-test .part {
+	height: 100%;
+	float: left;
+}
+
+.icd.svg-test .part.left, .icd .part.right { width: 5px }
+.icd.svg-test .part.center{ width: calc(100% - 10px) }
+
+.icd.svg-test.icon-container svg { overflow: visible; }
+
+.icd.svg-test.icon-container path {
+	stroke-width: 8px;
+	stroke: black;
+	fill: none;
+	stroke-linejoin: round;
+	shape-rendering: auto;
+}
+
+.icd.svg-test.icon-container line {
+	stroke-width: 4px;
+	stroke: black;
+}
+
+
