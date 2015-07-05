@@ -55,35 +55,203 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 
 	</section>
 
+<br>
 
 <!-- Wut?! http://codepen.io/anon/pen/YXeVRd -->
 <!-- closer http://codepen.io/anon/pen/YXeVRd?editors=110 -->
-<!-- Yes! http://codepen.io/anon/pen/gpvvWZ?editors=110 (Also check this: http://metaskills.net/2014/08/29/dynamic-svgs-using-defs-elements-and-javascript/) -->
+<!-- Yes! http://codepen.io/anon/pen/mJXjmd?editors=110 (Also check this: http://metaskills.net/2014/08/29/dynamic-svgs-using-defs-elements-and-javascript/ to see if it can help) -->
+<!-- Actually, this is better I think: http://codepen.io/anon/pen/bdvGzW?editors=110 -->
+
+<!-- I noticed that f's, like at the end of 'stuff
+ can cause a gap between the center part of the shape and the right end of the shape, so I added lines to
+ the beginning and ends of the right-side paths to
+ match the horizontal line of the center bit to cover
+ any gap that may happen. Did it to the left side as well just in case. -->
+
+<!-- Not sure how to make the noun's curve thing look
+  better, and I still don't like how f's look at the end of a line. I guess I'll just hope no one uses nouns or f's? :/ -->
+<h2>Extended Lines to Cover Inconsistent Gaps</h2>
+<!-- VERB -->
 <div class="svg-test icd icon-container verb">
 
   <div class='part side left'>
     <!-- Apparently these svg properties can't be done with css -->
-    <svg width='5px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <svg width='8px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
       <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
-      <path d='m 100 0, l-100 50, l100 50' />
+      <path d='M 110 0, L100 0, L0 50, L100 100, L110 100' />
     </svg>
   </div>
 
   <div class='part center'>
     <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <line x1="0" y1="0" x2="101" y2="0"/>
-      <line x1="0" y1="100" x2="101" y2="100"/>
+      <line x1="0" y1="0" x2="100%" y2="0"/>
+      <line x1="0" y1="100%" x2="100%" y2="100%"/>
     </svg>
+    
+    <div class='contents'>some stuff and things and other stuff and things and stuff</div>
   </div>
 
   <div class='part right'>
-    <svg width='5px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <svg width='8px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
       <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
-      <path d='m 0 0, l100 50, l-100 50' />
+      <path d='M -10 0, L 0 0, L100 50, L0 100, L-10 100' />
     </svg>
   </div>
 
 </div>
+
+<!-- NOUN -->
+<div class="svg-test icd icon-container noun">
+
+  <div class='part side left'>
+    <!-- Apparently these svg properties can't be done with css -->
+    <svg width='15px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end -->
+      <path d='m 110 0, L 100 0, A 50, 50, 0 0 0 100, 100, L110 100' />
+    </svg>
+  </div>
+
+  <div class='part center'>
+    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <line x1="0" y1="0" x2="100%" y2="0"/>
+      <line x1="0" y1="100" x2="100%" y2="100"/>
+    </svg>
+    <!-- arcs don't seem to have the same trouble with f's at the end here, but it's still a problem on the actual page -->
+    <div class='contents'>some noun stuff and things ff</div>
+  </div>
+
+  <div class='part right'>
+    <svg width='15px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end -->
+      <path d='m -10 0, L 0 0, A 50, 50, 0 0 1 0, 100, L -10 100' />
+    </svg>
+  </div>
+
+</div>
+
+<!-- MESSAGE (or meta, as some call it) -->
+<div class="svg-test icd icon-container message">
+
+  <div class='part side left'>
+    <!-- Apparently these svg properties can't be done with css -->
+    <svg width='10px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
+      <path d='m 110 0, L 100 0 L 0 100, L 110 100' />
+    </svg>
+  </div>
+
+  <div class='part center'>
+    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <line x1="0" y1="0" x2="100%" y2="0"/>
+      <line x1="0" y1="100" x2="100%" y2="100"/>
+    </svg>
+    
+    <div class='contents'>some message stuff this time and stuff</div>
+  </div>
+
+  <div class='part right'>
+    <svg width='10px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
+      <path d='m -10 0, L 0 0, L 100 100, L -10 100' />
+    </svg>
+  </div>
+
+</div>
+
+<br>
+<br>
+
+<!-- No extended lines -->
+<h2>No Extended Lines</h2>
+<!-- VERB -->
+<div class="svg-test icd icon-container verb">
+
+  <div class='part side left'>
+    <!-- Apparently these svg properties can't be done with css -->
+    <svg width='8px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
+      <path d='M 100 0, L0 50, L100 100' />
+    </svg>
+  </div>
+
+  <div class='part center'>
+    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <line x1="0" y1="0" x2="100%" y2="0"/>
+      <line x1="0" y1="100%" x2="100%" y2="100%"/>
+    </svg>
+    
+    <div class='contents'>some stuff and things and other stuff and things and stuff</div>
+  </div>
+
+  <div class='part right'>
+    <svg width='8px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
+      <path d='M 0 0, L100 50, L0 100' />
+    </svg>
+  </div>
+
+</div>
+
+<!-- NOUN -->
+<div class="svg-test icd icon-container noun">
+
+  <div class='part side left'>
+    <!-- Apparently these svg properties can't be done with css -->
+    <svg width='15px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end -->
+      <path d='m 100 0, A 50, 50, 0 0 0 100, 100' />
+    </svg>
+  </div>
+
+  <div class='part center'>
+    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <line x1="0" y1="0" x2="100%" y2="0"/>
+      <line x1="0" y1="100" x2="100%" y2="100"/>
+    </svg>
+    <!-- arcs don't seem to have the same trouble with f's at the end here, but it's still a problem on the actual page -->
+    <div class='contents'>some noun stuff and things ff</div>
+  </div>
+
+  <div class='part right'>
+    <svg width='15px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end -->
+      <path d='m 0 0, A 50, 50, 0 0 1 0, 100' />
+    </svg>
+  </div>
+
+</div>
+
+<!-- MESSAGE (or meta, as some call it) -->
+<div class="svg-test icd icon-container message">
+
+  <div class='part side left'>
+    <!-- Apparently these svg properties can't be done with css -->
+    <svg width='10px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
+      <path d='m 100 0 L 0 100, L 100 100' />
+    </svg>
+  </div>
+
+  <div class='part center'>
+    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <line x1="0" y1="0" x2="100%" y2="0"/>
+      <line x1="0" y1="100" x2="100%" y2="100"/>
+    </svg>
+    
+    <div class='contents'>some message stuff this time and stuff</div>
+  </div>
+
+  <div class='part right'>
+    <svg width='10px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
+      <path d='m 0 0, L 100 100, L 0 100' />
+    </svg>
+  </div>
+
+</div>
+
+<br>
+
 
 	<!-- <div class="icd icon-side-hider"><div class="icd before-icon-body"></div></div><div class="icd icon-body"><img class="icon-part" src="./images/542px-Pacman.svg.png"></div><div class="icd icon-side-hider"><div class="icd after-icon-body"></div></div><div class="variable-name" style="display: none;">a</div></div> -->
 

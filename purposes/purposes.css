@@ -1,39 +1,90 @@
 /*purposes.css*/
 
-.icd.svg-test.icon-container {
+/*.icd div { box-sizing: border-box; margin: 0; padding: 0; }*/
+
+/* ================ */
+/* REGULAR HTML */
+/* ================ */
+.icd.icon-container {
 	position: relative;
 	/* How to make height match editor line height? */
 	height: 1.3rem;
-	min-width: 5rem;
-	width: 3rem;
-
-	/* Make border invisible later */
-	/* border: 2px solid rgba(200, 150, 150, 1); */
+	min-width: 2rem;
+	width: auto;
+	display: inline-block;
 	padding: 0;
-	overflow: visible;
 }
 
-.icd.svg-test .part {
-	height: 100%;
-	float: left;
+.icd.icon-container .center {
+	display: flex;
+	align-items: center;
 }
 
-.icd.svg-test .part.left, .icd .part.right { width: 5px }
-.icd.svg-test .part.center{ width: calc(100% - 10px) }
-
-.icd.svg-test.icon-container svg { overflow: visible; }
-
-.icd.svg-test.icon-container path {
-	stroke-width: 8px;
-	stroke: black;
-	fill: none;
-	stroke-linejoin: round;
-	shape-rendering: auto;
+.icd .part {
+  /* for pos: abs svg child */
+  position: relative;
+  height: 100%;
+  float: left;
 }
 
-.icd.svg-test.icon-container line {
-	stroke-width: 4px;
-	stroke: black;
+/* ================ */
+/* SVG BITS */
+/* ================ */
+.icd.icon-container svg {
+  overflow: visible;
+  position: absolute;
+  left: 0;
+}
+
+.icd path {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1px;
+  stroke: black;
+  fill: none;
+  stroke-linejoin: round;
+  shape-rendering: auto;
+  stroke-alignment: inner; /* for the future! */
+}
+
+.icd.icon-container line {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1px;
+  stroke: black;
+  stroke-alignment: inner; /* for the future! */
+}
+
+
+/* ================ */
+/* SHAPES */
+/* ================ */
+/* -- VERB -- */
+.icd.verb .part.left,
+.icd.verb .part.right {
+  width: 8px
+}
+.icd.icon-container.verb .center {
+	padding: 0;
+	width: calc(100% - 16px)
+}
+
+/* -- NOUN -- */
+.icd.noun .part.left,
+.icd.noun .part.right {
+  width: 15px
+}
+.icd.icon-container.noun .center {
+	padding: 0;
+	width: calc(100% - 30px)
+}
+
+/* -- MESSAGE/META -- */
+.icd.message .part.left,
+.icd.message .part.right {
+  width: 10px
+}
+.icd.icon-container.message .center {
+	padding: 0;
+	width: calc(100% - 20px)
 }
 
 

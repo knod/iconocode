@@ -159,13 +159,13 @@
 .icd .noun .icon-body,
 .icd .CodeMirror .noun,
 .icon-container.noun {
-	background-color: navy;
+	/*background-color: navy;*/
 }
 /* Message */
 .icd .message .icon-body,
 .icd .CodeMirror .message,
 .icon-container.message {
-	background-color: maroon;
+	/*background-color: maroon;*/
 }
 /* Because shit is messed up right now */
 .icd .icon-container.verb,
