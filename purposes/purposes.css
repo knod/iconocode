@@ -20,7 +20,7 @@
 	align-items: center;
 }
 
-.icd .part {
+.icd.icon-container .shape-part {
   /* for pos: abs svg child */
   position: relative;
   height: 100%;
@@ -36,7 +36,7 @@
   left: 0;
 }
 
-.icd path {
+.icd.icon-container path {
   vector-effect: non-scaling-stroke;
   stroke-width: 1px;
   stroke: black;
@@ -58,8 +58,8 @@
 /* SHAPES */
 /* ================ */
 /* -- VERB -- */
-.icd.verb .part.left,
-.icd.verb .part.right {
+.icd.icon-container.verb .shape-part.left,
+.icd.icon-container.verb .shape-part.right {
   width: 8px
 }
 .icd.icon-container.verb .center {
@@ -68,8 +68,8 @@
 }
 
 /* -- NOUN -- */
-.icd.noun .part.left,
-.icd.noun .part.right {
+.icd.icon-container.noun .shape-part.left,
+.icd.icon-container.noun .shape-part.right {
   width: 15px
 }
 .icd.icon-container.noun .center {
@@ -78,8 +78,8 @@
 }
 
 /* -- MESSAGE/META -- */
-.icd.message .part.left,
-.icd.message .part.right {
+.icd.icon-container.message .shape-part.left,
+.icd.icon-container.message .shape-part.right {
   width: 10px
 }
 .icd.icon-container.message .center {
@@ -88,3 +88,27 @@
 }
 
 
+/* ================ */
+/* MOUSEOVER TEXT */
+/* ================ */
+.icd .variable-name {
+	/* Will be displayed with js */
+	display: none;
+	position: absolute;
+	
+	padding: 0 .2rem;
+	background-color: rgb(255, 255, 255);
+	text-shadow: none;
+	color: black;
+}
+
+
+/* ================ */
+/* BACKGROUNDS, ATM */
+/* ================ */
+.icd .icon-container.verb,
+.icd .icon-container.square,
+.icd .icon-container.noun,
+.icd .icon-container.message {
+	background: none;
+}
