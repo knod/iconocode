@@ -9,7 +9,7 @@
 	position: relative;
 	/* How to make height match editor line height? */
 	height: 1.3rem;
-	min-width: 2rem;
+	min-width: 2.5rem;
 	width: auto;
 	display: inline-block;
 	padding: 0;
@@ -70,11 +70,11 @@
 /* -- NOUN -- */
 .icd.icon-container.noun .shape-part.left,
 .icd.icon-container.noun .shape-part.right {
-  width: 15px
+  width: 7.5px
 }
 .icd.icon-container.noun .center {
 	padding: 0;
-	width: calc(100% - 30px)
+	width: calc(100% - 15px)
 }
 
 /* -- MESSAGE/META -- */

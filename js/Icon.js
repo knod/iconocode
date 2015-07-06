@@ -97,7 +97,7 @@ var Icon = function ( varName ) {
 	newIcon.setId 		= function ( idStr ) {
 	/* ( str ) ->  Icon
 	* 
-	* Want to have this separate somewhere
+	* Want to have this separate somewhere just so it can be found
 	*/
 		newIcon.id = idStr;
 		return newIcon;
@@ -132,18 +132,26 @@ var Icon = function ( varName ) {
 	};  // End newIcon.setImages()
 
 
-	// newIcon.setId 		= function ( newID ) {
-	// 	var iconPath = newIcon.path;
-	// 	iconPath.setAttribute( 'id', newID );
-
-	// 	return newIcon.container;
-	// };  // End newIcon.setId()
-
-
 	newIcon.save 		= function ( parentObj ) {
 		parentObj[ newIcon.varName ] = newIcon;
 	};  // End newIcon.save()
 
+
+	// =================
+	// SVG ELEMENTS
+	// =================
+	newIcon.svgAttributes 	= 
+		"xmlns='http://www.w3.org/2000/svg' " +
+		"viewBox='0 0 100 100' preserveAspectRatio='none' ";
+	newIcon.centerHTML 		= 
+		"<div class='shape-part center'>" +
+			"<svg width='100%' height='100%' " + newIcon.svgAttributes + ">"  +
+				"<line x1='0' y1='0' x2='100%' y2='0'/>" +
+				"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
+			"</svg>" +
+			// Where the contents will go (images, text, etc)
+			"<div class='icon-body'></div>" +
+		"</div>";
 
 	newIcon.addVerbShape = function ( parentNode ) {
 	/* 
@@ -157,11 +165,7 @@ var Icon = function ( varName ) {
 		container.className = 'icd icon-container verb';
 
 		var svgSideDimensions 	= "width='8px' height='100%' ",
-			svgCenterDimensions = "width='100%' height='100%' ";
-
-		var svgAttributes =
-			 "xmlns='http://www.w3.org/2000/svg' " +
-			 "viewBox='0 0 100 100' preserveAspectRatio='none' ";
+			svgAttributes = newIcon.svgAttributes;
 
 		var htmlStr =
 			"<div class='shape-part left'>" +
@@ -171,14 +175,7 @@ var Icon = function ( varName ) {
 				"</svg>" +
 			"</div>" +
 
-			"<div class='shape-part center'>" +
-				'<svg ' + svgCenterDimensions + svgAttributes + '> ' +
-					"<line x1='0' y1='0' x2='100%' y2='0'/>" +
-					"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
-				"</svg>" +
-				// Where the contents will go (images, text, etc)
-				"<div class='icon-body'></div>" +
-			"</div>" +
+			newIcon.centerHTML +
 
 			"<div class='shape-part right'>" +
 				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
@@ -195,223 +192,84 @@ var Icon = function ( varName ) {
 	};  // End newIcon.addVerbShape()
 
 
-	// newIcon.addVerbShape = function ( parentNode ) {
-	// /* 
-	// * 
-	// * Too much of a pita to build it piece by piece the DOM way atm
-	// * Strings to DOM nodes: http://stackoverflow.com/questions/3103962/converting-html-string-into-dom-elements
-	// * Note: any attributes able to be defined with css are in purposes.css
-	// */
-	// 	// Remove this later, this will be the parent passed in
-	// 	var container = document.createElement('div');
-	// 	container.className = 'icd icon-container verb';
-
-	// 	var svgSideDimensions 	= "width='8px' height='100%' ",
-	// 		svgCenterDimensions = "width='100%' height='100%' ";
-
-	// 	var svgAttributes =
-	// 		 "xmlns='http://www.w3.org/2000/svg' " +
-	// 		 "viewBox='0 0 100 100' preserveAspectRatio='none' ";
-
-	// 	var xmlLeft 	=
-	// 		"<div class='shape-part left'>" +
-	// 			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
-	// 				//'m' xpos ypos, 'l' xdist ydist, ... 'z'
-	// 				"<path d='M 100 0, L0 50, L100 100' />" +
-	// 			"</svg>" +
-	// 		"</div>";
-	// 		console.log(xmlLeft)
-	// 	// See the link referenced in the function definition
-	// 	var parser 		= new DOMParser(),
-	// 		aDocument 	= parser.parseFromString(xmlLeft, "text/xml"),
-	// 		leftNode 	= aDocument.firstChild;
-	// 	container.appendChild( leftNode );
-
-	// 	var xmlCenter 	=
-	// 		"<div class='shape-part center'>" +
-	// 			'<svg ' + svgCenterDimensions + svgAttributes + '> ' +
-	// 				"<line x1='0' y1='0' x2='100%' y2='0'/>" +
-	// 				"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
-	// 			"</svg>" +
-	// 			// Where the contents will go (images, text, etc)
-	// 			"<div class='icon-body'></div>" +
-	// 		"</div>";
-	// 	// See the link referenced in the function definition
-	// 	parser 			= new DOMParser(),
-	// 		aDocument 	= parser.parseFromString(xmlCenter, "text/xml");
-	// 	var centerNode 	= aDocument.firstChild;
-	// 	container.appendChild( centerNode );
-
-	// 	var xmlRight	=
-	// 		"<div class='shape-part right'>" +
-	// 			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
-	// 				// 'm' xpos ypos, 'l' xdist ydist, ... 'z'
-	// 				"<path d='M 0 0, L100 50, L0 100' />" +
-	// 			"</svg>" +
-	// 		"</div>";
-	// 	// See the link referenced in the function definition
-	// 	parser 			= new DOMParser(),
-	// 		aDocument 	= parser.parseFromString(xmlRight, "text/xml");
-	// 	var rightNode 	= aDocument.firstChild;
-	// 	container.appendChild( rightNode );
-
-	// 	// // See the link referenced in the function definition
-	// 	// var parser 		= new DOMParser(),
-	// 	// 	aDocument 	= parser.parseFromString(xmlString, "text/xml"),
-	// 	// 	shapeNode 	= aDocument.firstChild;
-
-	// 	// fragment.appendChild( shapeNode );
-	// 	// container.appendChild(fragment);
-	// 	parentNode.appendChild( container );
-
-	// 	return container;
-	// };
-
 	newIcon.addNounShape = function ( parentNode ) {
 	/* 
 	* 
 	* Too much of a pita to build it piece by piece the DOM way atm
-	* Strings to DOM nodes: http://stackoverflow.com/questions/3103962/converting-html-string-into-dom-elements
+	* DOMParser() didn't work right, not properly assigning classes
+	* to its first child, so trying this now
 	*/
 		// Remove this later, this will be the parent passed in
 		var container = document.createElement('div');
-		container.className = 'icd icon-container verb';
+		container.className = 'icd icon-container noun';
 
-		var svgAttributes =
-			// Apparently these svg properties can't be done with css
-			 "<svg width='8px' height='100%' " +
-			 "xmlns='http://www.w3.org/2000/svg' " +
-			 "viewBox='0 0 100 100' preserveAspectRatio='none'>";
+		var svgSideDimensions 	= "width='7.5px' height='100%' ",
+			svgAttributes = newIcon.svgAttributes;
 
-		var xmlLeft 	=
+		var htmlStr =
 			"<div class='shape-part left'>" +
-				svgAttributes +
-					//'m' xpos ypos, 'l' xdist ydist, ... 'z'
-					"<path d='M 100 0, L0 50, L100 100' />" +
+				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+					// arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end
+					"<path d='m 100 0, A -100, 50, 0 0 0 100, 100' />" +
 				"</svg>" +
-			"</div>";
-		// See the link referenced in the function definition
-		var parser 		= new DOMParser(),
-			aDocument 	= parser.parseFromString(xmlLeft, "text/xml"),
-			leftNode 	= aDocument.firstChild;
-		container.appendChild( leftNode );
+			"</div>" +
 
-		var xmlCenter 	=
-			"<div class='shape-part center'>" +
-				svgAttributes +
-					"<line x1='0' y1='0' x2='100%' y2='0'/>" +
-					"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
-				"</svg>" +
-				// Where the contents will go (images, text, etc)
-				"<div class='icon-body'></div>" +
-			"</div>";
-		// See the link referenced in the function definition
-		parser 		= new DOMParser(),
-			aDocument 	= parser.parseFromString(xmlCenter, "text/xml"),
-			centerNode 	= aDocument.firstChild;
-		container.appendChild( centerNode );
+			newIcon.centerHTML +
 
-		var xmlRight	=
 			"<div class='shape-part right'>" +
-				svgAttributes +
-					// 'm' xpos ypos, 'l' xdist ydist, ... 'z'
-					"<path d='M 0 0, L100 50, L0 100' />" +
+				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+					// arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end
+					"<path d='m 0 0, A 100, 50, 0 0 1 0, 100' />" +
 				"</svg>" +
 			"</div>";
-		// See the link referenced in the function definition
-		parser 		= new DOMParser(),
-			aDocument 	= parser.parseFromString(xmlRight, "text/xml"),
-			rightNode 	= aDocument.firstChild;
-		container.appendChild( rightNode );
+		
+		container.innerHTML = htmlStr;
 
-		// // See the link referenced in the function definition
-		// var parser 		= new DOMParser(),
-		// 	aDocument 	= parser.parseFromString(xmlString, "text/xml"),
-		// 	shapeNode 	= aDocument.firstChild;
-
-		// fragment.appendChild( shapeNode );
-		// container.appendChild(fragment);
 		parentNode.appendChild( container );
 
-		return shapeNode;
-	};
+		return htmlStr;
+	};  // End newIcon.addNounShape()
 
 
-// 	newIcon.createSVG 	= function ( typeName, parentNode ) {
-// 	/* ???: Should we even use an svg */
+	newIcon.addMessageShape = function ( parentNode ) {
+	/* 
+	* 
+	* Too much of a pita to build it piece by piece the DOM way atm
+	* DOMParser() didn't work right, not properly assigning classes
+	* to its first child, so trying this now
+	*/
+		// Remove this later, this will be the parent passed in
+		var container = document.createElement('div');
+		container.className = 'icd icon-container message';
 
-// 		var NS 				= 'http://www.w3.org/2000/svg';  // Not sure what this is
-// 		var svg 			= document.createElementNS( NS, 'svg');
-// 		var propertyName 	= typeName + 'SVG';
-// 		newIcon.path 		= svg;
+		var svgSideDimensions 	= "width='10px' height='100%' ",
+			svgAttributes = newIcon.svgAttributes;
 
-// 		svg.setAttribute( 'width', '100%'); svg.setAttribute( 'height', '100%');
+		var htmlStr =
+			"<div class='shape-part left'>" +
+				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+					//'m' xpos ypos, 'l' xdist ydist, ... 'z'
+					"<path d='m 100 0 L 0 100, L 100 100' />" +
+				"</svg>" +
+			"</div>" +
 
-// 		parentNode.appendChild( svg );
+			newIcon.centerHTML +
 
-// 		// svg's don't have classes :P
-// 		// maybe check out http://toddmotto.com/hacking-svg-traversing-with-ease-addclass-removeclass-toggleclass-functions/
+			"<div class='shape-part right'>" +
+				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+					// 'm' xpos ypos, 'l' xdist ydist, ... 'z'
+					"<path d='m 0 0, L 100 100, L 0 100' />" +
+				"</svg>" +
+			"</div>";
+		
+console.log(htmlStr)
 
-// 		var group 			= document.createElementNS( NS, 'g');
-// 		svg.appendChild( group );
+		container.innerHTML = htmlStr;
 
-// 		var path 			= document.createElementNS( NS, 'path');
-// 		// I don't think this is ideal. Not sure what to do about it yet though.
-// 		newIcon.path 		= path;
-// 		group.appendChild( path );
+		parentNode.appendChild( container );
 
-// 		path.setAttribute( 'stroke-width', '1' );
-// 		path.setAttribute( 'stroke', '#000000' );
-// 		path.setAttribute( 'fill', 'none' );
-// 		// http://codepen.io/gionkunz/pen/KDvLj
-// 		svg.setAttribute( 'vector-effect', 'non-scaling-stroke' );
-
-// 		return svg;
-// 	};  // End adder.createSVG()
-
-
-// 	newIcon.createVerb 	= function ( parentNode ) {
-
-// 		var NS 			= 'http://www.w3.org/2000/svg';  // Not sure what this is
-// 		var verbSVG 	= newIcon.createSVG( 'verb', parentNode );
-// 		parentNode.appendChild( verbSVG );
-
-// 		var boundingBox = parentNode.getBoundingClientRect();
-// 		var svgHeight 	= boundingBox.height;
-// 		var svgWidth 	= boundingBox.width;
-// 		// console.log(svgHeight)
-// 		// debugger;
-
-// 		var lineAngle 	= 35;
-
-// 		var vertCenter 	= svgHeight/2;
-// 		var angledLineLength = Math.cos( lineAngle ) * svgHeight;
-
-
-// 		var verbPath 	= newIcon.path;
-// 		var start 		= 'M 1 ' + vertCenter;
-// 		var topLeft 	= ', l ' + lineAngle + ' ' + angledLineLength;
-
-// 		verbPath.setAttribute( 'd', start + topLeft );
-
-
-// // var svg = '<svg width="200" height="100" xmlns="http://www.w3.org/2000/svg">' +
-// // 			'<g>' +
-// // 		  		'<path id="svg_9" d="m5 52, l35 -45, l120 0, l35 45, l-35 45, l-120 0, l-35 -45z"' +
-// // 		  		' stroke-width="5" stroke="#000000" fill="none"/>' +
-// // 		 	'</g>' +
-// // 		'</svg>';
-
-// // 		var svg = '<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">' +
-// // 			'<g>' +
-// // 		  		'<path id="svg_9" d="m 5 52, l 35 -45, l 120 0, l 35 45, l -35 45, l -120 0, l -35 -45z"' +
-// // 		  		' stroke-width="5" stroke="#000000" fill="none"/>' +
-// // 		 	'</g>' +
-// // 		'</svg>';
-
-// 		// container.innerHTML = svg;
-
-// 	};
+		return htmlStr;
+	};  // End newIcon.addMessageShape()
 
 
 	newIcon.addNameText = function ( varName, parentNode ) {
