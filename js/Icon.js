@@ -1,5 +1,9 @@
 /* Icon.js
-Creating and editing an Icon object
+* Creating and editing an Icon object
+* 
+* TODO:
+* - Consider making images icon fonts so their color is easy to change.
+* - Make icon parts able to be any type of node, including text node
 */
 
 'use strict'
@@ -14,22 +18,23 @@ var Icon = function ( varName ) {
 
 	newIcon.varName = varName;  // Or just in tags? Or just varName? Or what?
 	newIcon.type;  // Need to store this here or just in tags? Is everything tags?
-	newIcon.images 	= [];  // [] or {}? 
+	newIcon.parts 	= [];  // [] or {}? // Not sure this is needed
 
 	newIcon.container 	= null;
 	newIcon.body 		= null;
-	newIcon.mouseoverNode = null;
 	// data-id?
 	// made up of its image names perhaps? That way we can more easily tell if there's a repeat?
 	newIcon.id;
 	newIcon.tags = [];  // data-tags? classes?
 
-	newIcon.path;  // svg path?
-	newIcon.width;  // !!!: Don't need this if we're using markers
+	// newIcon.path;  // svg path?
+	// newIcon.width;  // !!!: Don't need this if we're using markers
 	newIcon.borderColor;
-	newIcon.borderShape;
+	// newIcon.borderShape;
 
-	// Text - visibility: hidden, width = icon.width, setWidth
+	// Contains functions for setting purpose shapes
+	var typeShapeFuncts;
+
 
 	// ======================
 	// FUNCTIONS
@@ -39,41 +44,26 @@ var Icon = function ( varName ) {
 	};  // End newIcon.setParent()
 
 	newIcon.setType = function ( type, iconContainer ) {
-	/*
-
-	Sets border shape based on type
-	Type suggestions:
-		transative, intransitive
-		data, logic (process?), message
-		data, state (special kind of data), process, message
-		keyword (types of keywords?)
-			control
-			logic
+	/* ( str, node ) -> Icon
+	* 
+	* Sets border shape based on type
+	* Type suggestions:
+	* 	transative, intransitive
+	* 	data, logic (process?), message
+	* 	data, state (special kind of data), process, message
+	* 	keyword (types of keywords?)
+	* 		control
+	* 		logic
 	*/
-		// newIcon.container.style.border = '1px solid gray';
-		// var borderRadius = '0'
-
-		// Change class of before and after body nodes
 
 		iconContainer.classList.remove( 'verb' );
-		iconContainer.classList.remove( 'data' );
 		iconContainer.classList.remove( 'noun' );
-		iconContainer.classList.remove( 'square' );
 		iconContainer.classList.remove( 'message' );
 
 		iconContainer.classList.add( type );
+		typeShapeFuncts[ type ]( iconContainer );
 
-		// if ( type === 'data' ) {
-		// 	// Makes sure border right and left look round
-		// 	borderRadius = '50px';
-		// } else if ( type === 'message' ) {
-		// 	newIcon.container
-		// }
-		// // control
-		// // logic? process?
-
-		// newIcon.container.style.borderRadius = borderRadius;
-
+		return newIcon
 	};  // End newIcon.setType()
 
 
@@ -90,8 +80,18 @@ var Icon = function ( varName ) {
 	};  // End newIcon.addTerms()
 
 
+	newIcon.setId 		= function ( idStr ) {
+	/* ( str ) ->  Icon
+	* 
+	* Want to have this separate somewhere just so it can be found
+	*/
+		newIcon.id = idStr;
+		return newIcon;
+	};  // End newIcon.setId()
+
+
 	newIcon.setImages 	= function ( partNodes, parentNode ) {
-	/* 
+	/* ( [node], node ) -> latter Node
 	* 
 	* Gets all the parts of the icon and, using the $data 'terms',
 	* builds the icon with its search terms. Also sets the id
@@ -112,99 +112,119 @@ var Icon = function ( varName ) {
 			imgNamesStr += $imgNode.data('name');
 		}
 
-		newIcon.id 		= imgNamesStr;
+		newIcon.setId( imgNamesStr );
+		newIcon.parts = $(parentNode).children();
 
 		return parentNode;
 	};  // End newIcon.setImages()
 
 
-	// newIcon.setId 		= function ( newID ) {
-	// 	var iconPath = newIcon.path;
-	// 	iconPath.setAttribute( 'id', newID );
-
-	// 	return newIcon.container;
-	// };  // End newIcon.setId()
-
-
-	newIcon.save 	= function ( parentObj ) {
+	newIcon.save 		= function ( parentObj ) {
 		parentObj[ newIcon.varName ] = newIcon;
 	};  // End newIcon.save()
 
 
-	newIcon.createSVG 	= function ( typeName, parentNode ) {
-	/* ???: Should we even use an svg */
+	// =================
+	// SVG ELEMENTS
+	// =================
+	newIcon.svgAttributes 	= 
+		"xmlns='http://www.w3.org/2000/svg' " +
+		"viewBox='0 0 100 100' preserveAspectRatio='none' ";
 
-		var NS 				= 'http://www.w3.org/2000/svg';  // Not sure what this is
-		var svg 			= document.createElementNS( NS, 'svg');
-		var propertyName 	= typeName + 'SVG';
-		newIcon.path 		= svg;
+	newIcon.toVerbShape = function ( iconContainer ) {
+	/* 
+	* 
+	* Too much of a pita to build it piece by piece the DOM way atm
+	* DOMParser() didn't work right, not properly assigning classes
+	* to its first child, so trying this now
+	*/
+		var svgSideDimensions 	= "width='8px' height='100%' ",
+			svgAttributes 		= newIcon.svgAttributes;
 
-		svg.setAttribute( 'width', '100%'); svg.setAttribute( 'height', '100%');
+		var leftNode 	= iconContainer.getElementsByClassName('left')[0];
+		var leftHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				//'m' xpos ypos, 'l' xdist ydist, ... 'z'
+				"<path d='M 100 0, L0 50, L100 100' />" +
+			"</svg>";
+		leftNode.innerHTML = leftHTMLStr;
 
-		parentNode.appendChild( svg );
+		var rightNode 	= iconContainer.getElementsByClassName('right')[0];
+		var rightHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				// 'm' xpos ypos, 'l' xdist ydist, ... 'z'
+				"<path d='M 0 0, L100 50, L0 100' />" +
+			"</svg>";
+		rightNode.innerHTML = rightHTMLStr;
 
-		// svg's don't have classes :P
-		// maybe check out http://toddmotto.com/hacking-svg-traversing-with-ease-addclass-removeclass-toggleclass-functions/
-
-		var group 			= document.createElementNS( NS, 'g');
-		svg.appendChild( group );
-
-		var path 			= document.createElementNS( NS, 'path');
-		// I don't think this is ideal. Not sure what to do about it yet though.
-		newIcon.path 		= path;
-		group.appendChild( path );
-
-		path.setAttribute( 'stroke-width', '1' );
-		path.setAttribute( 'stroke', '#000000' );
-		path.setAttribute( 'fill', 'none' );
-		// http://codepen.io/gionkunz/pen/KDvLj
-		svg.setAttribute( 'vector-effect', 'non-scaling-stroke' );
-
-		return svg;
-	};  // End adder.createSVG()
-
-
-	newIcon.createVerb 	= function ( parentNode ) {
-
-		var NS 			= 'http://www.w3.org/2000/svg';  // Not sure what this is
-		var verbSVG 	= newIcon.createSVG( 'verb', parentNode );
-		parentNode.appendChild( verbSVG );
-
-		var boundingBox = parentNode.getBoundingClientRect();
-		var svgHeight 	= boundingBox.height;
-		var svgWidth 	= boundingBox.width;
-		// console.log(svgHeight)
-		// debugger;
-
-		var lineAngle 	= 35;
-
-		var vertCenter 	= svgHeight/2;
-		var angledLineLength = Math.cos( lineAngle ) * svgHeight;
+		return iconContainer;
+	};  // End newIcon.toVerbShape()
 
 
-		var verbPath 	= newIcon.path;
-		var start 		= 'M 1 ' + vertCenter;
-		var topLeft 	= ', l ' + lineAngle + ' ' + angledLineLength;
+	newIcon.toNounShape = function ( iconContainer ) {
+	/* 
+	* 
+	* Too much of a pita to build it piece by piece the DOM way atm
+	* DOMParser() didn't work right, not properly assigning classes
+	* to its first child, so trying this now
+	*/
+		var svgSideDimensions 	= "width='7.5px' height='100%' ",
+			svgAttributes 		= newIcon.svgAttributes;
 
-		verbPath.setAttribute( 'd', start + topLeft );
+		var leftNode 	= iconContainer.getElementsByClassName('left')[0];
+		var leftHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				// arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end
+				"<path d='m 100 0, A -100, 50, 0 0 0 100, 100' />" +
+			"</svg>";
+		leftNode.innerHTML = leftHTMLStr;
+
+		var rightNode 	= iconContainer.getElementsByClassName('right')[0];
+		var rightHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				// arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end
+				"<path d='m 0 0, A 100, 50, 0 0 1 0, 100' />" +
+			"</svg>";
+		rightNode.innerHTML = rightHTMLStr;
+
+		return iconContainer;
+	};  // End newIcon.toNounShape()
 
 
-// var svg = '<svg width="200" height="100" xmlns="http://www.w3.org/2000/svg">' +
-// 			'<g>' +
-// 		  		'<path id="svg_9" d="m5 52, l35 -45, l120 0, l35 45, l-35 45, l-120 0, l-35 -45z"' +
-// 		  		' stroke-width="5" stroke="#000000" fill="none"/>' +
-// 		 	'</g>' +
-// 		'</svg>';
+	newIcon.toMessageShape = function ( iconContainer ) {
+	/* 
+	* 
+	* Too much of a pita to build it piece by piece the DOM way atm
+	* DOMParser() didn't work right, not properly assigning classes
+	* to its first child, so trying this now
+	*/
+		var svgSideDimensions 	= "width='10px' height='100%' ",
+			svgAttributes 		= newIcon.svgAttributes;
 
-// 		var svg = '<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">' +
-// 			'<g>' +
-// 		  		'<path id="svg_9" d="m 5 52, l 35 -45, l 120 0, l 35 45, l -35 45, l -120 0, l -35 -45z"' +
-// 		  		' stroke-width="5" stroke="#000000" fill="none"/>' +
-// 		 	'</g>' +
-// 		'</svg>';
+		var leftNode 	= iconContainer.getElementsByClassName('left')[0];
+		var leftHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				//'m' xpos ypos, 'l' xdist ydist, ... 'z'
+				"<path d='m 100 0 L 0 100, L 100 100' />" +
+			"</svg>";
+		leftNode.innerHTML = leftHTMLStr;
 
-		// container.innerHTML = svg;
+		var rightNode 	= iconContainer.getElementsByClassName('right')[0];
+		var rightHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				// 'm' xpos ypos, 'l' xdist ydist, ... 'z'
+				"<path d='m 0 0, L 100 100, L 0 100' />" +
+			"</svg>";
+		rightNode.innerHTML = rightHTMLStr;
 
+		return iconContainer;
+	};  // End newIcon.toMessageShape()
+
+
+	typeShapeFuncts = {
+		'verb': newIcon.toVerbShape,
+		'noun': newIcon.toNounShape,
+		'message': newIcon.toMessageShape
 	};
 
 
@@ -215,7 +235,6 @@ var Icon = function ( varName ) {
 	*/
 		var nameContainer 	= document.createElement( 'div' );
 		parentNode.appendChild( nameContainer );
-		newIcon.mouseoverNode = nameContainer;
 
 		$(nameContainer).addClass( 'variable-name' );
 
@@ -224,6 +243,20 @@ var Icon = function ( varName ) {
 
 		return nameContainer;
 	};  // End newIcon.addNameText()
+
+
+	 newIcon.addCenterShape = function ( centerNode ) {
+	/* */
+		var htmlStr =
+			"<svg width='100%' height='100%' " + newIcon.svgAttributes + ">"  +
+				"<line x1='0' y1='0' x2='100%' y2='0'/>" +
+				"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
+			"</svg>";
+
+		centerNode.innerHTML = htmlStr;
+
+		return centerNode;
+	};  // End newIcon.addCenterShape()
 
 
 	newIcon.createNew 	= function ( parentNode ) {
@@ -238,33 +271,28 @@ var Icon = function ( varName ) {
 		container.className = prefix + ' icon-container';
 
 		// Left side
-		var hider1 		 = document.createElement( 'div' );
-		container.appendChild( hider1 );
-		hider1.className = prefix + ' icon-side-hider'
+		var leftSide 		= document.createElement( 'div' );
+		container.appendChild( leftSide );
+		leftSide.className 	= 'shape-part left';
 
-		var before 		 = document.createElement( 'div' );
-		hider1.appendChild(before);
-		before.className = prefix + ' before-icon-body';
+		// Center
+		var center = document.createElement( 'div' );
+		container.appendChild( center );
+		center.className = 'shape-part center';
+		newIcon.addCenterShape( center );
+		// --- Mouseover text --- \\		
+		newIcon.addNameText( varName, center );
 
-
-		// Body
+		// Body in Center
 		var body 		= document.createElement( 'div' );
-		container.appendChild( body );
+		center.appendChild( body );
 		newIcon.body 	= body;
-		body.className 	= prefix + ' icon-body';
+		body.className 	= 'icon-body';
 
 		// Right side
-		var hider2 		 = document.createElement( 'div' );
-		container.appendChild( hider2 );
-		hider2.className = prefix + ' icon-side-hider';
-
-		var after 		 = document.createElement( 'div' );
-		hider2.appendChild(after);
-		after.className  = prefix + ' after-icon-body';
-
-
-		// --- Mouseover text --- \\		
-		newIcon.addNameText( varName, container );
+		var rightSide 		= document.createElement( 'div' );
+		container.appendChild( rightSide );
+		rightSide.className = 'shape-part right';
 
 		return container;
 	};  // End newIcon.create()
@@ -274,43 +302,11 @@ var Icon = function ( varName ) {
 
 
 // --- MOUSEOVER ICON --- \\
-// TODO: put this somewhere sensical
-var iconMouseoverHandler = function ( mouseoverNode ) {
-/* 
-* 
-*/
-	mouseoverNode.style.display = 'block';
-};  // End iconMouseoverHandler()
+// In purpose.css
 
-var iconMouseoutHandler  = function ( mouseoverNode ) {
-/* 
-* 
-*/
-	mouseoverNode.style.display = 'none';
-};  // End iconMouseoutHandler()
-
-document.addEventListener( 'mouseover', function (evnt) {
-
-	var $closestCont = $(evnt.target).closest( '.icon-container' )
-
-	if ( $closestCont[0] !== undefined ) {
-		var nameCont = $closestCont.find( '.variable-name' )[0]
-		iconMouseoverHandler( nameCont );
-	}
-} );
-
-document.addEventListener( 'mouseout', function (evnt) {
-
-	var $closestCont = $(evnt.target).closest( '.icon-container' )
-
-	if ( $closestCont[0] !== undefined ) {
-		var nameCont = $closestCont.find( '.variable-name' )[0]
-		iconMouseoutHandler( nameCont );
-	}
-} );
 
 
 // TESTING
 var icon = new Icon( 'test1' );
 icon.createNew( document.body );
-icon.setType( 'noun', icon.body );
+icon.setType( 'noun', icon.container );

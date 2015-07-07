@@ -9,14 +9,14 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 	<title>Iconocode Testing</title>
 
 	<!-- CodeMirror -->
-	<link 	rel="stylesheet" href="CodeMirror-master/lib/codemirror.css">
+	<link 	rel='stylesheet' href='CodeMirror-master/lib/codemirror.css'>
 	<!-- Iconocode -->
-	<!-- <link 	rel="stylesheet" type="text/css" href="css/iconocode.css" /> -->
-	<link 	rel="stylesheet" type="text/css" href="css/iconocode-testing.css" />
-	<link 	rel="stylesheet" type="text/css" href="css/fuzzy-search.css" />
-	<link 	rel="stylesheet" type="text/css" href="purposes/purposes.css" />
+	<!-- <link 	rel='stylesheet' type='text/css' href='css/iconocode.css' /> -->
+	<link 	rel='stylesheet' type='text/css' href='css/iconocode-testing.css' />
+	<link 	rel='stylesheet' type='text/css' href='css/fuzzy-search.css' />
+	<link 	rel='stylesheet' type='text/css' href='purposes/purposes.css' />
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 
 </head>
 
@@ -28,9 +28,9 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 	<section>
 		<h2>Images for use in Icon test</h2>
 
-		<img src="./images/plus.png" alt="" class='Icon-test'>
-		<img src="./images/search-white.png" alt="" class='Icon-test'>
-		<img src="./images/542px-Pacman.svg.png" alt="" class='Icon-test'>
+		<img src='./images/plus.png' alt='' class='Icon-test'>
+		<img src='./images/search-white.png' alt='' class='Icon-test'>
+		<img src='./images/542px-Pacman.svg.png' alt='' class='Icon-test'>
 	</section>
 	
 
@@ -61,8 +61,9 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 <!-- closer http://codepen.io/anon/pen/YXeVRd?editors=110 -->
 <!-- Yes! http://codepen.io/anon/pen/mJXjmd?editors=110 (Also check this: http://metaskills.net/2014/08/29/dynamic-svgs-using-defs-elements-and-javascript/ to see if it can help) -->
 <!-- Actually, this is better I think: http://codepen.io/anon/pen/bdvGzW?editors=110 -->
+<!-- No extended lines: http://codepen.io/anon/pen/qdoErd?editors=110 -->
 
-<!-- I noticed that f's, like at the end of 'stuff
+<!-- I noticed that f's, like at the end of "stuff"
  can cause a gap between the center part of the shape and the right end of the shape, so I added lines to
  the beginning and ends of the right-side paths to
  match the horizontal line of the center bit to cover
@@ -72,27 +73,27 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
   better, and I still don't like how f's look at the end of a line. I guess I'll just hope no one uses nouns or f's? :/ -->
 <h2>Extended Lines to Cover Inconsistent Gaps</h2>
 <!-- VERB -->
-<div class="svg-test icd icon-container verb">
+<div class='svg-test icd icon-container verb'>
 
-  <div class='part side left'>
+  <div class='shape-part side left'>
     <!-- Apparently these svg properties can't be done with css -->
-    <svg width='8px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <svg width='8px' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
       <path d='M 110 0, L100 0, L0 50, L100 100, L110 100' />
     </svg>
   </div>
 
-  <div class='part center'>
-    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <line x1="0" y1="0" x2="100%" y2="0"/>
-      <line x1="0" y1="100%" x2="100%" y2="100%"/>
+  <div class='shape-part center'>
+    <svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
+      <line x1='0' y1='0' x2='100%' y2='0'/>
+      <line x1='0' y1='100%' x2='100%' y2='100%'/>
     </svg>
     
-    <div class='contents'>some stuff and things and other stuff and things and stuff</div>
+    <div class='icon-body'>some stuff and things and other stuff and things and stuff</div>
   </div>
 
-  <div class='part right'>
-    <svg width='8px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <div class='shape-part right'>
+    <svg width='8px' height='100%' xmlns='http://www.w3.org/2000/svg' style='position:absolute' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
       <path d='M -10 0, L 0 0, L100 50, L0 100, L-10 100' />
     </svg>
@@ -101,27 +102,27 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 </div>
 
 <!-- NOUN -->
-<div class="svg-test icd icon-container noun">
+<div class='svg-test icd icon-container noun'>
 
-  <div class='part side left'>
+  <div class='shape-part side left'>
     <!-- Apparently these svg properties can't be done with css -->
-    <svg width='15px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <svg width='15px' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end -->
       <path d='m 110 0, L 100 0, A 50, 50, 0 0 0 100, 100, L110 100' />
     </svg>
   </div>
 
-  <div class='part center'>
-    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <line x1="0" y1="0" x2="100%" y2="0"/>
-      <line x1="0" y1="100" x2="100%" y2="100"/>
+  <div class='shape-part center'>
+    <svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
+      <line x1='0' y1='0' x2='100%' y2='0'/>
+      <line x1='0' y1='100' x2='100%' y2='100'/>
     </svg>
     <!-- arcs don't seem to have the same trouble with f's at the end here, but it's still a problem on the actual page -->
-    <div class='contents'>some noun stuff and things ff</div>
+    <div class='icon-body'>some noun stuff and things ff</div>
   </div>
 
-  <div class='part right'>
-    <svg width='15px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <div class='shape-part right'>
+    <svg width='15px' height='100%' xmlns='http://www.w3.org/2000/svg' style='position:absolute' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end -->
       <path d='m -10 0, L 0 0, A 50, 50, 0 0 1 0, 100, L -10 100' />
     </svg>
@@ -130,27 +131,27 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 </div>
 
 <!-- MESSAGE (or meta, as some call it) -->
-<div class="svg-test icd icon-container message">
+<div class='svg-test icd icon-container message'>
 
-  <div class='part side left'>
+  <div class='shape-part side left'>
     <!-- Apparently these svg properties can't be done with css -->
-    <svg width='10px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <svg width='10px' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
       <path d='m 110 0, L 100 0 L 0 100, L 110 100' />
     </svg>
   </div>
 
-  <div class='part center'>
-    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <line x1="0" y1="0" x2="100%" y2="0"/>
-      <line x1="0" y1="100" x2="100%" y2="100"/>
+  <div class='shape-part center'>
+    <svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
+      <line x1='0' y1='0' x2='100%' y2='0'/>
+      <line x1='0' y1='100' x2='100%' y2='100'/>
     </svg>
     
-    <div class='contents'>some message stuff this time and stuff</div>
+    <div class='icon-body'>some message stuff this time and stuff</div>
   </div>
 
-  <div class='part right'>
-    <svg width='10px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <div class='shape-part right'>
+    <svg width='10px' height='100%' xmlns='http://www.w3.org/2000/svg' style='position:absolute' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
       <path d='m -10 0, L 0 0, L 100 100, L -10 100' />
     </svg>
@@ -164,27 +165,27 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 <!-- No extended lines -->
 <h2>No Extended Lines</h2>
 <!-- VERB -->
-<div class="svg-test icd icon-container verb">
+<div class='svg-test icd icon-container verb'>
 
-  <div class='part side left'>
+  <div class='shape-part side left'>
     <!-- Apparently these svg properties can't be done with css -->
-    <svg width='8px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <svg width='8px' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
       <path d='M 100 0, L0 50, L100 100' />
     </svg>
   </div>
 
-  <div class='part center'>
-    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <line x1="0" y1="0" x2="100%" y2="0"/>
-      <line x1="0" y1="100%" x2="100%" y2="100%"/>
+  <div class='shape-part center'>
+    <svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
+      <line x1='0' y1='0' x2='100%' y2='0'/>
+      <line x1='0' y1='100%' x2='100%' y2='100%'/>
     </svg>
     
-    <div class='contents'>some stuff and things and other stuff and things and stuff</div>
+    <div class='icon-body'>some stuff and things and other stuff and things and stuff</div>
   </div>
 
-  <div class='part right'>
-    <svg width='8px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <div class='shape-part right'>
+    <svg width='8px' height='100%' xmlns='http://www.w3.org/2000/svg' style='position:absolute' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
       <path d='M 0 0, L100 50, L0 100' />
     </svg>
@@ -193,27 +194,27 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 </div>
 
 <!-- NOUN -->
-<div class="svg-test icd icon-container noun">
+<div class='svg-test icd icon-container noun'>
 
-  <div class='part side left'>
+  <div class='shape-part side left'>
     <!-- Apparently these svg properties can't be done with css -->
-    <svg width='15px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <svg width='15px' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end -->
       <path d='m 100 0, A 50, 50, 0 0 0 100, 100' />
     </svg>
   </div>
 
-  <div class='part center'>
-    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <line x1="0" y1="0" x2="100%" y2="0"/>
-      <line x1="0" y1="100" x2="100%" y2="100"/>
+  <div class='shape-part center'>
+    <svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
+      <line x1='0' y1='0' x2='100%' y2='0'/>
+      <line x1='0' y1='100' x2='100%' y2='100'/>
     </svg>
     <!-- arcs don't seem to have the same trouble with f's at the end here, but it's still a problem on the actual page -->
-    <div class='contents'>some noun stuff and things ff</div>
+    <div class='icon-body'>some noun stuff and things ff</div>
   </div>
 
-  <div class='part right'>
-    <svg width='15px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <div class='shape-part right'>
+    <svg width='15px' height='100%' xmlns='http://www.w3.org/2000/svg' style='position:absolute' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end -->
       <path d='m 0 0, A 50, 50, 0 0 1 0, 100' />
     </svg>
@@ -222,27 +223,27 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 </div>
 
 <!-- MESSAGE (or meta, as some call it) -->
-<div class="svg-test icd icon-container message">
+<div class='svg-test icd icon-container message'>
 
-  <div class='part side left'>
+  <div class='shape-part side left'>
     <!-- Apparently these svg properties can't be done with css -->
-    <svg width='10px' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <svg width='10px' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
       <path d='m 100 0 L 0 100, L 100 100' />
     </svg>
   </div>
 
-  <div class='part center'>
-    <svg width='100%' height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <line x1="0" y1="0" x2="100%" y2="0"/>
-      <line x1="0" y1="100" x2="100%" y2="100"/>
+  <div class='shape-part center'>
+    <svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
+      <line x1='0' y1='0' x2='100%' y2='0'/>
+      <line x1='0' y1='100' x2='100%' y2='100'/>
     </svg>
     
-    <div class='contents'>some message stuff this time and stuff</div>
+    <div class='icon-body'>some message stuff this time and stuff</div>
   </div>
 
-  <div class='part right'>
-    <svg width='10px' height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <div class='shape-part right'>
+    <svg width='10px' height='100%' xmlns='http://www.w3.org/2000/svg' style='position:absolute' viewBox='0 0 100 100' preserveAspectRatio='none'>
       <!-- 'm' xpos ypos, 'l' xdist ydist, ... 'z' -->
       <path d='m 0 0, L 100 100, L 0 100' />
     </svg>
@@ -253,7 +254,7 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 <br>
 
 
-	<!-- <div class="icd icon-side-hider"><div class="icd before-icon-body"></div></div><div class="icd icon-body"><img class="icon-part" src="./images/542px-Pacman.svg.png"></div><div class="icd icon-side-hider"><div class="icd after-icon-body"></div></div><div class="variable-name" style="display: none;">a</div></div> -->
+	<!-- <div class='icd icon-side-hider'><div class='icd before-icon-body'></div></div><div class='icd icon-body'><img class='icon-part' src='./images/542px-Pacman.svg.png'></div><div class='icd icon-side-hider'><div class='icd after-icon-body'></div></div><div class='variable-name' style='display: none;'>a</div></div> -->
 
 
 
@@ -261,69 +262,69 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 	<!-- SCRIPTS -->
 	<!-- ************************* -->
 	<!-- Third Party -->
-	<script src="js/third-party/jquery-2.1.4.min.js"></script>
-	<!-- <script src="js2/third-party/XRegExp.js"></script> -->
+	<script src='js/third-party/jquery-2.1.4.min.js'></script>
+	<!-- <script src='js2/third-party/XRegExp.js'></script> -->
 
-	<script src="CodeMirror-master/lib/codemirror.js"></script>
-	<script src="CodeMirror-master/addon/mode/simple.js"></script>
-	<script src="CodeMirror-master/addon/display/placeholder.js"></script>
-	<!-- <script src="CodeMirror-master/mode/javascript/javascript.js"></script> -->
-	<!-- <script src="js2/third-party/fuzzy.js-master/fuzzy.js"></script> -->
-	<!-- <script src="js2/lazy-search-example1.js"></script> -->
+	<script src='CodeMirror-master/lib/codemirror.js'></script>
+	<script src='CodeMirror-master/addon/mode/simple.js'></script>
+	<script src='CodeMirror-master/addon/display/placeholder.js'></script>
+	<!-- <script src='CodeMirror-master/mode/javascript/javascript.js'></script> -->
+	<!-- <script src='js2/third-party/fuzzy.js-master/fuzzy.js'></script> -->
+	<!-- <script src='js2/lazy-search-example1.js'></script> -->
 
 	<!-- Defaults/Data -->
-	<!-- <script src="js/default-icons.js"></script>
-	<script src="js/map.js"></script> -->
+	<!-- <script src='js/default-icons.js'></script>
+	<script src='js/map.js'></script> -->
 
 	<!-- Functionality -->
-	<script src="js/Icon.js"></script>
+	<script src='js/Icon.js'></script>
 
 	<!-- ************************* -->
 	<!-- ADDER -->
 	<!-- ************************* -->
-	<script src="js2/start.js"></script>
+	<script src='js2/start.js'></script>
 
-	<script src="js/iconocode-image-list.js"></script>
-	<script src="js2/html5-tags.js"></script>
+	<script src='js/iconocode-image-list.js'></script>
+	<script src='js2/html5-tags.js'></script>
 
-	<!-- <script src="js2/fuzzy-search.js"></script> -->
-	<script src="js2/fuzzy/my-fuzzy-match.js"></script>
-	<script src="js2/fuzzy/my-fuzzy-search.js"></script>
-	<script src="js2/fuzzy/fuzzy-test.js"></script>
-	<!-- <script src="js2/my-fuzzy-match-simple-string.js"></script> -->
-	<script src="js/adder-utils-tabs.js"></script>
+	<!-- <script src='js2/fuzzy-search.js'></script> -->
+	<script src='js2/fuzzy/my-fuzzy-match.js'></script>
+	<script src='js2/fuzzy/my-fuzzy-search.js'></script>
+	<script src='js2/fuzzy/fuzzy-test.js'></script>
+	<!-- <script src='js2/my-fuzzy-match-simple-string.js'></script> -->
+	<script src='js/adder-utils-tabs.js'></script>
 
-	<script src="js2/ImageChoice.js"></script>
-	<script src="js2/ImageChoice2.js"></script>
+	<script src='js2/ImageChoice.js'></script>
+	<script src='js2/ImageChoice2.js'></script>
 	
-	<script src="js2/adder.js"></script>
-	<script src="js2/commands.js"></script>
-	<script src="js2/viewer.js"></script>
-	<script src="js2/mode-types.js"></script>
-	<script src="js2/mode-images.js"></script>
+	<script src='js2/adder.js'></script>
+	<script src='js2/commands.js'></script>
+	<script src='js2/viewer.js'></script>
+	<script src='js2/mode-types.js'></script>
+	<script src='js2/mode-images.js'></script>
 
-	<script src="js2/Grid.js"></script>
-	<script src="js2/grid-navigation.js"></script>
+	<script src='js2/Grid.js'></script>
+	<script src='js2/grid-navigation.js'></script>
 	
-	<script src="js2/search-images.js"></script>
+	<script src='js2/search-images.js'></script>
 
 
 	<!-- ************************* -->
 	<!-- COORDINATE WITH EDITOR -->
 	<!-- ************************* -->
-	<script src="js2/icd/icon-map.js"></script>
-	<script src="js2/icd/Utils.js"></script>
-	<script src="js2/icd/Updater.js"></script>
+	<script src='js2/icd/icon-map.js'></script>
+	<script src='js2/icd/Utils.js'></script>
+	<script src='js2/icd/Updater.js'></script>
 
-	<script src="js2/icd/Iconocode.js"></script>
+	<script src='js2/icd/Iconocode.js'></script>
 
 	
 	<!-- ************************* -->
 	<!-- EDITOR FOR TESTING -->
 	<!-- ************************* -->
-	<script src="CodeMirror-master/mode/javascript/javascript.js"></script>
-	<link 	rel="stylesheet" href="CodeMirror-master/theme/lesser-dark.css">
-	<script src="js2/editor/start.js"></script>
+	<script src='CodeMirror-master/mode/javascript/javascript.js'></script>
+	<link 	rel='stylesheet' href='CodeMirror-master/theme/lesser-dark.css'>
+	<script src='js2/editor/start.js'></script>
 
 
 </body>

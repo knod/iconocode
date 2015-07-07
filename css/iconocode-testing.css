@@ -34,7 +34,7 @@
 /* --- LISTS --- */
 .icd ol, .icd ul, .icd li {
 	padding: 0;
-	background-color: lightgray;
+	/*background-color: lightgray;*/
 }
 .icd ol, .icd ul, .icd li {
 	margin: 0;
@@ -52,140 +52,6 @@
 /* ICON (!!! Moved to purposes/purposes.css !!!) */
 /* ================== */
 
-/* !!! SHAPE EXPERIMENT */
-/* Starting point: http://jsfiddle.net/2az358rq/5/ */
-	.icd.icon-container {
-		border: none;
-		padding: 0px 7px;
-		vertical-align: middle;
-	}
-
-	.icd.icon-container .icon-body {
-		position: relative;
-		margin: 0 auto;
-
-		/*height: 100%;*/
-		height: 1.3rem;
-		/*min-width: 3rem;*/
-		border: 2px solid rgb( 220, 220, 220);
-		background-color: rgba(0, 0, 0, 0); 
-		border-left: none;
-		border-right: none;
-		/*width:300px;*/
-	}
-
-	/* ================== */
-	/* SHAPES */
-	/* ================== */
-	.icon-container.verb .icon-body::before,
-	.icon-container.verb .icon-body::after {
-		content: '';
-		border: 2px solid rgb( 220, 220, 220);
-		border-top: none;
-		border-right: none;
-		/* Height and width based on body/container height? */
-		height: calc(1.2rem/1.55);
-		width: calc(1.2rem/1.55);
-		/* margin-top: 50%; */
-		display: inline-block;
-		/* vertical-align: middle; */
-
-		position: absolute;
-		top: 7%;
-	}
-
-/* !!! This isn't showing up in chrome at all, though it works if I do it manually in there */
-	.adder-picker .icon-container.verb .icon-body::before,
-	.adder-picker .icon-container.verb .icon-body::after, {
-	  /* Height and width based on body/container height? */
-	  	/* Height in .icd .type-choice-container .icon-body: height: calc(1.3rem * 2); */
-	  height: calc(2.6rem/1.55);
-	  width: calc(2.6rem/1.55);
-	  margin-top:-6px;
-	}
-
-	.icon-container.verb .icon-body::before {
-		transform: rotate(45deg);
-		/*margin-right:-18px;*/
-		left: -7px;
-	}
-	.icon-container.verb .icon-body::after {
-		/*margin-left:-18px;*/
-		transform: rotate(-135deg);
-		right: -7px;
-	}
-/* !!! END SHAPE EXPERIMENT */
-
-
-.icd .icon-container .icon-body {
-	position: relative;
-	margin: 0 auto;
-
-	/*height: 1.2rem;*/
-	min-width: 1.5rem;
-}
-
-.icd .icon-container .icon-side-hider {
-	width: 0;
-	height: 0;
-	border: none;
-}
-
-/* SHAPES */
-.icd .before-icon-body,
-.icd .after-icon-body {
-	width: 0;
-	height: 0;
-	border: none;
-}
-
-/* !!!! Something needs to be done about width - trapezoid needs
-	significant width to show shape, for example !!!! */
-/* Process? */
-/* diamond is only one with different height? */
-.icd .verb .icon-body, .icd .verb.icon-body,
-.icd .CodeMirror .verb,
-/* For testing */
-.icon-container.verb {
-	/*background: darkolivegreen;*/
-}
-/* Process? */
-.icd .square .icon-body,
-.icd .CodeMirror .square,
-.icon-container.square {
-	background-color: firebrick;
-}
-/* Data? */
-.icd .noun .icon-body,
-.icd .CodeMirror .noun,
-.icon-container.noun {
-	/*background-color: navy;*/
-}
-/* Message */
-.icd .message .icon-body,
-.icd .CodeMirror .message,
-.icon-container.message {
-	/*background-color: maroon;*/
-}
-/* Because shit is messed up right now */
-.icd .icon-container.verb,
-.icd .icon-container.square,
-.icd .icon-container.noun,
-.icd .icon-container.message {
-	background: none;
-}
-
-/* MOUSEOVER TEXT */
-.icd .variable-name {
-	/*display: block;*/
-	display: none;
-	position: absolute;
-	
-	padding: 0 .2rem;
-	background-color: rgb(255, 255, 255);
-	text-shadow: none;
-	color: black;
-}
 
 
 /* =================== */
@@ -218,13 +84,16 @@ I mean, it's position absolute, so it's not going to
 be scrollable... make it position: relative?
 */
 .icd.icon-adder {
-	position: absolute;
+	/*position: absolute;*/
+	position: fixed;
 	left: calc( 50% - 20rem/2 );
 	top: calc( 50% - 10rem/2 );
 
 	width: 20rem;
 	height: auto;
 
+	/* for monokai */
+	/*background-color: rgba(69, 68, 59, .99);*/
 	background-color: rgb( 200, 200, 200 );
 	border-right: 1px solid rgb( 150, 150, 150 );
 	border-left: 1px solid rgb( 150, 150, 150 );
@@ -303,13 +172,27 @@ be scrollable... make it position: relative?
 	/* Why does this go out of the parent? */
 	height: 95%;
 }
+
 .icd .type-choice-container .icon-container {
 	display: block;
+	margin: 0 auto;
 	margin-top: .7rem;
+	width: 65%;
+	height: 40%;
 }
 .icd .type-choice-container .icon-body {
-	height: calc(1.3rem * 2);
-	min-width: calc(1.5rem * 2);
+	/*height: calc(1.3rem * 2);*/
+	/*min-width: calc(1.5rem * 2);*/
+
+	/* Focus outline is weird because it doesn't include the end shapes */
+	/*height: 100%;*/
+	/*width: 100%;*/
+}
+.icd .type-choice-container .icon-container path {
+  stroke-width: 3px;
+}
+.icd .type-choice-container .icon-container line {
+  stroke-width: 3px;
 }
 
 
@@ -457,17 +340,3 @@ but maybe we want the images to be their proper size?
 	max-height: 1rem;
 }
 
-/* Need to somehow make this the right height */
-/* http://stackoverflow.com/questions/8468066/child-inside-parent-with-min-height-100-not-inheriting-height
-	Kushagra Gour's isn't working, not sure if I can get the top answer working either
-Can't use position absolute for other reasons
-*/
-.icon-part {
-/* Inheriting and 100% don't work */
-	/*max-height: 1.3rem;*/
-	/* !!! FOR BORDER EXPERIMENT */
-	max-height: 1.05rem;
-}
-.CodeMirror .icon-container {
-	height: 1.3rem;
-}
