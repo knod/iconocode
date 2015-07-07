@@ -34,7 +34,7 @@
 /* --- LISTS --- */
 .icd ol, .icd ul, .icd li {
 	padding: 0;
-	background-color: lightgray;
+	/*background-color: lightgray;*/
 }
 .icd ol, .icd ul, .icd li {
 	margin: 0;
@@ -84,13 +84,16 @@ I mean, it's position absolute, so it's not going to
 be scrollable... make it position: relative?
 */
 .icd.icon-adder {
-	position: absolute;
+	/*position: absolute;*/
+	position: fixed;
 	left: calc( 50% - 20rem/2 );
 	top: calc( 50% - 10rem/2 );
 
 	width: 20rem;
 	height: auto;
 
+	/* for monokai */
+	/*background-color: rgba(69, 68, 59, .99);*/
 	background-color: rgb( 200, 200, 200 );
 	border-right: 1px solid rgb( 150, 150, 150 );
 	border-left: 1px solid rgb( 150, 150, 150 );
@@ -169,13 +172,27 @@ be scrollable... make it position: relative?
 	/* Why does this go out of the parent? */
 	height: 95%;
 }
+
 .icd .type-choice-container .icon-container {
 	display: block;
+	margin: 0 auto;
 	margin-top: .7rem;
+	width: 65%;
+	height: 40%;
 }
 .icd .type-choice-container .icon-body {
-	height: calc(1.3rem * 2);
-	min-width: calc(1.5rem * 2);
+	/*height: calc(1.3rem * 2);*/
+	/*min-width: calc(1.5rem * 2);*/
+
+	/* Focus outline is weird because it doesn't include the end shapes */
+	/*height: 100%;*/
+	/*width: 100%;*/
+}
+.icd .type-choice-container .icon-container path {
+  stroke-width: 3px;
+}
+.icd .type-choice-container .icon-container line {
+  stroke-width: 3px;
 }
 
 
@@ -323,17 +340,3 @@ but maybe we want the images to be their proper size?
 	max-height: 1rem;
 }
 
-/* Need to somehow make this the right height */
-/* http://stackoverflow.com/questions/8468066/child-inside-parent-with-min-height-100-not-inheriting-height
-	Kushagra Gour's isn't working, not sure if I can get the top answer working either
-Can't use position absolute for other reasons
-*/
-.icon-part {
-/* Inheriting and 100% don't work */
-	/*max-height: 1.3rem;*/
-	/* !!! FOR BORDER EXPERIMENT */
-	max-height: 1.05rem;
-}
-.CodeMirror .icon-container {
-	height: 1.3rem;
-}

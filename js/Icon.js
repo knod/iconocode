@@ -33,6 +33,9 @@ var Icon = function ( varName ) {
 	newIcon.borderColor;
 	newIcon.borderShape;
 
+	// Contains functions for setting purpose shapes
+	var typeShapeFuncts;
+
 	// Text - visibility: hidden, width = icon.width, setWidth
 
 	// ======================
@@ -60,12 +63,12 @@ var Icon = function ( varName ) {
 		// Change class of before and after body nodes
 
 		iconContainer.classList.remove( 'verb' );
-		iconContainer.classList.remove( 'data' );
 		iconContainer.classList.remove( 'noun' );
-		iconContainer.classList.remove( 'square' );
 		iconContainer.classList.remove( 'message' );
 
 		iconContainer.classList.add( type );
+		console.log(type); console.log(typeShapeFuncts[ type ])
+		typeShapeFuncts[ type ]( iconContainer );
 
 		// if ( type === 'data' ) {
 		// 	// Makes sure border right and left look round
@@ -143,133 +146,102 @@ var Icon = function ( varName ) {
 	newIcon.svgAttributes 	= 
 		"xmlns='http://www.w3.org/2000/svg' " +
 		"viewBox='0 0 100 100' preserveAspectRatio='none' ";
-	newIcon.centerHTML 		= 
-		"<div class='shape-part center'>" +
-			"<svg width='100%' height='100%' " + newIcon.svgAttributes + ">"  +
-				"<line x1='0' y1='0' x2='100%' y2='0'/>" +
-				"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
-			"</svg>" +
-			// Where the contents will go (images, text, etc)
-			"<div class='icon-body'></div>" +
-		"</div>";
 
-	newIcon.addVerbShape = function ( parentNode ) {
+	newIcon.toVerbShape = function ( iconContainer ) {
 	/* 
 	* 
 	* Too much of a pita to build it piece by piece the DOM way atm
 	* DOMParser() didn't work right, not properly assigning classes
 	* to its first child, so trying this now
 	*/
-		// Remove this later, this will be the parent passed in
-		var container = document.createElement('div');
-		container.className = 'icd icon-container verb';
-
 		var svgSideDimensions 	= "width='8px' height='100%' ",
-			svgAttributes = newIcon.svgAttributes;
+			svgAttributes 		= newIcon.svgAttributes;
 
-		var htmlStr =
-			"<div class='shape-part left'>" +
-				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
-					//'m' xpos ypos, 'l' xdist ydist, ... 'z'
-					"<path d='M 100 0, L0 50, L100 100' />" +
-				"</svg>" +
-			"</div>" +
+		var leftNode 	= iconContainer.getElementsByClassName('left')[0];
+		var leftHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				//'m' xpos ypos, 'l' xdist ydist, ... 'z'
+				"<path d='M 100 0, L0 50, L100 100' />" +
+			"</svg>";
+		leftNode.innerHTML = leftHTMLStr;
 
-			newIcon.centerHTML +
+		var rightNode 	= iconContainer.getElementsByClassName('right')[0];
+		var rightHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				// 'm' xpos ypos, 'l' xdist ydist, ... 'z'
+				"<path d='M 0 0, L100 50, L0 100' />" +
+			"</svg>";
+		rightNode.innerHTML = rightHTMLStr;
 
-			"<div class='shape-part right'>" +
-				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
-					// 'm' xpos ypos, 'l' xdist ydist, ... 'z'
-					"<path d='M 0 0, L100 50, L0 100' />" +
-				"</svg>" +
-			"</div>";
-		
-		container.innerHTML = htmlStr;
-
-		parentNode.appendChild( container );
-
-		return htmlStr;
-	};  // End newIcon.addVerbShape()
+		return iconContainer;
+	};  // End newIcon.toVerbShape()
 
 
-	newIcon.addNounShape = function ( parentNode ) {
+	newIcon.toNounShape = function ( iconContainer ) {
 	/* 
 	* 
 	* Too much of a pita to build it piece by piece the DOM way atm
 	* DOMParser() didn't work right, not properly assigning classes
 	* to its first child, so trying this now
 	*/
-		// Remove this later, this will be the parent passed in
-		var container = document.createElement('div');
-		container.className = 'icd icon-container noun';
-
 		var svgSideDimensions 	= "width='7.5px' height='100%' ",
-			svgAttributes = newIcon.svgAttributes;
+			svgAttributes 		= newIcon.svgAttributes;
 
-		var htmlStr =
-			"<div class='shape-part left'>" +
-				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
-					// arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end
-					"<path d='m 100 0, A -100, 50, 0 0 0 100, 100' />" +
-				"</svg>" +
-			"</div>" +
+		var leftNode 	= iconContainer.getElementsByClassName('left')[0];
+		var leftHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				// arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end
+				"<path d='m 100 0, A -100, 50, 0 0 0 100, 100' />" +
+			"</svg>";
+		leftNode.innerHTML = leftHTMLStr;
 
-			newIcon.centerHTML +
+		var rightNode 	= iconContainer.getElementsByClassName('right')[0];
+		var rightHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				// arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end
+				"<path d='m 0 0, A 100, 50, 0 0 1 0, 100' />" +
+			"</svg>";
+		rightNode.innerHTML = rightHTMLStr;
 
-			"<div class='shape-part right'>" +
-				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
-					// arc: 'm' xpos ypos, 'A' x-radius, y-radius rotation ? ? x-end, y-end
-					"<path d='m 0 0, A 100, 50, 0 0 1 0, 100' />" +
-				"</svg>" +
-			"</div>";
-		
-		container.innerHTML = htmlStr;
-
-		parentNode.appendChild( container );
-
-		return htmlStr;
-	};  // End newIcon.addNounShape()
+		return iconContainer;
+	};  // End newIcon.toNounShape()
 
 
-	newIcon.addMessageShape = function ( parentNode ) {
+	newIcon.toMessageShape = function ( iconContainer ) {
 	/* 
 	* 
 	* Too much of a pita to build it piece by piece the DOM way atm
 	* DOMParser() didn't work right, not properly assigning classes
 	* to its first child, so trying this now
 	*/
-		// Remove this later, this will be the parent passed in
-		var container = document.createElement('div');
-		container.className = 'icd icon-container message';
-
 		var svgSideDimensions 	= "width='10px' height='100%' ",
-			svgAttributes = newIcon.svgAttributes;
+			svgAttributes 		= newIcon.svgAttributes;
 
-		var htmlStr =
-			"<div class='shape-part left'>" +
-				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
-					//'m' xpos ypos, 'l' xdist ydist, ... 'z'
-					"<path d='m 100 0 L 0 100, L 100 100' />" +
-				"</svg>" +
-			"</div>" +
+		var leftNode 	= iconContainer.getElementsByClassName('left')[0];
+		var leftHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				//'m' xpos ypos, 'l' xdist ydist, ... 'z'
+				"<path d='m 100 0 L 0 100, L 100 100' />" +
+			"</svg>";
+		leftNode.innerHTML = leftHTMLStr;
 
-			newIcon.centerHTML +
+		var rightNode 	= iconContainer.getElementsByClassName('right')[0];
+		var rightHTMLStr =
+			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
+				// 'm' xpos ypos, 'l' xdist ydist, ... 'z'
+				"<path d='m 0 0, L 100 100, L 0 100' />" +
+			"</svg>";
+		rightNode.innerHTML = rightHTMLStr;
 
-			"<div class='shape-part right'>" +
-				'<svg ' + svgSideDimensions + svgAttributes + '> ' +
-					// 'm' xpos ypos, 'l' xdist ydist, ... 'z'
-					"<path d='m 0 0, L 100 100, L 0 100' />" +
-				"</svg>" +
-			"</div>";
-		
-console.log(htmlStr)
+		return iconContainer;
+	};  // End newIcon.toMessageShape()
 
-		container.innerHTML = htmlStr;
 
-		parentNode.appendChild( container );
-
-		return htmlStr;
-	};  // End newIcon.addMessageShape()
+	typeShapeFuncts = {
+		'verb': newIcon.toVerbShape,
+		'noun': newIcon.toNounShape,
+		'message': newIcon.toMessageShape
+	};
 
 
 	newIcon.addNameText = function ( varName, parentNode ) {
@@ -290,6 +262,20 @@ console.log(htmlStr)
 	};  // End newIcon.addNameText()
 
 
+	 newIcon.addCenterShape = function ( centerNode ) {
+	/* */
+		var htmlStr =
+			"<svg width='100%' height='100%' " + newIcon.svgAttributes + ">"  +
+				"<line x1='0' y1='0' x2='100%' y2='0'/>" +
+				"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
+			"</svg>";
+
+		centerNode.innerHTML = htmlStr;
+
+		return centerNode;
+	};  // End newIcon.addCenterShape()
+
+
 	newIcon.createNew 	= function ( parentNode ) {
 	/* 
 	* 
@@ -302,33 +288,28 @@ console.log(htmlStr)
 		container.className = prefix + ' icon-container';
 
 		// Left side
-		var hider1 		 = document.createElement( 'div' );
-		container.appendChild( hider1 );
-		hider1.className = prefix + ' icon-side-hider'
+		var leftSide 		= document.createElement( 'div' );
+		container.appendChild( leftSide );
+		leftSide.className 	= 'shape-part left';
 
-		var before 		 = document.createElement( 'div' );
-		hider1.appendChild(before);
-		before.className = prefix + ' before-icon-body';
+		// Center
+		var center = document.createElement( 'div' );
+		container.appendChild( center );
+		center.className = 'shape-part center';
+		newIcon.addCenterShape( center );
+		// --- Mouseover text --- \\		
+		newIcon.addNameText( varName, center );
 
-
-		// Body
+		// Body in Center
 		var body 		= document.createElement( 'div' );
-		container.appendChild( body );
+		center.appendChild( body );
 		newIcon.body 	= body;
-		body.className 	= prefix + ' icon-body';
+		body.className 	= 'icon-body';
 
 		// Right side
-		var hider2 		 = document.createElement( 'div' );
-		container.appendChild( hider2 );
-		hider2.className = prefix + ' icon-side-hider';
-
-		var after 		 = document.createElement( 'div' );
-		hider2.appendChild(after);
-		after.className  = prefix + ' after-icon-body';
-
-
-		// --- Mouseover text --- \\		
-		newIcon.addNameText( varName, container );
+		var rightSide 		= document.createElement( 'div' );
+		container.appendChild( rightSide );
+		rightSide.className = 'shape-part right';
 
 		return container;
 	};  // End newIcon.create()
@@ -338,43 +319,44 @@ console.log(htmlStr)
 
 
 // --- MOUSEOVER ICON --- \\
-// TODO: put this somewhere sensical
-var iconMouseoverHandler = function ( mouseoverNode ) {
-/* 
-* 
-*/
-	mouseoverNode.style.display = 'block';
-};  // End iconMouseoverHandler()
+// Now in purpose.css
+// // TODO: put this somewhere sensical
+// var iconMouseoverHandler = function ( mouseoverNode ) {
+// /* 
+// * 
+// */
+// 	mouseoverNode.style.display = 'block';
+// };  // End iconMouseoverHandler()
 
-var iconMouseoutHandler  = function ( mouseoverNode ) {
-/* 
-* 
-*/
-	mouseoverNode.style.display = 'none';
-};  // End iconMouseoutHandler()
+// var iconMouseoutHandler  = function ( mouseoverNode ) {
+// /* 
+// * 
+// */
+// 	mouseoverNode.style.display = 'none';
+// };  // End iconMouseoutHandler()
 
-document.addEventListener( 'mouseover', function (evnt) {
+// document.addEventListener( 'mouseover', function (evnt) {
 
-	var $closestCont = $(evnt.target).closest( '.icon-container' )
+// 	// var $closestCont = $(evnt.target).closest( '.icon-container' )
 
-	if ( $closestCont[0] !== undefined ) {
-		var nameCont = $closestCont.find( '.variable-name' )[0]
-		iconMouseoverHandler( nameCont );
-	}
-} );
+// 	// if ( $closestCont[0] !== undefined ) {
+// 	// 	var nameCont = $closestCont.find( '.variable-name' )[0]
+// 	// 	iconMouseoverHandler( nameCont );
+// 	// }
+// } );
 
-document.addEventListener( 'mouseout', function (evnt) {
+// document.addEventListener( 'mouseout', function (evnt) {
 
-	var $closestCont = $(evnt.target).closest( '.icon-container' )
+// 	// var $closestCont = $(evnt.target).closest( '.icon-container' )
 
-	if ( $closestCont[0] !== undefined ) {
-		var nameCont = $closestCont.find( '.variable-name' )[0]
-		iconMouseoutHandler( nameCont );
-	}
-} );
+// 	// if ( $closestCont[0] !== undefined ) {
+// 	// 	var nameCont = $closestCont.find( '.variable-name' )[0]
+// 	// 	iconMouseoutHandler( nameCont );
+// 	// }
+// } );
 
 
 // TESTING
 var icon = new Icon( 'test1' );
 icon.createNew( document.body );
-icon.setType( 'noun', icon.body );
+icon.setType( 'noun', icon.container );

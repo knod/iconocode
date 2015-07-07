@@ -8,16 +8,11 @@
 .icd.icon-container {
 	position: relative;
 	/* How to make height match editor line height? */
-	height: 1.3rem;
-	min-width: 2.5rem;
+	height: 1rem;
+	min-width: 1.5rem;
 	width: auto;
 	display: inline-block;
 	padding: 0;
-}
-
-.icd.icon-container .center {
-	display: flex;
-	align-items: center;
 }
 
 .icd.icon-container .shape-part {
@@ -25,6 +20,25 @@
   position: relative;
   height: 100%;
   float: left;
+}
+
+.icd.icon-container .center,
+.icd.icon-container .icon-body {
+	display: flex;
+	align-items: center;
+}
+
+
+/* Need to somehow make this the right height */
+/* http://stackoverflow.com/questions/8468066/child-inside-parent-with-min-height-100-not-inheriting-height
+	Kushagra Gour's isn't working, not sure if I can get the top answer working either
+Can't use position absolute for other reasons
+*/
+.icon-part {
+/* Inheriting and 100% don't work */
+	/*max-height: 1.3rem;*/
+	/* !!! FOR BORDER EXPERIMENT */
+	max-height: .85rem;
 }
 
 /* ================ */
@@ -39,7 +53,7 @@
 .icd.icon-container path {
   vector-effect: non-scaling-stroke;
   stroke-width: 1px;
-  stroke: black;
+  stroke: lightgray;
   fill: none;
   stroke-linejoin: round;
   shape-rendering: auto;
@@ -49,7 +63,7 @@
 .icd.icon-container line {
   vector-effect: non-scaling-stroke;
   stroke-width: 1px;
-  stroke: black;
+  stroke: lightgray;
   stroke-alignment: inner; /* for the future! */
 }
 
@@ -91,10 +105,17 @@
 /* ================ */
 /* MOUSEOVER TEXT */
 /* ================ */
+.icd.icon-container:hover .variable-name {
+	display: block;
+}
+
 .icd .variable-name {
 	/* Will be displayed with js */
 	display: none;
 	position: absolute;
+	/*clear: both;*/
+	top: 1rem;
+	left: 0;
 	
 	padding: 0 .2rem;
 	background-color: rgb(255, 255, 255);
