@@ -3,7 +3,7 @@
 * 
 * TODO:
 * - Consider making images icon fonts so their color is easy to change.
-* - Make icon parts able to be any type of node
+* - Make icon parts able to be any type of node, including text node
 */
 
 'use strict'
@@ -18,25 +18,23 @@ var Icon = function ( varName ) {
 
 	newIcon.varName = varName;  // Or just in tags? Or just varName? Or what?
 	newIcon.type;  // Need to store this here or just in tags? Is everything tags?
-	newIcon.images 	= [];  // [] or {}? 
+	newIcon.parts 	= [];  // [] or {}? // Not sure this is needed
 
 	newIcon.container 	= null;
 	newIcon.body 		= null;
-	newIcon.mouseoverNode = null;
 	// data-id?
 	// made up of its image names perhaps? That way we can more easily tell if there's a repeat?
 	newIcon.id;
 	newIcon.tags = [];  // data-tags? classes?
 
-	newIcon.path;  // svg path?
-	newIcon.width;  // !!!: Don't need this if we're using markers
+	// newIcon.path;  // svg path?
+	// newIcon.width;  // !!!: Don't need this if we're using markers
 	newIcon.borderColor;
-	newIcon.borderShape;
+	// newIcon.borderShape;
 
 	// Contains functions for setting purpose shapes
 	var typeShapeFuncts;
 
-	// Text - visibility: hidden, width = icon.width, setWidth
 
 	// ======================
 	// FUNCTIONS
@@ -46,41 +44,26 @@ var Icon = function ( varName ) {
 	};  // End newIcon.setParent()
 
 	newIcon.setType = function ( type, iconContainer ) {
-	/*
-
-	Sets border shape based on type
-	Type suggestions:
-		transative, intransitive
-		data, logic (process?), message
-		data, state (special kind of data), process, message
-		keyword (types of keywords?)
-			control
-			logic
+	/* ( str, node ) -> Icon
+	* 
+	* Sets border shape based on type
+	* Type suggestions:
+	* 	transative, intransitive
+	* 	data, logic (process?), message
+	* 	data, state (special kind of data), process, message
+	* 	keyword (types of keywords?)
+	* 		control
+	* 		logic
 	*/
-		// newIcon.container.style.border = '1px solid gray';
-		// var borderRadius = '0'
-
-		// Change class of before and after body nodes
 
 		iconContainer.classList.remove( 'verb' );
 		iconContainer.classList.remove( 'noun' );
 		iconContainer.classList.remove( 'message' );
 
 		iconContainer.classList.add( type );
-		console.log(type); console.log(typeShapeFuncts[ type ])
 		typeShapeFuncts[ type ]( iconContainer );
 
-		// if ( type === 'data' ) {
-		// 	// Makes sure border right and left look round
-		// 	borderRadius = '50px';
-		// } else if ( type === 'message' ) {
-		// 	newIcon.container
-		// }
-		// // control
-		// // logic? process?
-
-		// newIcon.container.style.borderRadius = borderRadius;
-
+		return newIcon
 	};  // End newIcon.setType()
 
 
@@ -108,7 +91,7 @@ var Icon = function ( varName ) {
 
 
 	newIcon.setImages 	= function ( partNodes, parentNode ) {
-	/* 
+	/* ( [node], node ) -> latter Node
 	* 
 	* Gets all the parts of the icon and, using the $data 'terms',
 	* builds the icon with its search terms. Also sets the id
@@ -129,7 +112,8 @@ var Icon = function ( varName ) {
 			imgNamesStr += $imgNode.data('name');
 		}
 
-		newIcon.setId( imgNamesStr )
+		newIcon.setId( imgNamesStr );
+		newIcon.parts = $(parentNode).children();
 
 		return parentNode;
 	};  // End newIcon.setImages()
@@ -251,7 +235,6 @@ var Icon = function ( varName ) {
 	*/
 		var nameContainer 	= document.createElement( 'div' );
 		parentNode.appendChild( nameContainer );
-		newIcon.mouseoverNode = nameContainer;
 
 		$(nameContainer).addClass( 'variable-name' );
 
@@ -319,41 +302,8 @@ var Icon = function ( varName ) {
 
 
 // --- MOUSEOVER ICON --- \\
-// Now in purpose.css
-// // TODO: put this somewhere sensical
-// var iconMouseoverHandler = function ( mouseoverNode ) {
-// /* 
-// * 
-// */
-// 	mouseoverNode.style.display = 'block';
-// };  // End iconMouseoverHandler()
+// In purpose.css
 
-// var iconMouseoutHandler  = function ( mouseoverNode ) {
-// /* 
-// * 
-// */
-// 	mouseoverNode.style.display = 'none';
-// };  // End iconMouseoutHandler()
-
-// document.addEventListener( 'mouseover', function (evnt) {
-
-// 	// var $closestCont = $(evnt.target).closest( '.icon-container' )
-
-// 	// if ( $closestCont[0] !== undefined ) {
-// 	// 	var nameCont = $closestCont.find( '.variable-name' )[0]
-// 	// 	iconMouseoverHandler( nameCont );
-// 	// }
-// } );
-
-// document.addEventListener( 'mouseout', function (evnt) {
-
-// 	// var $closestCont = $(evnt.target).closest( '.icon-container' )
-
-// 	// if ( $closestCont[0] !== undefined ) {
-// 	// 	var nameCont = $closestCont.find( '.variable-name' )[0]
-// 	// 	iconMouseoutHandler( nameCont );
-// 	// }
-// } );
 
 
 // TESTING
