@@ -141,19 +141,31 @@ var Icon = function ( varName ) {
 		var svgSideDimensions 	= "width='8px' height='100%' ",
 			svgAttributes 		= newIcon.svgAttributes;
 
-		var leftNode 	= iconContainer.getElementsByClassName('left')[0];
+		// This would be awesome, but it looks weird at almost any value
+		// and the top corners don't get rounded yet.
+		// TODO: Make rounded corners
+		var rounding 	= 0;
+
+		var leftNode 	= iconContainer.getElementsByClassName('left')[0],
+			leftPath 	= 'M 100 0 L0 50 L100 100',
+			leftRounded = roundPathCorners( leftPath, rounding, false );
+
 		var leftHTMLStr =
 			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
 				//'m' xpos ypos, 'l' xdist ydist, ... 'z'
-				"<path d='M 100 0, L0 50, L100 100' />" +
+				"<path d='" + leftRounded + "' />" +
 			"</svg>";
 		leftNode.innerHTML = leftHTMLStr;
 
-		var rightNode 	= iconContainer.getElementsByClassName('right')[0];
+
+		var rightNode 	 = iconContainer.getElementsByClassName('right')[0],
+			rightPath 	 = 'M 0 0 L100 50 L0 100',
+			rightRounded = roundPathCorners( rightPath, rounding, false );
+
 		var rightHTMLStr =
 			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
 				// 'm' xpos ypos, 'l' xdist ydist, ... 'z'
-				"<path d='M 0 0, L100 50, L0 100' />" +
+				"<path d='" + rightRounded + "' />" +
 			"</svg>";
 		rightNode.innerHTML = rightHTMLStr;
 
@@ -303,8 +315,6 @@ var Icon = function ( varName ) {
 
 // --- MOUSEOVER ICON --- \\
 // In purpose.css
-
-
 
 // TESTING
 var icon = new Icon( 'test1' );
