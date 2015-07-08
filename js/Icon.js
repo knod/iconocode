@@ -277,6 +277,10 @@ var Icon = function ( varName ) {
 	};  // End newIcon.addCenterShape()
 
 
+	// --- MOUSEOVER ICON --- \\
+	// In purpose.css
+
+
 	newIcon.createNew 	= function ( parentNode ) {
 	/* 
 	* 
@@ -319,10 +323,3 @@ var Icon = function ( varName ) {
 };  // End Icon {}
 
 
-// --- MOUSEOVER ICON --- \\
-// In purpose.css
-
-// TESTING
-var icon = new Icon( 'test1' );
-icon.createNew( document.body );
-icon.setType( 'noun', icon.container );
