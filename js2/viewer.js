@@ -170,19 +170,6 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 
 
 
-	// // ====================
-	// // ADDER ICON
-	// // ====================
-	// thisViewer.constructIcon(adder.result.varName, 'default', ) = function ( variableName, purpose, imageNodes )
-	var codeNode = $('.icd.icon-adder .CodeMirror-code pre')[0];
-	var adderIcon = new AdderIcon();
-	adder.icon = adderIcon;
-
-	adderIcon.createNew( parentNode );
-	adderIcon.container.style.position 	= 'absolute';
-	adderIcon.setWidth( codeNode );
-	adderIcon.setType('default', adderIcon.container);
-
 	// =====================
 	// ONE LINE HIGH
 	// =====================
@@ -251,6 +238,21 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	$('.icd.icon-adder .CodeMirror-hscrollbar')[0].style.height = '2px';
 
 	var applier 			 = thisViewer.addApply( adder.sections.viewer );
+
+
+	// ====================
+	// ADDER ICON
+	// ====================
+	// Last so that the editor will be in the correct posiition?
+	var codeNode = $('.icd.icon-adder .CodeMirror-code pre')[0];
+	var adderIcon = new AdderIcon();
+	adder.icon = adderIcon;
+
+	adderIcon.createNew( parentNode );
+	adderIcon.container.style.position 	= 'absolute';
+	adderIcon.setWidth( codeNode );
+	adderIcon.setType('default', adderIcon.container);
+
 
 	return cmEditor;
 };  // End adder.addViewer()
