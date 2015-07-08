@@ -130,6 +130,7 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 
 	adder.searchBar;
 
+
 	// ==================
 	// MODE
 	// ==================
@@ -144,11 +145,19 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// ===============
 	// EDITOR
 	// ===============
+	// var placeholderIcon 		= document.createElement('div');
+	// parentNode.appendChild( placeholderIcon );
+	// placeholderIcon.className 	= 'icd icon-container default';
+	// // var placeholderText 		= document.createTextNode('What does this variable do?');
+	// // placeholderIcon.appendChild( placeholderText );
+
+	// parentNode = placeholderIcon;
+
 	var cmEditor = CodeMirror( parentNode,
 		{
 			mode: 			"icd", // text or text/html = cm-m-null class on span
 			value: 			"What does this variable do?",
-			// theme: 			"monokai",
+			theme:  		"lesser-dark",
 			lineNumbers: 	false,
 			addModeClass: 	true,
 			showCursorWhenSelecting: true,
@@ -159,23 +168,27 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 
 	adder.viewer 		= cmEditor;
 
-	// var searcher = CodeMirror( parentNode,
-	// 	{
-	// 		mode: 			"javascript",
-	// 		value: 			"Search here",
-	// 		theme: 			"monokai",
-	// 		lineNumbers: 	false
-	// 	}
-	// );
 
-	// adder.searcher = searcher;
 
+	// // ====================
+	// // ADDER ICON
+	// // ====================
+	// thisViewer.constructIcon(adder.result.varName, 'default', ) = function ( variableName, purpose, imageNodes )
+	var codeNode = $('.icd.icon-adder .CodeMirror-code pre')[0];
+	var adderIcon = new AdderIcon();
+	adder.icon = adderIcon;
+
+	adderIcon.createNew( parentNode );
+	adderIcon.container.style.position 	= 'absolute';
+	adderIcon.setWidth( codeNode );
+	adderIcon.setType('default', adderIcon.container);
 
 	// =====================
 	// ONE LINE HIGH
 	// =====================
 	// cmEditor.setSize( '100%', cmEditor.defaultTextHeight() + 2 * 4);
-	cmEditor.setSize( 'auto', '100%');
+	cmEditor.setSize( 'auto', cmEditor.defaultTextHeight());
+	// cmEditor.setSize( 'auto', '100%');
 	// searcher.setSize( '100%', '100%');
 	// 200 is the preferable width of text field in pixels,
 	// 4 is default CM padding (which depends on the theme you're using)
@@ -186,11 +199,6 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	    change.update(change.from, change.to, [newtext]);
 	    return true;
 	});
-	// searcher.on("beforeChange", function(instance, change) {
-	//     var newtext = change.text.join("").replace(/\n/g, ""); // remove ALL \n !
-	//     change.update(change.from, change.to, [newtext]);
-	//     return true;
-	// });
 
 
 	// ======================
@@ -214,27 +222,34 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 		// When text is added or deleted (anything else?) search the mode's choices
 		var activeGrid = adder.modes[ adder.activeMode ].grid;
 		adder.runSearch( activeGrid.choiceContainers )
+		// Takes a bit for the change to actually take effect
+		setTimeout( function () {
+			var codeNode = $('.icd.icon-adder .CodeMirror-code pre')[0];
+			adderIcon.setWidth( codeNode );
+		}, 20)
 	});
 
-	// the following line fixes a bug I've encountered in CodeMirror 3.1
-	$(".icd.icon-adder .CodeMirror-scroll").css('overflow', 'hidden');
-	// jQuery again! be careful with selector or move this to .css file
+	// // the following line fixes a bug I've encountered in CodeMirror 3.1
+	// // Me: ???: Wasn't this working before? Why do I need !important? What's overriding it?
+	// // $(".icd.icon-adder .CodeMirror-scroll").css('overflow', 'hidden');
+	// // http://stackoverflow.com/questions/7917608/im-unable-to-inject-a-style-with-an-important-rule
+	// $(".icd.icon-adder .CodeMirror-scroll")[0].style.setProperty('overflow', 'hidden', 'important');
+	// $(".icd.icon-adder .CodeMirror-scroll")[0].style['minHeight'] = '0px';
+	// $(".icd.icon-adder .CodeMirror-scroll")[0].style.height = '1.3rem';
+	// console.log($(".icd.icon-adder .CodeMirror-scroll")[0].style)
+	// // jQuery again! be careful with selector or move this to .css file
 
 	adder.editorNode 		 = $('.icd.icon-adder .CodeMirror')[0];
 	// TODO: Try this: adder.editorNode = cmEditor.getWrapperElement();
 	adder.searchBarContainer = $('.icd.icon-adder .CodeMirror-code')[0];
-	// adder.searchBarContainer.style.display = 'flex';
 
 	// --- STYLING --- \\
 	// To display apply properly
 	$(".icd.icon-adder .CodeMirror").css('display', 'flex');
 	// I don't like the current horizontal scroll bar space
-	$('.icd.icon-adder .CodeMirror-hscrollbar')[0].style['minHeight'] = '10px';
-	$('.icd.icon-adder .CodeMirror-hscrollbar')[0].style.height = '10px';
+	$('.icd.icon-adder .CodeMirror-hscrollbar')[0].style['minHeight'] = '2px';
+	$('.icd.icon-adder .CodeMirror-hscrollbar')[0].style.height = '2px';
 
-	adder.sections.viewer.style.display = 'flex';
-	adder.sections.viewer.style['alignItems'] = 'flex-start';
-	adder.sections.viewer.style['justifyContent'] = 'space-between';
 	var applier 			 = thisViewer.addApply( adder.sections.viewer );
 
 	return cmEditor;

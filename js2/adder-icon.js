@@ -1,31 +1,20 @@
-/* Icon.js
-* Creating and editing an Icon object
-* 
-* TODO:
-* - Consider making images icon fonts so their color is easy to change.
-* - Make icon parts able to be any type of node, including text node
-*/
+/* Adder-Icon.js */
 
 'use strict'
 
 var prefix = 'icd';
 
-var Icon = function ( varName ) {
-/*
-
+var AdderIcon = function () {
+/* ( none ) -> AdderIcon
+* 
+* Weird icon container shape in the background of the
+* adder editor instance that tries to adjust the fake icon
+* container to match the width of the icon being built.
 */
 	var newIcon = {};
 
-	newIcon.varName = varName;  // Or just in tags? Or just varName? Or what?
 	newIcon.type;  // Need to store this here or just in tags? Is everything tags?
-	newIcon.parts 	= [];  // [] or {}? // Not sure this is needed
-
 	newIcon.container 	= null;
-	newIcon.body 		= null;
-	// data-id?
-	// made up of its image names perhaps? That way we can more easily tell if there's a repeat?
-	newIcon.id;
-	newIcon.tags = [];  // data-tags? classes?
 
 	// newIcon.path;  // svg path?
 	// newIcon.width;  // !!!: Don't need this if we're using markers
@@ -43,18 +32,11 @@ var Icon = function ( varName ) {
 		parent.appendChild( newIcon.container );
 	};  // End newIcon.setParent()
 
-	newIcon.setType = function ( type, iconContainer ) {
-	/* ( str, node ) -> Icon
+	newIcon.setType = function ( type ) {
+	/* ( str, node ) -> AdderIcon
 	* 
-	* Sets border shape based on type
-	* Type suggestions:
-	* 	transative, intransitive
-	* 	data, logic (process?), message
-	* 	data, state (special kind of data), process, message
-	* 	keyword (types of keywords?)
-	* 		control
-	* 		logic
 	*/
+		var iconContainer = newIcon.container;
 
 		iconContainer.classList.remove( 'verb' );
 		iconContainer.classList.remove( 'noun' );
@@ -67,63 +49,50 @@ var Icon = function ( varName ) {
 		return newIcon
 	};  // End newIcon.setType()
 
+	// newIcon.setSearchBar 	= function ( barNode ) {
+	// /* ( [node], node ) -> latter Node
+	// * 
+	// */
+	// 	newIcon.body.appendChild( barNode );
+	// 	return parentNode;
+	// };  // End newIcon.setSearchBar()
 
-	newIcon.addTerms 	= function ( partNode ) {
+	newIcon.setWidth = function( contentNode ) {
 	/* 
-	* 
-	* Get the search terms on the node and add them to the icon
-	* TODO: Just do newIcon.tags = someList; List will be
-	* 	constructed elsewhere
+	* Width is weird with relation to the content in the adder
+	* and the fake icon container and I don't understand it right now
+	* so this hack is all I have to get things to look right
 	*/
-		newIcon.tags.push( $(partNode).data('terms') );
 
-		return partNode;
-	};  // End newIcon.addTerms()
-
-
-	newIcon.setId 		= function ( idStr ) {
-	/* ( str ) ->  Icon
-	* 
-	* Want to have this separate somewhere just so it can be found
-	*/
-		newIcon.id = idStr;
-		return newIcon;
-	};  // End newIcon.setId()
+		var $contentNode = $(contentNode);
+		var iconCenter 	 = newIcon.container.getElementsByClassName( 'center' )[0];
+		var container 	 = newIcon.container;
+		var $editorNode	 = $('.icon-adder .CodeMirror');
 
 
-	newIcon.setImages 	= function ( partNodes, parentNode ) {
-	/* ( [node], node ) -> latter Node
-	* 
-	* Gets all the parts of the icon and, using the $data 'terms',
-	* builds the icon with its search terms. Also sets the id
-	* of the icon using the image names.
-	* !!!: That's a lot for one function to do
-	*/
-		// TODO: Add way to add in the text nodes as well
-
-		// How to construct this? Use a 'name' data property in image's node
-		var imgNamesStr = '';
-		// Always a good idea to use length with node list loops
-		var numNodes 	= partNodes.length;
-		for ( var nodei = 0; nodei < numNodes; nodei++ ) {
-			var $imgNode = $(partNodes[nodei]);
-
-			// Deeply copy the image and add it to the icon
-			$imgNode.clone().appendTo( $(parentNode) );
-			imgNamesStr += $imgNode.data('name');
+		var contentWidth = $contentNode.width();
+		// Handle weird sizing issues that I'm not sure where they come from
+		if ( adder.typeSelected === true ) {
+			contentWidth += 8
+			container.style['marginLeft'] = '0';
+		} else {
+			container.style['marginLeft'] = '9px';
 		}
 
-		newIcon.setId( imgNamesStr );
-		newIcon.parts = $(parentNode).children();
+		if (adder.result.type === 'message') {
+			contentWidth -= 5;
+		}
 
-		return parentNode;
-	};  // End newIcon.setImages()
+		$(iconCenter).width( contentWidth );
+
+		var contentPosition = $editorNode.position();
+		container.style.left = contentPosition.left + 'px';
+		container.style.top = contentPosition.top + 'px';
+		
 
 
-	newIcon.save 		= function ( parentObj ) {
-		parentObj[ newIcon.varName ] = newIcon;
-	};  // End newIcon.save()
-
+		return newIcon;
+	};  // End newIcon.setWidth;
 
 	// =================
 	// SVG ELEMENTS
@@ -132,7 +101,34 @@ var Icon = function ( varName ) {
 		"xmlns='http://www.w3.org/2000/svg' " +
 		"viewBox='0 0 100 100' preserveAspectRatio='none' ";
 
+
+	 newIcon.addCenterShape = function ( centerNode, htmlStr ) {
+	/* */
+
+		var htmlStr = htmlStr ||
+			"<svg width='100%' height='100%' " + newIcon.svgAttributes + ">"  +
+				"<line x1='0' y1='0' x2='100%' y2='0'/>" +
+				"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
+			"</svg>";
+
+		centerNode.innerHTML = htmlStr;
+
+		return centerNode;
+	};  // End newIcon.addCenterShape()
+
+
 	newIcon.toDefaultShape = function( iconContainer ) {
+	// Just the css border created by 'default' class name remains
+
+		var leftNode 		= iconContainer.getElementsByClassName('left')[0];
+		leftNode.innerHTML 	= '';
+
+		var centerNode 		 = iconContainer.getElementsByClassName('center')[0];
+		newIcon.addCenterShape( centerNode, '' );
+
+		var rightNode 		= iconContainer.getElementsByClassName('right')[0];
+		rightNode.innerHTML = '';
+
 		return iconContainer;
 	}
 
@@ -161,6 +157,10 @@ var Icon = function ( varName ) {
 				"<path d='" + leftRounded + "' />" +
 			"</svg>";
 		leftNode.innerHTML = leftHTMLStr;
+
+
+		var centerNode 	= iconContainer.getElementsByClassName('center')[0];
+		newIcon.addCenterShape( centerNode );
 
 
 		var rightNode 	 = iconContainer.getElementsByClassName('right')[0],
@@ -196,6 +196,11 @@ var Icon = function ( varName ) {
 			"</svg>";
 		leftNode.innerHTML = leftHTMLStr;
 
+
+		var centerNode 	= iconContainer.getElementsByClassName('center')[0];
+		newIcon.addCenterShape( centerNode );
+
+
 		var rightNode 	= iconContainer.getElementsByClassName('right')[0];
 		var rightHTMLStr =
 			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
@@ -226,6 +231,11 @@ var Icon = function ( varName ) {
 			"</svg>";
 		leftNode.innerHTML = leftHTMLStr;
 
+
+		var centerNode 	= iconContainer.getElementsByClassName('center')[0];
+		newIcon.addCenterShape( centerNode );
+
+
 		var rightNode 	= iconContainer.getElementsByClassName('right')[0];
 		var rightHTMLStr =
 			'<svg ' + svgSideDimensions + svgAttributes + '> ' +
@@ -244,37 +254,6 @@ var Icon = function ( varName ) {
 		'message': newIcon.toMessageShape,
 		'default': newIcon.toDefaultShape
 	};
-
-
-	newIcon.addNameText = function ( varName, parentNode ) {
-	/*
-	* 
-	* Add text that will show when the icon is moused over
-	*/
-		var nameContainer 	= document.createElement( 'div' );
-		parentNode.appendChild( nameContainer );
-
-		$(nameContainer).addClass( 'variable-name' );
-
-		var nameText 		= document.createTextNode( varName );
-		nameContainer.appendChild( nameText );
-
-		return nameContainer;
-	};  // End newIcon.addNameText()
-
-
-	 newIcon.addCenterShape = function ( centerNode ) {
-	/* */
-		var htmlStr =
-			"<svg width='100%' height='100%' " + newIcon.svgAttributes + ">"  +
-				"<line x1='0' y1='0' x2='100%' y2='0'/>" +
-				"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
-			"</svg>";
-
-		centerNode.innerHTML = htmlStr;
-
-		return centerNode;
-	};  // End newIcon.addCenterShape()
 
 
 	newIcon.createNew 	= function ( parentNode ) {
@@ -297,32 +276,17 @@ var Icon = function ( varName ) {
 		var center = document.createElement( 'div' );
 		container.appendChild( center );
 		center.className = 'shape-part center';
-		newIcon.addCenterShape( center );
-		// --- Mouseover text --- \\		
-		newIcon.addNameText( varName, center );
-
-		// Body in Center
-		var body 		= document.createElement( 'div' );
-		center.appendChild( body );
-		newIcon.body 	= body;
-		body.className 	= 'icon-body';
 
 		// Right side
 		var rightSide 		= document.createElement( 'div' );
 		container.appendChild( rightSide );
 		rightSide.className = 'shape-part right';
 
+		// newIcon.setSearchBar( searchBar );
+
 		return container;
 	};  // End newIcon.create()
 
 	return newIcon;
-};  // End Icon {}
+};  // End AdderIcon {}
 
-
-// --- MOUSEOVER ICON --- \\
-// In purpose.css
-
-// TESTING
-var icon = new Icon( 'test1' );
-icon.createNew( document.body );
-icon.setType( 'noun', icon.container );

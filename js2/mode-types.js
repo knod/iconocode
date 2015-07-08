@@ -21,20 +21,20 @@ adder.addTypeMode = function () {
 
 	var iconObj_;
 
+
 	// ===============
 	// ACTIVATING TYPE
 	// ================
 	var chooseType = function ( chosenNode ) {
 
 		var $textContainer = $(adder.searchBarContainer);  // created in viewer.js
-		// Remove all possible previous type classes
-		$textContainer.removeClass( 'verb' );
-		$textContainer.removeClass( 'noun' );
-		$textContainer.removeClass( 'message' );
 
-		var purpose = $(chosenNode).data('terms')[0]
-		// Add the new class
-		$textContainer.addClass( purpose )
+		var adderIcon = adder.icon;
+
+		var purpose = $(chosenNode).data('terms')[0];
+		adderIcon.setType( purpose );
+
+		adder.viewer.setValue('');
 
 		// If it's the first time, switch modes automatically
 		if ( adder.typeSelected === false ) {

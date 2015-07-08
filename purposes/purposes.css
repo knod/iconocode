@@ -74,7 +74,7 @@ Can't use position absolute for other reasons
 /* -- VERB -- */
 .icd.icon-container.verb .shape-part.left,
 .icd.icon-container.verb .shape-part.right {
-  width: 8px
+  width: 8px;
 }
 .icd.icon-container.verb .center {
 	padding: 0;
@@ -84,7 +84,7 @@ Can't use position absolute for other reasons
 /* -- NOUN -- */
 .icd.icon-container.noun .shape-part.left,
 .icd.icon-container.noun .shape-part.right {
-  width: 7.5px
+  width: 7.5px;
 }
 .icd.icon-container.noun .center {
 	padding: 0;
@@ -94,11 +94,23 @@ Can't use position absolute for other reasons
 /* -- MESSAGE/META -- */
 .icd.icon-container.message .shape-part.left,
 .icd.icon-container.message .shape-part.right {
-  width: 10px
+  width: 10px;
 }
 .icd.icon-container.message .center {
 	padding: 0;
 	width: calc(100% - 20px)
+}
+
+/* Outline in adder/icon editor */
+.icd.icon-container.default {
+	border: 1px dashed lightgray;
+}
+.icd.icon-container.default .shape-part.left,
+.icd.icon-container.default .shape-part.right {
+  width: 0px;
+}
+.icd.icon-container.default .center {
+	padding: 0;
 }
 
 

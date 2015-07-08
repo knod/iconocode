@@ -100,7 +100,7 @@ adder.showAdder = function ( edInst, iconMap ) {
 	var cursorPos 	= edInst.getCursor();
 
 	var result_ 	= adder.result;
-	console.log(result_);
+
 	result_.editor	= edInst;
 	result_.lineNum = cursorPos.line;
 	result_.token 	= edInst.getTokenAt( cursorPos );

@@ -109,6 +109,9 @@ adder.addImageMode 	= function () {
 			}
 		);
 
+		// Trigger saving for undo, I hope, and resizing of fake icon container
+		CodeMirror.signal(adder.viewer, 'change' );
+
 		// ===================
 		// RE-FOCUS
 		// ===================

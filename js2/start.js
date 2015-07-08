@@ -39,6 +39,7 @@ adder.activeMode 	= null;
 adder.node 	 		= null;
 
 // Inside the adder
+adder.icon 			= {};
 adder.viewer 		= null;
 adder.sections 		= { commands: null, tabs: null, viewer: null, pickers: null };
 adder.modes  		= {

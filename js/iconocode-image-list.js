@@ -21,6 +21,8 @@ adder.addImgList 	= function () {
 		{ fileName: 'plus.png', searchTerms: [ 'plus', 'math', 'add', 'yellow' ] },
 		{ fileName: 'search-white.png', searchTerms: [ 'search', 'magnifying', 'glass', 'white', 'gray' ] },
 		{ fileName: 'tongue-face.png', searchTerms: [ 'tongue-face', 'face', 'emoticon', 'funny', 'tongue', 'smiley', 'yellow', 'red', 'pink' ] },
+		{ fileName: 'mobs-neutral-clear.svg', searchTerms: [ 'mobs', 'ai', 'neutral', 'many', 'group' ] },
+		{ fileName: 'columns.svg', searchTerms: [ 'columns' ] }
 	];  // End adder.defaultImages[]
 
 
