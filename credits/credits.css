@@ -1,0 +1,19 @@
+/* credits.css */
+
+img {
+	max-width: 3rem;
+	max-height: 3rem;
+}
+
+li {
+	list-style: none;
+	float: left
+}
+
+li div {
+	text-align: center;
+}
+
+p {
+	margin: .2rem 0;
+}
