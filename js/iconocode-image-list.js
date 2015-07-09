@@ -22,7 +22,8 @@ adder.addImgList 	= function () {
 		{ fileName: 'search-white.png', searchTerms: [ 'search', 'magnifying', 'glass', 'white', 'gray' ] },
 		{ fileName: 'tongue-face.png', searchTerms: [ 'tongue-face', 'face', 'emoticon', 'funny', 'tongue', 'smiley', 'yellow', 'red', 'pink' ] },
 		{ fileName: 'mobs-neutral-clear.svg', searchTerms: [ 'mobs', 'ai', 'neutral', 'many', 'group' ] },
-		{ fileName: 'columns.svg', searchTerms: [ 'columns' ] }
+		{ fileName: 'columns.svg', searchTerms: [ 'columns' ] },
+		{ fileName: 'noun_1306_cc_no-att.svg', searchTerms: [ 'hammer', 'build', 'construct', 'fix' ] }
 	];  // End adder.defaultImages[]
 
 
