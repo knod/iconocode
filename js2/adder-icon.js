@@ -86,7 +86,6 @@ var AdderIcon = function () {
 		$(iconCenter).width( contentWidth );
 
 		var contentPosition = $editorNode.position();
-		debugger;
 		container.style.left = contentPosition.left + 'px';
 		container.style.top = contentPosition.top + 'px';
 		

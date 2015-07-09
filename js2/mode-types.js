@@ -34,11 +34,12 @@ adder.addTypeMode = function () {
 		var purpose = $(chosenNode).data('terms')[0];
 		adderIcon.setType( purpose );
 
-		adder.viewer.setValue('');
-
 		// If it's the first time, switch modes automatically
 		if ( adder.typeSelected === false ) {
 			adder.activateMode( adder.modes.images.tab );
+			// Only erase contents when it's the placeholder text
+			adder.viewer.setValue('');
+
 			// Don't do this again
 			adder.typeSelected = true;
 		}
