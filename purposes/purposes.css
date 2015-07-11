@@ -2,6 +2,18 @@
 
 /*.icd div { box-sizing: border-box; margin: 0; padding: 0; }*/
 
+/* =========================== */
+/* =========================== */
+/* SMALL ICONS */
+/* =========================== */
+  position: relative;
+  height: .8rem;
+  min-width: 1.5rem;
+  width: auto;
+  display: inline-block;
+  vertical-align: bottom;
+  padding: 0;
+
 /* ================ */
 /* REGULAR HTML */
 /* ================ */
@@ -26,6 +38,7 @@
 .icd.icon-container .icon-body {
 	display: flex;
 	align-items: center;
+	height: 100%;
 }
 
 
@@ -38,7 +51,8 @@ Can't use position absolute for other reasons
 /* Inheriting and 100% don't work */
 	/*max-height: 1.3rem;*/
 	/* !!! FOR BORDER EXPERIMENT */
-	max-height: .85rem;
+	/*max-height: .85rem;*/
+	height: 70%;
 }
 
 /* ================ */
@@ -144,4 +158,20 @@ Can't use position absolute for other reasons
 .icd .icon-container.noun,
 .icd .icon-container.message {
 	background: none;
+}
+
+
+
+/* =========================== */
+/* =========================== */
+/* SMALL ICONS */
+/* =========================== */
+.icd.icon-container {
+  position: relative;
+  height: .8rem;
+  min-width: 1.5rem;
+  width: auto;
+  display: inline-block;
+  vertical-align: bottom;
+  padding: 0;
 }
