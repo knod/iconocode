@@ -203,7 +203,7 @@ be scrollable... make it position: relative?
 	margin: 0 auto;
 	margin-top: .7rem;
 	width: 65%;
-	height: 40%;
+	height: 30%;
 }
 .icd .type-choice-container .icon-body {
 	/*height: calc(1.3rem * 2);*/

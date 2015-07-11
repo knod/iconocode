@@ -143,7 +143,7 @@ var Icon = function ( varName ) {
 	* DOMParser() didn't work right, not properly assigning classes
 	* to its first child, so trying this now
 	*/
-		var svgSideDimensions 	= "width='8px' height='100%' ",
+		var svgSideDimensions 	= "width='5px' height='100%' ",
 			svgAttributes 		= newIcon.svgAttributes;
 
 		// This would be awesome, but it looks weird at almost any value

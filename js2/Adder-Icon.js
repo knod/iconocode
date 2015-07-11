@@ -73,7 +73,7 @@ var AdderIcon = function () {
 		var contentWidth = $contentNode.width();
 		// Handle weird sizing issues that I'm not sure where they come from
 		if ( adder.typeSelected === true ) {
-			contentWidth += 8
+			contentWidth += 8;
 			container.style['marginLeft'] = '0';
 		} else {
 			container.style['marginLeft'] = '9px';
@@ -81,6 +81,9 @@ var AdderIcon = function () {
 
 		if (adder.result.type === 'message') {
 			contentWidth -= 5;
+		} else if ( adder.result.type === 'verb' ) {
+			container.style['marginLeft'] = '4px';
+			contentWidth -= 4;
 		}
 
 		$(iconCenter).width( contentWidth );
@@ -137,7 +140,7 @@ var AdderIcon = function () {
 	* DOMParser() didn't work right, not properly assigning classes
 	* to its first child, so trying this now
 	*/
-		var svgSideDimensions 	= "width='8px' height='100%' ",
+		var svgSideDimensions 	= "width='5px' height='100%' ",
 			svgAttributes 		= newIcon.svgAttributes;
 
 		// This would be awesome, but it looks weird at almost any value

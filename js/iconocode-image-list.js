@@ -24,7 +24,10 @@ adder.addImgList 	= function () {
 		{ fileName: 'mobs-neutral-clear.svg', searchTerms: [ 'mobs', 'ai', 'neutral', 'many', 'group' ] },
 		{ fileName: 'columns.svg', searchTerms: [ 'columns' ] },
 		{ fileName: 'noun_1306_cc_no-attr.svg', searchTerms: [ 'hammer', 'build', 'construct', 'fix' ] },
-		{ fileName: 'noun_37982_cc_no-attr.svg', searchTerms: [ 'grid', 'cells' ] }
+		{ fileName: 'noun_37982_cc_no-attr.svg', searchTerms: [ 'grid', 'cells' ] },
+		{ fileName: 'rows.svg', searchTerms: [ 'rows' ] },
+		{ fileName: 'push2.svg', searchTerms: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
+		{ fileName: 'push.svg', searchTerms: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] }
 	];  // End adder.defaultImages[]
 
 

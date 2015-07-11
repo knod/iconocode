@@ -15,7 +15,7 @@
    id="svg3005"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="columns.svg">
+   sodipodi:docname="rows.svg">
   <defs
      id="defs3007" />
   <sodipodi:namedview
@@ -64,7 +64,8 @@
      inkscape:groupmode="layer"
      transform="translate(0,0.04545385)">
     <g
-       id="g3430">
+       id="g3430"
+       transform="matrix(0,-1,1,0,0.04545322,63.954543)">
       <rect
          y="-0.045455933"
          x="0"
