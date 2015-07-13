@@ -59,7 +59,7 @@ Add the adder element
 
 
 	// Hide adder until needed
-	// adder.node.style.display = 'none';
+	$(adder.node).hide();
 
 	return adderNode_;
 };  // End adder.addAdder()
@@ -114,8 +114,14 @@ adder.showAdder = function ( edInst, iconMap ) {
 	// Testing
 	// adder.typeSelected = true;
 
+	// =================
+	// ADDER NODE STUFF
+	// =================
 	// Make adder visible
-	adder.node.style.display = 'auto';
+	$(adder.node).show();
+	adder.viewer.setValue('What does this variable do?');
+	$(adder.node).find('.selected').removeClass('selected');
+	adder.viewer.focus();
 
 	// Make "Type" tab active
 	adder.activateMode( adder.modes.types.tab );

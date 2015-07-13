@@ -101,6 +101,8 @@ be scrollable... make it position: relative?
 	position: fixed;
 	left: calc( 50% - 20rem/2 );
 	top: calc( 50% - 10rem/2 );
+	/* Make sure it's in front of anything else. Weird Code Mirror issues. */
+	z-index: 2000;
 
 	width: 20rem;
 	height: auto;

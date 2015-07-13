@@ -169,17 +169,17 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	adder.viewer 		= cmEditor;
 
 
-
 	// =====================
 	// ONE LINE HIGH
 	// =====================
 	// cmEditor.setSize( '100%', cmEditor.defaultTextHeight() + 2 * 4);
-	cmEditor.setSize( 'auto', cmEditor.defaultTextHeight());
+	cmEditor.setSize( 'auto', cmEditor.defaultTextHeight() + 'rem');
 	// cmEditor.setSize( 'auto', '100%');
 	// searcher.setSize( '100%', '100%');
 	// 200 is the preferable width of text field in pixels,
 	// 4 is default CM padding (which depends on the theme you're using)
 
+console.log(cmEditor.getWrapperElement().style.height)
 	// now disallow adding newlines in the following simple way
 	cmEditor.on("beforeChange", function(instance, change) {
 	    var newtext = change.text.join("").replace(/\n/g, ""); // remove ALL \n !
