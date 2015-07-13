@@ -12,11 +12,9 @@ adder.addCommands = function ( parentNode ) {
 
 	var commands = {};
 
-
 	// ================================
 	// SAVING AN ICON
 	// ================================
-
 	commands.constructIcon = function ( variableName, purpose, imageNodes ) {
 	/* ( str, str, [Nodes] ) -> {}
 	* 
@@ -88,6 +86,9 @@ adder.addCommands = function ( parentNode ) {
 		// Takes: token, lineNum, iconMap, editor
 		icd.utils.markVar( result_.token, result_.lineNum, result_.iconMap, result_.editor  );
 
+		// Get rid of adder
+		commands.exit( adder );
+
 		return iconObj;
 	};  // End commands.applyIcon()
 
@@ -124,14 +125,17 @@ adder.addCommands = function ( parentNode ) {
 	// ================================
 	// EXITING ADDER
 	// ================================
-	commands.exit = function () {
+	commands.exit = function ( obj ) {
 	/* 
 	* 
 	* Exits adder interface. Resets it?
 	* TODO: Warn if icon is there but hasn't been saved
 	*/
+		// Get rid of adder
+		$(obj.node).hide();
+		obj.result.editor.focus();
 
-
+		return obj;
 	};  // End commands.exit()
 
 
@@ -145,7 +149,7 @@ adder.addCommands = function ( parentNode ) {
 
 		control.addEventListener( 'click', function () {
 			
-
+			commands.exit( adder );
 			
 		} );
 
