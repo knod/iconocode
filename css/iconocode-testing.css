@@ -357,7 +357,7 @@ but maybe we want the images to be their proper size?
 /* --- DOCUMENT --- */
 /* --------------------- */
 .footer {
-	position:absolute;
+	position: fixed;
 	bottom: 0;
 }
 

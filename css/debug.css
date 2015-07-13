@@ -49,6 +49,12 @@ input::-moz-focus-inner {
   padding: 0;
 }
 
+#icon_size_input {
+	position: fixed;
+	top: 1rem;
+	right: 2rem;	
+}
+
 .CodeMirror.test-editor .CodeMirror-linenumber {
 	transform: translate( 0, 30%);
 }
