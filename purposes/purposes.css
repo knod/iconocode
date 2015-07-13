@@ -1,19 +1,5 @@
 /*purposes.css*/
 
-/*.icd div { box-sizing: border-box; margin: 0; padding: 0; }*/
-
-/* =========================== */
-/* =========================== */
-/* SMALL ICONS */
-/* =========================== */
-  position: relative;
-  height: .8rem;
-  min-width: 1.5rem;
-  width: auto;
-  display: inline-block;
-  vertical-align: bottom;
-  padding: 0;
-
 /* ================ */
 /* REGULAR HTML */
 /* ================ */
@@ -47,11 +33,7 @@
 	Kushagra Gour's isn't working, not sure if I can get the top answer working either
 Can't use position absolute for other reasons
 */
-.icon-part {
-/* Inheriting and 100% don't work */
-	/*max-height: 1.3rem;*/
-	/* !!! FOR BORDER EXPERIMENT */
-	/*max-height: .85rem;*/
+.icd.icon-container .icon-part {
 	height: 70%;
 }
 
@@ -153,10 +135,10 @@ Can't use position absolute for other reasons
 /* ================ */
 /* BACKGROUNDS, ATM */
 /* ================ */
-.icd .icon-container.verb,
-.icd .icon-container.square,
-.icd .icon-container.noun,
-.icd .icon-container.message {
+.icd.icon-container.verb,
+.icd.icon-container.square,
+.icd.icon-container.noun,
+.icd.icon-container.message {
 	background: none;
 }
 
@@ -167,11 +149,50 @@ Can't use position absolute for other reasons
 /* SMALL ICONS */
 /* =========================== */
 .icd.icon-container {
+	position: relative;
+	display: inline-block;
+	vertical-align: baseline;
+
+	transform: translate( 0, 30% );
+
+	height: 1rem;
+
+	min-width: 1.5rem;
+	width: auto;
+	padding: 0;
+}
+
+.icd.icon-container.small {
+	vertical-align: bottom;
+	height: .8rem;
+	/*transform: translate( 0, -30% );*/
+}
+
+.icd.icon-container.large {
+	vertical-align: baseline;
+	height: 1.3rem;
+	/*transform: translate( 0, 30% );*/
+}
+
+
+/*.icd.icon-container .icon-part{
   position: relative;
-  height: .8rem;
+  display: inline-block;
+
+  height: 1rem;
+
   min-width: 1.5rem;
   width: auto;
-  display: inline-block;
-  vertical-align: bottom;
   padding: 0;
+}*/
+
+/*.icd.icon-container.small .icon-part{
+  vertical-align: bottom;
+  height: .8rem;
 }
+
+.icd.icon-container.large .icon-part{
+  height: 1.3rem;
+  transform: translate( 50%, 0 );
+}*/
+

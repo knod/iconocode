@@ -15,6 +15,8 @@ var myCodeMirror = CodeMirror(document.body,
 	}
 );
 
+$(myCodeMirror.getWrapperElement()).addClass('test-editor');
+
 myCodeMirror.on('cursorActivity', function ( instance ) {
 /* 
 * Happens even when it's just text being typed in

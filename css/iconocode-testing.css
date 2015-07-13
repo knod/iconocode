@@ -354,6 +354,15 @@ but maybe we want the images to be their proper size?
 
 
 /* --------------------- */
+/* --- DOCUMENT --- */
+/* --------------------- */
+.footer {
+	position:absolute;
+	bottom: 0;
+}
+
+
+/* --------------------- */
 /* --- TEST --- */
 /* --------------------- */
 .icd :focus {

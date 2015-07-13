@@ -27,6 +27,7 @@ adder.addImgList 	= function () {
 		{ fileName: 'noun_37982_cc_no-attr.svg', searchTerms: [ 'grid', 'cells' ] },
 		{ fileName: 'rows.svg', searchTerms: [ 'rows' ] },
 		{ fileName: 'push2.svg', searchTerms: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
+		{ fileName: 'push3.svg', searchTerms: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
 		{ fileName: 'push.svg', searchTerms: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] }
 	];  // End adder.defaultImages[]
 

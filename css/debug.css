@@ -1,0 +1,54 @@
+/*debug.css*/
+
+/* ================================ */
+/* ICON STYLE TOGGLE BUTTON */
+/* ================================ */
+button {
+	position: fixed;
+	top: 2rem;
+	right: 2rem;
+	border: 1px solid gray;
+	color: darkgray;
+	padding: 0.2rem;
+
+	/* http://codepen.io/terkel/pen/dvejH */
+   /* background: none;
+    border: 0;
+    color: inherit;*/
+    /* cursor: default; */
+    /*font: inherit;
+    line-height: normal;
+    overflow: visible;
+    padding: 0;
+    -webkit-appearance: button;*/ /* for input */
+    /*-webkit-user-select: none;*/ /* for button */
+	/*-moz-user-select: none;*/
+	/*-ms-user-select: none;*/
+
+	/* http://stackoverflow.com/questions/16077341/how-to-reset-all-default-styles-of-the-html5-button-element */
+	background: none repeat scroll 0 0 transparent;
+	/*border: medium none;*/
+	border-spacing: 0;
+	/*color: #26589F;*/
+	/*font-family: 'PT Sans Narrow',sans-serif;*/
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 1.42rem;
+	list-style: none outside none;
+	margin: 0;
+	/*padding: 0;*/
+	text-align: left;
+	text-decoration: none;
+	text-indent: 0;
+}
+
+/* http://stackoverflow.com/questions/16077341/how-to-reset-all-default-styles-of-the-html5-button-element */
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+.CodeMirror.test-editor .CodeMirror-linenumber {
+	transform: translate( 0, 30%);
+}

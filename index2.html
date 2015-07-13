@@ -15,6 +15,7 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 	<link 	rel='stylesheet' type='text/css' href='css/iconocode-testing.css' />
 	<!-- <link 	rel='stylesheet' type='text/css' href='css/fuzzy-search.css' /> -->
 	<link 	rel='stylesheet' type='text/css' href='purposes/purposes.css' />
+  <link   rel='stylesheet' type='text/css' href='css/debug.css' />
 
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 
@@ -23,6 +24,12 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 
 <body>
 	
+  <form>
+        <input type='range' id='icon_size_input' name='iconSizeInput' min='0.8' max='2' step='0.02' value='1'>
+        <output name='iconSizeOutput' for='iconSizeInput' id='icon_size_output'></output>
+  </form>
+  <!-- <button id='toggle-icon-size'>Make Large</button> -->
+
 	<h1>Testing</h1>
 	
 	<section>
@@ -44,7 +51,7 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 
   <br>
 
-  <a href='./credits/credits.html'>Credits here for stuff like icons from the Noun Project</a>
+  <a class='footer' href='./credits/credits.html'>Credits for stuff like icons from the Noun Project</a>
 
 	<!-- ************************* -->
 	<!-- SCRIPTS -->
@@ -115,6 +122,7 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 	<script src='CodeMirror-master/mode/javascript/javascript.js'></script>
 	<link 	rel='stylesheet' href='CodeMirror-master/theme/lesser-dark.css'>
 	<script src='js2/editor/start.js'></script>
+  <script src='js2/debug/icon-styles.js'></script>
 
 
 </body>
