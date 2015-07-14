@@ -160,19 +160,10 @@ Can't use position absolute for other reasons
 	min-width: 1.5rem;
 	width: auto;
 	padding: 0;
-}
 
-/*.icd.icon-container.small {
-	vertical-align: bottom;
-	height: .8rem;
-	transform: translate( 0, -30% );
+	/* For vertical centering */
+	float: left;
 }
-
-.icd.icon-container.large {
-	vertical-align: baseline;
-	height: 1.3rem;
-	transform: translate( 0, 30% );
-}*/
 
 
 /*.icd.icon-container .icon-part{

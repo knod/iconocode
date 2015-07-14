@@ -36,9 +36,11 @@ window.addEventListener( 'load', function () {
 	iconSizeSlider.addEventListener( 'input', function (evnt) {
 
 		var iconSize 	= evnt.target.value;
+		var lineDiff 	= 0.35;
+
 
 		// Line is just a little bigger to give space around icons
-		var lineHeight 	= (parseFloat(iconSize) + 0.02);
+		var lineHeight 	= (parseFloat(iconSize) + lineDiff);
 		// Don't let line get smaller than 1 rem
 		if ( lineHeight < 1 ) { lineHeight = 1 };
 
@@ -49,11 +51,14 @@ window.addEventListener( 'load', function () {
 		$('.CodeMirror.test-editor .CodeMirror-lines').css( 'line-height', lineHeight + 'rem' );
 
 		$('.CodeMirror.test-editor .icd.icon-container').css( 'height', iconSize + 'rem' );
+		$('.CodeMirror.test-editor .icd.icon-container').css( 'margin-top', (lineDiff/2) + 'rem' );
 		// $('.CodeMirror.test-editor .icd.icon-container').css( 'transform', 'translate( 0, ' + translate + 'rem )' );
 
 		// $('.CodeMirror.test-editor .CodeMirror-linenumber').css( 'transform', 'translate( 0, ' + translate + 'rem )' );
 		
 		$('.icd.icon-container .icon-part').hide().show(0);
+
+		$('#icon_size_output').val( iconSize + 'rem' );
 
 	});
 });

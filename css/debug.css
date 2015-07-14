@@ -55,10 +55,16 @@ input::-moz-focus-inner {
   padding: 0;
 }
 
-#icon_size_input {
+#icon_size_form {
 	position: fixed;
 	top: 1rem;
 	right: 2rem;	
+}
+
+form * {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
 }
 
 .CodeMirror.test-editor .CodeMirror-linenumber {
