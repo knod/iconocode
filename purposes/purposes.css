@@ -153,7 +153,7 @@ Can't use position absolute for other reasons
 	display: inline-block;
 	vertical-align: baseline;
 
-	transform: translate( 0, 30% );
+	/*transform: translate( 0, 30% );*/
 
 	height: 1rem;
 
@@ -162,17 +162,17 @@ Can't use position absolute for other reasons
 	padding: 0;
 }
 
-.icd.icon-container.small {
+/*.icd.icon-container.small {
 	vertical-align: bottom;
 	height: .8rem;
-	/*transform: translate( 0, -30% );*/
+	transform: translate( 0, -30% );
 }
 
 .icd.icon-container.large {
 	vertical-align: baseline;
 	height: 1.3rem;
-	/*transform: translate( 0, 30% );*/
-}
+	transform: translate( 0, 30% );
+}*/
 
 
 /*.icd.icon-container .icon-part{

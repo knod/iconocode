@@ -38,17 +38,20 @@ window.addEventListener( 'load', function () {
 		var iconSize 	= evnt.target.value;
 
 		// Line is just a little bigger to give space around icons
-		var lineHeight 	= (parseFloat(iconSize));
+		var lineHeight 	= (parseFloat(iconSize) + 0.02);
 		// Don't let line get smaller than 1 rem
 		if ( lineHeight < 1 ) { lineHeight = 1 };
 
 
 		var translate = iconSize * .3;
 
+
 		$('.CodeMirror.test-editor .CodeMirror-lines').css( 'line-height', lineHeight + 'rem' );
 
-		$('.icd.icon-container').css( 'height', iconSize + 'rem' );
-		$('.icd.icon-container').css( 'transform', 'translate( 0, ' + translate + 'rem )' );
+		$('.CodeMirror.test-editor .icd.icon-container').css( 'height', iconSize + 'rem' );
+		// $('.CodeMirror.test-editor .icd.icon-container').css( 'transform', 'translate( 0, ' + translate + 'rem )' );
+
+		// $('.CodeMirror.test-editor .CodeMirror-linenumber').css( 'transform', 'translate( 0, ' + translate + 'rem )' );
 		
 		$('.icd.icon-container .icon-part').hide().show(0);
 
