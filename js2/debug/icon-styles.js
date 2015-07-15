@@ -45,21 +45,20 @@ window.addEventListener( 'load', function () {
 
 		// var lineDiff 	= lineHeight - iconSize;
 
-		// This assumes a font size of 16
-		var fontSize = $('.CodeMirror.test-editor .CodeMirror-lines').css('fontSize');
-		console.log(fontSize)
-		// devisor = 44.35 arrived at by the left hand side divided by the margin-bottom value gotten from
-		// manually centering stuff for both line height 2.35 and line-height 1.175
-		// They're not the same, so then getting the difference of those calculations and dividing by 2
-		// then adding that to the smaller result (the one for 1.175)
-		// In Math: 
-		// larger 	= ((2.35 * 16) - (16/2))/0.65
-		// smaller 	= ((1.175 * 16) - (16/2))/0.25
-		// average 	= (larger + smaller)/2
-		var divisor = 44.37
-		var baselineChange = -1 * ( ((lineHeight * 16) - (16/2)) / divisor )
+		// --- VERTICALLY CENTER --- \\
+		var elem 	 = $('.CodeMirror.test-editor .CodeMirror-lines')[0];
+		var style 	 = window.getComputedStyle( elem, null ).getPropertyValue('font-size');
+		var fontSize = parseFloat(style);
 
-		console.log( iconSize * 1.175)
+		// devisor arrived at by the left hand side divided by the margin-bottom value
+		// gotten from manually centering stuff for both line height 2.35 and line-height 1.175
+		// They're not the same, so then getting the average of those calculations
+		// In Math: 
+		// larger 	= ((2.35 * 13) - (13/2))/0.65
+		// smaller 	= ((1.175 * 13) - (13/2))/0.25
+		// average 	= (larger + smaller)/2
+		var divisor = 36.05;
+		var baselineChange = -1 * ( ((lineHeight * fontSize) - (fontSize/2)) / divisor )
 
 		// 1 should = 1, 2 should = 2.35
 		$('.CodeMirror.test-editor .CodeMirror-lines').css( 'line-height', lineHeight + 'rem' );
@@ -69,12 +68,6 @@ window.addEventListener( 'load', function () {
 
 		$('.icd.icon-container .icon-part').hide().show(0);
 
-
-// Answer's description from http://stackoverflow.com/questions/12950479/why-does-inline-block-element-having-content-not-vertically-aligned
-// overflow = inherit
-// With margin-top removed
-// 2.35, 2, margin-bottom = 0.65
-// 1.175, 1, margin-bottom = 0.25
 	});
 });
 

@@ -147,7 +147,7 @@ Can't use position absolute for other reasons
 
 /* =========================== */
 /* =========================== */
-/* SMALL ICONS */
+/* CENTERING DIFFERENT SIZED ICONS */
 /* =========================== */
 .icd.icon-container {
 	position: relative;
@@ -169,25 +169,4 @@ Can't use position absolute for other reasons
 	overflow: inherit;
 }
 
-
-/*.icd.icon-container .icon-part{
-  position: relative;
-  display: inline-block;
-
-  height: 1rem;
-
-  min-width: 1.5rem;
-  width: auto;
-  padding: 0;
-}*/
-
-/*.icd.icon-container.small .icon-part{
-  vertical-align: bottom;
-  height: .8rem;
-}
-
-.icd.icon-container.large .icon-part{
-  height: 1.3rem;
-  transform: translate( 50%, 0 );
-}*/
 
