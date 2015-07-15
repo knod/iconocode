@@ -163,7 +163,10 @@ Can't use position absolute for other reasons
 	padding: 0;
 
 	/* For vertical centering */
-	float: left;
+	/* Takes it out of the flow, even though it's on the child */
+	/*float: left;*/
+	/* See http://stackoverflow.com/questions/12950479/why-does-inline-block-element-having-content-not-vertically-aligned */
+	overflow: inherit;
 }
 
 
