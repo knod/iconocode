@@ -19,10 +19,6 @@ var IcdUpdater = function ( utils, iconMap ) {
 	updater.oldToken 		= { type: null };
 	updater.oldCursorPos 	= { line: null, ch: null };
 
-	// Needs varName, mapObj
-	var getVarIcon 	= utils.getVarIcon;
-	var markVar 	= utils.markVar;
-
 	// updater.changeHandler = function ( evnt ) {
 		// /* 
 		// * 
@@ -53,11 +49,20 @@ var IcdUpdater = function ( utils, iconMap ) {
 
 		var markArray 	= editor.findMarksAt( tokenStart ),
 			mark 		= null;
-		// console.log(markArray)
+
 		// Need a better test in case there are other marks there
 		if ( markArray.length === 0 ) {
-			// Actually mark the variable's token
-			mark = markVar( token, lineNum, iconMap, editor );
+			// Check if there's a mark for that text
+
+			var tokenStart 	= { line: lineNum, ch: token.start  },
+				tokenEnd 	= { line: lineNum, ch: token.end };
+
+			var iconObj 	= utils.getVarIcon( token.string, iconMap );
+
+			if ( iconObj !== null ) {
+				// Actually mark the variable's token
+				mark = utils.markVar( token, lineNum, iconObj, editor );
+			}
 		}
 
 		return mark;

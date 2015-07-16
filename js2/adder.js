@@ -119,6 +119,7 @@ adder.showAdder = function ( edInst, iconMap ) {
 	// =================
 	// Make adder visible
 	$(adder.node).show();
+	adder.icon.setType('default');
 	adder.viewer.setValue('What does this variable do?');
 	$(adder.node).find('.selected').removeClass('selected');
 	adder.viewer.focus();
