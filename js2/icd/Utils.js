@@ -35,13 +35,12 @@ var IcdUtils = function () {
 	};  // End newUtils.getVarIcon()
 
 
-	newUtils.markVar 	= function ( token, lineNum, iconMap, editor ) {
+	newUtils.markVar 	= function ( token, lineNum, iconObj, editor ) {
 	/* 
 	*/
 		var tokenStart 	= { line: lineNum, ch: token.start  },
 			tokenEnd 	= { line: lineNum, ch: token.end };
 
-		var iconObj 	= newUtils.getVarIcon( token.string, iconMap );
 		var nodeClone 	= $(iconObj.container).clone()[0];
 
 		// --- PLACE MARKER --- \\

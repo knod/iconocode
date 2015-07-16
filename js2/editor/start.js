@@ -66,21 +66,23 @@ window.addEventListener('load', function () {
 		img1b 	= $(adder.modes.images.grid.choiceContainers[1]).find('img')[0],
 		img2a 	= $(adder.modes.images.grid.choiceContainers[2]).find('img')[0],
 		img2b 	= $(adder.modes.images.grid.choiceContainers[3]).find('img')[0];
-	img1a.className = 'icon-part';
-	img1b.className = 'icon-part';
-	img2a.className = 'icon-part';
-	img2b.className = 'icon-part';
 
 	var icon1 	= constructIcon( 'token1', 'verb', [img1a, img1b] ),
 		icon2 	= constructIcon( 'token2', 'verb', [img2a, img2b] );
+
+	icon1.parts[0].className = 'icon-part';
+	icon1.parts[1].className = 'icon-part';
+	icon2.parts[0].className = 'icon-part';
+	icon2.parts[1].className = 'icon-part';
 
 	// INSERT AS MARKERS
 	setTimeout( function () {
 		// Wait so there's time for codemirror to tokenize things properly
 		var token1 	= myCM.getTokenAt( {line: 1, ch: 1} ),
 			token2 	= myCM.getTokenAt( {line: 2, ch: 1} );
-		icd.utils.markVar( token1, 1, icd.map, myCM );
-		icd.utils.markVar( token2, 2, icd.map, myCM );
+		icd.utils.markVar( token1, 1, icon1, myCM );
+		icd.utils.markVar( token2, 2, icon2, myCM );
+
 	} , 50);
 
 });

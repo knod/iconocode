@@ -84,7 +84,7 @@ adder.addCommands = function ( parentNode ) {
 
 		// !!!: currently using global, need local
 		// Takes: token, lineNum, iconMap, editor
-		icd.utils.markVar( result_.token, result_.lineNum, result_.iconMap, result_.editor  );
+		icd.utils.markVar( result_.token, result_.lineNum, iconObj, result_.editor  );
 
 		// Get rid of adder
 		commands.exit( adder );
@@ -96,9 +96,10 @@ adder.addCommands = function ( parentNode ) {
 	commands.preserveText = function () {
 	/* 
 	* 
-	* Give each piece of text in the viewer a class that will allow it to
+	* Give each text node in the viewer a class that will allow it to
 	* be retrieved for insertion into the final icon. Give the
 	* text node a $data of 'terms' as well, made up of its contents
+	* ???: is this the only other node we need to account for?
 	*/
 
 	};  // End commands.labelText()
@@ -171,7 +172,7 @@ adder.addCommands = function ( parentNode ) {
 	};  // End commands.addCommands()
 
 
-	var container = commands.addCommands( parentNode )
+	var container = commands.addCommands( parentNode );
 
 	return container;
 };  // End adder.addCommands()
