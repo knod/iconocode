@@ -25,6 +25,8 @@ var Iconocode = function () {
 	icd.adder = {};  // Must integrate main start.js with this
 	icd.updater = new IcdUpdater( icd.utils, icd.map );
 
+	icd.hotbar = new HotBar( icd.map );
+
 	// I think each editor instance will have to add its own event listener
 	// icd.utils.cursorMovementHandler( editorInstance? );
 	// _rgn (##javascript) suggests looking at the source to see if the

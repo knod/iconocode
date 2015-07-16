@@ -91,7 +91,7 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 
 		iconObj.setImages( imageNodes, iconObj.body );
 
-		iconObj.save( icd.map );
+		iconObj.save( icd.map, icd.hotbar );
 
 		return iconObj;
 	};  // End thisViewer.constructIcon()

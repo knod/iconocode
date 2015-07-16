@@ -1,0 +1,30 @@
+/*editor-and-extras.css*/
+
+.test-editor {
+	width: 90%;
+}
+
+.icon-hotbar {
+	float:left;
+	display: inline-block;
+	margin-right: 0.5%;
+
+	height: 300px;
+	width: 9.5%;
+
+	background-color: #262626;
+	color: lightgray;
+}
+
+.icon-hotbar h3 {
+	margin: 0 auto;
+	padding: 0.2rem 0.5rem;
+	text-align: center;
+}
+
+.icon-hotbar-icons {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+}

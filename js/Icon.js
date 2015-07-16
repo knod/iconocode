@@ -120,8 +120,9 @@ var Icon = function ( varName ) {
 	};  // End newIcon.setImages()
 
 
-	newIcon.save 		= function ( parentObj ) {
-		parentObj[ newIcon.varName ] = newIcon;
+	newIcon.save 		= function ( parentMap, hotbarObj ) {
+		parentMap[ newIcon.varName ] = newIcon;
+		hotbarObj.update();
 	};  // End newIcon.save()
 
 
