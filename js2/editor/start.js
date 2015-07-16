@@ -6,42 +6,47 @@
 
 'use strict'
 
-var myCodeMirror = CodeMirror(document.body,
-	{
-		mode: 		'javascript',
-		value: 		"function myScript(){return 100;}\ntoken1 = 5;\ntoken2 = 12;",
-		theme:  	"lesser-dark",
-		lineNumbers: true
-	}
-);
-
-var myEditorElement = myCodeMirror.getWrapperElement();
-$( myEditorElement ).addClass('test-editor');
-
-myCodeMirror.on('cursorActivity', function ( instance ) {
-/* 
-* Happens even when it's just text being typed in
-*/
-	icd.updater.cursorMovementHandler( instance );
-});  // End on cursor activity
-
-
-myCodeMirror.setOption("extraKeys", {
-// http://codemirror.net/doc/manual.html#keymaps
-	Tab: function() {
-	/* 
-	* Need to put in right click somehow, or some more sensical shortcut commands
-	*/
-		// 
-		adder.showAdder( myCodeMirror, icd.map );
-	}
-});
+var myCM
 
 // ===========================
 // TEST
 // ===========================
 window.addEventListener('load', function () {
-	var myCM = myCodeMirror;
+
+
+	var editorContainer = document.querySelector('.editor-container')
+
+	myCM = CodeMirror( editorContainer,
+		{
+			mode: 		'javascript',
+			value: 		"function myScript(){return 100;}\ntoken1 = 5;\ntoken2 = 12;",
+			theme:  	"lesser-dark",
+			lineNumbers: true
+		}
+	);
+
+	var myEditorElement = myCM.getWrapperElement();
+	$( myEditorElement ).addClass('test-editor');
+
+	myCM.on('cursorActivity', function ( instance ) {
+	/* 
+	* Happens even when it's just text being typed in
+	*/
+		icd.updater.cursorMovementHandler( instance );
+	});  // End on cursor activity
+
+
+	myCM.setOption("extraKeys", {
+	// http://codemirror.net/doc/manual.html#keymaps
+		Tab: function() {
+		/* 
+		* Need to put in right click somehow, or some more sensical shortcut commands
+		*/
+			// 
+			adder.showAdder( myCM, icd.map );
+		}
+	});
+
 
 	var constructIcon = function ( variableName, purpose, imageNodes ) {
 		/* ( str, str, [Nodes] ) -> {}
@@ -56,7 +61,7 @@ window.addEventListener('load', function () {
 			iconObj.setType( purpose , iconObj.container );
 			iconObj.setImages( imageNodes, iconObj.body );
 
-			iconObj.save( icd.map );
+			iconObj.save( icd.map, icd.hotbar );
 
 			return iconObj;
 	};  // End constructIcon()

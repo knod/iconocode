@@ -28,7 +28,7 @@ adder.addCommands = function ( parentNode ) {
 		iconObj.setType( purpose , iconObj.container );
 		iconObj.setImages( imageNodes, iconObj.body );
 
-		iconObj.save( icd.map );
+		iconObj.save( icd.map, icd.hotbar );
 
 		return iconObj;
 	};  // End commands.constructIcon()
