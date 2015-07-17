@@ -23,6 +23,7 @@ var HotBar = function ( iconMap, editorInstance, parentNode ) {
 
 		editorInstance.focus();
 		editorInstance.replaceSelection( iconObj.varName );
+		editorInstance.replaceSelection( ' ' );
 
 		// editorInstance.getCursor();
 
