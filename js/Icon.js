@@ -112,7 +112,8 @@ var Icon = function ( varName ) {
 			$imgNode.clone().appendTo( $(parentNode) );
 			// Remove all previous classes and add the right class
 			// Why was I doing this elsewhere?
-			$imgNode.removeClass()
+			$imgNode.removeClass();
+			$imgNode.addClass( 'icon-part' );
 			imgNamesStr += $imgNode.data('name');
 		}
 

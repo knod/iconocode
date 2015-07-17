@@ -358,6 +358,10 @@ but maybe we want the images to be their proper size?
 /* --------------------- */
 /* --- DOCUMENT --- */
 /* --------------------- */
+body {
+	background-color: lightgray;
+}
+
 .footer {
 	position: fixed;
 	bottom: 0;
