@@ -13,7 +13,6 @@ var myCM
 // ===========================
 window.addEventListener('load', function () {
 
-
 	var editorContainer = document.querySelector('.editor-container')
 
 	myCM = CodeMirror( editorContainer,
@@ -25,6 +24,9 @@ window.addEventListener('load', function () {
 		}
 	);
 
+	icd.addEditor( myCM );
+
+	// ----------------------------------------------
 	var myEditorElement = myCM.getWrapperElement();
 	$( myEditorElement ).addClass('test-editor');
 
@@ -67,18 +69,18 @@ window.addEventListener('load', function () {
 	};  // End constructIcon()
 
 	// MAKE ICONS
-	var img1a 	= $(adder.modes.images.grid.choiceContainers[0]).find('img')[0],
-		img1b 	= $(adder.modes.images.grid.choiceContainers[1]).find('img')[0],
-		img2a 	= $(adder.modes.images.grid.choiceContainers[2]).find('img')[0],
-		img2b 	= $(adder.modes.images.grid.choiceContainers[3]).find('img')[0];
+	var img1a 	= $(adder.modes.images.grid.choiceContainers[0]).find('img').clone()[0],
+		img1b 	= $(adder.modes.images.grid.choiceContainers[1]).find('img').clone()[0],
+		img2a 	= $(adder.modes.images.grid.choiceContainers[2]).find('img').clone()[0],
+		img2b 	= $(adder.modes.images.grid.choiceContainers[3]).find('img').clone()[0];
+	// Change here so they'll be saved with the right class
+	img1a.className = 'icon-part';
+	img1b.className = 'icon-part';
+	img2a.className = 'icon-part';
+	img2b.className = 'icon-part';
 
 	var icon1 	= constructIcon( 'token1', 'verb', [img1a, img1b] ),
 		icon2 	= constructIcon( 'token2', 'verb', [img2a, img2b] );
-
-	icon1.parts[0].className = 'icon-part';
-	icon1.parts[1].className = 'icon-part';
-	icon2.parts[0].className = 'icon-part';
-	icon2.parts[1].className = 'icon-part';
 
 	// INSERT AS MARKERS
 	setTimeout( function () {
