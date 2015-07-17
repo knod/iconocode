@@ -110,6 +110,9 @@ var Icon = function ( varName ) {
 
 			// Deeply copy the image and add it to the icon
 			$imgNode.clone().appendTo( $(parentNode) );
+			// Remove all previous classes and add the right class
+			// Why was I doing this elsewhere?
+			$imgNode.removeClass()
 			imgNamesStr += $imgNode.data('name');
 		}
 

@@ -18,6 +18,17 @@ var HotBar = function ( iconMap, parentNode ) {
 	newHotbar.list	= document.querySelector('.icon-hotbar-icons');
 
 
+	newHotbar.makeListItem = function ( contentsNode ) {
+	/*
+	* Make one list item node
+	*/
+		var listItem = document.createElement('li');
+		listItem.appendChild( contentsNode );
+
+		return contentsNode;
+	};  // End newHotbar.makeListItem()
+
+
 	newHotbar.update = function () {
 	/* 
 	* iconMap comes from when the thing is first created up top.
@@ -30,8 +41,14 @@ var HotBar = function ( iconMap, parentNode ) {
 		for ( var varName in iconMap ) {
 			if ( iconMap.hasOwnProperty( varName ) ) {
 
-				var $clone = $(iconMap[ varName ].node).clone();
-				console.log(varName ,':', clone);
+				var iconClone 		= $(iconMap[ varName ].container).clone()[0];
+				console.log(iconClone)
+				var listIcon	= newHotbar.makeListItem( iconClone );
+				// $clone.appendTo( $hotbarList );
+				newHotbar.list.appendChild( listIcon );
+
+
+		console.log( newHotbar.list )
 			}
 		}
 
