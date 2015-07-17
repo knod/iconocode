@@ -83,4 +83,8 @@ getScrolledHrefs();
 // Scrape those tags and download the file
 
 
-// Get 
+// If the svg has <text> in it, remove it from from this list and put it in another list and another folder?
+// Maybe this isn't the best database to work with
+
+
+
