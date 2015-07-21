@@ -40,12 +40,15 @@ window.addEventListener('load', function () {
 
 	myCM.setOption("extraKeys", {
 	// http://codemirror.net/doc/manual.html#keymaps
-		Tab: function() {
+		'Cmd-I': function() {
 		/* 
 		* Need to put in right click somehow, or some more sensical shortcut commands
 		*/
 			// 
 			adder.showAdder( myCM, icd.map );
+		},
+		'Shift-Enter': function() {
+			eval( myCM.getValue() );
 		}
 	});
 
