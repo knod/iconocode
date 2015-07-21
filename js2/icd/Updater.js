@@ -19,27 +19,6 @@ var IcdUpdater = function ( utils, iconMap ) {
 	updater.oldToken 		= { type: null };
 	updater.oldCursorPos 	= { line: null, ch: null };
 
-	// updater.changeHandler = function ( evnt ) {
-		// /* 
-		// * 
-		// * Use the specific instance of editor used in order to
-		// * replace the right variable names. Not sure how to handle
-		// * different instances yet.
-		// */
-
-		// 	/* 
-		// 	* Actually, what I need to do is wait until after the person is done
-		// 	* typing a token... I'm not sure how to do that...
-		// 	*/
-
-		// 	// Check whether the current token is a variable name
-		// 	// Check whether the text of the current token matches anything in the icon map
-		// 		// How to make sure someone is done writing?
-		// 		// It needs to be followed by a non-variable token, but what
-		// 		// if the thing following it is a new line? Or if they
-		// 		// simply move their curosor away from it?
-	// };  // End updater.changeHandler()
-
 
 	updater.markUnmarked = function ( token, lineNum, iconMap, editor ) {
 	/* 
@@ -69,7 +48,25 @@ var IcdUpdater = function ( utils, iconMap ) {
 	};  // End updater.markUnmarked()
 
 
-	updater.cursorMovementHandler = function ( edInstance ) {
+	updater.markIf = function ( token, lineNum, edInstance ) {
+	/* ( {JS}, int )
+	* 
+	* Marks certain types of tokens if they're unmarked
+	*/
+		var type = token.type;
+		// In future: if ( Icon.type === token.type ) {}
+		// Change current Icon.type to Icon.purpose
+		var varb = 'variable', ky = 'keyword', prop = 'property';
+		var isValid = type === varb || type === ky || type === prop;
+		if ( isValid ) {	
+			updater.markUnmarked(token, lineNum, iconMap, edInstance);
+		}
+
+		return isValid
+	};  // End updater.markIf()
+
+
+	updater.cursorActivityHandler = function ( edInstance ) {
 	/* ( CodeMirror ) -> ??
 	* 
 	* If the user moves their cursor away from a non-marked token,
@@ -88,11 +85,10 @@ var IcdUpdater = function ( utils, iconMap ) {
 		var currToken 	= edInstance.getTokenAt( currCursorPos ),
 			currType 	= currToken.type;
 
-		// If the user's just moved out of a variable token
-		if ( (currType !== oldType) && (oldType === 'variable') ) {
-			// Mark the text with an icon, hiding the visible text (if not already)
-			updater.markUnmarked( oldToken_, updater.oldCursorPos.line, iconMap, edInstance )
-
+		// If the user's just moved out of a token
+		if ( currType !== oldType ) {
+			// Mark certain tokens with an icon (if not already)
+			updater.markIf( oldToken_, updater.oldCursorPos.line, edInstance );
 		}
 
 		updater.oldToken 		= currToken;
@@ -100,6 +96,56 @@ var IcdUpdater = function ( utils, iconMap ) {
 
 		return true;
 	};  // End updater.cursorMovementHandler()
+
+
+	updater.getAllTokens = function ( edInstance ) {
+	/* ( CodeMirror ) -> [];
+	* 
+	* Return an array of all the tokens in the editor instance
+	*/
+		var numLines 	= edInstance.lineCount();
+		var allTokens 	= [];
+
+		for ( var lineNum = 0; lineNum < numLines; lineNum++ ) {
+			// cm.getLineTokens(line: integer, ?precise: boolean) → array<{start, end, string, type, state}>
+			var lineTokens = edInstance.getLineTokens( lineNum );
+			allTokens = allTokens.concat( lineTokens );
+
+		}
+
+		return allTokens;
+	};  // End updater.getAllTokens()
+
+
+	updater.markAll = function ( edInstance, iconMap, iconKey ) {
+	/* ( CodeMirror, IconMap, str ) -> same CodeMirror
+	* 
+	* If there's in iconKey, it marks all tokens that have a string
+	* matching the iconKey, otherwise it just marks all tokens.
+	*/
+		var numLines = edInstance.lineCount();
+
+		for ( var lineNum = 0; lineNum < numLines; lineNum++ ) {
+			// cm.getLineTokens(line: integer, ?precise: boolean) → array<{start, end, string, type, state}>
+			var lineTokens = edInstance.getLineTokens( lineNum );
+			for ( var tokeni = 0; tokeni < lineTokens.length; tokeni++ ) {
+
+				var token = lineTokens[ tokeni ]
+
+				// undefined iconKey will match all token string values
+				var matchesKey = true;
+				if ( iconKey !== undefined ) { matchesKey = token.string === iconKey }
+
+				if ( matchesKey ) {
+					updater.markIf( token, lineNum, edInstance );
+				}
+
+			}  // End for all line tokens
+
+		}  // end for all lines
+
+		return edInstance;
+	};  // End updater.markAll()
 
 
 	return updater;

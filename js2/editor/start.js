@@ -34,7 +34,7 @@ window.addEventListener('load', function () {
 	/* 
 	* Happens even when it's just text being typed in
 	*/
-		icd.updater.cursorMovementHandler( instance );
+		icd.updater.cursorActivityHandler( instance );
 	});  // End on cursor activity
 
 
@@ -114,5 +114,13 @@ x.style.border 	= '1px solid black';
 x.style['backgroundColor'] = 'teal';
 document.body.appendChild( x );
 
+TEST updater.markAll()
+function myScript(){return 100;}
+token1 = 5;
+token2 = 12;
+
+var xy = 5;
+xy = xy * 2;
+console.log(xy
 */
 

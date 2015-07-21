@@ -5,6 +5,13 @@
 * TODO:
 * - ???: How do I handle new instances of editors
 * 	being added to the current page. (leave that for much later)
+* - ???: How do I mark properties that have the same name, but
+* 	belong to different objects as different icons? Should that be
+* 	possible? How about variable names that match property names?
+* 	For example, 'push' as a var name would probably look different
+* 	than js's .push (if the coder is writing good var names). Maybe
+* 	at least in Icon should have a variable purpose and a type, and
+* 	the type can be checked against the token type.
 */
 
 'use strict'

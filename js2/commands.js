@@ -84,7 +84,8 @@ adder.addCommands = function ( parentNode ) {
 
 		// !!!: currently using global, need local
 		// Takes: token, lineNum, iconMap, editor
-		icd.utils.markVar( result_.token, result_.lineNum, iconObj, result_.editor  );
+		// icd.utils.markVar( result_.token, result_.lineNum, iconObj, result_.editor  );
+		icd.updater.markAll( result_.editor, icd.map, result_.token.string );
 
 		// Get rid of adder
 		commands.exit( adder );
