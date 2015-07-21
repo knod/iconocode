@@ -48,7 +48,15 @@ window.addEventListener('load', function () {
 			adder.showAdder( myCM, icd.map );
 		},
 		'Shift-Enter': function() {
-			eval( myCM.getValue() );
+			// Run the code written in the editor unless there's an error
+			var contents = myCM.getValue();
+			contents = contents.replace(/document\.body/, 'document.querySelector(".output")');
+
+			try {
+				eval( contents );
+			} catch ( error ) {
+				console.log( 'CM Error:', error );
+			}
 		}
 	});
 
@@ -97,4 +105,14 @@ window.addEventListener('load', function () {
 
 });
 
+
+/* TEST CODE
+var x = document.createElement('div');
+x.style.width 	= '80px';
+x.style.height 	= '30px';
+x.style.border 	= '1px solid black';
+x.style['backgroundColor'] = 'teal';
+document.body.appendChild( x );
+
+*/
 

@@ -23,46 +23,35 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 </head>
 
 
-<body>
-	
-  <form id='icon_size_form'>
-        <input type='range' id='icon_size_input' name='iconSizeInput' min='0.8' max='2' step='0.02' value='1'>
-        <output name='iconSizeOutput' for='iconSizeInput' id='icon_size_output'></output>
-  </form>
-  <!-- <button id='toggle-icon-size'>Make Large</button> -->
+<body>	
 
-	<h1>Iconocode</h1>
+  <header>
+    <h1>Iconocode</h1>
 
-  <hr>
-  
-  <section class='editor-container'>
+    <hr>
+  </header>
 
-    <section class='icon-hotbar'>
-      <h3>Hotbar</h3>
-      <ol class='icon-hotbar-icons'>
-      </ol>
-    </section>
-    
-  </section>
+  <div class ='app'>
+    <section class='editor-area'>
 
-<!--   <section>
-    <h2>my-fuzzy.js Demo</h2>
+      <form id='icon_size_form'>
+            <input type='range' id='icon_size_input' name='iconSizeInput' min='0.8' max='2' step='0.02' value='1'>
+            <output name='iconSizeOutput' for='iconSizeInput' id='icon_size_output'></output>
+      </form>
 
-    <div class='search-container'>
-      <div class='icd fuzzy-search-wrapper'>
-
-        <div class='fuzzy-input'>
-          <input type='text' id='search-query' autofocus>
-        </div>
-
-        <ol id='fuzzy-matches-container'>
+      <section class='icon-hotbar'>
+        <h3>Hotbar</h3>
+        <ol class='icon-hotbar-icons'>
         </ol>
+      </section>
 
-      </div>
-    </div>
-  </section>
-  <hr> -->
-  
+      <section class='editor-container'></section>
+        
+    </section>
+
+    <section class='output'></section>
+  </div> <!-- end .app -->
+
   <br>
 
   <a class='footer' href='./credits/credits.html'>Credits for stuff like icons from the Noun Project</a>

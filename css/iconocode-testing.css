@@ -358,9 +358,64 @@ but maybe we want the images to be their proper size?
 /* --------------------- */
 /* --- DOCUMENT --- */
 /* --------------------- */
-body {
+body, html {
 	background-color: lightgray;
+	height: 100%;
+	width: 100%;
 }
+
+header {
+	height: 3.5rem;
+}
+
+h1 {
+	margin: 0 0.2rem;
+}
+
+header, .app { width: 98.7%; }
+
+.app {
+	position: relative;
+	height: calc(100% - 4.5rem);
+}
+
+/* Top-to-Bottom */
+/*.editor-area, .output {
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
+.editor-area {
+	bottom: 0;
+}
+
+.output{
+	top: 0;
+	bottom: 301px;
+	background-color: gray;
+}*/
+
+/* Side-to-Side */
+.editor-area, .output {
+	float: left;
+	height: 100%;
+	top: 0;
+	bottom: 0;
+}
+
+.editor-area {
+	width: 45%;
+}
+
+.output{
+	width: 54.5%;
+	margin-left: 0.5%;
+	overflow: scroll;
+
+	background-color: gray;
+}
+
 
 .footer {
 	position: fixed;
