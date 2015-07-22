@@ -1,5 +1,8 @@
 /*editor-and-extras.css*/
 
+/* ========================= */
+/* HOTBAR/EDITOR ARRANGEMENT */
+/* ========================= */
 .test-editor {
 	width: 100%;
 	height: 100%;
@@ -36,7 +39,53 @@
 
 /* For Side-to-Side */
 .editor-container {
+	position: relative;
 	width: 80%;
 	height: 100%;
 	display: inline-block;
 }
+
+/* ========================= */
+/* BUTTONS */
+/* ========================= */
+button {
+	/* Resetting styles */
+	position: absolute;
+	top: 0.35rem;
+	right: 0.35rem;
+	border: 0px solid black;
+	color: black;
+	padding: 0 0.2rem;
+
+	/* http://stackoverflow.com/questions/16077341/how-to-reset-all-default-styles-of-the-html5-button-element */
+	background: none repeat scroll 0 0 gray;
+	/*border: medium none;*/
+	border-spacing: 0;
+	/*color: #26589F;*/
+	/*font-family: 'PT Sans Narrow',sans-serif;*/
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 1.42rem;
+	list-style: none outside none;
+	margin: 0;
+	/*padding: 0;*/
+	text-align: left;
+	text-decoration: none;
+	text-indent: 0;
+
+	z-index: 100;
+}
+button:hover {
+	background-color: dimgray;
+}
+button:active {
+	background-color: darkgray;
+}
+
+/* http://stackoverflow.com/questions/16077341/how-to-reset-all-default-styles-of-the-html5-button-element */
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+

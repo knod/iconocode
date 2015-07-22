@@ -5,7 +5,7 @@
 
 'use strict'
 
-var HotBar = function ( iconMap, editorInstance, parentNode ) {
+var HotBar = function ( editorInstance, iconMap, parentNode ) {
 /*
 * Eventually will create the element and add it to the container
 * Currently used in iconocode.js
@@ -53,11 +53,11 @@ var HotBar = function ( iconMap, editorInstance, parentNode ) {
 
 
 	newHotbar.update = function () {
-	/* 
-	* iconMap comes from when the thing is first created up top.
+	/* ( none ) -> None
+	* 
+	* Uses iconMap to rebuild contents of hotbar
+	* iconMap comes from when the hotbar is first created up top.
 	*/
-		console.log('--- update hotbar ---')
-
 		var $hotbarList = $(newHotbar.list);
 
 		$hotbarList.empty()
@@ -67,7 +67,7 @@ var HotBar = function ( iconMap, editorInstance, parentNode ) {
 
 				var iconObj = iconMap[ varName ];
 
-				var iconClone 		= $(iconObj.container).clone()[0];
+				var iconClone 	= $(iconObj.container).clone()[0];
 				var listIcon	= newHotbar.makeListItem( iconClone, iconObj );
 				// $clone.appendTo( $hotbarList );
 				newHotbar.list.appendChild( listIcon );
@@ -79,6 +79,35 @@ var HotBar = function ( iconMap, editorInstance, parentNode ) {
 
 	return newHotbar;
 };  // End HotBar {}
+
+
+var Extras = function ( edInstance, iconMap ) {
+
+	var extras 		= {};
+	extras.editor 	= edInstance;
+	extras.iconMap 	= iconMap;
+
+	// ============================
+	// SHOW AND HIDE ICONS
+	// ============================
+	var iconToggler  = document.querySelector('.icon-toggle');
+	extras.toggler 	 = iconToggler;
+	var iconsShowing = true;
+
+	iconToggler.addEventListener( 'click', function ( evnt ) {
+
+		if ( iconsShowing === true ) {
+			icd.updater.removeAllMarks( extras.editor );
+		} else {
+			icd.updater.markAll( edInstance, iconMap );
+		}
+
+		iconsShowing = !iconsShowing
+
+	} );
+
+	return extras;
+};  // End Extras {}
 
 // spaceview of pictures on phone when you point in the right direction
 

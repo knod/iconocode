@@ -148,5 +148,18 @@ var IcdUpdater = function ( utils, iconMap ) {
 	};  // End updater.markAll()
 
 
+	updater.removeAllMarks = function ( edInstance ) {
+	/**/
+		var allMarks = edInstance.getAllMarks();
+		var numMarks = allMarks.length;
+
+		for ( var marki = 0; marki < allMarks.length; marki++ ) {
+			allMarks[ marki ].clear()
+		}
+
+		return edInstance;
+	};  // End updater.removeAllMarks()
+
+
 	return updater;
 };  // End IcdUpdater {}

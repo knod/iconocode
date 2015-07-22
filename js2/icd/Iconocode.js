@@ -37,7 +37,8 @@ var Iconocode = function () {
 	icd.addEditor = function ( editorInstance ) {
 		icd.editors.push( editorInstance );
 		// !!!: This is terrible, but it's a hack for now
-		icd.hotbar = new HotBar( icd.map, editorInstance );
+		icd.hotbar = new HotBar( editorInstance, icd.map );
+		icd.extras = new Extras( editorInstance, icd.map );
 	};
 
 	// I think each editor instance will have to add its own event listener
