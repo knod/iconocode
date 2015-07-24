@@ -40,7 +40,9 @@ adder.addImgList 	= function () {
 	}
 
 	// Add the compile np image objects
-	adder.defaultImages = imgs.concat( npImages );
+	if ( npImages !== undefined ) {
+		adder.defaultImages = imgs.concat( npImages );
+	}
 
 	return adder.defaultImages;
 };  // End adder.addImgList()
