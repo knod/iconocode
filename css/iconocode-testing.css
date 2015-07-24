@@ -283,6 +283,11 @@ but maybe we want the images to be their proper size?
 	height: auto;
 }
 
+/*.icd .image-choice svg * {
+	stroke: rgb(153, 153, 153) !important;
+	fill: rgb(153, 153, 153) !important;
+}*/
+
 .icd .image-tag-list-container {
 	position: relative;
 	align-self: flex-end;

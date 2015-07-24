@@ -12,6 +12,8 @@
 * 	than js's .push (if the coder is writing good var names). Maybe
 * 	at least in Icon should have a variable purpose and a type, and
 * 	the type can be checked against the token type.
+* - Make sure that when icons are off, moving the cursor doesn't
+* 	trigger showing an icon when the cursor moves off of a token
 */
 
 'use strict'

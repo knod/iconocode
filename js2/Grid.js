@@ -12,7 +12,6 @@ adder.Grid = function ( modeName, maxCols, choiceContainers ) {
 * 
 * 
 */
-
 	var thisGrid = {};
 
 	thisGrid.choiceContainers 	= choiceContainers,
@@ -59,13 +58,24 @@ adder.Grid = function ( modeName, maxCols, choiceContainers ) {
 	};  // End thisGrid.addRow()
 
 
+	thisGrid.getNumRows = function ( choiceContainers ) {
+
+		// Get the right number of rows for the given number of choices, each time
+		// Takes into account having a non-evenly divided number
+		var numRows = Math.ceil( choiceContainers.length / maxCols );
+		// To make sure not all the np icons are added at once
+		numRows 	= Math.min( 40, choiceContainers.length );
+
+		return numRows
+	};  // End thisGrid.getNumRows()
+
+
 	thisGrid.set 	= function ( modeType_, maxCols, choiceContainers ) {
 	/**/
 		var rowNodes = [];
 
 		// Get the right number of rows for the given number of choices, each time
-		// Takes into account having a non-evenly divided number
-		var numRows = Math.ceil( choiceContainers.length / maxCols )
+		var numRows = thisGrid.getNumRows( choiceContainers );
 
 		for ( var rowi = 0; rowi < numRows; rowi++ ) {
 
@@ -108,8 +118,7 @@ adder.Grid = function ( modeName, maxCols, choiceContainers ) {
 		var rowNodes = [];
 
 		// Get the right number of rows for the given number of choices, each time
-		// Takes into account having a non-evenly divided number
-		var numRows = Math.ceil( choiceContainers.length / maxCols )
+		var numRows = thisGrid.getNumRows( choiceContainers );
 
 		for ( var rowi = 0; rowi < numRows; rowi++ ) {
 			// Add a row to the DOM, then add the row's node to the list

@@ -58,14 +58,15 @@ adder.addImageMode 	= function () {
 
 	!!!: Now not working at beginning of search bar! wtf?!
 	*/
-		var newNode 		= document.createElement('img');
+		var newNode = $(imgNode).clone()[0];
+		// var newNode 		= document.createElement('img');
 		newNode.className 	= 'icon-part'
 		// Not implemented yet. Not necessary? Or do we want access to the search terms?
 		// newNode.dataset['object'] = imgNode.dataset['object'];
 
-		// Set same image file path
-		var filePath 	 = $(imgNode).attr('src');
-		newNode.src 	 = filePath;
+		// // Set same image file path
+		// var filePath 	 = $(imgNode).attr('src');
+		// newNode.src 	 = filePath;
 
 		// Add data (terms and name, I think)
 		$(newNode).data('terms', $(imgNode).data('terms'));
@@ -158,7 +159,10 @@ adder.addImageMode 	= function () {
 			allImageObjs 		= adder.defaultImages,
 			imageChoicesNodes 	= [];
 
-		for ( var imgi = 0; imgi < allImageObjs.length; imgi++ ) {
+		// Too many in np to do all of them
+		var numImages = Math.min( 50, allImgObjs.length );
+
+		for ( var imgi = 0; imgi < numImages; imgi++ ) {
 			var imgObj = allImageObjs[ imgi ]
 			var parent = document.createDocumentFragment();
 

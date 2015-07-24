@@ -14,21 +14,21 @@ adder.imgFolder 	= './images/';
 adder.addImgList 	= function () {
 
 	adder.defaultImages = [
-		{ fileName: '542px-Pacman.svg.png', searchTerms: ['pacman', 'player', 'yellow', 'circle'] },
-		{ fileName: 'book-icon-yellow.png', searchTerms: [ 'book', 'reading', 'open', 'yellow' ] },
-		{ fileName: 'js-yellow.png', searchTerms: [ 'js', 'javascript', 'acronym', 'text', 'letters', 'yellow' ] },
-		{ fileName: 'mouse.png', searchTerms: [ 'mouse', 'pointer', 'cursor', 'computer', 'black' ] },
-		{ fileName: 'plus.png', searchTerms: [ 'plus', 'math', 'add', 'yellow' ] },
-		{ fileName: 'search-white.png', searchTerms: [ 'search', 'magnifying', 'glass', 'white', 'gray' ] },
-		{ fileName: 'tongue-face.png', searchTerms: [ 'tongue-face', 'face', 'emoticon', 'funny', 'tongue', 'smiley', 'yellow', 'red', 'pink' ] },
-		{ fileName: 'mobs-neutral-clear.svg', searchTerms: [ 'mobs', 'ai', 'neutral', 'many', 'group' ] },
-		{ fileName: 'columns.svg', searchTerms: [ 'columns' ] },
-		{ fileName: 'noun_1306_cc_no-attr.svg', searchTerms: [ 'hammer', 'build', 'construct', 'fix' ] },
-		{ fileName: 'noun_37982_cc_no-attr.svg', searchTerms: [ 'grid', 'cells' ] },
-		{ fileName: 'rows.svg', searchTerms: [ 'rows' ] },
-		{ fileName: 'push2.svg', searchTerms: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
-		{ fileName: 'push3.svg', searchTerms: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
-		{ fileName: 'push.svg', searchTerms: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] }
+		{ filename: '542px-Pacman.svg.png', tags: ['pacman', 'player', 'yellow', 'circle'] },
+		{ filename: 'book-icon-yellow.png', tags: [ 'book', 'reading', 'open', 'yellow' ] },
+		{ filename: 'js-yellow.png', tags: [ 'js', 'javascript', 'acronym', 'text', 'letters', 'yellow' ] },
+		{ filename: 'mouse.png', tags: [ 'mouse', 'pointer', 'cursor', 'computer', 'black' ] },
+		{ filename: 'plus.png', tags: [ 'plus', 'math', 'add', 'yellow' ] },
+		{ filename: 'search-white.png', tags: [ 'search', 'magnifying', 'glass', 'white', 'gray' ] },
+		{ filename: 'tongue-face.png', tags: [ 'tongue-face', 'face', 'emoticon', 'funny', 'tongue', 'smiley', 'yellow', 'red', 'pink' ] },
+		{ filename: 'mobs-neutral-clear.svg', tags: [ 'mobs', 'ai', 'neutral', 'many', 'group' ] },
+		{ filename: 'columns.svg', tags: [ 'columns' ] },
+		{ filename: 'noun_1306_cc_no-attr.svg', tags: [ 'hammer', 'build', 'construct', 'fix' ] },
+		{ filename: 'noun_37982_cc_no-attr.svg', tags: [ 'grid', 'cells' ] },
+		{ filename: 'rows.svg', tags: [ 'rows' ] },
+		{ filename: 'push2.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
+		{ filename: 'push3.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
+		{ filename: 'push.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] }
 	];  // End adder.defaultImages[]
 
 
@@ -39,6 +39,10 @@ adder.addImgList 	= function () {
 		imgs[ imgi ].folderPath = folderPath;
 	}
 
+	// Add the compile np image objects
+	adder.defaultImages = imgs.concat( npImages );
+
+	return adder.defaultImages;
 };  // End adder.addImgList()
 
 adder.addImgList();
