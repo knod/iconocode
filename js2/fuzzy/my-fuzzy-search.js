@@ -1,4 +1,4 @@
-/* my-fuzzy-search.js 
+/* my-fuzzy-search-02.js 
 * 
 * Finds all fuzzy matches in an array and builds them
 * into a node. Returns other interesting info as well
@@ -10,6 +10,10 @@
 * 	if we want to optimize, put regex in fuzzy-search)
 * - Allow searching using multiple words separated by a ","
 * 
+* ----------------
+* --- NEW PLAN ---
+* Should return list of matches, list of non-matches and
+* rank of matches
 */
 
 'use strict'
@@ -17,6 +21,8 @@
 var FuzzySearcher = function () {
 
 	var searcher = {};
+
+	searcher.results = {};  // term: rank
 
 	var matcher = new FuzzyMatcher( searcher );
 	var result = { node: null, matchingElements: [], matchingTerms: [], matchesData: [] }
@@ -27,7 +33,7 @@ var FuzzySearcher = function () {
 	searcher.containerClass = 'fuzzy-matches';
 	searcher.termClass 		= 'fuzzy-matched-term';
 
-	searcher.maxResults 	= 50;
+	searcher.maxResults 	= 2000;
 
 
 	searcher.escapeRegex = function ( str ) {
@@ -71,7 +77,7 @@ var FuzzySearcher = function () {
 	* 
 	* Builds, sorts, and returns an array of matches
 	*/
-		var matchArray = [];
+		var matchArray = []
 		var queryRegex = searcher.queryRegex( query );
 
 		for ( var termi = 0; ( termi < terms.length ) &&
@@ -80,20 +86,71 @@ var FuzzySearcher = function () {
 			matcher.matchedTermClass = searcher.termClass;
 			// In case user has changed this to something like '<span>'
 			var matchTagName = searcher.matchTagName.replace( /[<> ]/g, '' )
-			var aMatch = matcher.toNode( terms[ termi ], query, queryRegex, matchTagName );
-			if ( aMatch !== null ) {
-				matchArray.push( aMatch );
-			}
+			
+			var term = terms[ termi ];
+			var aMatch = matcher.toNode( term, query, queryRegex, matchTagName );
+			
+			// Added .doesMatch, also properties for a term that doesn't match the query
+
+			// if ( aMatch === null ) {
+			// 	// Make a 'match' that will have a really low rank
+			// 	var aMatch = {
+			// 		doesMatch: false,
+			// 		term: term, query: query,
+			// 		node: document.createElement('li'),  // Not correct, but this functionality will be removed later anyway
+			// 		matchArray: [''], score: -1000
+			// 	}
+			// } else {
+			// 	aMatch.doesMatch = true;
+			// }
+			matchArray.push( aMatch );
+
 		}
+
 		// This doesn't quite fit here , but it's so short... Anyway,
 		// puts stuff in the right order based on score
 		return matchArray.sort( matcher.matchComparator );
 	};  // End searcher.getMatches()
 
 
-	searcher.toNode 	= function( terms, query ) {
-	/* ( [str], str, str ) -> {} */
-		result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
+	searcher.buildResults = function ( sortedMatches ) {
+	/* Creates results values in appropriate format */
+
+		var results 	= { failures: {}, matches: {} };
+		var numTerms 	= sortedMatches.length;
+
+		for ( var matchi = 0; matchi < numTerms; matchi++ ) {
+			
+			var match 	= sortedMatches[ matchi ];
+			// Rank helps sort them when they're not in an array
+			// Build list with arrayName[ obj.rank ] = obj;
+			// Smaller number is higher rank
+			var rank 	= matchi;  // sortedMatches is already ordered by rank, so index == rank
+			var obj 	= { 
+				'doesMatch': match.doesMatch,
+				'rank'		: rank,
+				'score'		: match.score,
+				'matchArray': match.matchArray
+			};
+
+			if ( match.doesMatch === true ) {
+				results.matches[ match.term ] = obj;
+			} else {
+				results.failures[ match.term ] = obj;
+			}
+		}
+
+		return results;
+	};  // End searcher.buildResults()
+
+
+	// This is not a good name, but I don't know what is
+	searcher.runSearch = function( terms, query ) {
+	/* ( [str], str, str ) -> { failures: { term: { matchData } }, matches: {} }
+	* Returned matchData: doesMatch, rank, score, matchArray
+	* 
+	*/
+		// result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
 
 		// TODO: Validator should be separate from the two scripts. Need
 		// A utils script, but then it's less self-contained. Which
@@ -101,22 +158,29 @@ var FuzzySearcher = function () {
 		// var tagName 		= tagName || searcher.searchTagName;
 		// tagName = tagName.replace( /[<> ]/g, '' );
 
-		var node 			= document.createDocumentFragment();
-		result.node 		= node;
-		node.className 		= searcher.containerClass;
+		// var node 			= document.createDocumentFragment();
+		// result.node 		= node;
+		// node.className 		= searcher.containerClass;
 
-		var matchesData 	= searcher.getMatches( terms, query );
-		result.matchesData 	= matchesData;
-
-		for ( var matchi = 0; matchi < matchesData.length; matchi++ ) {
-			var match = matchesData[ matchi ];
-			node.appendChild( match.node );
-			result.matchingElements.push( match.node );
-			result.matchingTerms.push( match.term );
+		if ( query.length > 0 ) {
+			// Array of data from the matcher functions
+			var matchesData 	= searcher.getMatches( terms, query );
+			// Objects in the format we need them
+			var results 		= searcher.buildResults(matchesData);
+			console.log(results);
+			// console.log(results);
+			// result.matchesData 	= matchesData;
 		}
 
-		return result;
-	};  // End searcher.search()
+		// for ( var matchi = 0; matchi < matchesData.length; matchi++ ) {
+		// 	var match = matchesData[ matchi ];
+		// 	node.appendChild( match.node );
+		// 	result.matchingElements.push( match.node );
+		// 	result.matchingTerms.push( match.term );
+		// }
+
+		return results;
+	};  // End searcher.runSearch()
 
 	return searcher;
 };  // End FuzzySearcher()
@@ -130,4 +194,4 @@ var FuzzySearcher = function () {
 // 	'Check in', 'ca', 'caa', 'cana', 'crabapple'
 // ];
 
-// console.log(fuzzySearcher.toNode( terms, 'ca' ));
+// console.log(fuzzySearcher.search( terms, 'ca' ));

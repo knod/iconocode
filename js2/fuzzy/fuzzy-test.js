@@ -62,9 +62,9 @@ window.addEventListener( 'load', function () {
 		// $(outputNode).empty();
 		// Make sure there's some text in the search to match with
 		if ($(inputNode).val().length > 0) {
-			var matchData = fuzzySearcher.toNode( terms, query );
-			outputNode.appendChild( matchData.node );
-			$(matchData.node).children().first().addClass('selected');
+			var matchData = fuzzySearcher.runSearch( terms, query );
+			// outputNode.appendChild( matchData.node );
+			// $(matchData.node).children().first().addClass('selected');
 		}
 
 		return outputNode;

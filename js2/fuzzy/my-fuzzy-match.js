@@ -230,14 +230,16 @@ var FuzzyMatcher = function ( context ) {
 		var matches 				= matcher.getMatch( term, query, queryRegex );
 			if ( matches !== null ) {
 
-				result.matchArray = matches;
-				result.score = matcher.calcScore( matches );
+				result.doesMatch 	= true;
+				result.matchArray 	= matches;
+				result.score 		= matcher.calcScore( matches );
 				// matcher.buildNode( matches );
 
 				// console.log(resultNode)
 			// ??: If there wasn't a match, what do I return?
 			}  else {
-				result.matchArray 	= [];
+				result.doesMatch 	= false;
+				result.matchArray 	= [''];
 				result.score 		= -1000;
 			} // end if match
 
@@ -253,10 +255,10 @@ var FuzzyMatcher = function ( context ) {
 		// If the scores are the same
 		if ( m1.score === m2.score ) {
 			// Add the number of letters before the first match
-			m2.altScore = m2.score - $(m2.node).contents()[0].length;
-			m1.altScore = m1.score - $(m1.node).contents()[0].length;
+			var m2_altScore = m2.score - m2.matchArray[0].length;
+			var m1_altScore = m1.score - m1.matchArray[0].length;
 
-			diff = m2.altScore - m1.altScore;
+			diff = m2_altScore - m1_altScore;
 		}
 
 		return diff;
