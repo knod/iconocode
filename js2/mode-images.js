@@ -46,7 +46,7 @@ adder.addImageMode 	= function () {
 /* Enclose and name so it can be called in order */
 
 	// images: { tab: null, section: null, choices: [], grid: {}, choiceHeight: null }
-	imgMode = adder.modes.images;
+	var imgMode = adder.modes.images;
 
 	// Currently (07/24/15) rows seem to be about 302px across
 	// 302/8 = 37.7656
