@@ -52,6 +52,7 @@ adder.addImageMode 	= function () {
 	// 302/8 = 37.7656
 	// Width will be the same
 	imgMode.choiceHeight = 37;
+	imgMode.imageObjects = adder.setupImageObjects()
 
 	adder.imageChoices = [];
 
@@ -164,7 +165,7 @@ adder.addImageMode 	= function () {
 	adder.addGrid = function ( parentNode ) {
 
 		var maxCols 			= 5,
-			allImageObjs 		= adder.setupImageObjects(),
+			allImageObjs 		= imgMode.imageObjects,
 			imageChoicesNodes 	= [];
 
 		// Too many in np to do all of them

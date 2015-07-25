@@ -135,9 +135,10 @@ var FuzzySearcher = function () {
 	};  // End searcher.buildResults()
 
 
-	searcher.toNode 	= function( terms, query ) {
+	// This is not a good name, but I don't know what is
+	searcher.runSearch = function( terms, query ) {
 	/* ( [str], str, str ) -> {} */
-		result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
+		// result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
 
 		// TODO: Validator should be separate from the two scripts. Need
 		// A utils script, but then it's less self-contained. Which
@@ -153,17 +154,17 @@ var FuzzySearcher = function () {
 		var matchesData 	= searcher.getMatches( terms, query );
 		// Objects in the format we need them
 		var results 		= searcher.buildResults(matchesData);
-		result.matchesData 	= matchesData;
+		// result.matchesData 	= matchesData;
 
-		for ( var matchi = 0; matchi < matchesData.length; matchi++ ) {
-			var match = matchesData[ matchi ];
-			node.appendChild( match.node );
-			result.matchingElements.push( match.node );
-			result.matchingTerms.push( match.term );
-		}
+		// for ( var matchi = 0; matchi < matchesData.length; matchi++ ) {
+		// 	var match = matchesData[ matchi ];
+		// 	node.appendChild( match.node );
+		// 	result.matchingElements.push( match.node );
+		// 	result.matchingTerms.push( match.term );
+		// }
 
-		return result;
-	};  // End searcher.search()
+		return results;
+	};  // End searcher.runSearch()
 
 	return searcher;
 };  // End FuzzySearcher()
@@ -177,4 +178,4 @@ var FuzzySearcher = function () {
 // 	'Check in', 'ca', 'caa', 'cana', 'crabapple'
 // ];
 
-// console.log(fuzzySearcher.toNode( terms, 'ca' ));
+// console.log(fuzzySearcher.search( terms, 'ca' ));
