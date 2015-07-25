@@ -185,7 +185,6 @@ var FuzzyMatcher = function ( context ) {
 
 	matcher.buildNode 		= function ( matchArray ) {
 	/* ( [] ) -> Node */
-		var result_ = result;
 
 		var numGroups 	= matchArray.length;
 		for ( var groupi = 0; groupi < numGroups; groupi++ ) {
@@ -194,19 +193,19 @@ var FuzzyMatcher = function ( context ) {
 			// If group is even, it matched .*, which isn't styled text
 			if ( groupi % 2 === 0 ) {
 
-				matcher.addText( chars, result_.node );
+				matcher.addText( chars, result.node );
 			// If the group is odd, it's a match to an actual letter
 			} else {
 
 				var matchLetterNode 		= document.createElement( 'span' );
 				matchLetterNode.className 	= matcher.matchedLetterClass;
-				result_.node.appendChild( matchLetterNode );
+				result.node.appendChild( matchLetterNode );
 
 				matcher.addText( chars, matchLetterNode );
 			}  // end if even
 		}  // end for each array of letters
 
-		return result_.node;
+		return result.node;
 	};  // End matcher.buildNode()
 
 
@@ -223,28 +222,25 @@ var FuzzyMatcher = function ( context ) {
 		// Create the provided element, or a default one
 		var nodeTag = matcher.sanitizeTagName( tagName );
 
-		var resultNode 				= document.createElement( nodeTag );
-		result.node 				= resultNode;
-		resultNode.className 		= matcher.matchedTermClass;
-		resultNode.dataset['term'] 	= term;
+		// var resultNode 				= document.createElement( nodeTag );
+		// result.node 					= resultNode;
+		// resultNode.className 		= matcher.matchedTermClass;
+		// resultNode.dataset['term'] 	= term;
 
 		var matches 				= matcher.getMatch( term, query, queryRegex );
 			if ( matches !== null ) {
 
+				result.doesMatch 	= true;
 				result.matchArray 	= matches;
 				result.score 		= matcher.calcScore( matches );
-				result.doesMatch 	= true;
-				matcher.buildNode( matches );
+				// matcher.buildNode( matches );
 
 				// console.log(resultNode)
 			// ??: If there wasn't a match, what do I return?
 			}  else {
-				// result = null;  // ??
-					result.matchArray 	= [''];
-					result.score 		= -1000;
-					result.doesMatch 	= false;
-					// Not correct, but this functionality will be removed later anyway
-					result.node 		= document.createElement('li');
+				result.doesMatch 	= false;
+				result.matchArray 	= [''];
+				result.score 		= -1000;
 			} // end if match
 
 		return result;
@@ -264,8 +260,6 @@ var FuzzyMatcher = function ( context ) {
 
 			diff = m2_altScore - m1_altScore;
 		}
-
-		// if ( diff > )
 
 		return diff;
 	};

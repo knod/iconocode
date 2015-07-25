@@ -33,7 +33,7 @@ var FuzzySearcher = function () {
 	searcher.containerClass = 'fuzzy-matches';
 	searcher.termClass 		= 'fuzzy-matched-term';
 
-	searcher.maxResults 	= 50;
+	searcher.maxResults 	= 2000;
 
 
 	searcher.escapeRegex = function ( str ) {
@@ -116,19 +116,28 @@ var FuzzySearcher = function () {
 	searcher.buildResults = function ( sortedMatches ) {
 	/* Creates results values in appropriate format */
 
-		var results 	= {};
+		var results 	= { failures: {}, matches: {} };
 		var numTerms 	= sortedMatches.length;
 
 		for ( var matchi = 0; matchi < numTerms; matchi++ ) {
+			
 			var match 	= sortedMatches[ matchi ];
-			var rank 	= numTerms - matchi;
-			results[ match.term ] = { 
+			// Rank helps sort them when they're not in an array
+			// Build list with arrayName[ obj.rank ] = obj;
+			// Smaller number is higher rank
+			var rank 	= matchi;  // sortedMatches is already ordered by rank, so index == rank
+			var obj 	= { 
 				'doesMatch': match.doesMatch,
-				'rank': rank,
-				'score': match.score,
+				'rank'		: rank,
+				'score'		: match.score,
 				'matchArray': match.matchArray
 			};
-			console.log(match.term, ':', results[match.term]);
+
+			if ( match.doesMatch === true ) {
+				results.matches[ match.term ] = obj;
+			} else {
+				results.failures[ match.term ] = obj;
+			}
 		}
 
 		return results;
@@ -137,7 +146,10 @@ var FuzzySearcher = function () {
 
 	// This is not a good name, but I don't know what is
 	searcher.runSearch = function( terms, query ) {
-	/* ( [str], str, str ) -> {} */
+	/* ( [str], str, str ) -> { failures: { term: { matchData } }, matches: {} }
+	* Returned matchData: doesMatch, rank, score, matchArray
+	* 
+	*/
 		// result = { node: null, matchesData: [], matchingElements: [], matchingTerms: [] };
 
 		// TODO: Validator should be separate from the two scripts. Need
@@ -146,15 +158,19 @@ var FuzzySearcher = function () {
 		// var tagName 		= tagName || searcher.searchTagName;
 		// tagName = tagName.replace( /[<> ]/g, '' );
 
-		var node 			= document.createDocumentFragment();
-		result.node 		= node;
-		node.className 		= searcher.containerClass;
+		// var node 			= document.createDocumentFragment();
+		// result.node 		= node;
+		// node.className 		= searcher.containerClass;
 
-		// Array of data from the matcher functions
-		var matchesData 	= searcher.getMatches( terms, query );
-		// Objects in the format we need them
-		var results 		= searcher.buildResults(matchesData);
-		// result.matchesData 	= matchesData;
+		if ( query.length > 0 ) {
+			// Array of data from the matcher functions
+			var matchesData 	= searcher.getMatches( terms, query );
+			// Objects in the format we need them
+			var results 		= searcher.buildResults(matchesData);
+			console.log(results);
+			// console.log(results);
+			// result.matchesData 	= matchesData;
+		}
 
 		// for ( var matchi = 0; matchi < matchesData.length; matchi++ ) {
 		// 	var match = matchesData[ matchi ];
