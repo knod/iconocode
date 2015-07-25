@@ -37,7 +37,6 @@ adder.setupImageObjects = function () {
 	// Add the compile np image objects
 	if ( npImages !== undefined ) {
 		imgs = imgs.concat( npImages );
-		console.log(JSON.stringify(npImages[0]))
 		// regex101.com, javascript
 		// "tags":\[(".*")]
 		// /([A-z0-9])/g
