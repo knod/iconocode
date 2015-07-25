@@ -6,18 +6,6 @@
 window.addEventListener( 'load', function () {
 
 	var fuzzySearcher = new FuzzySearcher();
-
-	var inputNode 	= document.getElementById('search-query'),
-		outputNode 	= document.getElementById('fuzzy-matches-container');
-
-	var terms = [
-		'Update payment method', 'See payment statistics',
-		'Shopping cart', 'Recently bought', 'Check out',
-		'Check in', 'ca', 'caa', 'cana', 'crabapple',
-		'face', 'pacman', 'black', 'acronym', 'search'
-	];
-
-
 	// var getQuery 	= function () {
 	// 	return $(inputNode).val();
 	// };  // End getQuery()
@@ -82,6 +70,14 @@ window.addEventListener( 'load', function () {
 		return outputNode;
 	};  // End runSearch()
 
+
+	// ====================
+	// INPUT
+	// ====================
+	var terms = tagsArray;
+
+	var inputNode 	= document.getElementById('search-query'),
+		outputNode 	= document.getElementById('fuzzy-matches-container');
 
 	inputNode.addEventListener('keydown', function( evnt ) {
 	/* Prevent navigating in the text using the up and down keys */

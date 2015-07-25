@@ -217,27 +217,28 @@ var FuzzyMatcher = function ( context ) {
 	* script.
 	*/
 		result = {};
-		result.term 	= term; result.query 	= query;
+		result.term = term; result.query = query;
 
 		// Create the provided element, or a default one
 		var nodeTag = matcher.sanitizeTagName( tagName );
 
-		var resultNode 				= document.createElement( nodeTag );
-		result.node 				= resultNode;
-		resultNode.className 		= matcher.matchedTermClass;
-		resultNode.dataset['term'] 	= term;
+		// var resultNode 				= document.createElement( nodeTag );
+		// result.node 					= resultNode;
+		// resultNode.className 		= matcher.matchedTermClass;
+		// resultNode.dataset['term'] 	= term;
 
 		var matches 				= matcher.getMatch( term, query, queryRegex );
 			if ( matches !== null ) {
 
 				result.matchArray = matches;
 				result.score = matcher.calcScore( matches );
-				matcher.buildNode( matches );
+				// matcher.buildNode( matches );
 
 				// console.log(resultNode)
 			// ??: If there wasn't a match, what do I return?
 			}  else {
-				result = null;  // ??
+				result.matchArray 	= [];
+				result.score 		= -1000;
 			} // end if match
 
 		return result;
