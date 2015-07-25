@@ -21,7 +21,7 @@
 var fuzzySearcher 	= new FuzzySearcher();
 
 
-adder.matchQuery 		= function ( choiceContainer, query ) {
+adder.matchQuery 	= function ( choiceContainer, query ) {
 /*
 
 Runs the search for matches on a container's node. Doesn't
@@ -126,7 +126,7 @@ Updates the visible search terms for all choices.
 };  // End adder.updateContainerList()
 
 
-adder.runSearch 		= function ( choiceContainers ) {
+adder.runSearch 		= function ( imageObjects ) {
 /* ( [Nodes] ) -> Nodes
 */
 
@@ -144,12 +144,12 @@ console.log('------------')
 		var query = token.string.replace( /;/, '' );
 
 		// Choice nodes sorted by rank:
-		var choiceArray = adder.updateContainerList( choiceContainers, query );
+		var choiceArray = adder.updateContainerList( imageObjects, query );
 		adder.updateImageGrid( choiceArray );
 
 	}
 
-	return choiceContainers;
+	return imageObjects;
 };
 
 

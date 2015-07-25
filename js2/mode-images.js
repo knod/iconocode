@@ -46,7 +46,7 @@ adder.addImageMode 	= function () {
 /* Enclose and name so it can be called in order */
 
 	// images: { tab: null, section: null, choices: [], grid: {}, choiceHeight: null }
-	imgMode = adder.modes.images;
+	var imgMode = adder.modes.images;
 
 	// Currently (07/24/15) rows seem to be about 302px across
 	// 302/8 = 37.7656
@@ -161,14 +161,14 @@ adder.addImageMode 	= function () {
 
 
 	adder.imageGridObj;
-	adder.addGrid = function ( allImgObjs, parentNode ) {
+	adder.addGrid = function ( parentNode ) {
 
 		var maxCols 			= 5,
-			allImageObjs 		= adder.defaultImages,
+			allImageObjs 		= adder.setupImageObjects(),
 			imageChoicesNodes 	= [];
 
 		// Too many in np to do all of them
-		var numImages = Math.min( 50, allImgObjs.length );
+		var numImages = Math.min( 50, allImageObjs.length );
 
 		for ( var imgi = 0; imgi < numImages; imgi++ ) {
 			var imgObj = allImageObjs[ imgi ]
@@ -197,8 +197,9 @@ adder.addImageMode 	= function () {
 		parentNode.appendChild( imagePicker );
 
 		// Add images to the DOM (will also add custom images in future)
-		adder.modes.images.choices 	= adder.defaultImages;
-		adder.addGrid( adder.modes.images.choices, imagePicker );
+		// adder.modes.images.choices 	= adder.defaultImages;
+		// adder.addGrid( adder.modes.images.choices, imagePicker );
+		adder.addGrid( imagePicker );
 
 
 		imagePicker.addEventListener( 'mouseover', function ( evnt ) {

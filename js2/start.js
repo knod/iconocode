@@ -61,9 +61,9 @@ adder.modes  		= {
 	}  // end modes.colors{}
 }  // end adder.modes{}
 
-adder.defaultImages = null;
-adder.imgFolder 	= null;
-adder.addImgList 	= null;
+// adder.defaultImages = null;
+// adder.imgFolder 	= null;
+// adder.addImgList 	= null;
 
 
 window.addEventListener( 'load', function () {

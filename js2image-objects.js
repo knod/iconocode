@@ -1,4 +1,4 @@
-/* iconocode-image-list.js
+/* image-objects.js
 
 A list of all the names of image files and
 the path to them?)
@@ -7,13 +7,9 @@ the path to them?)
 'use strict'
 
 
-adder.defaultImages = null;
-adder.imgFolder 	= './images/';
+adder.setupImageObjects = function () {
 
-
-adder.addImgList 	= function () {
-
-	adder.defaultImages = [
+	var imgs = [
 		{ filename: '542px-Pacman.svg.png', tags: ['pacman', 'player', 'yellow', 'circle'] },
 		{ filename: 'book-icon-yellow.png', tags: [ 'book', 'reading', 'open', 'yellow' ] },
 		{ filename: 'js-yellow.png', tags: [ 'js', 'javascript', 'acronym', 'text', 'letters', 'yellow' ] },
@@ -29,11 +25,10 @@ adder.addImgList 	= function () {
 		{ filename: 'push2.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
 		{ filename: 'push3.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
 		{ filename: 'push.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] }
-	];  // End adder.defaultImages[]
+	];  // End adder.imgs[]
 
 
-	var imgs = adder.defaultImages;
-	var folderPath = adder.imgFolder
+	var folderPath 	= './images/';
 
 	for ( var imgi = 0; imgi < imgs.length; imgi++ ) {
 		imgs[ imgi ].folderPath = folderPath;
@@ -41,10 +36,11 @@ adder.addImgList 	= function () {
 
 	// Add the compile np image objects
 	if ( npImages !== undefined ) {
-		adder.defaultImages = imgs.concat( npImages );
+		imgs = imgs.concat( npImages );
 	}
+	console.log('imgs[0]:', imgs[0])
 
-	return adder.defaultImages;
-};  // End adder.addImgList()
+	return imgs;
+};  // End setupImgObj()
 
-adder.addImgList();
+// adder.setupImageObjects
