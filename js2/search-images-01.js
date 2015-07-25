@@ -1,4 +1,4 @@
-/* search-images.js
+/* search-images-01.js
 * 
 * Trying to implement fuzzy search functionality with
 * multiple lists for images.
@@ -33,6 +33,7 @@ get rid of the node's terms
 	// Get match data and store it in the node
 	var matchData 	= fuzzySearcher.toNode( terms, query );
 	$(choiceContainer).data('matchData', matchData);
+	console.log(matchData)
 
 	return matchData;
 };  //  End adder.matchQuery()

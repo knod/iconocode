@@ -38,7 +38,6 @@ adder.setupImageObjects = function () {
 	if ( npImages !== undefined ) {
 		imgs = imgs.concat( npImages );
 	}
-	console.log('imgs[0]:', imgs[0])
 
 	return imgs;
 };  // End setupImgObj()

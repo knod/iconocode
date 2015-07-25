@@ -185,6 +185,7 @@ var FuzzyMatcher = function ( context ) {
 
 	matcher.buildNode 		= function ( matchArray ) {
 	/* ( [] ) -> Node */
+		var result_ = result;
 
 		var numGroups 	= matchArray.length;
 		for ( var groupi = 0; groupi < numGroups; groupi++ ) {
@@ -193,19 +194,19 @@ var FuzzyMatcher = function ( context ) {
 			// If group is even, it matched .*, which isn't styled text
 			if ( groupi % 2 === 0 ) {
 
-				matcher.addText( chars, result.node );
+				matcher.addText( chars, result_.node );
 			// If the group is odd, it's a match to an actual letter
 			} else {
 
 				var matchLetterNode 		= document.createElement( 'span' );
 				matchLetterNode.className 	= matcher.matchedLetterClass;
-				result.node.appendChild( matchLetterNode );
+				result_.node.appendChild( matchLetterNode );
 
 				matcher.addText( chars, matchLetterNode );
 			}  // end if even
 		}  // end for each array of letters
 
-		return result.node;
+		return result_.node;
 	};  // End matcher.buildNode()
 
 
@@ -217,7 +218,7 @@ var FuzzyMatcher = function ( context ) {
 	* script.
 	*/
 		result = {};
-		result.term 	= term; result.query 	= query;
+		result.term = term; result.query = query;
 
 		// Create the provided element, or a default one
 		var nodeTag = matcher.sanitizeTagName( tagName );
@@ -230,14 +231,20 @@ var FuzzyMatcher = function ( context ) {
 		var matches 				= matcher.getMatch( term, query, queryRegex );
 			if ( matches !== null ) {
 
-				result.matchArray = matches;
-				result.score = matcher.calcScore( matches );
+				result.matchArray 	= matches;
+				result.score 		= matcher.calcScore( matches );
+				result.doesMatch 	= true;
 				matcher.buildNode( matches );
 
 				// console.log(resultNode)
 			// ??: If there wasn't a match, what do I return?
 			}  else {
-				result = null;  // ??
+				// result = null;  // ??
+					result.matchArray 	= [''];
+					result.score 		= -1000;
+					result.doesMatch 	= false;
+					// Not correct, but this functionality will be removed later anyway
+					result.node 		= document.createElement('li');
 			} // end if match
 
 		return result;
@@ -252,11 +259,13 @@ var FuzzyMatcher = function ( context ) {
 		// If the scores are the same
 		if ( m1.score === m2.score ) {
 			// Add the number of letters before the first match
-			m2.altScore = m2.score - $(m2.node).contents()[0].length;
-			m1.altScore = m1.score - $(m1.node).contents()[0].length;
+			var m2_altScore = m2.score - m2.matchArray[0].length;
+			var m1_altScore = m1.score - m1.matchArray[0].length;
 
-			diff = m2.altScore - m1.altScore;
+			diff = m2_altScore - m1_altScore;
 		}
+
+		// if ( diff > )
 
 		return diff;
 	};
