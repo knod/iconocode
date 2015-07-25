@@ -1,6 +1,9 @@
 /* Updater.js
 * 
-* 
+* TODO:
+* - Add fuzzy search using image objects instead of
+* image elements and only populating the grid with a
+* certain number of those
 */
 
 'use strict'

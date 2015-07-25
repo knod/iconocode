@@ -99,9 +99,9 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		// stroke is no stroke if nothing is specified
 		// var fill = svgStr.match(/(<svg.*?)(fill.*?['|"])(.*?[^'|"])(.*?>)/g);
 		// var justSvg = svgStr.match(/<svg.*?>/gi)[0]
-		var justSvg = svgStr.replace(/<svg.*?>/gi, function ( match, original ) {
+		var giveAttr = svgStr.replace(/<svg.*?>/gi, function ( match, original ) {
 
-			var fill 	= justSvg.match(/fill/);
+			var fill 	= match.match(/fill/);
 			if ( fill === null ) {
 				svg.setAttribute('fill', 'rgb(153, 153, 153)');
 			}

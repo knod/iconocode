@@ -47,7 +47,7 @@ adder.modes  		= {
 	types: { tab: null, section: null, choices: {}, grid: {} }, // verb, noun, message
 
 	// Not comfortable that choices is a list and not an object
-	images: { tab: null, section: null, choices: [], grid: {} }, // img list
+	images: { tab: null, section: null, choices: [], grid: {}, choiceHeight: 0 }, // img list
 
 	colors: {
 		tab: null,
