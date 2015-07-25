@@ -116,7 +116,7 @@ var FuzzySearcher = function () {
 	searcher.buildResults = function ( sortedMatches ) {
 	/* Creates results values in appropriate format */
 
-		var results 	= { failures: {}, matches: {} };
+		var results 	= { matches: [], failures: [], matchesData: {}, failuresData: {} };
 		var numTerms 	= sortedMatches.length;
 
 		for ( var matchi = 0; matchi < numTerms; matchi++ ) {
@@ -134,9 +134,11 @@ var FuzzySearcher = function () {
 			};
 
 			if ( match.doesMatch === true ) {
-				results.matches[ match.term ] = obj;
+				results.matches.push( match.term );
+				results.matchesData[ match.term ] = obj;
 			} else {
-				results.failures[ match.term ] = obj;
+				results.failures.push( match.term );
+				results.failuresData[ match.term ] = obj;
 			}
 		}
 
@@ -164,10 +166,9 @@ var FuzzySearcher = function () {
 
 		if ( query.length > 0 ) {
 			// Array of data from the matcher functions
-			var matchesData 	= searcher.getMatches( terms, query );
+			var matchesData = searcher.getMatches( terms, query );
 			// Objects in the format we need them
-			var results 		= searcher.buildResults(matchesData);
-			console.log(results);
+			var results 	= searcher.buildResults(matchesData);
 			// console.log(results);
 			// result.matchesData 	= matchesData;
 		}
