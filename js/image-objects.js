@@ -12,21 +12,21 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 	// objsByIds is the current name of the thing containing all the image objects
 
 	var imgs = [
-		{ filename: '542px-Pacman.svg.png', tags: ['pacman', 'player', 'yellow', 'circle'] },
-		{ filename: 'book-icon-yellow.png', tags: [ 'book', 'reading', 'open', 'yellow' ] },
-		{ filename: 'js-yellow.png', tags: [ 'js', 'javascript', 'acronym', 'text', 'letters', 'yellow' ] },
-		{ filename: 'mouse.png', tags: [ 'mouse', 'pointer', 'cursor', 'computer', 'black' ] },
-		{ filename: 'plus.png', tags: [ 'plus', 'math', 'add', 'yellow' ] },
-		{ filename: 'search-white.png', tags: [ 'search', 'magnifying', 'glass', 'white', 'gray' ] },
-		{ filename: 'tongue-face.png', tags: [ 'tongue-face', 'face', 'emoticon', 'funny', 'tongue', 'smiley', 'yellow', 'red', 'pink' ] },
-		{ filename: 'mobs-neutral-clear.svg', tags: [ 'mobs', 'ai', 'neutral', 'many', 'group' ] },
-		{ filename: 'columns.svg', tags: [ 'columns' ] },
-		{ filename: 'noun_1306_cc_no-attr.svg', tags: [ 'hammer', 'build', 'construct', 'fix' ] },
-		{ filename: 'noun_37982_cc_no-attr.svg', tags: [ 'grid', 'cells' ] },
-		{ filename: 'rows.svg', tags: [ 'rows' ] },
-		{ filename: 'push2.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
-		{ filename: 'push3.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
-		{ filename: 'push.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] }
+		{ name: 'pacman', filename: '542px-Pacman.svg.png', tags: ['pacman', 'player', 'yellow', 'circle'] },
+		{ name: 'book', filename: 'book-icon-yellow.png', tags: [ 'book', 'reading', 'open', 'yellow' ] },
+		{ name: 'js', filename: 'js-yellow.png', tags: [ 'js', 'javascript', 'acronym', 'text', 'letters', 'yellow' ] },
+		{ name: 'mouse', filename: 'mouse.png', tags: [ 'mouse', 'pointer', 'cursor', 'computer', 'black' ] },
+		{ name: 'plus', filename: 'plus.png', tags: [ 'plus', 'math', 'add', 'yellow' ] },
+		{ name: 'search', filename: 'search-white.png', tags: [ 'search', 'magnifying', 'glass', 'white', 'gray' ] },
+		{ name: 'tongue', filename: 'tongue-face.png', tags: [ 'tongue-face', 'face', 'emoticon', 'funny', 'tongue', 'smiley', 'yellow', 'red', 'pink' ] },
+		{ name: 'mobs', filename: 'mobs-neutral-clear.svg', tags: [ 'mobs', 'ai', 'neutral', 'many', 'group' ] },
+		{ name: 'columns', filename: 'columns.svg', tags: [ 'columns' ] },
+		{ name: 'hammer', filename: 'noun_1306_cc_no-attr.svg', tags: [ 'hammer', 'build', 'construct', 'fix' ] },
+		{ name: 'grid', filename: 'noun_37982_cc_no-attr.svg', tags: [ 'grid', 'cells' ] },
+		{ name: 'rows', filename: 'rows.svg', tags: [ 'rows' ] },
+		{ name: 'push2', filename: 'push2.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
+		{ name: 'push3', filename: 'push3.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
+		{ name: 'push', filename: 'push.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] }
 	];  // End adder.imgs[]
 
 
@@ -40,6 +40,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 		
 		// Need to update [tags] and tag: [] and id:{}
 		// tagsArray, idsByTag, objsByIds
+
 
 		// --- objsByIds (objs-by-ids.js) --- \\
 		objsByIds[ imgi ] = obj;
@@ -76,13 +77,12 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 				tagIds.push( obj.id );
 			}
 		}  // end for objects
-
-		idsByTag[ tag ] = tagIds;
+		idsByTag[ tag ].concat( tagIds );
 
 	}  // end for tags
 
-
-	return imgs;
+	// ???: Not sure what to return, there are 3 major things here
+	return objsByIds;
 };  // End setupImgObj()
 
 // adder.setupImageObjects

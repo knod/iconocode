@@ -25,7 +25,7 @@ var AdderSearcher = function ( searchbar ) {
 */
 	var searcher = {};
 
-	var fuzzySearcher 	= new FuzzySearcher();
+	var fuzzySearcher = new FuzzySearcher();
 
 
 	// ========================
@@ -70,17 +70,20 @@ var AdderSearcher = function ( searchbar ) {
 
 	searcher.runSearch 	= function ( query ) {
 	/* ( str ) -> ?? */
-		outputNode.innerHTML 	= ''; // Why doesn't this work?
+		// outputNode.innerHTML 	= '';
 		// $(outputNode).empty();
+
+		var matchData;
+
 		// Make sure there's some text in the search to match with
 		// If I use length > 0 and type in 'a', I get 4707 unique ids, 'ac' gets 812
-		if ( $(inputNode).val().length > 3 ) {
-			var matchData 	= fuzzySearcher.runSearch( terms, query );
+		if ( query.length > 3 ) {
+			matchData 	= fuzzySearcher.runSearch( terms, query );
 			adder.currentMatchData = matchData;
 			
 			// idsByTag  from tag-dict.js
 			// These turn out already ranked
-			var objIds 		= searcher.getUniqueObjIds( matchData.matches, idsByTag );
+			var objIds = searcher.getUniqueObjIds( matchData.matches, idsByTag );
 			adder.currentMatchIds = objIds;
 
 			// outputNode.appendChild( matchData.node );
@@ -90,8 +93,9 @@ var AdderSearcher = function ( searchbar ) {
 		// Pass out the objIds array and the reults? (results allow)
 		// for not having to re-analyze the tags, can just use the data we
 		// already have
-		return outputNode;
+		return matchData;
 	};  // End runSearch()
+
 
 	// searcher.matchQuery 	= function ( imgObj, query ) {
 	// /*

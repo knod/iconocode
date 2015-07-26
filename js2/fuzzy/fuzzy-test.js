@@ -63,6 +63,8 @@ window.addEventListener( 'load', function () {
 	// ========================
 	// DATA
 	// ========================
+	console.log(idsByTag)
+	console.log(idsByTag['accounting'])
 	var getUniqueObjIds = function ( tagNames, idsByTag ) {
 	/* ( [""], { tagName: 'id#s'} )
 	* 
@@ -77,6 +79,7 @@ window.addEventListener( 'load', function () {
 			// Maybe check unique right in here
 			// http://stackoverflow.com/questions/11246758/how-to-get-unique-values-in-an-array
 			var tagIds = idsByTag[ tag ];
+			console.log(tag)
 
 			// Add this tag's id's to the main list
 			for ( var idi = 0; idi < tagIds.length; idi++ ) {  // for each id in tag
@@ -99,19 +102,24 @@ window.addEventListener( 'load', function () {
 	// Always searching through the same terms?
 	var terms = tagsArray;  // tags-array.js
 	// idsByTag  from tag-dict.js, we'll work out how to do it better later
+	var matchData;
+	var objIds;
+
 
 	var runSearch 	= function ( query ) {
-		outputNode.innerHTML 	= ''; // Why doesn't this work?
+		console.log('running search')
+		// outputNode.innerHTML 	= '';
 		// $(outputNode).empty();
 		// Make sure there's some text in the search to match with
 		// If I use length > 0 and type in 'a', I get 4707 unique ids, 'ac' gets 812
 		if ( $(inputNode).val().length > 3 ) {
-			var matchData 	= fuzzySearcher.runSearch( terms, query );
+			matchData 	= fuzzySearcher.runSearch( terms, query );
 			adder.currentMatchData = matchData;
 			
 			// idsByTag  from idsByTag.js
 			// These turn out already ranked
-			var objIds 		= getUniqueObjIds( matchData.matches, idsByTag );
+			objIds 		= getUniqueObjIds( matchData.matches, idsByTag );
+
 			adder.currentMatchIds = objIds;
 
 			// How do I connect the rankings with the object ids?
@@ -168,6 +176,65 @@ window.addEventListener( 'load', function () {
 
 	}, false);
 
+
+	// =======================
+	// TEST
+	// =======================
+	// Pretend to scroll through rows
+	var firstRowNum = 0;
+	var numRows 	= 40;
+	var numCols 	= 8;
+	var testRows = function ( wheelDelta ) {
+		// Put in the event
+		// var accY = 0;
+
+		// scrollableNode.addEventListener('wheel', function ( evnt ) {
+		// 	// console.log(evnt)
+		// 	// console.log(evnt.deltaY);
+
+		// 	var deltaY = evnt.deltaY;
+		// 	accY += deltaY;
+		// 	console.log(accY)
+
+		// 	if ( (accY % 30) === 0 ) {
+		// 	}
+
+		// });
+
+		if ( wheelDelta > 2 ) {
+			firstRowNum += 1;
+			// Don't go above the max number of rows (taking into account 0 index)
+			firstRowNum = Math.min( (numRows - 1), firstRowNum );
+		} else if ( wheelDelta < -2 ) {
+			firstRowNum -= 1;
+			// Don't go below 0
+			firstRowNum = Math.max( 0, firstRowNum );
+		}
+
+		console.log(firstRowNum)
+
+		var firstIndex = ( firstRowNum * numCols );
+
+		var rows = [];
+		for ( var indx = 0; indx < numRows; indx++ ) {
+			var id 	= objIds[ indx ];
+			console.log()
+			var obj = objsByIds[ id ];
+			rows.push( obj );
+			console.log( obj.name );
+		}
+
+		return rows;
+	}  // End testRows()
+
+	document.addEventListener('wheel', function ( evnt ) {
+		// console.log(evnt)
+		// console.log(evnt.deltaY);
+
+		var deltaY = evnt.deltaY;
+		testRows( deltaY );
+
+	});
 
 });  // End window on load
 
