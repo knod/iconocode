@@ -63,8 +63,6 @@ window.addEventListener( 'load', function () {
 	// ========================
 	// DATA
 	// ========================
-	console.log(idsByTag)
-	console.log(idsByTag['accounting'])
 	var getUniqueObjIds = function ( tagNames, idsByTag ) {
 	/* ( [""], { tagName: 'id#s'} )
 	* 
@@ -79,7 +77,6 @@ window.addEventListener( 'load', function () {
 			// Maybe check unique right in here
 			// http://stackoverflow.com/questions/11246758/how-to-get-unique-values-in-an-array
 			var tagIds = idsByTag[ tag ];
-			console.log(tag)
 
 			// Add this tag's id's to the main list
 			for ( var idi = 0; idi < tagIds.length; idi++ ) {  // for each id in tag
@@ -107,7 +104,7 @@ window.addEventListener( 'load', function () {
 
 
 	var runSearch 	= function ( query ) {
-		console.log('running search')
+		console.log('----------- running search -----------')
 		// outputNode.innerHTML 	= '';
 		// $(outputNode).empty();
 		// Make sure there's some text in the search to match with
@@ -182,7 +179,7 @@ window.addEventListener( 'load', function () {
 	// =======================
 	// Pretend to scroll through rows
 	var firstRowNum = 0;
-	var numRows 	= 40;
+	var numRows 	= 8;
 	var numCols 	= 8;
 	var testRows = function ( wheelDelta ) {
 		// Put in the event
@@ -216,13 +213,19 @@ window.addEventListener( 'load', function () {
 		var firstIndex = ( firstRowNum * numCols );
 
 		var rows = [];
-		for ( var indx = 0; indx < numRows; indx++ ) {
-			var id 	= objIds[ indx ];
-			console.log()
-			var obj = objsByIds[ id ];
-			rows.push( obj );
-			console.log( obj.name );
+		for ( var iteri = 0; iteri < numRows; iteri++ ) {
+			var row = [];
+			var rowNum = firstRowNum + iteri;
+			for ( var colNum = 0; colNum < numCols; colNum++ ) {
+				var indx = (rowNum * numCols) + colNum
+				var id 	= objIds[ indx ];
+				// console.log()
+				var obj = objsByIds[ id ];
+				row.push( obj );
+			}
+			rows.push( row );
 		}
+		console.log(rows)
 
 		return rows;
 	}  // End testRows()

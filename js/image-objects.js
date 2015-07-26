@@ -51,6 +51,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 			var tag = obj.tags[ tagi ];
 			if ( tagsArray.indexOf( tag ) === -1 ) {
 				tagsArray.push( tag );
+				tagsArray[ tag ] = [];  // So it can be added to later
 			}
 		}
 
@@ -58,26 +59,34 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 
 
 	// --- idsByTag (ids-by-tag.js) --- \\
+	
+		
 	var numTags = tagsArray.length;
-	var numObjs = imgs.length;
 
+	// Get each tag, including the new ones
 	for ( var tagi = 0; tagi < numTags; tagi++ ) {
 
 		var tag 	= tagsArray[ tagi ];
 		var tagIds = [];
 
-		for ( var obji = 0; obji < numObjs; obji++ ) {
+		// Get each new object
+		for ( var obji = 0; obji < imgs.length; obji++ ) {
 			
 			var obj = imgs[ obji ];
 
-			// If the tag is in the object's list of tags
-			var doesContain = obj.tags.indexOf(tag) > -1;
+			// If the new object contains that tag
+			var doesContain = obj.tags.indexOf( tag ) > -1;
+				// add that object's id to the idsByTag dict
 			if ( doesContain === true ) {
-				// Add it to what will be the key's list
-				tagIds.push( obj.id );
+				// But first, if it's a new tag and not in the idsByTag dict
+				// Add the tag as a key to the idsByTag dict
+				if ( !idsByTag.hasOwnProperty( tag ) ) {
+					idsByTag[ tag ] = [];
+				}
+
+				idsByTag[ tag ].push( obj.id );
 			}
-		}  // end for objects
-		idsByTag[ tag ].concat( tagIds );
+		}  // end for new objects
 
 	}  // end for tags
 
