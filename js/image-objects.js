@@ -7,7 +7,9 @@ the path to them?)
 'use strict'
 
 
-adder.setupImageObjects = function () {
+adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
+/* Change the names in future when I'm actually passing the values in */
+	// objsByIds is the current name of the thing containing all the image objects
 
 	var imgs = [
 		{ filename: '542px-Pacman.svg.png', tags: ['pacman', 'player', 'yellow', 'circle'] },
@@ -31,16 +33,54 @@ adder.setupImageObjects = function () {
 	var folderPath 	= './images/';
 
 	for ( var imgi = 0; imgi < imgs.length; imgi++ ) {
-		imgs[ imgi ].folderPath = folderPath;
-	}
+		var obj = imgs[ imgi ];
+		obj.folderPath = folderPath;
+		// TODO: Move to icd.map so that we can have a last id# variable to make more dynamically
+		obj.id = 'icd_' + imgi;
+		
+		// Need to update [tags] and tag: [] and id:{}
+		// tagsArray, idsByTag, objsByIds
 
-	// Add the compile np image objects
-	if ( npImages !== undefined ) {
-		imgs = imgs.concat( npImages );
-		// regex101.com, javascript
-		// "tags":\[(".*")]
-		// /([A-z0-9])/g
-	}
+		// --- objsByIds (objs-by-ids.js) --- \\
+		objsByIds[ imgi ] = obj;
+
+		// --- tagsArray (tags-array.js) --- \\  
+		// Add all unique tags to master tag array
+		for ( var tagi = 0; tagi < obj.tags.length; tagi++ ) {
+			var tag = obj.tags[ tagi ];
+			if ( tagsArray.indexOf( tag ) === -1 ) {
+				tagsArray.push( tag );
+			}
+		}
+
+	}  // end for every image object
+
+
+	// --- idsByTag (ids-by-tag.js) --- \\
+	var numTags = tagsArray.length;
+	var numObjs = imgs.length;
+
+	for ( var tagi = 0; tagi < numTags; tagi++ ) {
+
+		var tag 	= tagsArray[ tagi ];
+		var tagIds = [];
+
+		for ( var obji = 0; obji < numObjs; obji++ ) {
+			
+			var obj = imgs[ obji ];
+
+			// If the tag is in the object's list of tags
+			var doesContain = obj.tags.indexOf(tag) > -1;
+			if ( doesContain === true ) {
+				// Add it to what will be the key's list
+				tagIds.push( obj.id );
+			}
+		}  // end for objects
+
+		idsByTag[ tag ] = tagIds;
+
+	}  // end for tags
+
 
 	return imgs;
 };  // End setupImgObj()

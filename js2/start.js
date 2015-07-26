@@ -41,6 +41,11 @@ adder.node 	 		= null;
 // Inside the adder
 adder.icon 			= {};
 adder.viewer 		= null;
+
+// For the searching of the images
+adder.currentMatchData;  // fuzzy-test.js
+adder.currentMatchIds;  // fuzzy-test.js
+
 adder.sections 		= { commands: null, tabs: null, viewer: null, pickers: null };
 adder.modes  		= {
 

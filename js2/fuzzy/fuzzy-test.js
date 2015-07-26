@@ -63,27 +63,23 @@ window.addEventListener( 'load', function () {
 	// ========================
 	// DATA
 	// ========================
-	// var filterUnique = function ( unfiltereArray ) {
-
-	// };  // End filterUnique()
-
-
-	var getUniqueObjIds = function ( tagNames, tagIdsDict ) {
+	var getUniqueObjIds = function ( tagNames, idsByTag ) {
 	/* ( [""], { tagName: 'id#s'} )
 	* 
 	* Get all the unique object ids associated with all the tag names
+	* These turn out already ranked.
 	*/
 		var objIds = [];
 		
-		for ( var tagi = 0; tagi < tagNames.length; tagi++ ) {
+		for ( var tagi = 0; tagi < tagNames.length; tagi++ ) {  // for each tag
 
 			var tag = tagNames[ tagi ];
 			// Maybe check unique right in here
 			// http://stackoverflow.com/questions/11246758/how-to-get-unique-values-in-an-array
-			var tagIds = tagIdsDict[ tag ];
+			var tagIds = idsByTag[ tag ];
 
 			// Add this tag's id's to the main list
-			for ( var idi = 0; idi < tagIds.length; idi++ ) {
+			for ( var idi = 0; idi < tagIds.length; idi++ ) {  // for each id in tag
 				var id = tagIds[ idi ];
 
 				// but only if it's unique
@@ -92,11 +88,9 @@ window.addEventListener( 'load', function () {
 					objIds.push( id );
 				}
 
-			}
+			}  // end for each id in tag
 
-		}
-console.log(objIds.sort())
-		// for ( var tag in tagO)
+		}  // end for each tag
 
 		return objIds;
 	};  // End getUniqueObjIds()
@@ -104,25 +98,31 @@ console.log(objIds.sort())
 
 	// Always searching through the same terms?
 	var terms = tagsArray;  // tags-array.js
-	// tagIdsDict  from tag-dict.js, we'll work out how to do it better later
+	// idsByTag  from tag-dict.js, we'll work out how to do it better later
 
 	var runSearch 	= function ( query ) {
 		outputNode.innerHTML 	= ''; // Why doesn't this work?
 		// $(outputNode).empty();
 		// Make sure there's some text in the search to match with
 		// If I use length > 0 and type in 'a', I get 4707 unique ids, 'ac' gets 812
-		if ( $(inputNode).val().length > 1 ) {
+		if ( $(inputNode).val().length > 3 ) {
 			var matchData 	= fuzzySearcher.runSearch( terms, query );
+			adder.currentMatchData = matchData;
 			
-			// tagIdsDict  from tag-dict.js
-			var objIds 		= getUniqueObjIds( matchData.matches, tagIdsDict );
-			var objs 		= getObjects( objIds );
+			// idsByTag  from idsByTag.js
+			// These turn out already ranked
+			var objIds 		= getUniqueObjIds( matchData.matches, idsByTag );
+			adder.currentMatchIds = objIds;
 
+			// How do I connect the rankings with the object ids?
 
 			// outputNode.appendChild( matchData.node );
 			// $(matchData.node).children().first().addClass('selected');
 		}
 
+		// Pass out the objIds array and the reults? (results allow)
+		// for not having to re-analyze the tags, can just use the data we
+		// already have
 		return outputNode;
 	};  // End runSearch()
 

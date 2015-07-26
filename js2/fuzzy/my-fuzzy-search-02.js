@@ -117,6 +117,8 @@ var FuzzySearcher = function () {
 	/* Creates results values in appropriate format */
 
 		var results 	= { matches: [], failures: [], matchesData: {}, failuresData: {} };
+		// TODO: Covert to this:
+		// var results 	= { matches: {array: [], data: {}}, failures: {array: [], data: {}} };
 		var numTerms 	= sortedMatches.length;
 
 		for ( var matchi = 0; matchi < numTerms; matchi++ ) {

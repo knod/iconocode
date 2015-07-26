@@ -259,6 +259,13 @@ var FuzzyMatcher = function ( context ) {
 			var m1_altScore = m1.score - m1.matchArray[0].length;
 
 			diff = m2_altScore - m1_altScore;
+
+			if (m2_altScore === m1_altScore) {
+				// If compareFunction(a, b) is less than 0, sort a to a lower index than b, i.e. a comes first.
+				// If m1 is ealier in the alphabet than 
+				//shoky_> knod: so basically,  function(a,b) { if (a.score !== b.score) { return a.score - b.score } else { return a.string.localeCompare(b.string) } }
+				m2.term.localeCompare( m1.term );
+			}
 		}
 
 		return diff;

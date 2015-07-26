@@ -28,144 +28,209 @@ var AdderSearcher = function ( searchbar ) {
 	var fuzzySearcher 	= new FuzzySearcher();
 
 
-	searcher.matchQuery 	= function ( imgObj, query ) {
-	/*
-
-	Runs the search for matches on a container's node. Doesn't
-	get rid of the node's terms
+	// ========================
+	// DATA
+	// ========================
+	searcher.getUniqueObjIds = function ( tagNames, idsByTag ) {
+	/* ( [""], { tagName: 'id#s'} )
+	* 
+	* Get all the unique object ids associated with all the tag names
+	* These turn out already ranked.
 	*/
-		var terms = imgObj.tags;
+		var objIds = [];
+		
+		for ( var tagi = 0; tagi < tagNames.length; tagi++ ) {  // for each tag
 
-		// Get match data and store it in the node
-		var matchData 		= fuzzySearcher.runSearch( terms, query );
-		imgObj.matchData 	= matchData;
+			var tag = tagNames[ tagi ];
+			// Maybe check unique right in here
+			// http://stackoverflow.com/questions/11246758/how-to-get-unique-values-in-an-array
+			var tagIds = idsByTag[ tag ];
 
-		return matchData;
-	};  //  End searcher.matchQuery()
+			// Add this tag's id's to the main list
+			for ( var idi = 0; idi < tagIds.length; idi++ ) {  // for each id in tag
+				var id = tagIds[ idi ];
+
+				// but only if it's unique
+				// if this is too slow, look at http://stackoverflow.com/questions/237104/array-containsobj-in-javascript
+				if ( objIds.indexOf( id ) === -1 ) {
+					objIds.push( id );
+				}
+
+			}  // end for each id in tag
+
+		}  // end for each tag
+
+		return objIds;
+	};  // End getUniqueObjIds()
 
 
-	searcher.runSearch 		= function ( imageObjects ) {
-	/* ( [Nodes] ) -> Nodes
-	*/
 
-		// var cmEditor = adder.viewer;
+	var terms = tagsArray;  // tags-array.js
+	// idsByTag from ids-by-tag.js, we'll work out how to do it better later
 
-		// Get the text in the current token
-		var token = searchbar.getTokenAt( searchbar.getCursor() );
+	searcher.runSearch 	= function ( query ) {
+	/* ( str ) -> ?? */
+		outputNode.innerHTML 	= ''; // Why doesn't this work?
+		// $(outputNode).empty();
+		// Make sure there's some text in the search to match with
+		// If I use length > 0 and type in 'a', I get 4707 unique ids, 'ac' gets 812
+		if ( $(inputNode).val().length > 3 ) {
+			var matchData 	= fuzzySearcher.runSearch( terms, query );
+			adder.currentMatchData = matchData;
+			
+			// idsByTag  from tag-dict.js
+			// These turn out already ranked
+			var objIds 		= searcher.getUniqueObjIds( matchData.matches, idsByTag );
+			adder.currentMatchIds = objIds;
 
-	// console.log('------------')
-
-		if ( token.string.length > 3 ) {
-
-			// Sanitize query (maybe not necessary. TODO: test removal of this later)
-			// Remove any semicolons, though actually if anything but this adds them, I think this breaks
-			var query = token.string.replace( /;/, '' );
-
-			// Choice nodes sorted by rank:
-			// var choiceArray = searcher.updateContainerList( imageObjects, query );
-			for ( var obji = 0; obji < 3000; obji++ ) {
-
-				var test = searcher.matchQuery( imageObjects[obji], query );
-				// if ( obji < 3 ) {
-				// 	console.log(test);
-				// }
-				if ( (obji % 1000) === 0) {console.log('bleh');debugger;}
-			}
-
-			// adder.updateImageGrid( choiceArray );
-
+			// outputNode.appendChild( matchData.node );
+			// $(matchData.node).children().first().addClass('selected');
 		}
 
-		return imageObjects;
-	};
+		// Pass out the objIds array and the reults? (results allow)
+		// for not having to re-analyze the tags, can just use the data we
+		// already have
+		return outputNode;
+	};  // End runSearch()
+
+	// searcher.matchQuery 	= function ( imgObj, query ) {
+	// /*
+
+	// Runs the search for matches on a container's node. Doesn't
+	// get rid of the node's terms
+	// */
+	// 	var terms = imgObj.tags;
+
+	// 	// Get match data and store it in the node
+	// 	var matchData 		= fuzzySearcher.runSearch( terms, query );
+	// 	imgObj.matchData 	= matchData;
+
+	// 	return matchData;
+	// };  //  End searcher.matchQuery()
 
 
-					adder.updateChoiceList 	= function ( choiceContainer, query ) {
-					/*
+	// searcher.runSearch 		= function ( imageObjects ) {
+	// /* ( [Nodes] ) -> Nodes
+	// */
 
-					Runs the search for matches on each choiceNode. Shows just
-					matching terms. Doesn't get rid of search terms.
-					*/
-						var matchData = searcher.matchQuery( choiceContainer, query );
+	// 	// var cmEditor = adder.viewer;
 
-						// !!!: HERE'S THE THING THAT'S NOT GENERAL
-						// Re-make list of terms with styled list elements
-						var list 		= $(choiceContainer).find('ol')[0];
-						$(list).empty();
-						list.appendChild( matchData.node );
+	// 	// Get the text in the current token
+	// 	var token = searchbar.getTokenAt( searchbar.getCursor() );
 
-						return choiceContainer
-					};  // End adder.updateChoiceList()
+	// // console.log('------------')
 
+	// 	if ( token.string.length > 3 ) {
 
-					adder.updateContainerList = function ( choiceContainers, query ) {
-					/* ( [Node], str ) -> [Node]
+	// 		// Sanitize query (maybe not necessary. TODO: test removal of this later)
+	// 		// Remove any semicolons, though actually if anything but this adds them, I think this breaks
+	// 		var query = token.string.replace( /;/, '' );
 
-					Updates the visible search terms for all choices.
-					*/
-						// List to be ranked
-						var newChoiceOrder = [];
+	// 		// Choice nodes sorted by rank:
+	// 		// var choiceArray = searcher.updateContainerList( imageObjects, query );
+	// 		for ( var obji = 0; obji < 3000; obji++ ) {
 
-						for ( var nodei = 0; nodei < choiceContainers.length; nodei++ ) {
+	// 			var test = searcher.matchQuery( imageObjects[obji], query );
+	// 			// if ( obji < 3 ) {
+	// 			// 	console.log(test);
+	// 			// }
+	// 			if ( (obji % 1000) === 0) {console.log('bleh');debugger;}
+	// 		}
 
-							var choiceContainer = choiceContainers[ nodei ];
-							// Change the visible search terms for that image
-							adder.updateChoiceList( choiceContainer, query );
-							newChoiceOrder.push(choiceContainer);
+	// 		// adder.updateImageGrid( choiceArray );
 
-							// !!!: THIS ISN'T GENERALIZED EITHER
-							// If it didn't match, hide it (it'll still be in the DOM)
-							if ( $(choiceContainer).data('matchData').matchesData[0] === undefined ) {
-								$(choiceContainer).hide();
-							} else {  // Otherwise make sure it's visible
-								$(choiceContainer).show();
-							}
-						}
+	// 	}
+
+	// 	return imageObjects;
+	// };
 
 
-						var matchComparator = function ( node1, node2 ) {
-						/* This is in here because in here is where the test properties are created 
+	// 				adder.updateChoiceList 	= function ( choiceContainer, query ) {
+	// 				/*
 
-						!!!: This is actually not working and I'm not sure why. For 'a', I get
-						add, face, black, pacman, reading, acronym, magnifying glass. It should be more like
-						add, acronym, face, pacman, magnifying glass, black, reading
+	// 				Runs the search for matches on each choiceNode. Shows just
+	// 				matching terms. Doesn't get rid of search terms.
+	// 				*/
+	// 					var matchData = searcher.matchQuery( choiceContainer, query );
 
-						Better to always return either 1, -1, or 0?
-						*/
-							// !!!: TODO: This is terrible. I have to dig way down deep
-							var match2 = $(node2).data('matchData').matchesData[0];
-							var match1 = $(node1).data('matchData').matchesData[0];
+	// 					// !!!: HERE'S THE THING THAT'S NOT GENERAL
+	// 					// Re-make list of terms with styled list elements
+	// 					var list 		= $(choiceContainer).find('ol')[0];
+	// 					$(list).empty();
+	// 					list.appendChild( matchData.node );
 
-							// If either of the nodes had no matches, somehow put them at the bottom
-							// of the rankings
-							if ( match2 === undefined ) { match2 = {score: -1000, term: 'z', matchArray: ['z']}; }
-							if ( match1 === undefined ) { match1 = {score: -1000, term: 'z', matchArray: ['z']}; }
+	// 					return choiceContainer
+	// 				};  // End adder.updateChoiceList()
 
-							var sortResult;
-							// If the scores are the same
-							if ( match1.score === match2.score ) {
-								// Add the number of letters before the first match
-								var alt2 = match2.score - match2.matchArray[0].length;
-								var alt1 = match1.score - match1.matchArray[0].length;
 
-								sortResult = alt2 - alt1;  // I'm not sure why this works, maybe go with below:
-								// if 		( alt2 === alt1 ) { sortResult = 0; }
-								// else if ( alt2 > alt1 ) { sortResult = 1; }
-								// else { sortResult = -1; }
+	// 				adder.updateContainerList = function ( choiceContainers, query ) {
+	// 				/* ( [Node], str ) -> [Node]
 
-							} else {
+	// 				Updates the visible search terms for all choices.
+	// 				*/
+	// 					// List to be ranked
+	// 					var newChoiceOrder = [];
 
-								sortResult = match2.score - match1.score;  // Same as alt note above
-								// if ( match2.score > match1.score ) { sortResult = 1; }
-								// else 	{ sortResult = -1; }
-							}
+	// 					for ( var nodei = 0; nodei < choiceContainers.length; nodei++ ) {
 
-							return sortResult;
-						};  // End matchComparator()
+	// 						var choiceContainer = choiceContainers[ nodei ];
+	// 						// Change the visible search terms for that image
+	// 						adder.updateChoiceList( choiceContainer, query );
+	// 						newChoiceOrder.push(choiceContainer);
 
-						newChoiceOrder.sort( matchComparator );
-						return newChoiceOrder;
-					};  // End adder.updateContainerList()
+	// 						// !!!: THIS ISN'T GENERALIZED EITHER
+	// 						// If it didn't match, hide it (it'll still be in the DOM)
+	// 						if ( $(choiceContainer).data('matchData').matchesData[0] === undefined ) {
+	// 							$(choiceContainer).hide();
+	// 						} else {  // Otherwise make sure it's visible
+	// 							$(choiceContainer).show();
+	// 						}
+	// 					}
+
+
+	// 					var matchComparator = function ( node1, node2 ) {
+	// 					/* This is in here because in here is where the test properties are created 
+
+	// 					!!!: This is actually not working and I'm not sure why. For 'a', I get
+	// 					add, face, black, pacman, reading, acronym, magnifying glass. It should be more like
+	// 					add, acronym, face, pacman, magnifying glass, black, reading
+
+	// 					Better to always return either 1, -1, or 0?
+	// 					*/
+	// 						// !!!: TODO: This is terrible. I have to dig way down deep
+	// 						var match2 = $(node2).data('matchData').matchesData[0];
+	// 						var match1 = $(node1).data('matchData').matchesData[0];
+
+	// 						// If either of the nodes had no matches, somehow put them at the bottom
+	// 						// of the rankings
+	// 						if ( match2 === undefined ) { match2 = {score: -1000, term: 'z', matchArray: ['z']}; }
+	// 						if ( match1 === undefined ) { match1 = {score: -1000, term: 'z', matchArray: ['z']}; }
+
+	// 						var sortResult;
+	// 						// If the scores are the same
+	// 						if ( match1.score === match2.score ) {
+	// 							// Add the number of letters before the first match
+	// 							var alt2 = match2.score - match2.matchArray[0].length;
+	// 							var alt1 = match1.score - match1.matchArray[0].length;
+
+	// 							sortResult = alt2 - alt1;  // I'm not sure why this works, maybe go with below:
+	// 							// if 		( alt2 === alt1 ) { sortResult = 0; }
+	// 							// else if ( alt2 > alt1 ) { sortResult = 1; }
+	// 							// else { sortResult = -1; }
+
+	// 						} else {
+
+	// 							sortResult = match2.score - match1.score;  // Same as alt note above
+	// 							// if ( match2.score > match1.score ) { sortResult = 1; }
+	// 							// else 	{ sortResult = -1; }
+	// 						}
+
+	// 						return sortResult;
+	// 					};  // End matchComparator()
+
+	// 					newChoiceOrder.sort( matchComparator );
+	// 					return newChoiceOrder;
+	// 				};  // End adder.updateContainerList()
 
 
 	return searcher;
