@@ -188,7 +188,7 @@ window.addEventListener( 'load', function () {
 	var numObjects 		= Object.keys(objsByIds).length
 	var numTotalRows 	= Math.ceil( numObjects / numCols);
 	
-	var existingRows 			= [];
+	var existingRows 	= [];
 
 
 	var getRowOfObjectsByRowNum = function ( rowNum ) {
@@ -210,10 +210,43 @@ window.addEventListener( 'load', function () {
 	};  // End getRowOfObjectsByRowNum()
 
 
+
+	// Pretend to scroll through rows
+	var scrollRowArray = function ( wheelDelta ) {
+
+		// Actually just do this when elements go off the visible page
+		if ( wheelDelta > 2 ) {
+			firstRowIndx += 1;
+			// Don't go above the max number of rows (taking into account 0 index)
+			var lastFirstRowIndx = (numTotalRows - 1) - numExistingRows;
+			firstRowIndx = Math.min( lastFirstRowIndx, firstRowIndx );
+		} else if ( wheelDelta < -2 ) {
+			firstRowIndx -= 1;
+			// Don't go below 0
+			firstRowIndx = Math.max( 0, firstRowIndx );
+		}
+
+
+		existingRows = [];
+		for ( var iteri = 0; iteri < numExistingRows; iteri++ ) {
+			
+			// For number of rows that are showing, get the start of each row
+			var rowNum = firstRowIndx + iteri;
+			// Then fill that row with the right objects
+			var row = getRowOfObjectsByRowNum( rowNum )
+			// Add that row to all the rows
+			existingRows.push( row );
+
+		}
+
+		return existingRows;
+	}  // End scrollRowArray()
+
+
 	// This is to build all the rows each time. What we really need to do
 	// is just add a row to the top or bottom and remove one on the opposite end
 	// This should only be done once at the end of each search round (resetting the grid)
-	var setGridArray = function () {
+	var setGridArray = function ( existingRows ) {
 
 		// Create 5 visible rows, with 8 columns each
 		for ( var iteri = 0; iteri < numExistingRows; iteri++ ) {
@@ -228,82 +261,12 @@ window.addEventListener( 'load', function () {
 	};  // End setGridArray()
 
 
-	var scrollRowsArray = function ( wheelDelta, existingRows ) {
-		// This should look like the same result as before, it'll just be done differently
-		// Is there a point to doing it this way? Will the right element stay selected?
-		// Will we still need to change the navigation position?
 
-		if ( wheelDelta > 2 ) {
-			console.log( '---------------' )
-			console.log('existing rows before:', existingRows)
-			// ???: Not sure how to handle 0 index in here
-			// lastRowIndx starts at 0
-			// numExistingRows and numTotalRows do not start at 0
-			// Last and first row numbers refer to the last and first existing rows
-			// Don't go below the max number of total rows (taking into account 0 index)
 
-			// ???!: Which one?!
-			// // +1 because we're pretending rows have been incremented to show possible next row
-			// var lastRowIndx = firstRowIndx + 1 + (numExistingRows);
-			// // 10 total rows, 7 existing ones, first row = 0, last row = 8;
-			// // 10 total rows, 7 existing ones, first row = 2, last row = 10;
-			// lastRowIndx 	= Math.min( numTotalRows - 1, lastRowIndx );
-			// // Math.min( 9, 8 );
-			// // Math.min( 9, 10 );
-			// // If it won't go too far
-			// if ( lastRowIndx < (numTotalRows - 1) ) {
-			// 	// 8 < 9; 10 < 9 (this will be false when last row is 9, which is too early?)
-			// }
 
-			// +1 because we're pretending rows have been incremented to show possible next row
-			var lastRowIndx = (firstRowIndx + 1) + (numExistingRows - 1);
-			// 10 total rows, 7 existing ones, first row = 0, last row = 7;
-			// 10 total rows, 7 existing ones, first row = 2, last row = 9;
-			var numRows0Indx = numTotalRows - 1;
-			lastRowIndx 	= Math.min( numRows0Indx, lastRowIndx );
-			// Math.min( 9, 7 );
-			// Math.min( 9, 9 );
-			// If it won't go too far
-			// console.log('lastRow:', lastRowIndx, '; numTotal - 1:', (numTotalRows - 1));  // Working, I think
-			if ( lastRowIndx < (numTotalRows - 1) ) {
-				// 7 < 9; 9 < 9 (just right?)
-				// Actually increment everything
-				firstRowIndx += 1;
 
-				var newRow 	= getRowOfObjectsByRowNum( lastRowIndx );
-				// console.log(newRow)
-				// Remove first row from rows
-				console.log(existingRows.shift());
-				console.log('existing rows length:', existingRows.length)
-		console.log('existingRows after shift:', existingRows)
-				// Add a row to the end
-				existingRows.push( newRow );
 
-			}
 
-		} else if ( wheelDelta < -2 ) {
-			console.log( '***************' )
-			firstRowIndx -= 1;
-
-			// Don't go above first row
-			firstRowIndx = Math.max( 0, firstRowIndx );
-			console.log('firstRow:', firstRowIndx, '; 0')
-			if ( firstRowIndx > 0 ) {
-				var newRow = getRowOfObjectsByRowNum( firstRowIndx );
-				// Remove the last row from rows
-				existingRows.pop();
-				// Add a row above this one
-				existingRows.unshift( newRow )
-		console.log('existingRows:', existingRows)
-			}
-
-		}
-
-		
-		// var scrollGrid = function 
-
-		return existingRows;
-	}  // End scrollRowsArray()
 
 
 
@@ -312,13 +275,13 @@ window.addEventListener( 'load', function () {
 		// console.log(evnt.deltaY);
 
 		var deltaY = evnt.deltaY;
-		scrollRowsArray( deltaY, existingRows );
+		scrollRowArray( deltaY, existingRows );
 
 	});
 
 
 	// START TEST
-	setGridArray();
+	setGridArray( existingRows );
 
 });  // End window on load
 
