@@ -180,6 +180,7 @@ be scrollable... make it position: relative?
 	height: 9rem;
 	/* for some reason makes images oversized */
 	/*width: 100%;*/
+	overflow: scroll;
 }
 
 
@@ -237,8 +238,6 @@ but maybe we want the images to be their proper size?
 	flex-wrap: wrap;
 
 	padding: 2.5%;
-
-	overflow: scroll;
 }
 
 .icd .images-picker-row {

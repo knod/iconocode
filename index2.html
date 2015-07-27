@@ -31,6 +31,21 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
     <hr>
   </header>
 
+
+    <section style='z-index: 1000;'>
+    <h2>my-fuzzy.js Demo</h2>
+    <div class='search-container'>
+      <div class='icd fuzzy-search-wrapper'>
+        <div class='fuzzy-input'>
+          <input type='text' id='search-query' autofocus>
+        </div>
+        <ol id='fuzzy-matches-container' style='background-color: white;'>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+
   <div class ='app'>
     <section class='editor-area'>
 
@@ -58,7 +73,7 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
   <br>
 
   <a class='footer' href='./credits/credits.html'>Credits for stuff like icons from the Noun Project</a>
-<!-- 32 -->
+
 	<!-- ************************* -->
 	<!-- SCRIPTS -->
 	<!-- ************************* -->
@@ -86,34 +101,41 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 	<!-- ************************* -->
 	<script src='js2/start.js'></script>
 
-  <script src='images/image-objects-compiled.js'></script>
-	<script src='js/iconocode-image-list.js'></script>
-
-  <!-- SEARCHING -->
+	
+	<!-- === SEARCHING === -->
 	<script src='js2/html5-tags.js'></script>
 	<!-- <script src='js2/fuzzy-search.js'></script> -->
 	<script src='js2/fuzzy/my-fuzzy-match.js'></script>
-	<script src='js2/fuzzy/my-fuzzy-search.js'></script>
-	<!-- <script src='js2/fuzzy/fuzzy-test.js'></script> --> <!-- Test -->
+	<script src='js2/fuzzy/my-fuzzy-search-02.js'></script>
+
+	<!-- Image Data -->
+	<script src='js2/fuzzy/tags-array.js'></script>
+	<script src='js2/fuzzy/ids-by-tag.js'></script>
+	<script src='js2/fuzzy/objs-by-ids.js'></script>
+	<!-- <script src='images/image-objects-compiled.js'></script> -->
+	<script src='js/image-objects.js'></script>
+
+	<!-- Test Searching -->
+	<script src='js2/fuzzy/fuzzy-test.js'></script>
 	<!-- <script src='js2/my-fuzzy-match-simple-string.js'></script> -->
 
 	<script src='js/adder-utils-tabs.js'></script>
 
-  <script src='js2/scroll-reveal.js'></script>
+	<script src='js2/scroll-reveal.js'></script>
 	<script src='js2/ImageChoice.js'></script>
 	<script src='js2/ImageChoice2.js'></script>
-	
+
 	<script src='js2/adder.js'></script>
 	<script src='js2/commands.js'></script>
-  <script src='js2/Adder-Icon.js'></script>
+	<script src='js2/Adder-Icon.js'></script>
 	<script src='js2/viewer.js'></script>
 	<script src='js2/mode-types.js'></script>
 	<script src='js2/mode-images.js'></script>
 
 	<script src='js2/Grid.js'></script>
 	<script src='js2/grid-navigation.js'></script>
-	
-	<script src='js2/search-images.js'></script>
+
+	<script src='js2/search-images-02.js'></script>
 
 
 	<!-- ************************* -->
@@ -122,18 +144,18 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 	<script src='js2/icd/icon-map.js'></script>
 	<script src='js2/icd/Utils.js'></script>
 	<script src='js2/icd/Updater.js'></script>
-  <script src='js2/editor-icon-extras.js'></script>
+	<script src='js2/editor-icon-extras.js'></script>
 
 	<script src='js2/icd/Iconocode.js'></script>
 
-	
+
 	<!-- ************************* -->
 	<!-- EDITOR FOR TESTING -->
 	<!-- ************************* -->
 	<script src='CodeMirror-master/mode/javascript/javascript.js'></script>
 	<link 	rel='stylesheet' href='CodeMirror-master/theme/lesser-dark.css'>
 	<script src='js2/editor/start.js'></script>
-  <script src='js2/debug/icon-styles.js'></script>
+	<script src='js2/debug/icon-styles.js'></script>
 
 
 </body>

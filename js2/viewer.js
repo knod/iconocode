@@ -205,10 +205,13 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// =================
 	// EVENTS
 	// =================
+	var searcher 		= new AdderSearcher( cmEditor );
+	var imageObjects 	= adder.modes.images.imageObjects;
+
 	cmEditor.on("change", function(instance, change) {
 		// When text is added or deleted (anything else?) search the mode's choices
 		var activeGrid = adder.modes[ adder.activeMode ].grid;
-		adder.runSearch( activeGrid.choiceContainers )
+		searcher.runSearch( imageObjects );
 		// Takes a bit for the change to actually take effect
 		setTimeout( function () {
 			var codeNode = $('.icd.icon-adder .CodeMirror-code pre')[0];

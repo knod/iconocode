@@ -3,7 +3,13 @@
 * Handles a grid of choices/options that are selectable and choosable
 * 
 * TODO:
-* How to restore choices to original order when all search text is gone?
+* - How to restore choices to original order when all search text is gone?
+* - Change grid navigation to work with row array instead of DOM,
+* 	set selection after matching with the right row array element.
+* - Reveal new rows on scroll
+* - ???: No navigation to top from bottom and bottom from top? Would
+* 	the DOM scroll the whole length of the div?
+* - What happens to selection if someone scrolls the selection out of view?
 */
 
 

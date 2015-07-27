@@ -61,47 +61,48 @@ window.addEventListener('load', function () {
 	});
 
 
-	var constructIcon = function ( variableName, purpose, imageNodes ) {
-		/* ( str, str, [Nodes] ) -> {}
-		* 
-		* Creates, sets, and saves an icon with the given values.
-		*/
-			var iconObj = new Icon( variableName );
+	// --- TESTING ICONS --- \\
+	// var constructIcon = function ( variableName, purpose, imageNodes ) {
+	// 	/* ( str, str, [Nodes] ) -> {}
+	// 	* 
+	// 	* Creates, sets, and saves an icon with the given values.
+	// 	*/
+	// 		var iconObj = new Icon( variableName );
 
-			// Placeholder... Not sure this works this way anymore
-			// Need to create marker
-			iconObj.createNew( document.createDocumentFragment() );
-			iconObj.setType( purpose , iconObj.container );
-			iconObj.setImages( imageNodes, iconObj.body );
+	// 		// Placeholder... Not sure this works this way anymore
+	// 		// Need to create marker
+	// 		iconObj.createNew( document.createDocumentFragment() );
+	// 		iconObj.setType( purpose , iconObj.container );
+	// 		iconObj.setImages( imageNodes, iconObj.body );
 
-			iconObj.save( icd.map, icd.hotbar );
+	// 		iconObj.save( icd.map, icd.hotbar );
 
-			return iconObj;
-	};  // End constructIcon()
+	// 		return iconObj;
+	// };  // End constructIcon()
 
-	// MAKE ICONS
-	var img1a 	= $(adder.modes.images.grid.choiceContainers[0]).find('img').clone()[0],
-		img1b 	= $(adder.modes.images.grid.choiceContainers[1]).find('img').clone()[0],
-		img2a 	= $(adder.modes.images.grid.choiceContainers[2]).find('img').clone()[0],
-		img2b 	= $(adder.modes.images.grid.choiceContainers[3]).find('img').clone()[0];
-	// Change here so they'll be saved with the right class
-	img1a.className = 'icon-part';
-	img1b.className = 'icon-part';
-	img2a.className = 'icon-part';
-	img2b.className = 'icon-part';
+	// // MAKE ICONS
+	// var img1a 	= $(adder.modes.images.grid.choiceContainers[0]).find('img').clone()[0],
+	// 	img1b 	= $(adder.modes.images.grid.choiceContainers[1]).find('img').clone()[0],
+	// 	img2a 	= $(adder.modes.images.grid.choiceContainers[2]).find('img').clone()[0],
+	// 	img2b 	= $(adder.modes.images.grid.choiceContainers[3]).find('img').clone()[0];
+	// // Change here so they'll be saved with the right class
+	// img1a.className = 'icon-part';
+	// img1b.className = 'icon-part';
+	// img2a.className = 'icon-part';
+	// img2b.className = 'icon-part';
 
-	var icon1 	= constructIcon( 'token1', 'verb', [img1a, img1b] ),
-		icon2 	= constructIcon( 'token2', 'verb', [img2a, img2b] );
+	// var icon1 	= constructIcon( 'token1', 'verb', [img1a, img1b] ),
+	// 	icon2 	= constructIcon( 'token2', 'verb', [img2a, img2b] );
 
-	// INSERT AS MARKERS
-	setTimeout( function () {
-		// Wait so there's time for codemirror to tokenize things properly
-		var token1 	= myCM.getTokenAt( {line: 1, ch: 1} ),
-			token2 	= myCM.getTokenAt( {line: 2, ch: 1} );
-		icd.utils.markVar( token1, 1, icon1, myCM );
-		icd.utils.markVar( token2, 2, icon2, myCM );
+	// // INSERT AS MARKERS
+	// setTimeout( function () {
+	// 	// Wait so there's time for codemirror to tokenize things properly
+	// 	var token1 	= myCM.getTokenAt( {line: 1, ch: 1} ),
+	// 		token2 	= myCM.getTokenAt( {line: 2, ch: 1} );
+	// 	icd.utils.markVar( token1, 1, icon1, myCM );
+	// 	icd.utils.markVar( token2, 2, icon2, myCM );
 
-	} , 50);
+	// } , 50);
 
 });
 

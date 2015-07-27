@@ -51,26 +51,26 @@ var ScrollReveal = function ( scrollableNode ) {
 	//     }
 	// });
 
-	var accY = 0;
+	// var accY = 0;
 
 	scrollableNode.addEventListener('wheel', function ( evnt ) {
 		// console.log(evnt)
 		// console.log(evnt.deltaY);
 
-		var deltaY = evnt.deltaY;
-		accY += deltaY;
-		console.log(accY)
+		// var deltaY = evnt.deltaY;
+		// accY += deltaY;
+		// console.log(accY)
 
-		if ( (accY % 30) === 0 ) {
-			// var hr = document.createElement('hr');
-			// hr.style.position = 'absolute';
-			// hr.style.top = accY + 'px';
-			// hr.style.left = '0';
-			// hr.style.color = 'lightgray';
-			// hr.style.width = '100%';
+		// if ( (accY % 30) === 0 ) {
+		// 	// var hr = document.createElement('hr');
+		// 	// hr.style.position = 'absolute';
+		// 	// hr.style.top = accY + 'px';
+		// 	// hr.style.left = '0';
+		// 	// hr.style.color = 'lightgray';
+		// 	// hr.style.width = '100%';
 
-			// scrollableNode.appendChild( hr );
-		}
+		// 	// scrollableNode.appendChild( hr );
+		// }
 
 	});
 

@@ -217,27 +217,30 @@ var FuzzyMatcher = function ( context ) {
 	* script.
 	*/
 		result = {};
-		result.term 	= term; result.query 	= query;
+		result.term = term; result.query = query;
 
 		// Create the provided element, or a default one
 		var nodeTag = matcher.sanitizeTagName( tagName );
 
-		var resultNode 				= document.createElement( nodeTag );
-		result.node 				= resultNode;
-		resultNode.className 		= matcher.matchedTermClass;
-		resultNode.dataset['term'] 	= term;
+		// var resultNode 				= document.createElement( nodeTag );
+		// result.node 					= resultNode;
+		// resultNode.className 		= matcher.matchedTermClass;
+		// resultNode.dataset['term'] 	= term;
 
 		var matches 				= matcher.getMatch( term, query, queryRegex );
 			if ( matches !== null ) {
 
-				result.matchArray = matches;
-				result.score = matcher.calcScore( matches );
-				matcher.buildNode( matches );
+				result.doesMatch 	= true;
+				result.matchArray 	= matches;
+				result.score 		= matcher.calcScore( matches );
+				// matcher.buildNode( matches );
 
 				// console.log(resultNode)
 			// ??: If there wasn't a match, what do I return?
 			}  else {
-				result = null;  // ??
+				result.doesMatch 	= false;
+				result.matchArray 	= [''];
+				result.score 		= -1000;
 			} // end if match
 
 		return result;
@@ -252,10 +255,17 @@ var FuzzyMatcher = function ( context ) {
 		// If the scores are the same
 		if ( m1.score === m2.score ) {
 			// Add the number of letters before the first match
-			m2.altScore = m2.score - $(m2.node).contents()[0].length;
-			m1.altScore = m1.score - $(m1.node).contents()[0].length;
+			var m2_altScore = m2.score - m2.matchArray[0].length;
+			var m1_altScore = m1.score - m1.matchArray[0].length;
 
-			diff = m2.altScore - m1.altScore;
+			diff = m2_altScore - m1_altScore;
+
+			if (m2_altScore === m1_altScore) {
+				// If compareFunction(a, b) is less than 0, sort a to a lower index than b, i.e. a comes first.
+				// If m1 is ealier in the alphabet than 
+				//shoky_> knod: so basically,  function(a,b) { if (a.score !== b.score) { return a.score - b.score } else { return a.string.localeCompare(b.string) } }
+				m2.term.localeCompare( m1.term );
+			}
 		}
 
 		return diff;
