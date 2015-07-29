@@ -263,13 +263,6 @@ window.addEventListener( 'load', function () {
 
 
 
-
-
-
-
-
-
-
 	document.addEventListener('wheel', function ( evnt ) {
 		// console.log(evnt)
 		// console.log(evnt.deltaY);
