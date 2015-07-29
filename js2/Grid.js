@@ -121,7 +121,8 @@ adder.Grid = function ( choiceObjs, rowBlueprint, parentNode ) {
 
 
 	var getHeightByNumRows = function( numRows ) {
-	/* ( int ) -> int */
+	/* ( int ) -> int 
+	* Re-calcuate height of sizer using sizes of choices */
 		return ( numRows * (rowHeight_ + rowMargin_) ) + rowMargin_;
 	};  // End getHeightByNumRows()
 
@@ -131,6 +132,16 @@ adder.Grid = function ( choiceObjs, rowBlueprint, parentNode ) {
 		return Math.ceil( numObjects / numCols);
 	};  // End getNumRows()
 
+
+	var resizeSizer = function ( objIds, numCols ) {
+		// Get total number of rows that could exist with all the objects
+		var numTotalRows = getNumRows( objIds, numCols_ );
+		// Re-calcuate height of sizer using sizes of choices
+		var heightStyle  = getHeightByNumRows( numTotalRows_ ) + 'px';
+		newGrid.sizer.style.height = heightStyle;
+
+		return newGrid.sizer;
+	};
 
 	newGrid.update = function ( objIds ) {
 	/* ( [ strs ] ) -> Grid
@@ -142,7 +153,8 @@ adder.Grid = function ( choiceObjs, rowBlueprint, parentNode ) {
 	* 	After scrolling
 	* 	After mouse leave element (because may leave in the middle of scroll))
 	*/
-		var numTotalRows = getNumRows( objIds, numCols_ );
+		resizeSizer( objIds, numCols_ );  // Always size to fit imginary full contents
+
 		// Current top visible row. With this math, it will never exceed the max allowed.
 		var currRowNum = Math.ceil( scrollable_.scrollTop/(rowHeight_ + rowMargin_) );
 
