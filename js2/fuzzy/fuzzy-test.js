@@ -110,7 +110,7 @@ window.addEventListener( 'load', function () {
 		// If I use length > 0 and type in 'a', I get 4707 unique ids, 'ac' gets 812
 		if ( $(inputNode).val().length > 3 ) {
 			matchData 	= fuzzySearcher.runSearch( terms, query );
-			adder.currentMatchData = matchData;
+			adder.currentMatchData = matchData;  // { failures: { term: { matchData } }, matches: {} }
 			
 			// idsByTag  from idsByTag.js
 			// These turn out already ranked
@@ -194,6 +194,7 @@ window.addEventListener( 'load', function () {
 	var getRowOfObjectsByRowNum = function ( rowNum ) {
 
 		var row = [];
+		var objNames = [];  // For testing
 
 		for ( var colNum = 0; colNum < numCols; colNum++ ) {
 			// Get the index number the id of each object we need
@@ -202,10 +203,13 @@ window.addEventListener( 'load', function () {
 			var id 	= objIds[ indx ];
 			// Get the actual object using that id
 			var obj = objsByIds[ id ];
-
-			row.push( obj );
+			if ( obj !== undefined ) {
+				row.push( obj );
+				// objNames.push( obj.name ); // For testing
+			}
 		}
 
+		console.log( 'row', rowNum, 'image names:', objNames );
 		return row;
 	};  // End getRowOfObjectsByRowNum()
 
@@ -226,7 +230,7 @@ window.addEventListener( 'load', function () {
 			firstRowIndx = Math.max( 0, firstRowIndx );
 		}
 
-
+		console.log('----- Pretending to Update Rows -----')
 		existingRows = [];
 		for ( var iteri = 0; iteri < numExistingRows; iteri++ ) {
 			

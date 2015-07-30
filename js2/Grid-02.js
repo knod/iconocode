@@ -234,25 +234,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 
 
 	// -- Adding -- \\
-	// var makeChoiceNode = function ( index, objIds, parentRow ) {
-	// // This should be passed in as a callback instead, but for now we're faking it?
-
-	// 	// // Get the id
-	// 	// var id 	= objIds[ index ];
-	// 	// // Get the actual object using that id
-	// 	// var obj = choiceObjs_[ id ];  // This is a global var (maybe use sample for now)
-	// 	var choice = document.createElement('div');
-	// 	choice.style.height = '50px';
-	// 	choice.style.width = '50px';
-	// 	choice.style['backgroundColor'] = 'gray';
-	// 	choice.style.margin = '2px 5px 2px 5px';
-	// 	choice.style.display = 'inline-block';
-
-	// 	parentRow.appendChild( choice );
-
-	// };  // End makeChoiceNode
-
-
 	var makeRowNode = function ( rowNum, objIds ) {
 		
 		var row = document.createElement('div');
@@ -263,8 +244,10 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		// Height is position, rowNum is the numRows until this row
 		var pos = getHeightByNumRows( rowNum );
 
-		row.style.top = pos + 'px';
-		row.style.height = rowHeight_ + 'px';
+		row.style.top 		= pos + 'px';
+		row.style.height 	= rowHeight_ + 'px';
+		row.style.width		= '500px';
+		row.style.left 		= '50px';
 		row.style['backgroundColor'] = 'lightgray';
 		row.style.position = 'absolute';
 
@@ -273,8 +256,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 			var indx = (rowNum * numCols_) + colNum;
 			// TODO: Use callback in future
 			var choiceNode = makeChoiceNode( indx, objIds, row );
-			if (colNum === numCols_ -1) { console.log(objIds[ indx ]) 
-			}
 		}
 
 		return row;
@@ -307,7 +288,8 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		var totalNumRows = setTotalNumRows( objIds, numCols_ );
 		// Re-calcuate height of sizer using sizes of choices
 		var heightStyle  = getHeightByNumRows( totalNumRows ) + 'px';
-		newGrid.sizer.style.height = heightStyle;
+		newGrid.sizer.style.height 	= heightStyle;
+		newGrid.sizer.style.width 	= '600px';
 
 		return newGrid.sizer;
 	};  // End resizeSizer()
@@ -615,7 +597,6 @@ window.addEventListener('load', function () {
 	}
 	var modeName = 'images';
 	var makeChoiceNode = adder.makeImageNode;
-	console.log(makeChoiceNode)
 
 	var grid = new adder.Grid2( choiceObjs, rowBlueprint, modeName, makeChoiceNode )
 })
