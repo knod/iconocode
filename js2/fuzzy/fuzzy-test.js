@@ -108,7 +108,7 @@ window.addEventListener( 'load', function () {
 		// $(outputNode).empty();
 		// Make sure there's some text in the search to match with
 		// If I use length > 0 and type in 'a', I get 4707 unique ids, 'ac' gets 812
-		if ( $(inputNode).val().length > 3 ) {
+		if ( $(inputNode).val().length > 2 ) {
 			matchData 	= fuzzySearcher.runSearch( terms, query );
 			adder.currentMatchData = matchData;  // { failures: { term: { matchData } }, matches: {} }
 			
@@ -118,10 +118,7 @@ window.addEventListener( 'load', function () {
 
 			adder.currentMatchIds = objIds;
 
-			// How do I connect the rankings with the object ids?
-
-			// outputNode.appendChild( matchData.node );
-			// $(matchData.node).children().first().addClass('selected');
+			testGrid.reset( objIds );  // From Grid-02.js test
 		}
 
 		// Pass out the objIds array and the reults? (results allow)
@@ -230,7 +227,7 @@ window.addEventListener( 'load', function () {
 			firstRowIndx = Math.max( 0, firstRowIndx );
 		}
 
-		console.log('----- Pretending to Update Rows -----')
+		// console.log('----- Pretending to Update Rows -----')
 		existingRows = [];
 		for ( var iteri = 0; iteri < numExistingRows; iteri++ ) {
 			
@@ -259,7 +256,7 @@ window.addEventListener( 'load', function () {
 			var row = getRowOfObjectsByRowNum( rowNum );
 			existingRows.push( row );
 		}
-		console.log(existingRows)
+		// console.log(existingRows)
 
 		return existingRows;
 	};  // End setGridArray()
@@ -268,8 +265,6 @@ window.addEventListener( 'load', function () {
 
 
 	document.addEventListener('wheel', function ( evnt ) {
-		// console.log(evnt)
-		// console.log(evnt.deltaY);
 
 		var deltaY = evnt.deltaY;
 		scrollRowArray( deltaY, existingRows );

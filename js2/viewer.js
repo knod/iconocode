@@ -211,7 +211,7 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	cmEditor.on("change", function(instance, change) {
 		// When text is added or deleted (anything else?) search the mode's choices
 		var activeGrid = adder.modes[ adder.activeMode ].grid;
-		searcher.runSearch( imageObjects );
+		searcher.runSearch( imageObjects, activeGrid );
 		// Takes a bit for the change to actually take effect
 		setTimeout( function () {
 			var codeNode = $('.icd.icon-adder .CodeMirror-code pre')[0];

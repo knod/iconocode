@@ -158,15 +158,18 @@ adder.addImageMode 	= function () {
 		var id 	= objIds[ index ];
 		// Get the actual object using that id
 		var imgObj = objsByIds[ id ];  // This is a global var (maybe use sample for now)
+		
+		var imageNode;
+		if ( imgObj !== undefined ) {
+			var imageObj = new adder.ImgChoice2( imgObj, parentRow );
+			imageNode = imageObj.node;
 
-		var imageObj = new adder.ImgChoice2( imgObj, parentRow );
-		var imageNode = imageObj.node;
-
-		imageNode.style.height = '50px';
-		imageNode.style.width = '50px';
-		imageNode.style['backgroundColor'] = 'gray';
-		imageNode.style.margin = '2px 5px 2px 5px';
-		imageNode.style.display = 'inline-block';
+			imageNode.style.height = '50px';
+			imageNode.style.width = '50px';
+			imageNode.style['backgroundColor'] = 'rgb(48,48,48)';
+			imageNode.style.margin = '2px 5px 2px 5px';
+			imageNode.style.display = 'inline-block';
+		}
 
 		return imageNode;
 	}  // End adder.makeImageNode()
