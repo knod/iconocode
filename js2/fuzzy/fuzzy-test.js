@@ -205,11 +205,11 @@ window.addEventListener( 'load', function () {
 			var obj = objsByIds[ id ];
 			if ( obj !== undefined ) {
 				row.push( obj );
-				// objNames.push( obj.name ); // For testing
+				objNames.push( obj.name ); // For testing
 			}
 		}
 
-		console.log( 'row', rowNum, 'image names:', objNames );
+		// console.log( 'row', rowNum, 'image names:', objNames );  // For testing
 		return row;
 	};  // End getRowOfObjectsByRowNum()
 
