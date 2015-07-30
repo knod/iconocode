@@ -79,6 +79,7 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		// svgStr = svgStr.replace( /fill=['|"][^none].*?['|"]/gi, 'fill=' + color );
 		// svgStr = svgStr.replace( /stroke=['|"][^none].*?['|"]/gi, 'stroke=' + color );
 		svgStr = svgStr.replace(/#[0-9]*/g, color );
+		svgStr = svgStr.replace(/black/g, color );
 
 		// --- NODE --- \\
 		var choiceNode 		 = document.createElement('div');
