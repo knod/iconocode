@@ -152,6 +152,26 @@ adder.addImageMode 	= function () {
 	adder.numCols = 5;
 	adder.numRows;
 
+	// For new test
+	adder.makeImageNode = function ( index, objIds, parentRow ) {
+		// Get the id
+		var id 	= objIds[ index ];
+		// Get the actual object using that id
+		var imgObj = objsByIds[ id ];  // This is a global var (maybe use sample for now)
+
+		var imageObj = new adder.ImgChoice2( imgObj, parentRow );
+		var imageNode = imageObj.node;
+
+		imageNode.style.height = '50px';
+		imageNode.style.width = '50px';
+		imageNode.style['backgroundColor'] = 'gray';
+		imageNode.style.margin = '2px 5px 2px 5px';
+		imageNode.style.display = 'inline-block';
+
+		return imageNode;
+	}  // End adder.makeImageNode()
+
+
 	adder.updateImageGrid 	= function ( imageArray ) {
 
 		var maxCols = 5;
@@ -227,7 +247,7 @@ adder.addImageMode 	= function () {
 
 		} );
 
-		ScrollReveal( imagePicker );
+		// ScrollReveal( imagePicker );
 
 
 		return imagePicker;
