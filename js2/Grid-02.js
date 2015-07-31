@@ -87,8 +87,10 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	// --- Nodes --- \\
 	// var parentNode_ = parentNode;
 
+	// !!!: USE THIS AS THE SIZER INSTEAD (parent is the scroller, it seems)
 	// newGrid.scrollable  = document.getElementById( 'icd_' + modeName + '_picker' );
-	newGrid.scrollable  = document.getElementById( 'icd_' + modeName + '_picker' );
+	// newGrid.scrollable  = document.getElementById( 'icd_' + modeName + '_picker' );
+	newGrid.scrollable 	= document.querySelector('.adder-pickers-container');
 	var scrollable_ 	= newGrid.scrollable;
 	
 	newGrid.sizer 		= null;
@@ -292,9 +294,9 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	// -- Adjusting -- \\
 	var resizeSizer = function ( objIds, numCols ) {
 		// Get total number of rows that could exist with all the objects
-		var totalNumRows = setTotalNumRows( objIds, numCols_ );
+		var numTotalRows_ = setTotalNumRows( objIds, numCols_ );
 		// Re-calcuate height of sizer using sizes of choices
-		var heightStyle  = getHeightByNumRows( totalNumRows ) + 'px';
+		var heightStyle  = getHeightByNumRows( numTotalRows_ ) + 'px';
 		newGrid.sizer.style.height 	= heightStyle;
 		newGrid.sizer.style.width 	= '600px';
 
@@ -364,13 +366,8 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	* Add element that will "contain" "all" the elements, providing
 	* the scrolling size
 	*/
-		var sizer = document.createElement( 'div' );
-		parentNode.appendChild( sizer );
-
-		numTotalRows_ = setTotalNumRows( choiceObjs_, numCols_ );
-		sizer.id 			= 'icd_' + modeName + '_sizer';
-		// Testing
-		sizer.style['backgroundColor'] = 'teal';
+		var sizer = document.getElementById( 'icd_' + modeName + '_picker' );
+		$(sizer).addClass('icd_' + modeName + '_sizer');
 
 		return sizer;
 	};  // End addSizer()
@@ -399,9 +396,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		var currRowNum = Math.ceil( scrollable_.scrollTop/(rowHeight_ + rowMargin_) );
 
 		if ( force === true || (currRowNum !== oldFirstRowNum && (evnt.deltaY < 100 || evnt.deltaY > -100)) ) {
-
 			// Update the grid with the right rows
-			// Later need to pass in actual object ids that match stuff and things
 			newGrid.update( currRowNum );
 	  }
 

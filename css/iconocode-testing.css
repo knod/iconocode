@@ -176,8 +176,13 @@ be scrollable... make it position: relative?
 /* --------------------------------------- */
 /* --- PICKERS --- */
 /* --------------------------------------- */
-.icd .adder-picker {
+.icd .adder-pickers-container {
 	height: 9rem;
+	overflow: scroll;
+}
+.icd .adder-picker {
+	/* This is a sizer now for the parent which scrolls */
+	/*height: 9rem;*/
 	/* for some reason makes images oversized */
 	/*width: 100%;*/
 	/*overflow: scroll;*/
@@ -185,10 +190,6 @@ be scrollable... make it position: relative?
 
 
 /* --- TYPE PICKER --- */
-.icd .adder-pickers-container {
-	overflow: scroll;
-}
-
 #icd_types_picker {
 	/*background-color: darkkhaki;*/
 }
@@ -241,7 +242,7 @@ but maybe we want the images to be their proper size?
 	align-items: flex-start;
 	flex-wrap: wrap;
 
-	padding: 2.5%;
+	/*padding: 2.5%;*/
 }
 
 .icd .images-picker-row {
