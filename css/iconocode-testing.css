@@ -180,11 +180,15 @@ be scrollable... make it position: relative?
 	height: 9rem;
 	/* for some reason makes images oversized */
 	/*width: 100%;*/
-	overflow: scroll;
+	/*overflow: scroll;*/
 }
 
 
 /* --- TYPE PICKER --- */
+.icd .adder-pickers-container {
+	overflow: scroll;
+}
+
 #icd_types_picker {
 	/*background-color: darkkhaki;*/
 }

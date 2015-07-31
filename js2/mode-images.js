@@ -48,13 +48,12 @@ adder.addImageMode 	= function () {
 	// images: { tab: null, section: null, choices: [], grid: {}, choiceHeight: null }
 	var imgMode = adder.modes.images;
 
-	// Currently (07/24/15) rows seem to be about 302px across
-	// 302/8 = 37.7656
-	// Width will be the same
-	imgMode.choiceHeight = 37;
+	imgMode.name 		 = 'images';
+	// Currently (07/24/15) rows seem to be about 302px across, 302/8 = 37.7656
+	imgMode.imgHeight 	 = 37;  // Width will be the same
 	imgMode.imageObjects = adder.setupImageObjects()
 
-	adder.imageChoices = [];
+	adder.imageChoices 	 = [];
 
 	// ====================
 	// Choosing
@@ -149,42 +148,40 @@ adder.addImageMode 	= function () {
 
 	// --- GRID --- \\
 	adder.imgGrid = [];
-	adder.numCols = 5;
-	adder.numRows;
+	// adder.numCols = 5;
+	// adder.numRows;
 
-	// For new test
-	adder.makeImageNode = function ( index, objIds, parentRow ) {
-		// Get the id
-		var id 	= objIds[ index ];
-		// Get the actual object using that id
-		var imgObj = objsByIds[ id ];  // This is a global var (maybe use sample for now)
+	// Obj-based test
+	adder.makeImageNode = function ( imgObj, parentRow ) {
 		
 		var imageNode;
 		if ( imgObj !== undefined ) {
 			var imageObj = new adder.ImgChoice2( imgObj, parentRow );
 			imageNode = imageObj.node;
 
-			imageNode.style.height = '50px';
-			imageNode.style.width = '50px';
-			imageNode.style['backgroundColor'] = 'rgb(48,48,48)';
-			imageNode.style.margin = '2px 5px 2px 5px';
-			imageNode.style.display = 'inline-block';
+			// imageNode.style.height = '50px';
+			imageNode.style.height = imgMode.imageHeight + 'px';
+			// imageNode.style.width = '50px';
+			imageNode.style.width = imgMode.imageHeight + 'px';
+			// imageNode.style['backgroundColor'] = 'rgb(48,48,48)';
+			// imageNode.style.margin = '2px 5px 2px 5px';
+			// imageNode.style.display = 'inline-block';
 		}
 
 		return imageNode;
 	}  // End adder.makeImageNode()
 
+// TO REMOVE (selection/navigation before objects)
+	// adder.updateImageGrid 	= function ( imageArray ) {
 
-	adder.updateImageGrid 	= function ( imageArray ) {
+	// 	var maxCols = 5;
+	// 	adder.imageGridObj.set( 'images', maxCols, imageArray );
 
-		var maxCols = 5;
-		adder.imageGridObj.set( 'images', maxCols, imageArray );
+	// 	return adder.imageGridObj;
+	// };  // End adder.updateGrid()
 
-		return adder.imageGridObj;
-	};  // End adder.updateGrid()
-
-
-	adder.imageGridObj;
+// TO REMOVE (selection/navigation before objects)
+	// adder.imageGridObj;
 	adder.addGrid = function ( parentNode ) {
 
 		var maxCols 			= 5,
@@ -203,9 +200,23 @@ adder.addImageMode 	= function () {
 		}
 
 		// Now this is being kept in two places (also in adder.modes[ modeName ].grid)
-		adder.imageGridObj = new adder.Grid( 'images', maxCols, imageChoicesNodes );
+		// TO REMOVE (selection/navigation before objects)
+		// adder.imageGridObj = new adder.Grid( 'images', maxCols, imageChoicesNodes );
 
-		return adder.imageGridObj;
+		// Make grid of image choice nodes and objects for the user to select
+		var allImgObjs = objsByIds;  // Global in file of the same name, not in this directory
+		var rowBlueprint = {
+			height: imgMode.imgHeight,
+			vertMargin: 5,
+			numCols: 8
+		}
+		var modeName = imgMode.name;
+		var makeChoiceNode = adder.makeImageNode;
+
+		imgMode.grid = new adder.Grid2( allImgObjs, rowBlueprint, modeName, makeChoiceNode );
+		// testGrid = new adder.Grid2( choiceObjs, rowBlueprint, modeName, makeChoiceNode )
+
+		return imgMode.grid;
 	};  // End adder.addGrid()
 
 
@@ -233,7 +244,9 @@ adder.addImageMode 	= function () {
 
 			// Visually indicate selection of image
 			if ( $ancestor.length > 0 ) {
-				adder.imageGridObj.selectChoice( $ancestor[0] );
+				// TO REMOVE (selection/navigation before objects)
+				// Need new selection methods
+				// adder.imageGridObj.selectChoice( $ancestor[0] );
 			}
 			// TODO: Show all matching terms at full length
 

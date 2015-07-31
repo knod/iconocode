@@ -243,20 +243,26 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		row.id 			= modeName + '_choice_row' + rowNum;
 		row.dataset['row'] = rowNum;
 		// Height is position, rowNum is the numRows until this row
-		var pos = getHeightByNumRows( rowNum );
+		var top = getHeightByNumRows( rowNum );
 
-		row.style.top 		= pos + 'px';
+		// Temporary styling for test
+		row.style.top 		= top + 'px';
 		row.style.height 	= rowHeight_ + 'px';
-		row.style.width		= '500px';
-		row.style.left 		= '50px';
-		row.style['backgroundColor'] = 'lightgray';
 		row.style.position = 'absolute';
+		// row.style.width		= '500px';
+		// row.style.left 		= '50px';
+		// row.style['backgroundColor'] = 'lightgray';
 
+		// For each column, make and add the choice in that cell
 		for ( var colNum = 0; colNum < numCols_; colNum++ ) {
-			// Get the index number the id of each object we need
-			var indx = (rowNum * numCols_) + colNum;
-			// TODO: Use callback in future
-			var choiceNode = makeChoiceNode( indx, objIds, row );
+			// Get the index number of the id of each object we need
+			var index = (rowNum * numCols_) + colNum;
+			// Get the id
+			var id 	= objIds[ index ];
+			// Get the actual object using that id
+			var obj = objsByIds[ id ];  // This is a global var (maybe use sample for now?)
+
+			var choiceNode = makeChoiceNode( obj, row );
 		}
 
 		return row;

@@ -54,7 +54,7 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 	};  // End imgChoice.addImgTagList()
 
 
-	imgChoice.addImage 			= function ( imgFilePath, parentNode ) {
+	imgChoice.addImage 		= function ( imgFilePath, parentNode ) {
 	/*
 
 	Just create, return, and add an image node with the specified path
@@ -122,7 +122,7 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		// --- CONTAINER --- \\
 		var imgContainer 		= document.createElement('div');
 		parentNode.appendChild( imgContainer );
-		imgChoice.node = imgContainer;
+		imgChoice.node 			= imgContainer;
 
 		imgContainer.className 	= 'image-choice-container';
 		$(imgContainer).addClass( 'icd-choice-container' );
