@@ -67,56 +67,83 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 	};  // End imgChoice.addImage()
 
 
-	imgChoice.addSVG 		= function ( svgStr, parentNode ) {
-	/* svg string to node */
+imgChoice.addSVG 		= function ( svgStr, parentNode, imgObj ) {
+/* svg string to node */
 
-		// ???: svg into font?
 
-		// --- COLOR --- \\
-		// First change the color of everything that's colored
-		// http://stackoverflow.com/questions/12362270/cant-figure-out-the-color-of-an-svg-element
-		var color = 'rgb(153, 153, 153)';
-		// svgStr = svgStr.replace( /fill=['|"][^none].*?['|"]/gi, 'fill=' + color );
-		// svgStr = svgStr.replace( /stroke=['|"][^none].*?['|"]/gi, 'stroke=' + color );
-		svgStr = svgStr.replace(/#[0-9]*/g, color );
-		svgStr = svgStr.replace(/black/g, color );
+	// if ( imgObj.id === '167588' ) { console.log('broken', svgStr) }
+	// if ( imgObj.id === '167641' ) { console.log('working:', svgStr) }
 
-		// --- NODE --- \\
-		var choiceNode 		 = document.createElement('div');
-		parentNode.appendChild( choiceNode );
+	// ???: svg into font?
 
-		// var imgNodeObj = document.createElement('object');
-		// choiceNode.appendChild( imgNodeObj );
+	// --- COLOR --- \\
+	// First change the color of everything that's colored
+	// http://stackoverflow.com/questions/12362270/cant-figure-out-the-color-of-an-svg-element
+	var color = 'rgb(153, 153, 153)';
+	// svgStr = svgStr.replace( /fill=['|"][^none].*?['|"]/gi, 'fill=' + color );
+	// svgStr = svgStr.replace( /stroke=['|"][^none].*?['|"]/gi, 'stroke=' + color );
+	svgStr = svgStr.replace(/#[0-9]+/g, color );
+	svgStr = svgStr.replace(/black/g, color );
 
-		choiceNode.innerHTML = svgStr;
-		// imgNodeObj.innerHTML = svgStr;
+	// --- NODE --- \\
+	var choiceNode 		 = document.createElement('div');
+	// parentNode.appendChild( choiceNode );
 
-		var svg = choiceNode.children[0];
-		// var svg = choiceNode.children[0].children[0];
+	// // Attempt 2
+	// var imgNodeObj = document.createElement('object');
+	// choiceNode.appendChild( imgNodeObj );
+	// imgNodeObj.innerHTML = svgStr;
+	// var svg = choiceNode.children[0].children[0];
 
-		// --- SIZE --- \\
-		// Make sure each svg has a width and height defined
-		svg.setAttribute('height', '100%');
-		svg.setAttribute('width', '100%');
+	choiceNode.innerHTML = svgStr;
 
-		// --- COLOR --- \\
-		// Last little thing about color has to be done at the end
-		// If there is no fill defined, the fill is automatically black
-		// http://www.w3.org/TR/SVG/painting.html#FillProperties
-		// stroke is no stroke if nothing is specified
-		// var fill = svgStr.match(/(<svg.*?)(fill.*?['|"])(.*?[^'|"])(.*?>)/g);
-		// var justSvg = svgStr.match(/<svg.*?>/gi)[0]
-		var giveAttr = svgStr.replace(/<svg.*?>/gi, function ( match, original ) {
+	var svg = choiceNode.children[0];
 
-			var fill 	= match.match(/fill/);
-			if ( fill === null ) {
-				svg.setAttribute('fill', 'rgb(153, 153, 153)');
-			}
+	// --- SIZE --- \\
+	// Make sure each svg has a width and height defined
+	svg.setAttribute('height', '100%');
+	svg.setAttribute('width', '100%');
 
-		})
+	// --- COLOR --- \\
+	// Last little thing about color has to be done at the end
+	// If there is no fill defined, the fill is automatically black
+	// http://www.w3.org/TR/SVG/painting.html#FillProperties
+	// stroke is no stroke if nothing is specified
+	var giveAttr = svgStr.replace(/<svg.*?>/gi, function ( match, original ) {
 
-		return choiceNode;
-	};  // End imgChoice.addSVG();
+		var fill 	= match.match(/fill/);
+		if ( fill === null ) {
+			svg.setAttribute('fill', 'rgb(153, 153, 153)');
+		}
+
+	})
+
+
+	// // Attempt 3
+	// var choiceNode 	= document.createElement('img');
+	// parentNode.appendChild( choiceNode );
+
+	// var imgFilePath = '../image-data/images/' + imgObj.filename;
+	// choiceNode.src 	= imgFilePath;
+
+
+
+	// Attempt 4
+	var newStr 	= choiceNode.innerHTML;
+	choiceNode 	= document.createElement('img');
+	choiceNode.className = imgObj.id;
+	parentNode.appendChild( choiceNode );
+
+	var imgsrc 		= 'data:image/svg+xml;base64,'+ window.btoa( newStr );
+	choiceNode.src 	= imgsrc;
+	// var img 	= '<img src="'+imgsrc+'">'; 
+
+	// if ( imgObj.id === '167588' ) { console.log('broken', newStr) }
+	// if ( imgObj.id === '167641' ) { console.log('working:', newStr) }
+		
+
+	return choiceNode;
+};  // End imgChoice.addSVG();
 
 
 	imgChoice.addChoice 	= function ( imgObj, parentNode ) {
@@ -140,7 +167,7 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		var choiceNode;
 		// np images exist as text svg's, others are actual files
 		if ( imgObj.svg !== undefined ) {
-			choiceNode = imgChoice.addSVG( imgObj.svg, imgContainer )
+			choiceNode = imgChoice.addSVG( imgObj.svg, imgContainer, imgObj )
 		} else {
 			choiceNode 	= imgChoice.addImage( filePath, imgContainer );
 		}

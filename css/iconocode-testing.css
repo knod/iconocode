@@ -284,7 +284,10 @@ but maybe we want the images to be their proper size?
 	max-width: 100%;
 	max-height: 2.5rem;
 	margin: .2rem;
-	height: auto;
+	/*height: auto;*/
+	/* Have to do with new svg thingamajig */
+    width: 1.3rem;
+    height: 1.3rem;
 }
 
 /*.icd .image-choice svg * {

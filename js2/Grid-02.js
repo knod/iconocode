@@ -263,7 +263,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 			var id 	= objIds[ index ];
 			// Get the actual object using that id
 			var obj = objsByIds[ id ];  // This is a global var (maybe use sample for now?)
-
+			// if ( id === '167588' ) { console.log(obj.svg)}
 			var choiceNode = makeChoiceNode( obj, row );
 		}
 
