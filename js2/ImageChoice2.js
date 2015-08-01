@@ -83,10 +83,16 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 
 		// --- NODE --- \\
 		var choiceNode 		 = document.createElement('div');
-		choiceNode.innerHTML = svgStr;
 		parentNode.appendChild( choiceNode );
 
+		// var imgNodeObj = document.createElement('object');
+		// choiceNode.appendChild( imgNodeObj );
+
+		choiceNode.innerHTML = svgStr;
+		// imgNodeObj.innerHTML = svgStr;
+
 		var svg = choiceNode.children[0];
+		// var svg = choiceNode.children[0].children[0];
 
 		// --- SIZE --- \\
 		// Make sure each svg has a width and height defined

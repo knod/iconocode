@@ -41,13 +41,13 @@ Can't use position absolute for other reasons
 /* ================ */
 /* SVG BITS */
 /* ================ */
-.icd.icon-container svg {
+.icd.icon-container .shape-part svg {
   overflow: visible;
   position: absolute;
   left: 0;
 }
 
-.icd.icon-container path {
+.icd.icon-container .shape-part path {
   vector-effect: non-scaling-stroke;
   stroke-width: 1px;
   stroke: lightgray;
@@ -57,7 +57,7 @@ Can't use position absolute for other reasons
   stroke-alignment: inner; /* for the future! */
 }
 
-.icd.icon-container line {
+.icd.icon-container .shape-part line {
   vector-effect: non-scaling-stroke;
   stroke-width: 1px;
   stroke: lightgray;
