@@ -32,18 +32,6 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
   </header>
 
 
-    <section style='z-index: 1000;'>
-    <h2>my-fuzzy.js Demo</h2>
-    <div class='search-container'>
-      <div class='icd fuzzy-search-wrapper'>
-        <div class='fuzzy-input'>
-          <input type='text' id='search-query' autofocus>
-        </div>
-        <ol id='fuzzy-matches-container' style='background-color: white;'>
-        </ol>
-      </div>
-    </div>
-  </section>
 
 
   <div class ='app'>
@@ -69,6 +57,22 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 
     <section class='output'></section>
   </div> <!-- end .app -->
+
+<!--   <br>
+    <section style='z-index: 1000;'>
+	    <h2>my-fuzzy.js Demo</h2>
+	    <div class='search-container'>
+	      <div class='icd fuzzy-search-wrapper'>
+	        <div class='fuzzy-input'>
+	          <input type='text' id='search-query' autofocus>
+	        </div>
+	        <ol id='fuzzy-matches-container' style='background-color: white;'>
+	        </ol>
+	      </div>
+	    </div>
+  </section>
+  <div id='icd_test_picker' class='icd' style='height: 300px; width: 600px; position: relative; overflow:scroll;'></div>
+  <br> -->
 
   <br>
 
@@ -111,12 +115,14 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 	<!-- Image Data -->
 	<script src='js2/fuzzy/tags-array.js'></script>
 	<script src='js2/fuzzy/ids-by-tag.js'></script>
-	<script src='js2/fuzzy/objs-by-ids.js'></script>
+	<script src='../image-data/objs-by-ids.js'></script>
+	<script src='js2/objs-by-ids-sample.js'></script>
+
 	<!-- <script src='images/image-objects-compiled.js'></script> -->
 	<script src='js/image-objects.js'></script>
 
 	<!-- Test Searching -->
-	<script src='js2/fuzzy/fuzzy-test.js'></script>
+	<!-- <script src='js2/fuzzy/fuzzy-test.js'></script> -->
 	<!-- <script src='js2/my-fuzzy-match-simple-string.js'></script> -->
 
 	<script src='js/adder-utils-tabs.js'></script>
@@ -133,6 +139,7 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 	<script src='js2/mode-images.js'></script>
 
 	<script src='js2/Grid.js'></script>
+	<script src='js2/Grid-02.js'></script> <!-- Test -->
 	<script src='js2/grid-navigation.js'></script>
 
 	<script src='js2/search-images-02.js'></script>

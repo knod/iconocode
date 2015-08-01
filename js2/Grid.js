@@ -13,10 +13,14 @@
 */
 
 
-adder.Grid = function ( modeName, maxCols, choiceContainers ) {
-/* ( str, int, [Nodes] ) -> {}
+// ==========================
+// ==========================
+// OLD VERSION (using elments instead of objects)
+// ==========================
+adder.Grid = function ( modeName, MAX_COLS, choiceContainers, imageObjects ) {
+/* XXX( str, int, [Nodes] ) -> {}
 * 
-* 
+* rowSize = {height: int, vertMargin: int}
 */
 	var thisGrid = {};
 
@@ -64,31 +68,31 @@ adder.Grid = function ( modeName, maxCols, choiceContainers ) {
 	};  // End thisGrid.addRow()
 
 
-	thisGrid.getNumRows = function ( choiceContainers ) {
+	thisGrid.getTotalNumRows = function ( choiceContainers ) {
 
 		// Get the right number of rows for the given number of choices, each time
 		// Takes into account having a non-evenly divided number
-		var numRows = Math.ceil( choiceContainers.length / maxCols );
+		var numRows = Math.ceil( choiceContainers.length / MAX_COLS );
 		// To make sure not all the np icons are added at once
 		numRows 	= Math.min( 40, choiceContainers.length );
 
 		return numRows
-	};  // End thisGrid.getNumRows()
+	};  // End thisGrid.getTotalNumRows()
 
 
-	thisGrid.set 	= function ( modeType_, maxCols, choiceContainers ) {
+	thisGrid.set 	= function ( modeType_, MAX_COLS, choiceContainers ) {
 	/**/
 		var rowNodes = [];
 
 		// Get the right number of rows for the given number of choices, each time
-		var numRows = thisGrid.getNumRows( choiceContainers );
+		var numRows = thisGrid.getTotalNumRows( choiceContainers );
 
 		for ( var rowi = 0; rowi < numRows; rowi++ ) {
 
 			// Get the relevant choice nodes for this row.
-			var startIndx 	= maxCols * rowi,
-			// Use maxCols because .slice() doesn't include the last item
-				endIndx		= startIndx + maxCols;
+			var startIndx 	= MAX_COLS * rowi,
+			// Use MAX_COLS because .slice() doesn't include the last item
+				endIndx		= startIndx + MAX_COLS;
 			var rowChoices 	= choiceContainers.slice( startIndx, endIndx );
 
 			// Add a row to the DOM, then add the row's node to the list
@@ -118,13 +122,13 @@ adder.Grid = function ( modeName, maxCols, choiceContainers ) {
 	};  // End createRow()
 
 
-	var createGrid 	= function ( modeType_, maxCols, parentNode ) {
+	var createGrid 	= function ( modeType_, MAX_COLS, parentNode ) {
 	/* ( str, int ) -> [Nodes] */
 
 		var rowNodes = [];
 
 		// Get the right number of rows for the given number of choices, each time
-		var numRows = thisGrid.getNumRows( choiceContainers );
+		var numRows = thisGrid.getTotalNumRows( choiceContainers );
 
 		for ( var rowi = 0; rowi < numRows; rowi++ ) {
 			// Add a row to the DOM, then add the row's node to the list
@@ -137,8 +141,8 @@ adder.Grid = function ( modeName, maxCols, choiceContainers ) {
 	};  // End createGrid()
 
 
-	createGrid( modeType_, maxCols, parentNode );
-	thisGrid.set( modeType_, maxCols, choiceContainers );
+	createGrid( modeType_, MAX_COLS, parentNode );
+	thisGrid.set( modeType_, MAX_COLS, choiceContainers );
 
 	adder.setupGridNavigation( thisGrid, modeName );
 
@@ -151,38 +155,37 @@ adder.Grid = function ( modeName, maxCols, choiceContainers ) {
 // *************************************************
 // Testing
 // *************************************************
-// // --- IMAGES --- \\
-// var picker1 				= 'images';
-// var maxCols1 				= 5;
-// var imageChoiceNodesTest 	= [];
+	// // --- IMAGES --- \\
+	// var picker1 				= 'images';
+	// var MAX_COLS1 				= 5;
+	// var imageChoiceNodesTest 	= [];
 
-// var allImageObjs = adder.defaultImages
+	// var allImageObjs = adder.defaultImages
 
-// for ( var imgi = 0; imgi < allImageObjs.length; imgi++ ) {
-// 	var imgObj = allImageObjs[ imgi ]
-// 	var parent = document.createDocumentFragment();
+	// for ( var imgi = 0; imgi < allImageObjs.length; imgi++ ) {
+	// 	var imgObj = allImageObjs[ imgi ]
+	// 	var parent = document.createDocumentFragment();
 
-// 	var imgChoice 	= new adder.ImgChoice2( imgObj, parent );
-// 	imageChoiceNodesTest.push( imgChoice.node );
-// }
+	// 	var imgChoice 	= new adder.ImgChoice2( imgObj, parent );
+	// 	imageChoiceNodesTest.push( imgChoice.node );
+	// }
 
-// // Test in console:
-// // var myGrid = adder.Grid( picker1, maxCols1, imageChoiceNodesTest );
+	// // Test in console:
+	// // var myGrid = adder.Grid( picker1, MAX_COLS1, imageChoiceNodesTest );
 
 
-// // --- TYPES --- \\
-// // Not working, have to adjust how types container works in general to make
-// // it work.
-// var picker2 				= 'types';
-// var maxCols2 				= 3;
+	// // --- TYPES --- \\
+	// // Not working, have to adjust how types container works in general to make
+	// // it work.
+	// var picker2 				= 'types';
+	// var MAX_COLS2 				= 3;
 
-// // Test in console: 
-// // var verbThing 				= adder.addVerbChoice( document.createDocumentFragment(), 'icd' ),
-// // 	nounThing				= adder.addNounChoice( document.createDocumentFragment(), 'icd' ),
-// // 	messageThing			= adder.addMessageChoice( document.createDocumentFragment(), 'icd' );
+	// // Test in console: 
+	// // var verbThing 				= adder.addVerbChoice( document.createDocumentFragment(), 'icd' ),
+	// // 	nounThing				= adder.addNounChoice( document.createDocumentFragment(), 'icd' ),
+	// // 	messageThing			= adder.addMessageChoice( document.createDocumentFragment(), 'icd' );
 
-// // var typeChoiceNodesTest 	= [ verbThing, nounThing, messageThing ]
-// // var typeGrid = adder.Grid( picker2, maxCols2, typeChoiceNodesTest );
-
+	// // var typeChoiceNodesTest 	= [ verbThing, nounThing, messageThing ]
+	// // var typeGrid = adder.Grid( picker2, MAX_COLS2, typeChoiceNodesTest );
 
 

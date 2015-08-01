@@ -12,6 +12,13 @@
 * - If only one icon matches a search, automatically select that
 * 	icon (but then focus would have to be on that element and
 * 	pressing 'delete' would need to refocus in search bar?)
+* - Starting to type actual letters should put you in the
+* 	searchbar, with those letters typed in?
+* - Update grid position based on mouse movement too
+* 
+* 
+* Pseudo Code:
+* - Account for scrolling somehow? Should down-arrow, put
 */
 
 adder.setupGridNavigation = function ( thisGrid, modeName ) {

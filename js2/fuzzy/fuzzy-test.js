@@ -108,20 +108,16 @@ window.addEventListener( 'load', function () {
 		// $(outputNode).empty();
 		// Make sure there's some text in the search to match with
 		// If I use length > 0 and type in 'a', I get 4707 unique ids, 'ac' gets 812
-		if ( $(inputNode).val().length > 3 ) {
+		if ( $(inputNode).val().length > 2 ) {
 			matchData 	= fuzzySearcher.runSearch( terms, query );
-			adder.currentMatchData = matchData;
+			adder.currentMatchData = matchData;  // { failures: { term: { matchData } }, matches: {} }
 			
 			// idsByTag  from idsByTag.js
 			// These turn out already ranked
-			objIds 		= getUniqueObjIds( matchData.matches, idsByTag );
-
+			objIds = getUniqueObjIds( matchData.matches, idsByTag );
 			adder.currentMatchIds = objIds;
 
-			// How do I connect the rankings with the object ids?
-
-			// outputNode.appendChild( matchData.node );
-			// $(matchData.node).children().first().addClass('selected');
+			testGrid.reset( objIds );  // From Grid-02.js test
 		}
 
 		// Pass out the objIds array and the reults? (results allow)
@@ -194,6 +190,7 @@ window.addEventListener( 'load', function () {
 	var getRowOfObjectsByRowNum = function ( rowNum ) {
 
 		var row = [];
+		var objNames = [];  // For testing
 
 		for ( var colNum = 0; colNum < numCols; colNum++ ) {
 			// Get the index number the id of each object we need
@@ -202,10 +199,13 @@ window.addEventListener( 'load', function () {
 			var id 	= objIds[ indx ];
 			// Get the actual object using that id
 			var obj = objsByIds[ id ];
-
-			row.push( obj );
+			if ( obj !== undefined ) {
+				row.push( obj );
+				objNames.push( obj.name ); // For testing
+			}
 		}
 
+		// console.log( 'row', rowNum, 'image names:', objNames );  // For testing
 		return row;
 	};  // End getRowOfObjectsByRowNum()
 
@@ -226,7 +226,7 @@ window.addEventListener( 'load', function () {
 			firstRowIndx = Math.max( 0, firstRowIndx );
 		}
 
-
+		// console.log('----- Pretending to Update Rows -----')
 		existingRows = [];
 		for ( var iteri = 0; iteri < numExistingRows; iteri++ ) {
 			
@@ -255,7 +255,7 @@ window.addEventListener( 'load', function () {
 			var row = getRowOfObjectsByRowNum( rowNum );
 			existingRows.push( row );
 		}
-		console.log(existingRows)
+		// console.log(existingRows)
 
 		return existingRows;
 	};  // End setGridArray()
@@ -263,16 +263,7 @@ window.addEventListener( 'load', function () {
 
 
 
-
-
-
-
-
-
-
 	document.addEventListener('wheel', function ( evnt ) {
-		// console.log(evnt)
-		// console.log(evnt.deltaY);
 
 		var deltaY = evnt.deltaY;
 		scrollRowArray( deltaY, existingRows );
@@ -280,8 +271,27 @@ window.addEventListener( 'load', function () {
 	});
 
 
+	// =================================
+	// ADD THIS TO HTML
+	// =================================
+	// <br>
+	// <section style='z-index: 1000;'>
+	//     <h2>my-fuzzy.js Demo</h2>
+	//     <div class='search-container'>
+	//       <div class='icd fuzzy-search-wrapper'>
+	//         <div class='fuzzy-input'>
+	//           <input type='text' id='search-query' autofocus>
+	//         </div>
+	//         <ol id='fuzzy-matches-container' style='background-color: white;'>
+	//         </ol>
+	//       </div>
+	//     </div>
+	// </section>
+	// <div id='icd_test_picker' class='icd' style='height: 300px; width: 600px; position: relative; overflow:scroll;'></div>
+	// <br>
+
+
 	// START TEST
 	setGridArray( existingRows );
-
 });  // End window on load
 

@@ -41,9 +41,10 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 		// Need to update [tags] and tag: [] and id:{}
 		// tagsArray, idsByTag, objsByIds
 
+		var imgObjsByIds = objsByIds || objsByIdsSample || new Object();
 
 		// --- objsByIds (objs-by-ids.js) --- \\
-		objsByIds[ imgi ] = obj;
+		imgObjsByIds[ imgi ] = obj;
 
 		// --- tagsArray (tags-array.js) --- \\  
 		// Add all unique tags to master tag array
@@ -91,7 +92,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 	}  // end for tags
 
 	// ???: Not sure what to return, there are 3 major things here
-	return objsByIds;
+	return imgObjsByIds;
 };  // End setupImgObj()
 
 // adder.setupImageObjects

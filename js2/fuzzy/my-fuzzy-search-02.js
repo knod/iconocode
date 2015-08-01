@@ -144,6 +144,8 @@ var FuzzySearcher = function () {
 			}
 		}
 
+		// console.log( 'matches:', results.matches );
+
 		return results;
 	};  // End searcher.buildResults()
 
