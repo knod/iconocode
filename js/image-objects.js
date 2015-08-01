@@ -41,7 +41,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 		// Need to update [tags] and tag: [] and id:{}
 		// tagsArray, idsByTag, objsByIds
 
-		var imgObjsByIds = objsByIds || objsByIdsSample || new Object;
+		var imgObjsByIds = objsByIds || objsByIdsSample || new Object();
 
 		// --- objsByIds (objs-by-ids.js) --- \\
 		imgObjsByIds[ imgi ] = obj;

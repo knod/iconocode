@@ -114,8 +114,7 @@ window.addEventListener( 'load', function () {
 			
 			// idsByTag  from idsByTag.js
 			// These turn out already ranked
-			objIds 		= getUniqueObjIds( matchData.matches, idsByTag );
-
+			objIds = getUniqueObjIds( matchData.matches, idsByTag );
 			adder.currentMatchIds = objIds;
 
 			testGrid.reset( objIds );  // From Grid-02.js test

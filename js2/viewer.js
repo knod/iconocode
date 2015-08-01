@@ -208,10 +208,16 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	var searcher 		= new AdderSearcher( cmEditor );
 	var imageObjects 	= adder.modes.images.imageObjects;
 
-	cmEditor.on("change", function(instance, change) {
+	cmEditor.on("change", function( instance, change ) {
+
+		// Get the text that needs to be looked for
+		var query = cmEditor.getTokenAt( cmEditor.getCursor() ).string;
+
 		// When text is added or deleted (anything else?) search the mode's choices
-		var activeGrid = adder.modes[ adder.activeMode ].grid;
-		searcher.runSearch( imageObjects, activeGrid );
+		var activeGrid 	= adder.modes[ adder.activeMode ].grid;
+		var newIds 		= searcher.runSearch( query );
+		activeGrid.reset( newIds );
+
 		// Takes a bit for the change to actually take effect
 		setTimeout( function () {
 			var codeNode = $('.icd.icon-adder .CodeMirror-code pre')[0];

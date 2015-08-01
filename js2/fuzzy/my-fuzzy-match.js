@@ -250,6 +250,7 @@ var FuzzyMatcher = function ( context ) {
 
 	matcher.matchComparator = function(m1, m2) {
 	/* This is in here because in here is where the test properties are created */
+	// shoky> i always just remember that the "default" of  (a,b) -> a-b   is ascending
 		var diff = m2.score - m1.score;
 
 		// If the scores are the same
@@ -261,10 +262,10 @@ var FuzzyMatcher = function ( context ) {
 			diff = m2_altScore - m1_altScore;
 
 			if (m2_altScore === m1_altScore) {
-				// If compareFunction(a, b) is less than 0, sort a to a lower index than b, i.e. a comes first.
-				// If m1 is ealier in the alphabet than 
-				//shoky_> knod: so basically,  function(a,b) { if (a.score !== b.score) { return a.score - b.score } else { return a.string.localeCompare(b.string) } }
-				m2.term.localeCompare( m1.term );
+				// Alphabetical order
+				// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare
+				//shoky_> so basically,  function(a,b) { if (a.score !== b.score) { return a.score - b.score } else { return a.string.localeCompare(b.string) } }
+				diff = m2.term.localeCompare( m1.term );
 			}
 		}
 

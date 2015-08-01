@@ -390,7 +390,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	// EVENTS
 	// =====================
 	var oldFirstRowNum = 0;
-	newGrid.gridScrollHandler = function ( evnt, sizer_, force ) {
+	newGrid.scrollHandler = function ( evnt, sizer_, force ) {
 
 		// Current top visible row. With this math, it will never exceed the max allowed.
 		var currRowNum = Math.ceil( scrollable_.scrollTop/(rowHeight_ + rowMargin_) );
@@ -405,22 +405,20 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 
 
 	scrollable_.addEventListener('wheel', function(evnt) {
-	  newGrid.gridScrollHandler( evnt, null, false );
+		newGrid.scrollHandler( evnt, null, false );
 	});  // End scrollable_ event listener wheel
 
 	// ??: Better on mousemove or mouseout?
 	// Note: mousemove not working for scrollbar
 	scrollable_.addEventListener('mouseout', function(evnt) {
-	  //console.log('===== MOUSEOUT =====')
-	  newGrid.gridScrollHandler( evnt, null, true );
+		newGrid.scrollHandler( evnt, null, true );
 	});  // End scrollable_ event listener mouseout
 
 
 	scrollable_.addEventListener('scroll', function(evnt) {
-	  //console.log('===== SCROLL =====')
-	  // This event's behavior is great: it seems not to cycle through 
-	  // all the rows it passes through, just select rows
-	  newGrid.gridScrollHandler( evnt, null, true );
+		// This event's behavior is great: it seems not to cycle through 
+		// all the rows it passes through, just select rows
+		newGrid.scrollHandler( evnt, null, true );
 	});  // End scrollable_ event listener scroll
 
 

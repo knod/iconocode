@@ -70,30 +70,27 @@ var AdderSearcher = function ( searchbar ) {
 
 	searcher.runSearch 	= function ( query ) {
 	/* ( str ) -> ?? */
-		// outputNode.innerHTML 	= '';
-		// $(outputNode).empty();
 
-		var matchData;
-
+		// A way to look up the objects that will match the query
+		var objIds;
 		// Make sure there's some text in the search to match with
 		// If I use length > 0 and type in 'a', I get 4707 unique ids, 'ac' gets 812
-		if ( query.length > 3 ) {
-			matchData 	= fuzzySearcher.runSearch( terms, query );
+		if ( query.length > 1 ) {
+			var matchData = fuzzySearcher.runSearch( terms, query );
 			adder.currentMatchData = matchData;
-			
+
 			// idsByTag  from tag-dict.js
 			// These turn out already ranked
-			var objIds = searcher.getUniqueObjIds( matchData.matches, idsByTag );
+			objIds = searcher.getUniqueObjIds( matchData.matches, idsByTag );
 			adder.currentMatchIds = objIds;
 
-			// outputNode.appendChild( matchData.node );
-			// $(matchData.node).children().first().addClass('selected');
+			// if ( objIds.length === 0 ) {
+			// 	objIds = searcher.getUniqueObjIds( matchData.failures, idsByTag );
+			// }
+
 		}
 
-		// Pass out the objIds array and the reults? (results allow)
-		// for not having to re-analyze the tags, can just use the data we
-		// already have
-		return matchData;
+		return objIds;
 	};  // End runSearch()
 
 
