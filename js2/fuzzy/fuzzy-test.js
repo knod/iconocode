@@ -271,8 +271,27 @@ window.addEventListener( 'load', function () {
 	});
 
 
+	// =================================
+	// ADD THIS TO HTML
+	// =================================
+	// <br>
+	// <section style='z-index: 1000;'>
+	//     <h2>my-fuzzy.js Demo</h2>
+	//     <div class='search-container'>
+	//       <div class='icd fuzzy-search-wrapper'>
+	//         <div class='fuzzy-input'>
+	//           <input type='text' id='search-query' autofocus>
+	//         </div>
+	//         <ol id='fuzzy-matches-container' style='background-color: white;'>
+	//         </ol>
+	//       </div>
+	//     </div>
+	// </section>
+	// <div id='icd_test_picker' class='icd' style='height: 300px; width: 600px; position: relative; overflow:scroll;'></div>
+	// <br>
+
+
 	// START TEST
 	setGridArray( existingRows );
-
 });  // End window on load
 

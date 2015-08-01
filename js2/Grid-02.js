@@ -339,7 +339,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 
 	newGrid.reset = function ( objIds ) {
 
-		console.log('--- resetting', modeName, 'grid ---', objIds );
+		// console.log('--- resetting', modeName, 'grid ---', objIds );
 		var objIds = objIds || currentIds_;
 		if ( objIds ) { currentIds_ = objIds; }
 
@@ -432,20 +432,20 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 };  // End adder.Grid {} (new version)
 
 
-// *************************************************
-// New Testing
-// *************************************************
-var testGrid
-window.addEventListener('load', function () {
-	var choiceObjs = objsByIds;
-	var rowBlueprint = {
-		height: 60,
-		vertMargin: 10,
-		numCols: 8
-	}
-	var modeName = 'test';
-	var makeChoiceNode = adder.makeImageNode;
+// // *************************************************
+// // TESTING
+// // *************************************************
+// var testGrid
+// window.addEventListener('load', function () {
+// 	var choiceObjs = objsByIds;
+// 	var rowBlueprint = {
+// 		height: 60,
+// 		vertMargin: 10,
+// 		numCols: 8
+// 	}
+// 	var modeName = 'test';
+// 	var makeChoiceNode = adder.makeImageNode;
 
-	testGrid = new adder.Grid2( choiceObjs, rowBlueprint, modeName, makeChoiceNode )
-})
+// 	testGrid = new adder.Grid2( choiceObjs, rowBlueprint, modeName, makeChoiceNode )
+// })
 
