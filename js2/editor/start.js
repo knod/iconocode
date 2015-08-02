@@ -38,6 +38,8 @@ window.addEventListener('load', function () {
 	});  // End on cursor activity
 
 
+	var output = document.querySelector(".output");
+
 	myCM.setOption("extraKeys", {
 	// http://codemirror.net/doc/manual.html#keymaps
 		'Cmd-I': function() {
@@ -48,6 +50,7 @@ window.addEventListener('load', function () {
 			adder.showAdder( myCM, icd.map );
 		},
 		'Shift-Enter': function() {
+			$(output).empty();
 			// Run the code written in the editor unless there's an error
 			var contents = myCM.getValue();
 			contents = contents.replace(/document\.body/, 'document.querySelector(".output")');
