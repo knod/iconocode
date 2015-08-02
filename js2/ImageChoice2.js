@@ -70,41 +70,26 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 imgChoice.addSVG 		= function ( svgStr, parentNode, imgObj ) {
 /* svg string to node */
 
-
-	// if ( imgObj.id === '167588' ) { console.log('broken', svgStr) }
-	// if ( imgObj.id === '167641' ) { console.log('working:', svgStr) }
-
 	// ???: svg into font?
 
-	// --- COLOR --- \\
+	// --- COLOR STRINGS --- \\
 	// First change the color of everything that's colored
 	// http://stackoverflow.com/questions/12362270/cant-figure-out-the-color-of-an-svg-element
 	var color = 'rgb(153, 153, 153)';
-	// svgStr = svgStr.replace( /fill=['|"][^none].*?['|"]/gi, 'fill=' + color );
-	// svgStr = svgStr.replace( /stroke=['|"][^none].*?['|"]/gi, 'stroke=' + color );
 	svgStr = svgStr.replace(/#[0-9]+/g, color );
 	svgStr = svgStr.replace(/black/g, color );
 
-	// --- NODE --- \\
-	var choiceNode 		 = document.createElement('div');
-	// parentNode.appendChild( choiceNode );
-
-	// // Attempt 2
-	// var imgNodeObj = document.createElement('object');
-	// choiceNode.appendChild( imgNodeObj );
-	// imgNodeObj.innerHTML = svgStr;
-	// var svg = choiceNode.children[0].children[0];
-
-	choiceNode.innerHTML = svgStr;
-
-	var svg = choiceNode.children[0];
+	// --- CHECKING AND CHANGING ATTRIBUTES --- \\
+	var dummyNode = document.createElement('div');
+	dummyNode.innerHTML = svgStr;
+	var svg = dummyNode.children[0];
 
 	// --- SIZE --- \\
 	// Make sure each svg has a width and height defined
 	svg.setAttribute('height', '100%');
 	svg.setAttribute('width', '100%');
 
-	// --- COLOR --- \\
+	// --- COLOR ATTRIBUTES --- \\
 	// Last little thing about color has to be done at the end
 	// If there is no fill defined, the fill is automatically black
 	// http://www.w3.org/TR/SVG/painting.html#FillProperties
@@ -118,29 +103,18 @@ imgChoice.addSVG 		= function ( svgStr, parentNode, imgObj ) {
 
 	})
 
+	// --- ACTUAL RESULT --- \\
+	// Attempt 4 - http://techslides.com/save-svg-as-an-image
+	// Turn the html into a string that can be used as a src attribute value
+	var newStr 	= dummyNode.innerHTML;
+	var imgsrc 		= 'data:image/svg+xml;base64,'+ window.btoa( newStr );
 
-	// // Attempt 3
-	// var choiceNode 	= document.createElement('img');
-	// parentNode.appendChild( choiceNode );
-
-	// var imgFilePath = '../image-data/images/' + imgObj.filename;
-	// choiceNode.src 	= imgFilePath;
-
-
-
-	// Attempt 4
-	var newStr 	= choiceNode.innerHTML;
-	choiceNode 	= document.createElement('img');
+	// Actually the container for realz this time
+	var choiceNode 	= document.createElement('img');
 	choiceNode.className = imgObj.id;
 	parentNode.appendChild( choiceNode );
 
-	var imgsrc 		= 'data:image/svg+xml;base64,'+ window.btoa( newStr );
 	choiceNode.src 	= imgsrc;
-	// var img 	= '<img src="'+imgsrc+'">'; 
-
-	// if ( imgObj.id === '167588' ) { console.log('broken', newStr) }
-	// if ( imgObj.id === '167641' ) { console.log('working:', newStr) }
-		
 
 	return choiceNode;
 };  // End imgChoice.addSVG();
