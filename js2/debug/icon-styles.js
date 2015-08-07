@@ -28,8 +28,8 @@
 // });
 
 var iconSize = 1;
-var centerVertically = function () {
-
+var resizeIcons = function () {
+/*  */
 	// Line is just a little bigger to give space around icons
 	// var lineHeight 	= (parseFloat(iconSize) + lineDiff);
 	var lineHeight 	= ( parseFloat(iconSize) * 1.175 );
@@ -66,10 +66,13 @@ var centerVertically = function () {
 	$('.icon-hotbar .icd.icon-container').css( 'height', iconSize + 'rem' );
 	$('.icon-hotbar .icd.icon-container').css( 'margin-bottom', baselineChange + 'rem' );
 
+	// --- MOUSEOVER TEXT --- \\
+	$('.variable-name').css('line-height', '1rem');
+
 	// --- ALL (doesn't take affect unless I do this) --- \\
 	$('.icd.icon-container .icon-part').hide().show(0);
 
-};  // End centerVertically()
+};  // End resizeIcons()
 
 
 window.addEventListener( 'load', function () {
@@ -82,7 +85,7 @@ window.addEventListener( 'load', function () {
 		iconSize = evnt.target.value;
 		$('#icon_size_output').val( iconSize + 'rem' );
 
-		centerVertically();
+		resizeIcons();
 
 	});
 });

@@ -47,6 +47,9 @@ var IcdUpdater = function ( utils, iconMap ) {
 			}
 		}
 
+		// Center everything vertically based on size
+		resizeIcons();  // Global in icon-styles.js atm
+
 		return mark;
 	};  // End updater.markUnmarked()
 

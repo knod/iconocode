@@ -64,7 +64,9 @@ window.addEventListener('load', function () {
 	});
 
 
+	// ====================================================
 	// --- TESTING ICONS --- \\
+	// ====================================================
 	var constructIcon = function ( variableName, purpose, imageNodes ) {
 		/* ( str, str, [Nodes] ) -> {}
 		* 
@@ -80,7 +82,7 @@ window.addEventListener('load', function () {
 			iconObj.setImages( imageNodes, iconObj.body );
 
 			iconObj.save( icd.map, icd.hotbar );
-			console.log(iconObj)
+
 			return iconObj;
 	};  // End constructIcon()
 
@@ -128,6 +130,6 @@ token2 = 12;
 
 var xy = 5;
 xy = xy * 2;
-console.log(xy
+console.log(xy)
 */
 
