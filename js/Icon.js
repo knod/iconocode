@@ -4,6 +4,7 @@
 * TODO:
 * - Consider making images icon fonts so their color is easy to change.
 * - Make icon parts able to be any type of node, including text node
+* - Set 'icon-part' class in here instead
 */
 
 'use strict'
@@ -108,13 +109,15 @@ var Icon = function ( varName ) {
 		for ( var nodei = 0; nodei < numNodes; nodei++ ) {
 			var $imgNode = $(partNodes[nodei]);
 
-			// Deeply copy the image and add it to the icon
-			$imgNode.clone().appendTo( $(parentNode) );
 			// Remove all previous classes and add the right class
 			// Why was I doing this elsewhere?
+			// Note: Do classes before appending. Changing after doesn't seem to work for some reason.
 			$imgNode.removeClass();
 			$imgNode.addClass( 'icon-part' );
 			imgNamesStr += $imgNode.data('name');
+
+			// Deeply copy the image and add it to the icon
+			$imgNode.clone().appendTo( $(parentNode) );
 		}
 
 		newIcon.setId( imgNamesStr );
