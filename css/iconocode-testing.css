@@ -438,12 +438,12 @@ header, .app { width: 98.7%; }
 /* --------------------- */
 /* --- TEST --- */
 /* --------------------- */
-.icd :focus {
-	/*border: 3px solid rgb( 0, 0, 0 ) !important;*/
-}
+/*.icd :focus {
+	border: 3px solid rgb( 0, 0, 0 ) !important;
+}*/
 
-.Icon-test {
+/*.Icon-test {
 	max-width: 1rem;
 	max-height: 1rem;
-}
+}*/
 

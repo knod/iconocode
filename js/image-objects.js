@@ -32,19 +32,19 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 
 	var folderPath 	= './images/';
 
+	// Need to update [tags] and tag: [] and id:{}
+	// tagsArray, idsByTag, objsByIds
+
+	// --- objsByIds (objs-by-ids.js) --- \\
+	var imgObjsByIds = objsByIds;  // If available, use full dict
+
 	for ( var imgi = 0; imgi < imgs.length; imgi++ ) {
 		var obj = imgs[ imgi ];
 		obj.folderPath = folderPath;
 		// TODO: Move to icd.map so that we can have a last id# variable to make more dynamically
 		obj.id = 'icd_' + imgi;
-		
-		// Need to update [tags] and tag: [] and id:{}
-		// tagsArray, idsByTag, objsByIds
 
-		var imgObjsByIds = objsByIds || objsByIdsSample || new Object();
-
-		// --- objsByIds (objs-by-ids.js) --- \\
-		imgObjsByIds[ imgi ] = obj;
+		imgObjsByIds[ obj.id ] = obj;
 
 		// --- tagsArray (tags-array.js) --- \\  
 		// Add all unique tags to master tag array
@@ -60,8 +60,6 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 
 
 	// --- idsByTag (ids-by-tag.js) --- \\
-	
-		
 	var numTags = tagsArray.length;
 
 	// Get each tag, including the new ones

@@ -1,11 +1,20 @@
 /*editor-and-extras.css*/
 
 /* ========================= */
-/* HOTBAR/EDITOR ARRANGEMENT */
+/* HOTBAR */
 /* ========================= */
+/* --- Editor Arrangement */
 .test-editor {
 	width: 100%;
 	height: 100%;
+}
+
+/* For Side-to-Side */
+.editor-container {
+	position: relative;
+	width: 80%;
+	height: 100%;
+	display: inline-block;
 }
 
 .icon-hotbar {
@@ -23,6 +32,7 @@
 	color: lightgray;
 }
 
+/* --- Inside --- */
 .icon-hotbar h3 {
 	margin: 0 auto;
 	padding: 0.2rem 0.5rem;
@@ -34,15 +44,6 @@
 	padding: 0 1rem;
 	list-style: none;
 	text-decoration: none;
-}
-
-
-/* For Side-to-Side */
-.editor-container {
-	position: relative;
-	width: 80%;
-	height: 100%;
-	display: inline-block;
 }
 
 /* ========================= */
