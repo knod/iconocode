@@ -7,7 +7,7 @@ the path to them?)
 'use strict'
 
 
-adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
+adder.setupImageObjects = function ( arrayOfTags, idsInTags ) {
 /* Change the names in future when I'm actually passing the values in */
 	// objsByIds is the current name of the thing containing all the image objects
 
@@ -36,15 +36,13 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 	// tagsArray, idsByTag, objsByIds
 
 	// --- objsByIds (objs-by-ids.js) --- \\
-	var imgObjsByIds = objsByIds;  // If available, use full dict
-
 	for ( var imgi = 0; imgi < imgs.length; imgi++ ) {
 		var obj = imgs[ imgi ];
 		obj.folderPath = folderPath;
 		// TODO: Move to icd.map so that we can have a last id# variable to make more dynamically
 		obj.id = 'icd_' + imgi;
 
-		imgObjsByIds[ obj.id ] = obj;
+		objsByIds[ obj.id ] = obj;
 
 		// --- tagsArray (tags-array.js) --- \\  
 		// Add all unique tags to master tag array
@@ -90,7 +88,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags, imgObjsByIds ) {
 	}  // end for tags
 
 	// ???: Not sure what to return, there are 3 major things here
-	return imgObjsByIds;
+	return objsByIds;
 };  // End setupImgObj()
 
 // adder.setupImageObjects

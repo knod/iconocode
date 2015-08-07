@@ -216,7 +216,11 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 		// When text is added or deleted (anything else?) search the mode's choices
 		var activeGrid 	= adder.modes[ adder.activeMode ].grid;
 		var newIds 		= searcher.runSearch( query );
-		activeGrid.reset( newIds );
+
+		// Until the purposes grid is converted
+		if ( activeGrid.reset !== undefined ) {
+			activeGrid.reset( newIds );
+		}
 
 		// Takes a bit for the change to actually take effect
 		setTimeout( function () {

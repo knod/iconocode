@@ -75,13 +75,10 @@ adder.modes  		= {
 // --- objsByIds (objs-by-ids.js) --- \\
 var dict;
 if ( objsByIds !== undefined ) {
-	console.log('main dict');
 	dict = objsByIds;
 } else if ( objsByIdsSample !== undefined ) {
-	console.log('sample');
 	dict = objsByIdsSample;
 } else {
-	console.log('no sample')
 	dict = {};  // As a last resort, use only the images here
 }
 
