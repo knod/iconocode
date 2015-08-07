@@ -309,7 +309,7 @@ var Icon = function ( varName ) {
 		var center = document.createElement( 'div' );
 		container.appendChild( center );
 		center.className = 'shape-part center';
-		newIcon.addCenterShape( center );
+		// newIcon.addCenterShape( center );
 		// --- Mouseover text --- \\		
 		newIcon.addNameText( varName, center );
 
