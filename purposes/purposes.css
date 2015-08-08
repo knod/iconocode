@@ -139,6 +139,9 @@
 /* ================ */
 /* MOUSEOVER TEXT */
 /* ================ */
+.icd.icon-container:hover { z-index: 100; }
+.app .CodeMirror pre:hover { z-index: 100; }
+
 .icd.icon-container:hover .variable-name {
 	display: block;
 }
