@@ -34,7 +34,7 @@ Show a tab as being active, do it's action
 	// ==================
 	$(selectedTab).addClass( 'active-tab' );
 	// Reveal the related element
-	$(selectedTab).data('toShow').style.display = 'flex';
+	$(selectedTab).data('toShow').style.display = 'initial';
 
 	// Set active
 	adder.activeTab = selectedTab

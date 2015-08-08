@@ -182,7 +182,9 @@ be scrollable... make it position: relative?
 }
 .icd .adder-picker {
 	/* This is a sizer now for the parent which scrolls */
-	/*height: 9rem;*/
+	/* Its size will be set by the grid, but purposes isn't using that kind of grid yet */
+	/* so this is a fallback for now */
+	height: 100%;
 	/* for some reason makes images oversized */
 	/*width: 100%;*/
 	/*overflow: scroll;*/
