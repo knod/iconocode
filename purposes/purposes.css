@@ -46,7 +46,8 @@
   float: left;
   box-sizing: border-box;
   /* Even with border-box things get pushed around for certain values. Maybe just in codepen. */
-  padding: 5%;
+  padding: 1px;
+  margin: 0;  /* To counter <pre> margin interfering with hotbar */
   /* background-color:rgb( 200, 200, 200); */
 }
 
