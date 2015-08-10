@@ -250,7 +250,9 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	$('.icd.icon-adder .CodeMirror-hscrollbar')[0].style['minHeight'] = '2px';
 	$('.icd.icon-adder .CodeMirror-hscrollbar')[0].style.height = '2px';
 
-	var applier 			 = thisViewer.addApply( adder.sections.viewer );
+	$(cmEditor.getWrapperElement()).addClass('.icd.icon-container');
+
+	var applier 			 = thisViewer.addApply( adder.sections.viewer );  // Command to apply icon
 
 
 	// ====================

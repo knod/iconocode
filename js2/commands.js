@@ -42,7 +42,7 @@ adder.addCommands = function ( parentNode ) {
 		var $textContainer 	= $(adder.searchBarContainer);  // created in viewer.js
 		// Gives Node array, looping is dangerous
 
-		return $textContainer.find('.icon-part');
+		return $textContainer.contents();
 	};  // End commands.getParts()
 
 

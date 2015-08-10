@@ -106,13 +106,17 @@ var AdderIcon = function () {
 	 newIcon.addCenterShape = function ( centerNode, htmlStr ) {
 	/* */
 
-		var htmlStr = htmlStr ||
-			"<svg width='100%' height='100%' " + newIcon.svgAttributes + ">"  +
-				"<line x1='0' y1='0' x2='100%' y2='0'/>" +
-				"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
-			"</svg>";
+		// var htmlStr = htmlStr ||
+		// 	"<svg width='100%' height='100%' " + newIcon.svgAttributes + ">"  +
+		// 		"<line x1='0' y1='0' x2='100%' y2='0'/>" +
+		// 		"<line x1='0' y1='100%' x2='100%' y2='100%'/>" +
+		// 	"</svg>";
 
-		centerNode.innerHTML = htmlStr;
+		// centerNode.innerHTML = htmlStr;
+
+		var iconBody = document.createElement('div');
+		centerNode.appendChild( iconBody );
+		iconBody.className = 'icon-body';
 
 		return centerNode;
 	};  // End newIcon.addCenterShape()

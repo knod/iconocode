@@ -166,10 +166,8 @@ be scrollable... make it position: relative?
 
 	color: rgb( 140, 140, 140 );
 }
-.icd .CodeMirror img {
-
+.icd .adder-icon-viewer .CodeMirror img {
 	max-height: 1rem;
-
 }
 
 

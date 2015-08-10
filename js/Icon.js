@@ -121,7 +121,7 @@ var Icon = function ( varName ) {
 		}
 
 		newIcon.setId( imgNamesStr );
-		newIcon.parts = $(parentNode).children();
+		newIcon.parts = $(parentNode).contents();
 
 		return parentNode;
 	};  // End newIcon.setImages()
@@ -141,6 +141,17 @@ var Icon = function ( varName ) {
 		"viewBox='0 0 100 100' preserveAspectRatio='none' ";
 
 	newIcon.toDefaultShape = function( iconContainer ) {
+	// Just the css border created by 'default' class name remains
+
+		var leftNode 		= iconContainer.getElementsByClassName('left')[0];
+		leftNode.innerHTML 	= '';
+
+		var centerNode 		 = iconContainer.getElementsByClassName('center')[0];
+		newIcon.addCenterShape( centerNode, '' );
+
+		var rightNode 		= iconContainer.getElementsByClassName('right')[0];
+		rightNode.innerHTML = '';
+
 		return iconContainer;
 	}
 
