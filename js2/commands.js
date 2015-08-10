@@ -35,13 +35,12 @@ adder.addCommands = function ( parentNode ) {
 
 
 	commands.getParts = function () {
-	/*
+	/* ( None ) -> NodeList
 	* 
 	* This should be able to include text as well as images
 	*/
 		var $textContainer 	= $(adder.searchBarContainer);  // created in viewer.js
 		// Gives Node array, looping is dangerous
-
 		return $textContainer.contents();
 	};  // End commands.getParts()
 
