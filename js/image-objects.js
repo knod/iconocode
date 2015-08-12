@@ -51,8 +51,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags ) {
 		for ( var tagi = 0; tagi < obj.tags.length; tagi++ ) {
 			var tag = obj.tags[ tagi ];
 			if ( tagsArray.indexOf( tag ) === -1 ) {
-				tagsArray.push( tag );
-				tagsArray[ tag ] = [];  // So it can be added to later
+				tagsArray.push( tag );  // List of strings
 			}
 		}
 
@@ -66,7 +65,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags ) {
 	for ( var tagi = 0; tagi < numTags; tagi++ ) {
 
 		var tag 	= tagsArray[ tagi ];
-		var tagIds = [];
+		var tagIds  = [];
 
 		// Get each new object
 		for ( var obji = 0; obji < imgs.length; obji++ ) {
@@ -88,6 +87,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags ) {
 		}  // end for new objects
 
 	}  // end for tags
+	console.log(idsByTag)
 
 	// ???: Not sure what to return, there are 3 major things here
 	return objsByIds;
