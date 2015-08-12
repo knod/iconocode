@@ -25,7 +25,7 @@ var AdderSearcher = function ( searchbar ) {
 */
 	var searcher = {};
 
-	var fuzzySearcher = new FuzzySearcher();
+	var fuzzySearcher = new FuzzySearcher();  // my-fuzzy-search-02.js
 
 
 	// ========================
@@ -38,7 +38,7 @@ var AdderSearcher = function ( searchbar ) {
 	* These turn out already ranked.
 	*/
 		var objIds = [];
-		
+
 		for ( var tagi = 0; tagi < tagNames.length; tagi++ ) {  // for each tag
 
 			var tag = tagNames[ tagi ];
@@ -65,17 +65,18 @@ var AdderSearcher = function ( searchbar ) {
 
 
 
-	var terms = tagsArray;  // tags-array.js
+	var terms = tagsArray.slice(0);  // tags-array.js
 	// idsByTag from ids-by-tag.js, we'll work out how to do it better later
 
 	searcher.runSearch 	= function ( query ) {
 	/* ( str ) -> ?? */
-
+		console.log( '---------------------------------' )
 		// A way to look up the objects that will match the query
 		var objIds;
 		// Make sure there's some text in the search to match with
 		// If I use length > 0 and type in 'a', I get 4707 unique ids, 'ac' gets 812
-		if ( query.length > 1 ) {
+		if ( query.length > 2 ) {
+			// terms always stays the same
 			var matchData = fuzzySearcher.runSearch( terms, query );
 			adder.currentMatchData = matchData;
 
