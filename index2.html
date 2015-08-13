@@ -31,32 +31,30 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
     <hr>
   </header>
 
+	<!-- Because of quirky things, body is 100% height of viewport, so this is almost 100% of body and initially fills the viewport, but the stuff below the app isn't covered by the body, though the margins of the body still apply to that stuff. Scroll down and check out the body in the inspector. Weird, right?  -->
+	<div class ='app'>
+		<section class='editor-area'>
+
+		  <form id='icon_size_form'>
+		        <input type='range' id='icon_size_input' name='iconSizeInput' min='0.8' max='2' step='0.02' value='1'>
+		        <output name='iconSizeOutput' for='iconSizeInput' id='icon_size_output'></output>
+		  </form>
+
+		  <section class='icon-hotbar'>
+		    <h3>Hotbar</h3>
+		    <ol class='icon-hotbar-icons'>
+		    </ol>
+		  </section>
 
 
+		  <section class='editor-container'>
+		    <button class='icon-toggle'>Toggle Icons</button>
+		  </section>
+		    
+		</section>
 
-  <div class ='app'>
-    <section class='editor-area'>
-
-      <form id='icon_size_form'>
-            <input type='range' id='icon_size_input' name='iconSizeInput' min='0.8' max='2' step='0.02' value='1'>
-            <output name='iconSizeOutput' for='iconSizeInput' id='icon_size_output'></output>
-      </form>
-
-      <section class='icon-hotbar'>
-        <h3>Hotbar</h3>
-        <ol class='icon-hotbar-icons'>
-        </ol>
-      </section>
-
-
-      <section class='editor-container'>
-        <button class='icon-toggle'>Toggle Icons</button>
-      </section>
-        
-    </section>
-
-    <section class='output'></section>
-  </div> <!-- end .app -->
+		<section class='output' tabindex='0'></section>
+	</div> <!-- end .app -->
 
 <!--   <br>
     <section style='z-index: 1000;'>
@@ -74,9 +72,24 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
   <div id='icd_test_picker' class='icd' style='height: 300px; width: 600px; position: relative; overflow:scroll;'></div>
   <br> -->
 
-  <br>
+	<br>
 
-  <a class='footer' href='./credits/credits.html'>Credits for stuff like icons from the Noun Project</a>
+	<section class='instructions'>
+		<h2>Instructions</h2>
+		<p><strong>IMPORTANT:</strong> only add event listeners with $('.output').on( 'eventName', ... ) (other events will not be cleared when the code is re-run)</p>
+		<p>Press Cmd+i in a word in the editor to give that word an icon</p>
+		<p>--- Then press tab and the arrow keys to set the purpose of the variable</p>
+		<p>--- Then use the cursor to select images (most icons currently don't get displayed in the search bar)</p>
+		<p>--- To search for an icon, type text into the search bar (will only activate for more than 2 letters)</p>
+		<p>Press <strong>Shift+Enter</strong> while in the editor to apply your code</p>
+		<p>Click on the output element on the right to activate its event listeners</p>
+	</section>
+
+	<br>
+
+	<div class='footer'>
+		<a href='./credits/credits.html'>Credits for stuff like icons from the Noun Project</a>
+	</div>
 
 	<!-- ************************* -->
 	<!-- SCRIPTS -->
@@ -108,7 +121,7 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 	<!-- Image Data -->
 	<script src='js2/fuzzy/tags-array.js'></script>
 	<script src='js2/fuzzy/ids-by-tag.js'></script>
-	<!-- <script src='../image-data/objs-by-ids.js'></script> -->
+	<script src='../image-data/objs-by-ids.js'></script>
 	<script src='js2/objs-by-ids-sample.js'></script>
 	<!-- <script src='images/image-objects-compiled.js'></script> -->
 

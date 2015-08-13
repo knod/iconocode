@@ -29,7 +29,6 @@ var FuzzySearcher = function () {
 
 	// Defaults
 	// searcher.searchTagName 	= 'ol';  // ol because of ranking?
-	searcher.matchTagName 	= 'li';
 	searcher.containerClass = 'fuzzy-matches';
 	searcher.termClass 		= 'fuzzy-matched-term';
 
@@ -80,17 +79,19 @@ var FuzzySearcher = function () {
 		var matchArray = []
 		var queryRegex = searcher.queryRegex( query );
 
-		for ( var termi = 0; ( termi < terms.length ) &&
-							 ( termi < searcher.maxResults ); termi++ ) {
+		var termi
+		for ( termi = 0; ( termi < terms.length ) 
+			//&& ( termi < searcher.maxResults )  // Speeds up the search, but !!!: we don't get all the results this way
+							 ; termi++ ) {
 			// Get possible match data for each word in turn
-			matcher.matchedTermClass = searcher.termClass;
-			// In case user has changed this to something like '<span>'
-			var matchTagName = searcher.matchTagName.replace( /[<> ]/g, '' )
-			
 			var term = terms[ termi ];
-			var aMatch = matcher.toNode( term, query, queryRegex, matchTagName );
+			var aMatch = matcher.toNode( term, query, queryRegex );
 			
 			// Added .doesMatch, also properties for a term that doesn't match the query
+
+			if ( term === 'runner' ) {
+				console.log(aMatch);
+			}
 
 			// if ( aMatch === null ) {
 			// 	// Make a 'match' that will have a really low rank
@@ -106,7 +107,7 @@ var FuzzySearcher = function () {
 			matchArray.push( aMatch );
 
 		}
-
+		console.log(termi)
 		// This doesn't quite fit here , but it's so short... Anyway,
 		// puts stuff in the right order based on score
 		return matchArray.sort( matcher.matchComparator );

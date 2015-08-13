@@ -26,7 +26,9 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags ) {
 		{ name: 'rows', filename: 'rows.svg', tags: [ 'rows' ] },
 		{ name: 'push2', filename: 'push2.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
 		{ name: 'push3', filename: 'push3.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
-		{ name: 'push', filename: 'push.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] }
+		{ name: 'push', filename: 'push.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
+		{ name: 'chaser', filename: 'noun_170400_chaser.svg', tags: [ 'seeker', 'chaser', 'catcher', 'hunter', 'predator' ] },
+		{ name: 'runner', filename: 'noun_170400_runner.svg', tags: [ 'hider', 'runner', 'prey', 'runaway' ] }
 	];  // End adder.imgs[]
 
 
@@ -49,8 +51,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags ) {
 		for ( var tagi = 0; tagi < obj.tags.length; tagi++ ) {
 			var tag = obj.tags[ tagi ];
 			if ( tagsArray.indexOf( tag ) === -1 ) {
-				tagsArray.push( tag );
-				tagsArray[ tag ] = [];  // So it can be added to later
+				tagsArray.push( tag );  // List of strings
 			}
 		}
 
@@ -64,7 +65,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags ) {
 	for ( var tagi = 0; tagi < numTags; tagi++ ) {
 
 		var tag 	= tagsArray[ tagi ];
-		var tagIds = [];
+		var tagIds  = [];
 
 		// Get each new object
 		for ( var obji = 0; obji < imgs.length; obji++ ) {
@@ -86,6 +87,7 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags ) {
 		}  // end for new objects
 
 	}  // end for tags
+	console.log(idsByTag)
 
 	// ???: Not sure what to return, there are 3 major things here
 	return objsByIds;
