@@ -70,12 +70,12 @@ var AdderSearcher = function ( searchbar ) {
 
 	searcher.runSearch 	= function ( query ) {
 	/* ( str ) -> ?? */
-		console.log( '---------------------------------' )
+
 		// A way to look up the objects that will match the query
 		var objIds;
 		// Make sure there's some text in the search to match with
 		// If I use length > 0 and type in 'a', I get 4707 unique ids, 'ac' gets 812
-		if ( query.length > 2 ) {
+		if ( query.length > 1 ) {
 			// terms always stays the same
 			var matchData = fuzzySearcher.runSearch( terms, query );
 			adder.currentMatchData = matchData;
@@ -89,6 +89,8 @@ var AdderSearcher = function ( searchbar ) {
 			// 	objIds = searcher.getUniqueObjIds( matchData.failures, idsByTag );
 			// }
 
+		} else {
+			// objIds = searcher.getUniqueObjIds( terms, idsByTag );
 		}
 
 		return objIds;

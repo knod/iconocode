@@ -391,47 +391,34 @@ header, .app { width: 98.7%; }
 	height: calc(100% - 4.5rem);
 }
 
-/* Top-to-Bottom */
-/*.editor-area, .output {
-	position: absolute;
-	left: 0;
-	right: 0;
-}
-
-.editor-area {
-	bottom: 0;
-}
-
-.output{
-	top: 0;
-	bottom: 301px;
-	background-color: gray;
-}*/
-
-/* Side-to-Side */
-.editor-area, .output {
-	float: left;
-	height: 100%;
-	top: 0;
-	bottom: 0;
-}
-
-.editor-area {
-	width: 45%;
-}
-
-.output{
-	width: 54.5%;
-	margin-left: 0.5%;
-	overflow: scroll;
-
-	background-color: gray;
-}
-
-
+/* Footer */
 .footer {
-	position: fixed;
-	bottom: 0;
+	padding: .8rem 0 1rem 0;
+	text-align: center;
+	background-color: darkgray;
+	border-top: 1px solid black;
+	/* To offset automatic body margin (which I want to keep) */
+    margin-left: -8px;
+}
+
+/* Instructions */
+.instructions {
+    display: inline-block;
+
+	margin: 0 .1rem 1.3rem .1rem;
+    padding: 1rem;
+
+    background-color: darkgray;
+    border-radius: 5px;
+}
+
+.instructions h2 {
+	font-variant: small-caps;
+    margin: 0 0 1rem 0;
+}
+
+.instructions p {
+	margin: 0;
 }
 
 

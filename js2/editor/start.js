@@ -18,7 +18,7 @@ window.addEventListener('load', function () {
 	myCM = CodeMirror( editorContainer,
 		{
 			mode: 		'javascript',
-			value: 		"function myScript(){return 100;}\ntoken1 = 5;\ntoken2 = 12;",
+			value: 		"'use strict'\n\nvar myScript = function(){return 100;}\nvar token1 = 5;\nvar token2 = 12;",
 			theme:  	"lesser-dark",
 			lineNumbers: true
 		}
@@ -54,7 +54,9 @@ window.addEventListener('load', function () {
 			// Run the code written in the editor unless there's an error
 			var contents = myCM.getValue();
 			contents = contents.replace(/document\.body/, 'document.querySelector(".output")');
+			// Not sure how to reset all new added event listeners
 			$('.output').off();
+			$(document).off();
 
 			try {
 				eval( contents );
