@@ -54,6 +54,7 @@ window.addEventListener('load', function () {
 			// Run the code written in the editor unless there's an error
 			var contents = myCM.getValue();
 			contents = contents.replace(/document\.body/, 'document.querySelector(".output")');
+			$('.output').off();
 
 			try {
 				eval( contents );
