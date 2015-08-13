@@ -164,6 +164,8 @@ runner.move = function ( direction ) {
 
 runner.add( document.body );
 
+// ##post
+// Has to be 'keydown' or evnt.preventDefault() won't work. Events effects will have already happened
 $('.output').on( 'keydown', function keyup(evnt) {
   	var x = 0, y = 0;
   	var key = evnt.keyCode;
