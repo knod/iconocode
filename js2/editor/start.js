@@ -88,7 +88,7 @@ window.addEventListener('load', function () {
 	};  // End constructIcon()
 
 	// MAKE ICONS
-	var parent 	= document.body;
+	var parent 	= document.createDocumentFragment();
 
 	var img1a 	= adder.ImgChoice2( objsByIds['icd_0'], parent ).node,
 		img1b 	= adder.ImgChoice2( objsByIds['icd_1'], parent ).node,
@@ -132,5 +132,53 @@ token2 = 12;
 var xy = 5;
 xy = xy * 2;
 console.log(xy)
+
+
+var runner = {};
+runner.node;
+runner.speed = 15;// px's per step
+
+runner.add = function ( parentNode ) {
+	var node = document.createElement('div');
+  	runner.node = node;
+  	parentNode.appendChild( node );
+  	node.style.width = '50px';
+  	node.style.height = '50px';
+  	node.style['backgroundColor'] = 'teal';
+    node.style.border = '1px solid black';
+    node.style.position = 'absolute';
+};
+
+runner.move = function ( direction ) {
+// ( {x: int, y: int} ) -> None
+
+  var node = runner.node;
+  var top = node.offsetTop;
+  var left = node.offsetLeft;
+  top = top + (direction.y * runner.speed);
+  left = left + (direction.x * runner.speed);
+  
+  node.style.left = left + 'px';
+  node.style.top = top + 'px';
+};
+
+runner.add( document.body );
+
+$('.output').on( 'keydown', function keyup(evnt) {
+  	var x = 0, y = 0;
+  	var key = evnt.keyCode;
+  	if 		( key === 40 ) { y = 1; }
+  	else if ( key === 38 ) { y = -1; }
+  	else if ( key === 39 ) { x = 1; }
+  	else if ( key === 37 ) { x = -1; }
+  
+	var direction = {x: x, y: y};
+  	evnt.preventDefault();
+  	runner.move( direction );
+  // up: 38, down: 40, left: 37, right: 39console.log(event.keyCode);
+});
+
+
+
 */
 
