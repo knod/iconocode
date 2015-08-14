@@ -106,6 +106,7 @@ var IcdStorage = function ( saveNode, clearNode ) {
 	* 
 	* If a value for keyName has been stored locally
 	* Return either the variable again, or, if there is data, the data that was there
+	* 'Yours or better!' pattern (named by me!)
 	*/
 		var stored = localStorage.getItem( keyName );
 		var jsData;
@@ -127,7 +128,7 @@ var IcdStorage = function ( saveNode, clearNode ) {
 		if ( hasSavedData === 'true' ) {
 			console.log('Loading saved data! Check "icdMap" and "icdScripts"');
 			// --- GET ICON DATA --- \\
-			storage.loadKeyToVar( 'icdMap', icd.map );  // Load saved map
+			icd.map = storage.loadKeyToVar( 'icdMap', icd.map );  // Load saved map
 			
 			// --- UPDATE APP --- \\
 			icd.hotbar.update( icd.map );  // Update hotbar
