@@ -129,7 +129,7 @@ var Icon = function ( varName ) {
 
 	newIcon.save 		= function ( parentMap, hotbarObj ) {
 		parentMap[ newIcon.varName ] = newIcon;
-		hotbarObj.update();
+		hotbarObj.update( parentMap );
 	};  // End newIcon.save()
 
 

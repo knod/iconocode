@@ -58,4 +58,9 @@ window.addEventListener('load', function () {
 
 	icd = new Iconocode();
 
+	setTimeout( function storage() {
+		icd.storage = IcdStorage( $('.save')[0], $('.clear')[0] );
+		icd.storage.load();
+	}, 300 );
+
 });

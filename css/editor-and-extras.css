@@ -74,31 +74,27 @@
 /* BUTTONS */
 /* ========================= */
 button {
-	/* Resetting styles */
-	position: absolute;
-	top: 0.35rem;
-	right: 0.35rem;
+	/* Always want buttons on top? */
+	z-index: 2000;
+
+	/* --- RESET --- */
+	/* Mine */
 	border: 0px solid black;
 	color: black;
 	padding: 0 0.2rem;
 
 	/* http://stackoverflow.com/questions/16077341/how-to-reset-all-default-styles-of-the-html5-button-element */
 	background: none repeat scroll 0 0 gray;
-	/*border: medium none;*/
 	border-spacing: 0;
-	/*color: #26589F;*/
-	/*font-family: 'PT Sans Narrow',sans-serif;*/
 	font-size: 14px;
 	font-weight: normal;
 	line-height: 1.42rem;
 	list-style: none outside none;
 	margin: 0;
-	/*padding: 0;*/
 	text-align: left;
 	text-decoration: none;
 	text-indent: 0;
 
-	z-index: 100;
 }
 button:hover {
 	background-color: dimgray;
@@ -118,6 +114,28 @@ input::-moz-focus-inner {
 /* TOGGLE */
 /* ========================= */
 .icon-toggle {
-	z-index: 2000;
+	position: absolute;
+	top: 0.35rem;
+	right: 0.35rem;
 }
 
+.cache-commands {
+	z-index: 2000;
+
+	position: absolute;
+	bottom: 0.35rem;
+	right: 0.35rem;
+
+	pointer-events: none;
+}
+
+.save, .clear {
+	float: right;
+	clear: both;
+
+	pointer-events: auto;
+}
+
+.save {
+	margin-bottom: 0.2rem;
+}
