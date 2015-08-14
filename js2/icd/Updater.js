@@ -8,7 +8,7 @@
 
 'use strict'
 
-var IcdUpdater = function ( utils, iconMap ) {
+var IcdUpdater = function ( utils ) {
 /* 
 * 
 * Maybe what I need to do is keep track of the previous token and
@@ -54,7 +54,7 @@ var IcdUpdater = function ( utils, iconMap ) {
 	};  // End updater.markUnmarked()
 
 
-	updater.markIf = function ( token, lineNum, edInstance ) {
+	updater.markIf = function ( token, lineNum, edInstance, iconMap ) {
 	/* ( {JS}, int )
 	* 
 	* Marks certain types of tokens if they're unmarked
@@ -124,7 +124,7 @@ var IcdUpdater = function ( utils, iconMap ) {
 
 
 	updater.markAll = function ( edInstance, iconMap, iconKey ) {
-	/* ( CodeMirror, IconMap, str ) -> same CodeMirror
+	/* ( CodeMirror, IconMap, str(optional) ) -> same CodeMirror
 	* 
 	* If there's in iconKey, it marks all tokens that have a string
 	* matching the iconKey, otherwise it just marks all tokens.
@@ -143,7 +143,7 @@ var IcdUpdater = function ( utils, iconMap ) {
 				if ( iconKey !== undefined ) { matchesKey = token.string === iconKey }
 
 				if ( matchesKey ) {
-					updater.markIf( token, lineNum, edInstance );
+					updater.markIf( token, lineNum, edInstance, iconMap );
 				}
 
 			}  // End for all line tokens

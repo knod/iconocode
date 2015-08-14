@@ -122,8 +122,7 @@ window.addEventListener('load', function () {
 		// Wait so there's time for codemirror to tokenize things properly
 		var token1 	= myCM.getTokenAt( {line: 1, ch: 1} ),
 			token2 	= myCM.getTokenAt( {line: 2, ch: 1} );
-		icd.updater.markAll( myCM, icd.map, token1.string );
-		icd.updater.markAll( myCM, icd.map, token2.string );
+		icd.updater.markAll( myCM, icd.map );
 
 	} , 50);
 

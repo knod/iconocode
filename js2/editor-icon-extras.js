@@ -11,8 +11,8 @@ var HotBar = function ( editorInstance, iconMap, parentNode ) {
 * Currently used in iconocode.js
 */
 
-	var newHotbar 	= {};
-	var iconMap 	= iconMap;
+	var newHotbar = {};
+	newHotbar.iconMap = iconMap;
 
 	newHotbar.node 		= document.querySelector('.icon-hotbar');
 	newHotbar.list		= document.querySelector('.icon-hotbar-icons');
@@ -52,11 +52,10 @@ var HotBar = function ( editorInstance, iconMap, parentNode ) {
 	};  // End newHotbar.makeListItem()
 
 
-	newHotbar.update = function () {
+	newHotbar.update = function ( iconMap ) {
 	/* ( none ) -> None
 	* 
 	* Uses iconMap to rebuild contents of hotbar
-	* iconMap comes from when the hotbar is first created up top.
 	*/
 		var $hotbarList = $(newHotbar.list);
 
@@ -85,7 +84,7 @@ var Extras = function ( edInstance, iconMap ) {
 
 	var extras 		= {};
 	extras.editor 	= edInstance;
-	extras.iconMap 	= iconMap;
+	// extras.iconMap 	= iconMap;  // Don't want it to keep a copy of an old map here
 
 	// ============================
 	// SHOW AND HIDE ICONS
@@ -99,7 +98,7 @@ var Extras = function ( edInstance, iconMap ) {
 		if ( iconsShowing === true ) {
 			icd.updater.removeAllMarks( extras.editor );
 		} else {
-			icd.updater.markAll( edInstance, iconMap );
+			icd.updater.markAll( edInstance, icd.map );
 		}
 
 		iconsShowing = !iconsShowing
