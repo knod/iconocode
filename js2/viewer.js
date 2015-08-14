@@ -145,14 +145,6 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// ===============
 	// EDITOR
 	// ===============
-	// var placeholderIcon 		= document.createElement('div');
-	// parentNode.appendChild( placeholderIcon );
-	// placeholderIcon.className 	= 'icd icon-container default';
-	// // var placeholderText 		= document.createTextNode('What does this variable do?');
-	// // placeholderIcon.appendChild( placeholderText );
-
-	// parentNode = placeholderIcon;
-
 	var cmEditor = CodeMirror( parentNode,
 		{
 			mode: 			"icd", // text or text/html = cm-m-null class on span
@@ -172,13 +164,11 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 	// =====================
 	// ONE LINE HIGH
 	// =====================
+	// 200 is the preferable width of text field in pixels,
+	// 4 is default CM padding (which depends on the theme you're using)
 	// cmEditor.setSize( '100%', cmEditor.defaultTextHeight() + 2 * 4);
 	var lineHeight = cmEditor.defaultTextHeight() + 'rem';
 	cmEditor.setSize( 'auto', lineHeight );
-	// cmEditor.setSize( 'auto', '100%');
-	// searcher.setSize( '100%', '100%');
-	// 200 is the preferable width of text field in pixels,
-	// 4 is default CM padding (which depends on the theme you're using)
 
 	// now disallow adding newlines in the following simple way
 	cmEditor.on("beforeChange", function(instance, change) {
@@ -252,16 +242,16 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 
 	$(cmEditor.getWrapperElement()).addClass('.icd.icon-container');
 
-	var applier 			 = thisViewer.addApply( adder.sections.viewer );  // Command to apply icon
+	var applier = thisViewer.addApply( adder.sections.viewer );  // Command to apply icon
 
 
 	// ====================
 	// ADDER ICON
 	// ====================
 	// Last so that the editor will be in the correct posiition?
-	var codeNode = $('.icd.icon-adder .CodeMirror-code pre')[0];
-	var adderIcon = new AdderIcon();
-	adder.icon = adderIcon;
+	var codeNode 	= $('.icd.icon-adder .CodeMirror-code pre')[0];
+	var adderIcon 	= new AdderIcon();
+	adder.icon 		= adderIcon;
 
 	adderIcon.createNew( parentNode );
 	adderIcon.container.style.position 	= 'absolute';

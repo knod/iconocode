@@ -72,18 +72,9 @@ window.addEventListener('load', function () {
 		},
 
 		'Shift-Enter': function() {
-
 			// Run the code written in the editor unless there's an error
 			var contents = myCM.getValue();
 			rerunOutput( contents );
-
-			// $(output).remove();
-			// // Run the code written in the editor unless there's an error
-			// var contents = myCM.getValue();
-			// contents = contents.replace(/document\.body/, 'document.querySelector(".output")');
-			// // Not sure how to reset all new added event listeners
-			// $('.output').off();
-			// $(document).off();
 		}
 	});
 

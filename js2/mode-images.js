@@ -23,12 +23,12 @@
 * - Convert to select image container instead of image itself
 * - Hovering should do the same thing as navigating to a choice with the keyboard does
 * - !!!: Semicolon appearing when image is selected while no text is in the search bar
-* 
-* ??:
 * - How to replace a whole token instead of just a word? Maybe turn it into a
 * 	single word first and then erase it? In that case, maybe when the user
 * 	deletes the icon, don't show the text from before because that will
 * 	require remembering what the text looked like before the switch.
+* 
+* ??:
 * 
 * Notes:
 * - With codemirror flattenSpans set to true (by default), I can add a class to a
