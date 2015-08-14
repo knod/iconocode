@@ -40,29 +40,50 @@ window.addEventListener('load', function () {
 
 	var output = document.querySelector(".output");
 
+
+	var rerunOutput = function ( jsText ) {
+
+		// Remove iframe
+		$(output).remove();
+
+		// Recreate iframe
+		output = document.createElement('iframe');
+		output.className = 'output';
+		$('.app').append( output );
+
+		// Evaluate the code into the iframe
+		var outputWindow = output.contentWindow;  // the iframe's window
+
+		try {
+			outputWindow.eval( jsText );
+		} catch ( error ) {
+			console.log( 'CM Error:', error );
+		}
+		
+		return output;
+	};  // End rerunOutput()
+
+
 	myCM.setOption("extraKeys", {
 	// http://codemirror.net/doc/manual.html#keymaps
 		'Cmd-I': function() {
-		/* 
-		* Need to put in right click somehow, or some more sensical shortcut commands
-		*/
-			// 
+		// Need to put in right click somehow, or some more sensical shortcut commands
 			adder.showAdder( myCM, icd.map );
 		},
+
 		'Shift-Enter': function() {
-			$(output).empty();
+
 			// Run the code written in the editor unless there's an error
 			var contents = myCM.getValue();
-			contents = contents.replace(/document\.body/, 'document.querySelector(".output")');
-			// Not sure how to reset all new added event listeners
-			$('.output').off();
-			$(document).off();
+			rerunOutput( contents );
 
-			try {
-				eval( contents );
-			} catch ( error ) {
-				console.log( 'CM Error:', error );
-			}
+			// $(output).remove();
+			// // Run the code written in the editor unless there's an error
+			// var contents = myCM.getValue();
+			// contents = contents.replace(/document\.body/, 'document.querySelector(".output")');
+			// // Not sure how to reset all new added event listeners
+			// $('.output').off();
+			// $(document).off();
 		}
 	});
 
@@ -135,7 +156,7 @@ var xy = 5;
 xy = xy * 2;
 console.log(xy)
 
-
+TEST 4? 5?
 var runner = {};
 runner.node;
 runner.speed = 15;// px's per step
