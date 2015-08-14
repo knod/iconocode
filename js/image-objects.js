@@ -87,7 +87,6 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags ) {
 		}  // end for new objects
 
 	}  // end for tags
-	console.log(idsByTag)
 
 	// ???: Not sure what to return, there are 3 major things here
 	return objsByIds;
