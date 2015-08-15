@@ -104,6 +104,7 @@ var Icon = function ( varName ) {
 
 		// How to construct this? Use a 'name' data property in image's node
 		var imgNamesStr = '';
+		var parts = [];
 		// Always a good idea to use length with node list loops
 		var numNodes 	= partNodes.length;
 		for ( var nodei = 0; nodei < numNodes; nodei++ ) {
@@ -117,11 +118,14 @@ var Icon = function ( varName ) {
 			imgNamesStr += $imgNode.data('name');
 
 			// Deeply copy the image and add it to the icon
-			$imgNode.clone().appendTo( $(parentNode) );
+			var $newPart = $imgNode.clone();
+			$newPart.appendTo( $(parentNode) );
+			parts.push($newPart[0])
 		}
 
 		newIcon.setId( imgNamesStr );
-		newIcon.parts = $(parentNode).contents();
+		newIcon.parts = parts;
+		console.log(newIcon.parts)
 
 		return parentNode;
 	};  // End newIcon.setImages()
