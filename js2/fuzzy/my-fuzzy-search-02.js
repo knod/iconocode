@@ -86,28 +86,11 @@ var FuzzySearcher = function () {
 			// Get possible match data for each word in turn
 			var term = terms[ termi ];
 			var aMatch = matcher.toNode( term, query, queryRegex );
-			
-			// Added .doesMatch, also properties for a term that doesn't match the query
 
-			if ( term === 'runner' ) {
-				console.log(aMatch);
-			}
-
-			// if ( aMatch === null ) {
-			// 	// Make a 'match' that will have a really low rank
-			// 	var aMatch = {
-			// 		doesMatch: false,
-			// 		term: term, query: query,
-			// 		node: document.createElement('li'),  // Not correct, but this functionality will be removed later anyway
-			// 		matchArray: [''], score: -1000
-			// 	}
-			// } else {
-			// 	aMatch.doesMatch = true;
-			// }
 			matchArray.push( aMatch );
 
 		}
-		console.log(termi)
+
 		// This doesn't quite fit here , but it's so short... Anyway,
 		// puts stuff in the right order based on score
 		return matchArray.sort( matcher.matchComparator );
