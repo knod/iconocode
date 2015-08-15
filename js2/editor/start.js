@@ -71,6 +71,11 @@ window.addEventListener('load', function () {
 			adder.showAdder( myCM, icd.map );
 		},
 
+		'Ctrl-I': function() {
+		// Need to put in right click somehow, or some more sensical shortcut commands
+			adder.showAdder( myCM, icd.map );
+		},
+
 		'Shift-Enter': function() {
 			// Run the code written in the editor unless there's an error
 			var contents = myCM.getValue();
