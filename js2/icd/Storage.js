@@ -38,7 +38,7 @@ var IcdStorage = function ( saveNode, clearNode ) {
 	};  // End storage.saveKeyToVar()
 
 	storage.save = function () {
-		console.log('Saving. Check "icdMap" and "icdScripts"')
+		// console.log('Saving. Check "icdMap" and "icdScripts"')
 		// ??: Maybe it should just save icd completely?
 		// storage.saveValToKey( icd, 'icd' );
 		// Store the icon/variable relationships
@@ -72,11 +72,11 @@ var IcdStorage = function ( saveNode, clearNode ) {
 	* Just deletes icons and icon data, not the code in the editor.
 	* I figure if they want to do that, they can do it by hand
 	*/
-		console.log('Clearing. Check "icdMap" and "icdScripts"')
+		// console.log('Clearing. Check "icdMap" and "icdScripts"')
 
 		// Give the user one last chance to not delete their icons
 		var response = confirm('Are you sure you want to delete all your saved icons/hieroglyphs? They will be removed completely.')
-		console.log(response);
+		// console.log(response);
 		if ( response ) {
 
 			// Empty all icon records
@@ -125,20 +125,18 @@ var IcdStorage = function ( saveNode, clearNode ) {
 	* Make new icons using the data from the old icons
 	* As they get made, they get saved to the icon map
 	*/
-		// ???: Hmm, don't need this?
-		// var map = {};
+		var map = {};
 
 		for ( var key in JSONicons ) {
 			if ( JSONicons.hasOwnProperty( key ) ) {
 				var iconData = JSONicons[ key ];
 				var newIcon = storage.constructIcon( iconData.varName, iconData.purpose, iconData.parts );
 
-				// map[ key ] = newIcon;
+				map[ key ] = newIcon;
 			}  // end for every non-prototype key
 		}  // end for every key
 
-		// return map;
-		return storage;
+		return map;
 	};  // End storage.rebuildMap()
 
 
@@ -165,16 +163,17 @@ var IcdStorage = function ( saveNode, clearNode ) {
 
 		// If there is previously saved data, update everything with that data
 		var hasSavedData = localStorage.getItem('hasSavedData');  // This will be "true" or "false" ("false" when data has been cleared?)
-		console.log('Loading. "hasSavedData":', hasSavedData);
+		// console.log('Loading. "hasSavedData":', hasSavedData);
 
 		if ( hasSavedData === 'true' ) {
-			console.log('Loading saved data! Check "icdMap" and "icdScripts"');
+			// console.log('Loading saved data! Check "icdMap" and "icdScripts"');
 			// --- GET ICON DATA --- \\
 			var mapData = storage.loadKeyToVar( 'icdMap', icd.map );  // Load saved map
 			
 			// --- UPDATE APP --- \\
-			// icd.hotbar.update( icd.map );  // Update hotbar
-			storage.rebuildMap( mapData );
+			icd.map = {};  // Empty the map
+			icd.hotbar.update( icd.map );  // Empty the hotbar
+			icd.map = storage.rebuildMap( mapData );  // Rebuild them both
 
 			// -- Editor(s)
 			// TODO: Make way to add an editor to have multiple scripts
@@ -182,10 +181,9 @@ var IcdStorage = function ( saveNode, clearNode ) {
 			var code = currEditor.getValue();
 			code = storage.loadKeyToVar( 'icdScripts', code );  // Will come back as itself or as saved code
 
-			// Replace current blank editor, and add any needed editors/scripts
+			// Replace current editor contents, and add any needed editors/scripts
 			// (Right now, just replace the current editor)
 			currEditor.setValue( code );
-
 			// Mark all appropriate text with appropriate icons
 			icd.updater.markAll( currEditor, icd.map );
 
