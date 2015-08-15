@@ -152,6 +152,8 @@ xy = xy * 2;
 console.log(xy)
 
 TEST 4? 5?
+'use strict'
+
 var runner = {};
 runner.node;
 runner.speed = 15;// px's per step
@@ -184,7 +186,8 @@ runner.add( document.body );
 
 // ##post
 // Has to be 'keydown' or evnt.preventDefault() won't work. Events effects will have already happened
-$('.output').on( 'keydown', function keyup(evnt) {
+//$('.output').on( 'keydown', function keyup(evnt) {
+document.addEventListener( 'keydown', function keyup(evnt) {
   	var x = 0, y = 0;
   	var key = evnt.keyCode;
   	if 		( key === 40 ) { y = 1; }
