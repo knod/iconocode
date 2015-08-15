@@ -18,7 +18,7 @@ var Icon = function ( varName ) {
 	var newIcon = {};
 
 	newIcon.varName = varName;  // Or just in tags? Or just varName? Or what?
-	newIcon.type;  // Need to store this here or just in tags? Is everything tags?
+	newIcon.purpose;  // Need to store this here or just in tags? Is everything tags?
 	newIcon.parts 	= [];  // [] or {}? // Not sure this is needed
 
 	newIcon.container 	= null;
@@ -56,6 +56,7 @@ var Icon = function ( varName ) {
 	* 		control
 	* 		logic
 	*/
+		newIcon.purpose = type;
 
 		iconContainer.classList.remove( 'verb' );
 		iconContainer.classList.remove( 'noun' );
@@ -93,7 +94,7 @@ var Icon = function ( varName ) {
 
 
 	newIcon.setImages 	= function ( partNodes, parentNode ) {
-	/* ( [node], node ) -> latter Node
+	/* ( [node], node or html str ) -> latter Node
 	* 
 	* Gets all the parts of the icon and, using the $data 'terms',
 	* builds the icon with its search terms. Also sets the id
@@ -119,13 +120,16 @@ var Icon = function ( varName ) {
 
 			// Deeply copy the image and add it to the icon
 			var $newPart = $imgNode.clone();
+			// Save the html of the node
+			var dummy = document.createElement('div');
+			$newPart.clone().appendTo( $(dummy) )
+			parts.push( dummy.innerHTML )
+			// Actually add it to the icon
 			$newPart.appendTo( $(parentNode) );
-			parts.push($newPart[0])
 		}
 
 		newIcon.setId( imgNamesStr );
 		newIcon.parts = parts;
-		console.log(newIcon.parts)
 
 		return parentNode;
 	};  // End newIcon.setImages()

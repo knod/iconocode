@@ -84,6 +84,7 @@
 .icd .icd-tag-list-container { display: none; }
 .icd .selected .icd-tag-list-container { display: block; }
 .icd .icd-choice-container.selected { z-index: 100; }
+.icd .choice-tag-list { position: absolute; }
 
 
 /* =================== */

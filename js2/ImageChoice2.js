@@ -27,8 +27,7 @@ adder.ImgChoice2 = function ( imgObj, parentNode ) {
 		var tagList 		= document.createElement('ol');
 		tagContainer.appendChild( tagList );
 		tagList.className 	= 'image-tag-list';
-		$(tagList).addClass('icd-choice-tag-list')
-		tagList.style.position = 'absolute';
+		$(tagList).addClass('choice-tag-list')
 
 		// Add all the search terms in a list
 		var tags = imgObj.tags;

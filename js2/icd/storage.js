@@ -101,6 +101,47 @@ var IcdStorage = function ( saveNode, clearNode ) {
 	};  // End storage.toOriginal()
 
 
+	storage.constructIcon = function ( variableName, purpose, partsHTML ) {
+	/* ( str, str, [Nodes] ) -> {}
+	* 
+	* Creates, sets, and saves an icon with the given values.
+	* TODO: Same as command.constructIcon. Need to centralize.
+	*/
+		var iconObj = new Icon( variableName );
+
+		iconObj.createNew( document.createDocumentFragment() );
+		iconObj.setType( purpose , iconObj.container );
+		iconObj.setImages( partsHTML, iconObj.body );
+
+		iconObj.save( icd.map, icd.hotbar );
+
+		return iconObj;
+	};  // End storage.constructIcon()
+
+
+	storage.rebuildMap = function ( JSONicons ) {
+	/* {JSON} -> IcdStorage 
+	* 
+	* Make new icons using the data from the old icons
+	* As they get made, they get saved to the icon map
+	*/
+		// ???: Hmm, don't need this?
+		// var map = {};
+
+		for ( var key in JSONicons ) {
+			if ( JSONicons.hasOwnProperty( key ) ) {
+				var iconData = JSONicons[ key ];
+				var newIcon = storage.constructIcon( iconData.varName, iconData.purpose, iconData.parts );
+
+				// map[ key ] = newIcon;
+			}  // end for every non-prototype key
+		}  // end for every key
+
+		// return map;
+		return storage;
+	};  // End storage.rebuildMap()
+
+
 	storage.loadKeyToVar = function ( keyName, variable ) {
 	/* ( str, var ) -> same var
 	* 
@@ -110,6 +151,7 @@ var IcdStorage = function ( saveNode, clearNode ) {
 	*/
 		var stored = localStorage.getItem( keyName );
 		var jsData;
+		// If there was stored data, use it
 		if ( stored !== null ) {
 			jsData = JSON.parse( stored );
 			variable = jsData
@@ -128,10 +170,11 @@ var IcdStorage = function ( saveNode, clearNode ) {
 		if ( hasSavedData === 'true' ) {
 			console.log('Loading saved data! Check "icdMap" and "icdScripts"');
 			// --- GET ICON DATA --- \\
-			icd.map = storage.loadKeyToVar( 'icdMap', icd.map );  // Load saved map
+			var mapData = storage.loadKeyToVar( 'icdMap', icd.map );  // Load saved map
 			
 			// --- UPDATE APP --- \\
-			icd.hotbar.update( icd.map );  // Update hotbar
+			// icd.hotbar.update( icd.map );  // Update hotbar
+			storage.rebuildMap( mapData );
 
 			// -- Editor(s)
 			// TODO: Make way to add an editor to have multiple scripts
