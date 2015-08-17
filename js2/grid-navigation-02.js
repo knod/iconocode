@@ -24,6 +24,9 @@
 */
 
 adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
+/*
+* thisGrid.lastPosition must be of form {row: int, y: int}
+*/
 
 	// ====================
 	// Navigation
@@ -171,34 +174,26 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 		// ==================
 		// ROW
 		// ==================
-		// Make sure not to go past the last row with visible elements
-		// Use row 0 so that we know we're using a valid row number
-		var $choicePicker 	= $('#' + modeName_ + '_choice_row0').parent();
- 		// Contingency for no nodes being visible
-		var $lastVisibleCont = $choicePicker.find('.icd-choice-container:visible:last'),
-			lastRowNum 		 = parseInt($lastVisibleCont.data( 'row' ));  // Need to parse int?
-
-		currRowNum = wrapPosition( currRowNum, lastRowNum );
+		currRowNum = wrapPosition( currRowNum, thisGrid.lastPosition.row );
 
 		// ==================
 		// COL
 		// ==================
 		// Now use the number of columns in the correct row (is there a shorter way?)
 		var $lastRowCont 		= $('#' + modeName_ + '_choice_row' + currRowNum).find('.icd-choice-container:visible:last'),
-			lastColNum 			= $lastRowCont.data('col');
+			lastColNumInRow 	= $lastRowCont.data('col');
 
 		// Basically, in case user pressed up or down to get to the last row
 		// Without this the modulo thing below will do things we don't want
 		if ( currRowNum !== prevRowNum ) {
 			// If the previous selection was past the last possible item in this row
-			if ( currColNum > lastColNum ) {
+			if ( currColNum > lastColNumInRow ) {
 				// Go to the last possible item
-				currColNum = lastColNum
+				currColNum = lastColNumInRow
 			}
 		}
-
-		currColNum = wrapPosition( currColNum, lastColNum );
-
+		// When you get to the end, go to the beginning again
+		currColNum = wrapPosition( currColNum, lastColNumInRow );
 
 		// ==================
 		// USE NEW VALUES
@@ -257,7 +252,6 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 
 		return $('#icd_' + modeName_ + '_picker .selected').find('.icd-adder-choice')[0];
 	};  // End thisGrid.imgKeyHandler
-
 
 
 	return thisGrid;

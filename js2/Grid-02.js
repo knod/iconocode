@@ -76,7 +76,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 */
 
 	var newGrid = {};
-
+	newGrid.lastPosition = {};  // Will keep track of where the very last cell is
 
 	// varName_ to know they're in the top level of this scope, clarity
 
@@ -251,9 +251,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 		row.style.top 		= top + 'px';
 		row.style.height 	= rowHeight_ + 'px';
 		row.style.position = 'absolute';
-		// row.style.width		= '500px';
-		// row.style.left 		= '50px';
-		// row.style['backgroundColor'] = 'lightgray';
 
 		// For each column, make and add the choice in that cell
 		for ( var colNum = 0; colNum < numCols_; colNum++ ) {
@@ -264,11 +261,22 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 			// Get the actual object using that id
 			var obj = objsByIds[ id ];  // This is a global var (maybe use sample for now?)
 
-			var choiceNode = makeChoiceNode( obj, row );
-			// give it a cell id so it can be selected by the navigator
-			var cellId = modeName_ + '_choice_row' + rowNum + '_col' + colNum;
-			choiceNode.id = cellId;
-		}
+			// If we haven't passed the last matching item
+			if ( obj !== undefined ) {
+				var choiceNode = makeChoiceNode( obj, row );
+
+				// Give it a cell id so it can be selected by the navigator
+				var cellId = modeName_ + '_choice_row' + rowNum + '_col' + colNum;
+				choiceNode.id = cellId;
+				// Give a cell its position info
+				$(choiceNode).data('row', rowNum);
+				$(choiceNode).data('col', colNum);
+
+				// Set it as the last cell. It will be changed if there's another one after it
+				newGrid.lastPosition = {row: rowNum, col: colNum };
+			}
+
+		}  // end for every column
 
 		return row;
 	};  // End makeRowNode()
