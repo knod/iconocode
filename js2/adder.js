@@ -154,12 +154,8 @@ and it messed something up?
 	}
 };  // End adder.arrangeTabs()
 
-
-adder.addAdder();
-
-// document.addEventListener( 'keypress', adder.showAdder );  // End show adder event listener
-
-// };  // End adder.buildAdder()
+// Breaks scrolling. That's fine, it shouldn't even be here anyway
+// adder.addAdder();
 
 
 // =================================
