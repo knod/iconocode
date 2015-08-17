@@ -1,4 +1,4 @@
-/* grid-navigation.js
+/* grid-navigation-02.js
 * 
 * Sets Grid object properties for navigation of the grid
 * (using just keyboard input, or also mouse?)
@@ -21,7 +21,7 @@
 * - Account for scrolling somehow? Should down-arrow, put
 */
 
-adder.setupGridNavigation = function ( thisGrid, modeName ) {
+adder.setupGridNavigation02 = function ( thisGrid, modeName ) {
 
 	var modeType_ = thisGrid.modeType;
 
@@ -41,9 +41,18 @@ adder.setupGridNavigation = function ( thisGrid, modeName ) {
 		// Takes focus off of last thing, puts it on this thing's actual choice
 		var infoHolder = $choiceContainer.find('.icd-adder-choice')[0];
 		infoHolder.focus();
-
+// console.log(document.activeElement)
+// debugger;
 		return choiceContainer;
 	};  // thisGrid.selectChoice();
+
+
+	// Should keep this in here? It's kind of more general
+	// thisGrid.backToSearchbar = function ( cmEditor ) {
+	// 	cmEditor.focus();  // assigned in viewer.js
+	// 	// TODO: put cursor in a logical place. Not sure how CodeMirror does that.
+	// 	return $('.selected').removeClass('selected');
+	// };  // End thisGrid.backToSearchbar()
 
 
 	thisGrid.getCellNode = function ( position ) {

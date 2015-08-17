@@ -427,6 +427,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	// START
 	// =====================
 	newGrid.start( scrollable_ );
+	adder.setupGridNavigation02( newGrid, modeName );
 
 	return newGrid;
 };  // End adder.Grid {} (new version)
