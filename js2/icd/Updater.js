@@ -64,9 +64,9 @@ var IcdUpdater = function ( utils ) {
 		// Change current Icon.type to Icon.purpose
 		var varb = 'variable', ky = 'keyword', prop = 'property';
 		var isValid = type === varb || type === ky || type === prop;
-		if ( isValid ) {	
+		// if ( isValid ) {	
 			updater.markUnmarked(token, lineNum, iconMap, edInstance);
-		}
+		// }
 
 		return isValid
 	};  // End updater.markIf()
