@@ -41,7 +41,12 @@ adder.addCommands = function ( parentNode ) {
 	*/
 		var $textContainer 	= $(adder.searchBarContainer);  // created in viewer.js
 		// Gives Node array, looping is dangerous
-		return $textContainer.contents();
+		// var contents = $($($textContainer.children()[0]).children()[0]).contents();
+		var contents = $textContainer.find('.icon-part');  // TODO: Make text turn into icon-part in viewer
+		// $('body *:not(:has("*"))')  // to get innermost element
+		console.log(contents);
+
+		return contents;
 	};  // End commands.getParts()
 
 

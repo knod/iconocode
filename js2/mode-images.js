@@ -68,22 +68,18 @@ adder.addImageMode 	= function () {
 	*/
 		var newNode = $(imgNode).clone()[0];
 		// var newNode 		= document.createElement('img');
-		newNode.className 	= 'icon-part'
+		newNode.className 	= 'icon-part'// choice-part'
 		// Not implemented yet. Not necessary? Or do we want access to the search terms?
 		// newNode.dataset['object'] = imgNode.dataset['object'];
 
-		// // Set same image file path
-		// var filePath 	 = $(imgNode).attr('src');
-		// newNode.src 	 = filePath;
-
-		// Add data (terms and name, I think)
+		// Add data (terms and name, I think - need this with cloneing?)
 		$(newNode).data('terms', $(imgNode).data('terms'));
 		$(newNode).data('name', $(imgNode).data('name'));
 
 		// ===================
 		// EDITOR CONTENTS
 		// ===================
-		// --- GET SEARCH TERMS --- \\
+		// --- GET SEARCH TOKEN --- \\
 		var editor 		= adder.viewer;
 		var cursorPos 	= editor.getCursor();
 
@@ -107,16 +103,20 @@ adder.addImageMode 	= function () {
 		end 	= { line: 0, ch: token.end };
 		start 	= { line: 0, ch: token.start };  // Is this needed?
 
-		// --- PLACE MARKER --- \\
+		// --- REPLACE TOKEN WITH MARKER --- \\
 		var inViewer 	= editor.markText( start, end,
 			// I don't think classname matters when using 'replaceWith'
-			{className: 'chosen-image', replacedWith: newNode
+			{  //className: 'chosen-image', // Doesn't seem to actually add the class to the widget :P
+				replacedWith: newNode,
 				// clearOnEnter doesn't unclear on exit, need other way
 				// , clearOnEnter: true  // experiment
-				, handleMouseEvents: 	true // think I will need this
-				, addToHistory: 		true
+				handleMouseEvents: 	true, // think I will need this
+				addToHistory: 		true
 			}
 		);
+
+		// For correct image sizing
+		$(inViewer.widgetNode).addClass( 'icd icon-container' );
 
 		// Trigger saving for undo, I hope, and resizing of fake icon container
 		CodeMirror.signal(adder.viewer, 'change' );
