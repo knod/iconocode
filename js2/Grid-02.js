@@ -13,7 +13,7 @@
 */
 
 
-adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
+adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 
 /* Psuedo code
 	This should build everything, even the dom nodes, and handle navigation
@@ -88,8 +88,8 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	// var parentNode_ = parentNode;
 
 	// !!!: USE THIS AS THE SIZER INSTEAD (parent is the scroller, it seems)
-	// newGrid.scrollable  = document.getElementById( 'icd_' + modeName + '_picker' );
-	// newGrid.scrollable  = document.getElementById( 'icd_' + modeName + '_picker' );
+	// newGrid.scrollable  = document.getElementById( 'icd_' + modeName_ + '_picker' );
+	// newGrid.scrollable  = document.getElementById( 'icd_' + modeName_ + '_picker' );
 	newGrid.scrollable 	= document.querySelector('.adder-pickers-container');
 	var scrollable_ 	= newGrid.scrollable;
 	
@@ -205,7 +205,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	* Doesn't really need to return anything? It just changes the DOM.
 	*/
 		// Get an array of all the current row numbers
-		var currentRows = parentNode.getElementsByClassName( modeName + '-picker-row');
+		var currentRows = parentNode.getElementsByClassName( modeName_ + '-picker-row');
 		var currRowNums = getCurrentRowNums( currentRows );
 
 		// Figure out which row numbers need to be removed
@@ -225,7 +225,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 			var num = toRemove[ numi ];
 			// Get any element in the parent with that numbered row class
 			// (Can't get element by id from parent, only elements by class name)
-			var rowNode = document.getElementById( modeName + '_choice_row' + num );
+			var rowNode = document.getElementById( modeName_ + '_choice_row' + num );
 			// If the row node does exist, which it should, remove it
 			if ( rowNode !== null ) {
 				parentNode.removeChild( rowNode );
@@ -241,8 +241,8 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		
 		var row = document.createElement('div');
 
-		row.className 	= modeName + '-picker-row';
-		row.id 			= modeName + '_choice_row' + rowNum;
+		row.className 	= modeName_ + '-picker-row ' + rowNum;
+		row.id 			= modeName_ + '_choice_row' + rowNum;
 		row.dataset['row'] = rowNum;
 		// Height is position, rowNum is the numRows until this row
 		var top = getHeightByNumRows( rowNum );
@@ -263,8 +263,11 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 			var id 	= objIds[ index ];
 			// Get the actual object using that id
 			var obj = objsByIds[ id ];  // This is a global var (maybe use sample for now?)
-			// if ( id === '167588' ) { console.log(obj.svg)}
+
 			var choiceNode = makeChoiceNode( obj, row );
+			// give it a cell id so it can be selected by the navigator
+			var cellId = modeName_ + '_choice_row' + rowNum + '_col' + colNum;
+			choiceNode.id = cellId;
 		}
 
 		return row;
@@ -276,7 +279,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		var newRowNum = topRowNum;
 		for ( var rowCount = 0; rowCount < NUM_EXISTING_ROWS; rowCount++ ) {
 
-			var rowNode = document.getElementById( modeName + '_choice_row' + newRowNum );
+			var rowNode = document.getElementById( modeName_ + '_choice_row' + newRowNum );
 			// If a row of that id isn't there add it. Doesn't matter about prepending or appending, they're all positioned absolutely
 
 			if ( rowNode === null ) {
@@ -338,12 +341,12 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 
 	newGrid.reset = function ( objIds ) {
 
-		// console.log('--- resetting', modeName, 'grid ---', objIds );
+		// console.log('--- resetting', modeName_, 'grid ---', objIds );
 		var objIds = objIds || currentIds_;
 		if ( objIds ) { currentIds_ = objIds; }
 
 		// Get an array of all the current row numbers
-		// var currentRows = newGrid.sizer.getElementsByClassName( modeName + '-picker-row');
+		// var currentRows = newGrid.sizer.getElementsByClassName( modeName_ + '-picker-row');
 		// var currRowNums = getCurrentRowNums( currentRows );
 
 		// Remove all the current rows
@@ -365,8 +368,8 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	* Add element that will "contain" "all" the elements, providing
 	* the scrolling size
 	*/
-		var sizer = document.getElementById( 'icd_' + modeName + '_picker' );
-		$(sizer).addClass('icd_' + modeName + '_sizer');
+		var sizer = document.getElementById( 'icd_' + modeName_ + '_picker' );
+		$(sizer).addClass('icd_' + modeName_ + '_sizer');
 
 		return sizer;
 	};  // End addSizer()
@@ -426,7 +429,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	// START
 	// =====================
 	newGrid.start( scrollable_ );
-	adder.setupGridNavigation02( newGrid, modeName );
+	adder.setupGridNavigation02( newGrid, modeName_ );
 
 	return newGrid;
 };  // End adder.Grid {} (new version)

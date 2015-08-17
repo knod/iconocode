@@ -1,5 +1,7 @@
 /* grid-navigation-02.js
 * 
+* ADDS NEW PROPERTIES TO EXISTING OBJECT
+* 
 * Sets Grid object properties for navigation of the grid
 * (using just keyboard input, or also mouse?)
 * 
@@ -21,9 +23,7 @@
 * - Account for scrolling somehow? Should down-arrow, put
 */
 
-adder.setupGridNavigation02 = function ( thisGrid, modeName ) {
-
-	var modeType_ = thisGrid.modeType;
+adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 
 	// ====================
 	// Navigation
@@ -34,15 +34,17 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName ) {
 	/*
 
 	*/
-		$('#icd_' + modeType_ + '_picker .selected').removeClass('selected');
+		// Unselect the curretnly selected element
+		$('#icd_' + modeName_ + '_picker .selected').removeClass('selected');
+
+		// Select the desired element
 		var $choiceContainer = $(choiceContainer);
 		$choiceContainer.addClass('selected');
 
 		// Takes focus off of last thing, puts it on this thing's actual choice
 		var infoHolder = $choiceContainer.find('.icd-adder-choice')[0];
 		infoHolder.focus();
-// console.log(document.activeElement)
-// debugger;
+
 		return choiceContainer;
 	};  // thisGrid.selectChoice();
 
@@ -56,8 +58,8 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName ) {
 
 
 	thisGrid.getCellNode = function ( position ) {
-		var rowId 	  = modeType_ + '_choice_row' + position.row + '_col' + position.col,
-			choicNode = document.getElementById( rowId ),
+		var cellId 	  = modeName_ + '_choice_row' + position.row + '_col' + position.col,
+			choicNode = document.getElementById( cellId ),
 			container = $(choicNode).closest('.icd-choice-container');
 
 		return container;
@@ -157,7 +159,7 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName ) {
 	*/
 
 		// Need max number of columns for navigation with tab key to work
-		var maxCols 		= $('#' + modeType_ + '_choice_row' + position.row).children().toArray().length;
+		var maxCols 		= $('#' + modeName_ + '_choice_row' + position.row).children().toArray().length;
 		// So we can compare the previous row number to the current row number later
 		var prevRowNum 		= position.row;
 		// If the row gotten is the last row and has fewer than the full number of columns
@@ -171,7 +173,7 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName ) {
 		// ==================
 		// Make sure not to go past the last row with visible elements
 		// Use row 0 so that we know we're using a valid row number
-		var $choicePicker 	= $('#' + modeType_ + '_choice_row0').parent();
+		var $choicePicker 	= $('#' + modeName_ + '_choice_row0').parent();
  		// Contingency for no nodes being visible
 		var $lastVisibleCont = $choicePicker.find('.icd-choice-container:visible:last'),
 			lastRowNum 		 = parseInt($lastVisibleCont.data( 'row' ));  // Need to parse int?
@@ -182,7 +184,7 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName ) {
 		// COL
 		// ==================
 		// Now use the number of columns in the correct row (is there a shorter way?)
-		var $lastRowCont 		= $('#' + modeType_ + '_choice_row' + currRowNum).find('.icd-choice-container:visible:last'),
+		var $lastRowCont 		= $('#' + modeName_ + '_choice_row' + currRowNum).find('.icd-choice-container:visible:last'),
 			lastColNum 			= $lastRowCont.data('col');
 
 		// Basically, in case user pressed up or down to get to the last row
@@ -221,7 +223,7 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName ) {
 	*/
 		var key 			= evnt.keyCode || evnt.which;
 		// TODO: try using target instead;
-		var selectedChoice 	= $('#icd_' + modeType_ + '_picker .selected').find('.icd-adder-choice')[0];
+		var selectedChoice 	= $('#icd_' + modeName_ + '_picker .selected').find('.icd-adder-choice')[0];
 
 		// If we're in the image picker choices section already
 		if ( selectedChoice !== undefined ) {
@@ -253,7 +255,7 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName ) {
 			}
 		}
 
-		return $('#icd_' + modeType_ + '_picker .selected').find('.icd-adder-choice')[0];
+		return $('#icd_' + modeName_ + '_picker .selected').find('.icd-adder-choice')[0];
 	};  // End thisGrid.imgKeyHandler
 
 
