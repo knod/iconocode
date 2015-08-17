@@ -298,7 +298,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		// Re-calcuate height of sizer using sizes of choices
 		var heightStyle  = getHeightByNumRows( numTotalRows_ ) + 'px';
 		newGrid.sizer.style.height 	= heightStyle;
-		newGrid.sizer.style.width 	= '600px';
 
 		return newGrid.sizer;
 	};  // End resizeSizer()
