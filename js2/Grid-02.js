@@ -195,7 +195,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 
 	var containsSelected = function ( rowNode ) {
 		var hasSelected = $(rowNode).find('.selected')[0];
-		console.log('selectedNode:', !!hasSelected, hasSelected);
 		return !!hasSelected;
 	};  // End containsSelected()
 
