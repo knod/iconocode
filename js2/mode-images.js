@@ -58,7 +58,7 @@ adder.addImageMode 	= function () {
 	// ====================
 	// Choosing
 	// ====================
-	adder.chooseImage = function ( imgNode ) {
+	imgMode.chooseImage = function ( imgNode ) {
 	/* ( node ) -> ?
 
 	Hide text and show image where text was
@@ -128,7 +128,7 @@ adder.addImageMode 	= function () {
 		adder.backToSearchbar( adder.viewer );
 
 		return inViewer;
-	};  // End adder.chooseImage()
+	};  // End imgMode.chooseImage()
 
 
 	// ====================
@@ -167,21 +167,10 @@ adder.addImageMode 	= function () {
 		return imageNode;
 	}  // End adder.makeImageNode()
 
-// TO REMOVE (selection/navigation before objects)
-	// adder.updateImageGrid 	= function ( imageArray ) {
 
-	// 	var maxCols = 5;
-	// 	adder.imageGridObj.set( 'images', maxCols, imageArray );
+	imgMode.addGrid = function ( parentNode ) {
 
-	// 	return adder.imageGridObj;
-	// };  // End adder.updateGrid()
-
-// TO REMOVE (selection/navigation before objects)
-	// adder.imageGridObj;
-	adder.addGrid = function ( parentNode ) {
-
-		var maxCols 			= 5,
-			allImageObjs 		= imgMode.imageObjects,
+		var allImageObjs 		= imgMode.imageObjects,
 			imageChoicesNodes 	= [];
 
 		// Too many in np to do all of them
@@ -206,14 +195,15 @@ adder.addImageMode 	= function () {
 			vertMargin: 5,
 			numCols: 8
 		}
-		var modeName = imgMode.name;
-		var makeChoiceNode = adder.makeImageNode;
+		var modeName 		= imgMode.name;
+		var makeChoiceNode 	= adder.makeImageNode;
+		var chooseImage 	= imgMode.chooseImage;
 
-		imgMode.grid = new adder.Grid2( allImgObjs, rowBlueprint, modeName, makeChoiceNode );
+		imgMode.grid = new adder.Grid2( allImgObjs, rowBlueprint, modeName, makeChoiceNode, chooseImage );
 		// testGrid = new adder.Grid2( choiceObjs, rowBlueprint, modeName, makeChoiceNode )
 
 		return imgMode.grid;
-	};  // End adder.addGrid()
+	};  // End imgMode.addGrid()
 
 
 	// --- PICKER --- \\
@@ -229,38 +219,8 @@ adder.addImageMode 	= function () {
 
 		// Add images to the DOM (will also add custom images in future)
 		// adder.modes.images.choices 	= adder.defaultImages;
-		// adder.addGrid( adder.modes.images.choices, imagePicker );
-		adder.addGrid( imagePicker );
-
-
-		imagePicker.addEventListener( 'mouseover', function ( evnt ) {
-
-			var $target 	= $(evnt.target);
-			var $ancestor 	= $target.closest('.image-choice-container');
-
-			// Visually indicate selection of image
-			if ( $ancestor.length > 0 ) {
-				// TO REMOVE (selection/navigation before objects)
-				// Need new selection methods
-				// adder.imageGridObj.selectChoice( $ancestor[0] );
-			}
-			// TODO: Show all matching terms at full length
-
-		} );
-
-		imagePicker.addEventListener( 'click', function ( evnt ) {
-
-			var $target 	= $(evnt.target);
-			var $ancestor 	= $target.closest('.image-choice-container');
-
-			if ( $ancestor.length > 0 ) {
-				adder.chooseImage($ancestor.find('.image-choice')[0]);
-			}
-
-		} );
-
-		// ScrollReveal( imagePicker );
-
+		// imgMode.addGrid( adder.modes.images.choices, imagePicker );
+		imgMode.addGrid( imagePicker );
 
 		return imagePicker;
 	};  // End adder.addTypePicker()

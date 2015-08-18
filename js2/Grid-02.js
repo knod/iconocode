@@ -16,7 +16,7 @@
 */
 
 
-adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
+adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, chooseChoice_ ) {
 
 /* Psuedo code
 	This should build everything, even the dom nodes, and handle navigation
@@ -78,6 +78,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 
 	var newGrid = {};
 	newGrid.dimensions = {};  // Will keep track of where the very last cell is
+	adder.setupGridNavigation02( newGrid, modeName_ );
 
 	// varName_ to know they're in the top level of this scope, clarity
 
@@ -242,13 +243,14 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	};  // End removeExcessRows()
 
 
+	// -- Adding -- \\
 	var addChoice = function ( obj, parentRow, pos ) {
 	/* 
 	* 
 	* Add a choice and its event listeners 
 	* ??: What will 'obj' be for purpose choices?
 	*/
-		var choiceNode = makeChoiceNode( obj, parentRow );
+		var choiceNode = makeChoiceNode_( obj, parentRow );
 
 		// Give it a cell id so it can be selected by the navigator
 		var cellId = modeName_ + '_choice_row' + pos.row + '_col' + pos.col;
@@ -260,8 +262,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 		return choiceNode;
 	};  // End addChoice()
 
-
-	// -- Adding -- \\
 	var makeRowNode = function ( rowNum, objIds ) {
 		
 		var row = document.createElement('div');
@@ -413,6 +413,46 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	// ====================
 	// SETUP (create initial content, start off logic)
 	// ====================
+	var setListeners = function ( container ) {
+	/*
+	* Uses functions from grid-navigation
+	* For selection and choosing. Kind of wish we could just put it on
+	* the parent. Hmmm.
+	*/
+		var $container = $(container);
+
+		// Select a choice on mouseover, including setting position
+		$container.on( 'mouseover', function ( evnt ) {
+
+			var $target 	= $(evnt.target);
+			var $ancestor 	= $target.closest('.icd-choice-container');
+
+			// If there was actually a choice container there (if not on background or scrollbar)
+			if ( $ancestor.length > 0 ) {
+				newGrid.selectChoice( $ancestor[0] );  // Select choice
+			}
+			// TODO: Show all matching terms at full length
+
+		} );
+
+		// Choose choice with function that was handed in by creator
+		$container.on( 'click', function ( evnt ) {
+
+			var $target 	= $(evnt.target);
+			var $ancestor 	= $target.closest('.icd-choice-container');
+
+			// If there was actually a choice container there (if not on background or scrollbar)
+			if ( $ancestor.length > 0 ) {
+				// Get the correct child and use the given function to select it
+				// The data on this node is set by the creator of this grid, so
+				// it'll know what to fetch from the choice
+				chooseChoice_($ancestor.find('.icd-adder-choice')[0]);
+			}
+
+		} );
+	};  // End setListeners()
+
+
 	newGrid.addSizer = function ( parentNode ) {
 	/*
 	* Add element that will "contain" "all" the elements, providing
@@ -420,6 +460,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	*/
 		var sizer = document.getElementById( 'icd_' + modeName_ + '_picker' );
 		$(sizer).addClass('icd_' + modeName_ + '_sizer');
+		setListeners( sizer );
 
 		return sizer;
 	};  // End addSizer()
@@ -482,7 +523,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	// START
 	// =====================
 	newGrid.start( scrollable_ );
-	adder.setupGridNavigation02( newGrid, modeName_ );
 
 	return newGrid;
 };  // End adder.Grid {} (new version)
