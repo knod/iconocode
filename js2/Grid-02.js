@@ -6,14 +6,17 @@
 * - How to restore choices to original order when all search text is gone?
 * - Change grid navigation to work with row array instead of DOM,
 * 	set selection after matching with the right row array element.
-* - Reveal new rows on scroll
 * - ???: No navigation to top from bottom and bottom from top? Would
-* 	the DOM scroll the whole length of the div?
+* 	the DOM scroll the whole length of the div? (scrollTo is instantanious)
 * - What happens to selection if someone scrolls the selection out of view?
+* 
+* DONE:
+* - position absolute for rows, centered though, also, set a definite height
+* - Reveal new rows on scroll
 */
 
 
-adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
+adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 
 /* Psuedo code
 	This should build everything, even the dom nodes, and handle navigation
@@ -71,12 +74,10 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		If no matches, send failures
 
 	???: How do I handle row navigation and choosing?
-
-	TODO: position absolute for rows, centered though, also, set a definite height
 */
 
 	var newGrid = {};
-
+	newGrid.dimensions = {};  // Will keep track of where the very last cell is
 
 	// varName_ to know they're in the top level of this scope, clarity
 
@@ -88,14 +89,13 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	// var parentNode_ = parentNode;
 
 	// !!!: USE THIS AS THE SIZER INSTEAD (parent is the scroller, it seems)
-	// newGrid.scrollable  = document.getElementById( 'icd_' + modeName + '_picker' );
-	// newGrid.scrollable  = document.getElementById( 'icd_' + modeName + '_picker' );
 	newGrid.scrollable 	= document.querySelector('.adder-pickers-container');
 	var scrollable_ 	= newGrid.scrollable;
 	
-	newGrid.sizer 		= null;
+	newGrid.sizer 		= null;  // Will be DOM node
 
 	// --- Blueprints --- \\
+	newGrid.rowBlueprint = rowBlueprint; // for navigation
 	var rowHeight_ 	= rowBlueprint.height,
 		rowMargin_ 	= rowBlueprint.vertMargin,
 		numCols_ 	= rowBlueprint.numCols;
@@ -122,13 +122,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 
 		return newGrid;
 	};  // End newGrid.redrawBlueprints()
-
-
-	var setTotalNumRows = function ( objs, numCols ) {
-		var numObjects 	= Object.keys( objs ).length;
-		totalNumRows_ 	= Math.ceil( numObjects / numCols)
-		return totalNumRows_;
-	};  // End setTotalNumRows()
 
 
 	var getHeightByNumRows = function( numRows ) {
@@ -200,12 +193,19 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	};  // End getCurrentRowNums()
 
 
+	var containsSelected = function ( rowNode ) {
+		var hasSelected = $(rowNode).find('.selected')[0];
+		return !!hasSelected;
+	};  // End containsSelected()
+
+
 	var removeExcessRows = function ( newRowNums, parentNode ) {
 	/* ( [ints], [ints], [Nodes] ) -> same Node
 	* Doesn't really need to return anything? It just changes the DOM.
+	* Don't get rid of an option that's selected, or the row it's in. That way lies madness;
 	*/
 		// Get an array of all the current row numbers
-		var currentRows = parentNode.getElementsByClassName( modeName + '-picker-row');
+		var currentRows = parentNode.getElementsByClassName( modeName_ + '-picker-row');
 		var currRowNums = getCurrentRowNums( currentRows );
 
 		// Figure out which row numbers need to be removed
@@ -214,8 +214,14 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 			var rowNum = currRowNums[ rowi ];
 			// If that row number isn't in the list of new row numbers
 			if ( newRowNums.indexOf( rowNum ) === -1 ) {
-				// Slate it for removal
-				toRemove.push( rowNum );
+
+				// and if it doesn't contain a node that has been selected by the mouse or keyboard
+				var hasSelected = containsSelected( currentRows[ rowi ] );
+				if ( !hasSelected ) {
+					// Slate it for removal
+					toRemove.push( rowNum );
+				}
+
 			}
 		}  // End for every row in current row numbers array
 
@@ -225,7 +231,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 			var num = toRemove[ numi ];
 			// Get any element in the parent with that numbered row class
 			// (Can't get element by id from parent, only elements by class name)
-			var rowNode = document.getElementById( modeName + '_choice_row' + num );
+			var rowNode = document.getElementById( modeName_ + '_choice_row' + num );
 			// If the row node does exist, which it should, remove it
 			if ( rowNode !== null ) {
 				parentNode.removeChild( rowNode );
@@ -236,13 +242,32 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	};  // End removeExcessRows()
 
 
+	var addChoice = function ( obj, parentRow, pos ) {
+	/* 
+	* 
+	* Add a choice and its event listeners 
+	* ??: What will 'obj' be for purpose choices?
+	*/
+		var choiceNode = makeChoiceNode( obj, parentRow );
+
+		// Give it a cell id so it can be selected by the navigator
+		var cellId = modeName_ + '_choice_row' + pos.row + '_col' + pos.col;
+		choiceNode.id = cellId;
+		// Give a cell its position info
+		$(choiceNode).data('row', pos.row);
+		$(choiceNode).data('col', pos.col);
+
+		return choiceNode;
+	};  // End addChoice()
+
+
 	// -- Adding -- \\
 	var makeRowNode = function ( rowNum, objIds ) {
 		
 		var row = document.createElement('div');
 
-		row.className 	= modeName + '-picker-row';
-		row.id 			= modeName + '_choice_row' + rowNum;
+		row.className 	= modeName_ + '-picker-row ' + rowNum;
+		row.id 			= modeName_ + '_choice_row' + rowNum;
 		row.dataset['row'] = rowNum;
 		// Height is position, rowNum is the numRows until this row
 		var top = getHeightByNumRows( rowNum );
@@ -251,9 +276,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		row.style.top 		= top + 'px';
 		row.style.height 	= rowHeight_ + 'px';
 		row.style.position = 'absolute';
-		// row.style.width		= '500px';
-		// row.style.left 		= '50px';
-		// row.style['backgroundColor'] = 'lightgray';
 
 		// For each column, make and add the choice in that cell
 		for ( var colNum = 0; colNum < numCols_; colNum++ ) {
@@ -262,10 +284,15 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 			// Get the id
 			var id 	= objIds[ index ];
 			// Get the actual object using that id
-			var obj = objsByIds[ id ];  // This is a global var (maybe use sample for now?)
-			// if ( id === '167588' ) { console.log(obj.svg)}
-			var choiceNode = makeChoiceNode( obj, row );
-		}
+			var obj = objsByIds[ id ];  // ??: What to do about global objsByIds?
+
+			// If we haven't passed the last matching item
+			if ( obj !== undefined ) {
+				// Add a choice at the current position
+				var currPosition = {row: rowNum, col: colNum };
+				addChoice( obj, row, currPosition );
+			}
+		}  // end for every column
 
 		return row;
 	};  // End makeRowNode()
@@ -276,7 +303,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		var newRowNum = topRowNum;
 		for ( var rowCount = 0; rowCount < NUM_EXISTING_ROWS; rowCount++ ) {
 
-			var rowNode = document.getElementById( modeName + '_choice_row' + newRowNum );
+			var rowNode = document.getElementById( modeName_ + '_choice_row' + newRowNum );
 			// If a row of that id isn't there add it. Doesn't matter about prepending or appending, they're all positioned absolutely
 
 			if ( rowNode === null ) {
@@ -291,20 +318,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	};  // End addNewRows()
 
 
-	// -- Adjusting -- \\
-	var resizeSizer = function ( objIds, numCols ) {
-		// Get total number of rows that could exist with all the objects
-		var numTotalRows_ = setTotalNumRows( objIds, numCols_ );
-		// Re-calcuate height of sizer using sizes of choices
-		var heightStyle  = getHeightByNumRows( numTotalRows_ ) + 'px';
-		newGrid.sizer.style.height 	= heightStyle;
-		newGrid.sizer.style.width 	= '600px';
-
-		return newGrid.sizer;
-	};  // End resizeSizer()
-
-
-	// var updateRows = function () {};  // End updateRows()
 
 
 	// --- MAIN FUNCTION --- \\
@@ -321,10 +334,10 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 		var objIds = objIds || currentIds_;
 		if ( objIds ) { currentIds_ = objIds; }
 
-		// Current top visible row. With this math, it will never exceed the max allowed.
+		// Current top visible row. With this math (if not set manually), it will never exceed the max allowed.
 		var topVisibleRowNum = topVisibleRowNum || Math.ceil( scrollable_.scrollTop/(rowHeight_ + rowMargin_) );
+		// Do we need to do Math.max() on that?
 
-		resizeSizer( objIds, numCols_ );  // Always size to fit imginary full contents
 		// Using that, get the number id of all the rows that should exist (visible and buffer)
 		var newRowNums = getNewRowNums( topVisibleRowNum, totalNumRows_ );
 
@@ -337,20 +350,59 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	};  // End newGrid.update()
 
 
+	newGrid.resizeSizer = function ( numRows ) {
+	/* ( int ) -> Node */
+
+		// Re-calcuate height of sizer using number of choices and their dimensions
+		var heightStyle = getHeightByNumRows( numRows ) + 'px';
+		newGrid.sizer.style.height = heightStyle;
+
+		return newGrid.sizer;
+	};  // End newGrid.resizeSizer()
+
+
+	newGrid.setDimensions = function ( numObjs, numCols ) {
+	/* ( int, int ) -> {JS}
+	* 
+	* Set the size of the sizer
+	* Also, for grid navigation and, in the case of totalNumRows_), for
+	* scrolling through rows
+	*/
+		// Set global var total number of rows that would exist with all the objects
+		totalNumRows_ = Math.ceil( numObjs / numCols );
+		// Resize sizer node
+		newGrid.resizeSizer( totalNumRows_ );  // Always size to fit imginary full contents
+
+		// How many are in the last row. If this is 0, the last row is full
+		// For grid navigation for last row.
+		var remainder = numObjs % numCols;
+		var numColsLastRow;
+		// If there's 0 left over, the last row must be full
+		if ( remainder === 0 ) { numColsLastRow = numCols; }
+		else 				   { numColsLastRow = remainder; }
+
+		// For navigation
+		newGrid.dimensions = {
+			numRows: totalNumRows_, numCols: numCols, numItems: numObjs,
+			numColsLastRow: numColsLastRow
+		};
+		
+		return newGrid.dimensions;
+	};  // End newGrid.setDimensions()
+
+
 	newGrid.reset = function ( objIds ) {
+	/* ( [str] ) -> Grid2 */
+		
+		var objIds = objIds || currentIds_;  // If there are no objIds, just use the ones we last set, don't change
+		if ( objIds ) { currentIds_ = objIds; }  // Since there were objIds, set currentIds_ again to match
 
-		// console.log('--- resetting', modeName, 'grid ---', objIds );
-		var objIds = objIds || currentIds_;
-		if ( objIds ) { currentIds_ = objIds; }
+		// Size the sizer and set the grids dimension values (and total number of rows)
+		newGrid.setDimensions( objIds.length, numCols_);
 
-		// Get an array of all the current row numbers
-		// var currentRows = newGrid.sizer.getElementsByClassName( modeName + '-picker-row');
-		// var currRowNums = getCurrentRowNums( currentRows );
-
-		// Remove all the current rows
-		removeExcessRows( [], newGrid.sizer );
-
-		scrollable_.scrollTop = 0;
+		removeExcessRows( [], newGrid.sizer );  // Remove all the current rows
+		
+		scrollable_.scrollTop = 0;  // Go back to the top
 
 		newGrid.update( 0, objIds );
 
@@ -366,8 +418,8 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	* Add element that will "contain" "all" the elements, providing
 	* the scrolling size
 	*/
-		var sizer = document.getElementById( 'icd_' + modeName + '_picker' );
-		$(sizer).addClass('icd_' + modeName + '_sizer');
+		var sizer = document.getElementById( 'icd_' + modeName_ + '_picker' );
+		$(sizer).addClass('icd_' + modeName_ + '_sizer');
 
 		return sizer;
 	};  // End addSizer()
@@ -376,8 +428,10 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	newGrid.start = function ( parentNode ) {
 	// Add sizer to parent node
 	// Add rows starting at 0
-		var totalNumRows = setTotalNumRows( choiceObjs_, numCols_ )
+
 		newGrid.sizer = newGrid.addSizer( parentNode );
+		// Size the sizer and set the grids dimension values (and total number of rows)
+		newGrid.setDimensions( currentIds_.length, numCols_);
 		newGrid.update( 0 );
 
 		return newGrid;
@@ -404,30 +458,31 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName, makeChoiceNode ) {
 	};  // End newGrid.gridScrollHandler()
 
 
-	scrollable_.addEventListener('wheel', function(evnt) {
+	var $scrollable_ = $(scrollable_)
+
+	$scrollable_.on('wheel', function(evnt) {
 		newGrid.scrollHandler( evnt, null, false );
-	});  // End scrollable_ event listener wheel
+	});  // End $scrollable_ event listener wheel
 
 	// ??: Better on mousemove or mouseout?
 	// Note: mousemove not working for scrollbar
-	scrollable_.addEventListener('mouseout', function(evnt) {
+	$scrollable_.on('mouseout', function(evnt) {
 		newGrid.scrollHandler( evnt, null, true );
-	});  // End scrollable_ event listener mouseout
+	});  // End $scrollable_ event listener mouseout
 
 
-	scrollable_.addEventListener('scroll', function(evnt) {
+	$scrollable_.on('scroll', function(evnt) {
 		// This event's behavior is great: it seems not to cycle through 
 		// all the rows it passes through, just select rows
 		newGrid.scrollHandler( evnt, null, true );
-	});  // End scrollable_ event listener scroll
-
+	});  // End $scrollable_ event listener scroll
 
 
 	// =====================
 	// START
 	// =====================
 	newGrid.start( scrollable_ );
-	adder.setupGridNavigation02( newGrid, modeName );
+	adder.setupGridNavigation02( newGrid, modeName_ );
 
 	return newGrid;
 };  // End adder.Grid {} (new version)

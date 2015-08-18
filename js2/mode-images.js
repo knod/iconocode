@@ -153,20 +153,16 @@ adder.addImageMode 	= function () {
 
 	// Obj-based test
 	adder.makeImageNode = function ( imgObj, parentRow ) {
-		
+	/*
+	* imgObj should never === undefined
+	*/
 		var imageNode;
-		if ( imgObj !== undefined ) {
-			var imageObj = new adder.ImgChoice2( imgObj, parentRow );
-			imageNode = imageObj.node;
-
-			// imageNode.style.height = '50px';
-			imageNode.style.height = imgMode.imageHeight + 'px';
-			// imageNode.style.width = '50px';
-			imageNode.style.width = imgMode.imageHeight + 'px';
-			// imageNode.style['backgroundColor'] = 'rgb(48,48,48)';
-			// imageNode.style.margin = '2px 5px 2px 5px';
-			// imageNode.style.display = 'inline-block';
-		}
+		// Add a new image object to the parent row
+		var imageObj = new adder.ImgChoice2( imgObj, parentRow );
+		// Give it some nice styling so that other style things work
+		imageNode = imageObj.node;
+		imageNode.style.height = imgMode.imageHeight + 'px';
+		imageNode.style.width = imgMode.imageHeight + 'px';
 
 		return imageNode;
 	}  // End adder.makeImageNode()
