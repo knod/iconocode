@@ -193,9 +193,17 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	};  // End getCurrentRowNums()
 
 
+	var containsSelected = function ( rowNode ) {
+		var hasSelected = $(rowNode).find('.selected')[0];
+		console.log('selectedNode:', !!hasSelected, hasSelected);
+		return !!hasSelected;
+	};  // End containsSelected()
+
+
 	var removeExcessRows = function ( newRowNums, parentNode ) {
 	/* ( [ints], [ints], [Nodes] ) -> same Node
 	* Doesn't really need to return anything? It just changes the DOM.
+	* Don't get rid of an option that's selected, or the row it's in. That way lies madness;
 	*/
 		// Get an array of all the current row numbers
 		var currentRows = parentNode.getElementsByClassName( modeName_ + '-picker-row');
@@ -207,8 +215,14 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 			var rowNum = currRowNums[ rowi ];
 			// If that row number isn't in the list of new row numbers
 			if ( newRowNums.indexOf( rowNum ) === -1 ) {
-				// Slate it for removal
-				toRemove.push( rowNum );
+
+				// and if it doesn't contain a node that has been selected by the mouse or keyboard
+				var hasSelected = containsSelected( currentRows[ rowi ] );
+				if ( !hasSelected ) {
+					// Slate it for removal
+					toRemove.push( rowNum );
+				}
+
 			}
 		}  // End for every row in current row numbers array
 
@@ -279,7 +293,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 				var currPosition = {row: rowNum, col: colNum };
 				addChoice( obj, row, currPosition );
 			}
-
 		}  // end for every column
 
 		return row;
@@ -387,7 +400,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 
 		// Size the sizer and set the grids dimension values (and total number of rows)
 		newGrid.setDimensions( objIds.length, numCols_);
-		console.log(newGrid.dimensions);
 
 		removeExcessRows( [], newGrid.sizer );  // Remove all the current rows
 		
@@ -447,23 +459,24 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	};  // End newGrid.gridScrollHandler()
 
 
-	scrollable_.addEventListener('wheel', function(evnt) {
+	var $scrollable_ = $(scrollable_)
+
+	$scrollable_.on('wheel', function(evnt) {
 		newGrid.scrollHandler( evnt, null, false );
-	});  // End scrollable_ event listener wheel
+	});  // End $scrollable_ event listener wheel
 
 	// ??: Better on mousemove or mouseout?
 	// Note: mousemove not working for scrollbar
-	scrollable_.addEventListener('mouseout', function(evnt) {
+	$scrollable_.on('mouseout', function(evnt) {
 		newGrid.scrollHandler( evnt, null, true );
-	});  // End scrollable_ event listener mouseout
+	});  // End $scrollable_ event listener mouseout
 
 
-	scrollable_.addEventListener('scroll', function(evnt) {
+	$scrollable_.on('scroll', function(evnt) {
 		// This event's behavior is great: it seems not to cycle through 
 		// all the rows it passes through, just select rows
 		newGrid.scrollHandler( evnt, null, true );
-	});  // End scrollable_ event listener scroll
-
+	});  // End $scrollable_ event listener scroll
 
 
 	// =====================

@@ -25,13 +25,8 @@
 
 adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 /*
-* thisGrid.lastPosition must be of form {row: int, y: int}
+* // http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
 */
-
-	// ====================
-	// Navigation
-	// ====================
-	// http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
 
 	thisGrid.selectChoice = function ( choiceContainer ) {
 	/*
@@ -50,14 +45,6 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 
 		return choiceContainer;
 	};  // thisGrid.selectChoice();
-
-
-	// Should keep this in here? It's kind of more general
-	// thisGrid.backToSearchbar = function ( cmEditor ) {
-	// 	cmEditor.focus();  // assigned in viewer.js
-	// 	// TODO: put cursor in a logical place. Not sure how CodeMirror does that.
-	// 	return $('.selected').removeClass('selected');
-	// };  // End thisGrid.backToSearchbar()
 
 
 	thisGrid.getCellNode = function ( position ) {
