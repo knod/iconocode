@@ -61,9 +61,26 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 
 
 	thisGrid.getCellNode = function ( position ) {
+	/* ( {row, col} ) -> Node
+	* 
+	* Get the node at the current position. If there isn't one
+	* there, scroll to where there will be a node and update the grid
+	* to show the nodes at that position, _then_ get the node
+	*/
 		var cellId 	  = modeName_ + '_choice_row' + position.row + '_col' + position.col,
-			choicNode = document.getElementById( cellId ),
-			container = $(choicNode).closest('.icd-choice-container');
+			choiceNode = document.getElementById( cellId );
+
+		// If that node doesn't exist right now (it's not scrolled to atm), scroll there
+		if ( choiceNode === null ) {
+			var heightPer = thisGrid.rowBlueprint.height + thisGrid.rowBlueprint.vertMargin;
+			// I don't think this triggers a scroll event
+			thisGrid.scrollable.scrollTop = position.row * heightPer;  // I think this is blocking
+			// Not sure this is the right row num (0-indexed or not?), but it should be fine anyway? Not sure
+			thisGrid.update( position.row, false );
+		}
+
+		choiceNode 		= document.getElementById( cellId );
+		var container 	= $(choiceNode).closest('.icd-choice-container');
 
 		return container;
 	};  // End thisGrid.getCellNode()
@@ -113,8 +130,9 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 	// =================
 	var incrementPosition 	= function ( position, direction, numCols ) {
 	/* ( {}, str ) -> {}
-
-	Just changes position values based on direction, no further adjusments
+	* 
+	* Just changes position values based on direction, no further adjusments
+	* (no wrapping or anything)
 	*/
 		// Don't change actual position values, need the old ones
 		var newPos = { col: position.col, row: position.row };
@@ -135,8 +153,10 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 
 	var wrapPosition = function ( currPos, lastPossiblePos ) {
 	/* ( int, int ) -> Int
-
-	Works for rows or columms, makes sure the numbers wrap around
+	* 
+	* Works for rows or columms, makes sure the numbers wrap around
+	* ??: What does lastPossiblePos mean? Is it 0-indexed? I think
+	* it is required to be 0-indexed?
 	*/
 		var newPos 	= currPos;
 		// If currPos is before the beginning, put it at the end
@@ -153,47 +173,50 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 	// USE INPUT
 	// ====================
 	thisGrid.keyboardNavChoices = function ( position, direction ) {
-	/* ( {}, str, [[Node]] ) -> {}
-
-	Allows keyboard navigation and selection of images
-
-	TODO: Make universal so Variable Types can use it too?
-	??: Triggered by 'tab' keypress?
+	/* ( {JS}, str ) -> same {JS}
+	* 
+	* Allows keyboard navigation and selection of images
+	* 
+	* TODO: Make universal so Variable Types can use it too?
+	* ??: Triggered by 'tab' keypress?
+	* ??: 'tab' navigation wraps around last row over and over. Is that what we want?
 	*/
+		// Stay in bounds
+		var dimensions 		= thisGrid.dimensions;  // { numRows, numCols, numItems, numColsLastRow };
 
-		// Need max number of columns for navigation with tab key to work
-		var maxCols 		= $('#' + modeName_ + '_choice_row' + position.row).children().toArray().length;
 		// So we can compare the previous row number to the current row number later
 		var prevRowNum 		= position.row;
-		// If the row gotten is the last row and has fewer than the full number of columns
-		// incrementpPosition() will bring the column number to the beginning of the column
-
-		var currPosition 	= incrementPosition( position, direction, maxCols );
-		var currRowNum 		= currPosition.row, currColNum = currPosition.col;
-
-		// ==================
-		// ROW
-		// ==================
-		currRowNum = wrapPosition( currRowNum, thisGrid.lastPosition.row );
+		// Don't worry about wrapping around for now
+		var currPosition 	= incrementPosition( position, direction, dimensions.numCols );
+		var currRowNum 		= currPosition.row,
+			currColNum 		= currPosition.col;
 
 		// ==================
-		// COL
+		// STAY IN BOUNDS
 		// ==================
-		// Now use the number of columns in the correct row (is there a shorter way?)
-		var $lastRowCont 		= $('#' + modeName_ + '_choice_row' + currRowNum).find('.icd-choice-container:visible:last'),
-			lastColNumInRow 	= $lastRowCont.data('col');
+		// --- WRAP ROW --- \\
+		currRowNum = wrapPosition( currRowNum, (dimensions.numRows - 1) );
 
-		// Basically, in case user pressed up or down to get to the last row
-		// Without this the modulo thing below will do things we don't want
-		if ( currRowNum !== prevRowNum ) {
-			// If the previous selection was past the last possible item in this row
-			if ( currColNum > lastColNumInRow ) {
-				// Go to the last possible item
-				currColNum = lastColNumInRow
+		// --- HANDLE COLUMN --- \\
+		// Last row is a special case. If it's the last row, 
+		if ( currRowNum === (dimensions.numRows - 1)  ) {
+			// and we got there by pressing up or down from another row
+			if ( currRowNum !== prevRowNum ) {
+				// Make sure we don't go into a column that doesn't exist by
+				// not going above the max number of columns in the last row
+				// -1 because numColsLastRow is not 0-indexed
+				currColNum = Math.min( currColNum, (dimensions.numColsLastRow - 1) );
+			// but if we're just moving left or right in the last row,
+			} else {
+				// wraps around using the number of columns in the last row
+				currColNum = wrapPosition( currColNum, (dimensions.numColsLastRow - 1) );
 			}
+		// If we're not in the last row,
+		} else {
+			// wrap around using the number of columns in a full row
+			currColNum = wrapPosition( currColNum, (dimensions.numCols - 1) );
 		}
-		// When you get to the end, go to the beginning again
-		currColNum = wrapPosition( currColNum, lastColNumInRow );
+
 
 		// ==================
 		// USE NEW VALUES
