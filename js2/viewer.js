@@ -203,12 +203,12 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 		// Get the text that needs to be looked for
 		var query = cmEditor.getTokenAt( cmEditor.getCursor() ).string;
 
-		// When text is added or deleted (anything else?) search the mode's choices
-		var activeGrid 	= adder.modes[ adder.activeMode ].grid;
-		var newIds 		= searcher.runSearch( query );
-
 		// Until the purposes grid is converted
-		if ( activeGrid.reset !== undefined ) {
+		if ( adder.activeMode === 'images' ) {
+			// When text is added or deleted (anything else?) search the mode's choices
+			var activeGrid 	= adder.modes[ adder.activeMode ].grid;
+			var newIds 		= searcher.runSearch( query );
+			
 			activeGrid.reset( newIds );
 		}
 

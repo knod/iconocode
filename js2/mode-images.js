@@ -191,7 +191,7 @@ adder.addImageMode 	= function () {
 		// adder.imageGridObj = new adder.Grid( 'images', maxCols, imageChoicesNodes );
 
 		// Make grid of image choice nodes and objects for the user to select
-		var allImgObjs = objsByIds;  // Global in file of the same name, not in this directory
+		var choiceKeys = Object.keys( objsByIds );  // Global in file of the same name, not in this directory
 		var rowBlueprint = {
 			height: imgMode.imgHeight,
 			vertMargin: 5,
@@ -201,7 +201,7 @@ adder.addImageMode 	= function () {
 		var makeChoiceNode 	= adder.makeImageNode;
 		var chooseImage 	= imgMode.chooseImage;
 
-		imgMode.grid = new adder.Grid2( Object.keys( allImgObjs ), rowBlueprint, modeName, makeChoiceNode, chooseImage );
+		imgMode.grid = new adder.Grid2( choiceKeys, rowBlueprint, modeName, makeChoiceNode, chooseImage );
 		// testGrid = new adder.Grid2( choiceObjs, rowBlueprint, modeName, makeChoiceNode )
 
 		return imgMode.grid;
