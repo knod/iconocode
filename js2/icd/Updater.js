@@ -47,9 +47,6 @@ var IcdUpdater = function ( utils ) {
 			}
 		}
 
-		// Center everything vertically based on size
-		resizeIcons();  // Global in icon-styles.js atm
-
 		return mark;
 	};  // End updater.markUnmarked()
 
@@ -95,6 +92,10 @@ var IcdUpdater = function ( utils ) {
 		if ( currType !== oldType ) {
 			// Mark certain tokens with an icon (if not already)
 			updater.markIf( oldToken_, updater.oldCursorPos.line, edInstance, icd.map );
+
+			// Center everything vertically based on size
+			// Not in markUnmarked() in the hope of making toggling and loading faster
+			resizeIcons();  // Global in icon-styles.js atm
 		}
 
 		updater.oldToken 		= currToken;
@@ -149,6 +150,10 @@ var IcdUpdater = function ( utils ) {
 			}  // End for all line tokens
 
 		}  // end for all lines
+
+		// Center everything vertically based on size
+		// Putting it here in the hope of making toggling and loading faster
+		resizeIcons();  // Global in icon-styles.js atm
 
 		return edInstance;
 	};  // End updater.markAll()
