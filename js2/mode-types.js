@@ -145,27 +145,6 @@ adder.addTypeMode = function () {
 	* Called by Grid
 	* choicObj looks like {name: str, text: str, tags: []}
 	*/
-		// var typeContainer = typeMode_.addTypeChoiceContainer( typeName, parentNode, description );
-
-		// var typeIcon = new Icon( 'adder-type-choice-' + typeName );
-		// typeIcon.createNew( typeContainer );
-		// typeIcon.setType( typeName, typeIcon.container );
-		
-		// var $iconBody = $(typeIcon.container).find('.icon-body')
-		// // For searching, though that's not happening right now
-		// $(typeContainer).data('choice', $iconBody[0] );
-		// $iconBody.data('terms', [typeName]);
-
-		// // For keyboard navigation. Right now on icon body, may change later
-		// $iconBody.addClass('icd-adder-choice');
-		// $iconBody[0].tabIndex = 0;
-		// $iconBody[0].addEventListener( 'keydown', function ( evnt ) {
-		// 	adder.modes.types.grid.gridKeyHandler( evnt, typeMode_.chooseType );
-		// });
-
-		// // For setting the searchbar type
-		// $iconBody.data( 'typeToAdd', typeName );
-
 		var choiceObj 		= typeMode_.choices[ objKey ]
 		var typeContainer 	= typeMode_.addTypeChoiceContainer( choiceObj, parentRow);
 		typeMode_.addTypeContents( choiceObj, typeContainer );
@@ -205,15 +184,6 @@ adder.addTypeMode = function () {
 		adder.modes.types.section 	= typePicker;
 		parentNode.appendChild( typePicker );
 
-		// var iconPrefix 				= 'adder-type-choice';
-
-		// var verbContainer  	 = typeMode_.addTypeChoice( 'verb', 'changes data', document.createDocumentFragment() ),
-		// 	nounContainer 	 = typeMode_.addTypeChoice( 'noun', 'is accessed and changed', document.createDocumentFragment() ),
-		// 	messageContainer = typeMode_.addTypeChoice( 'message', 'tells you things', document.createDocumentFragment() );
-
-		// var typeChoicesNodes = [ verbContainer, nounContainer, messageContainer ];
-
-
 		var numCols = 3;
 		// var typeGrid = new adder.Grid( 'types', numCols, typeChoicesNodes );
 		typeMode_.addGrid( typeMode_.choices );  // Adds rows of choices
@@ -232,10 +202,6 @@ adder.addTypeMode = function () {
 		for ( var choicei = 0; choicei < numChoices; choicei++ ) {
 			allChoices[ choicei ].style.width = chioceWidth + '%';
 		}
-
-		// // --- VIEWER --- \\
-		// // Add hidden icon to viewer. It's type will change.
-		// // Maybe show a square shaped one for 'unspecified'
 
 		return typePicker;
 	};  // End adder.addTypePicker()
