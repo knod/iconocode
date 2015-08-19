@@ -209,7 +209,6 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 			// wrap around using the number of columns in a full row
 			currColNum = wrapPosition( currColNum, (dimensions.numCols - 1) );
 		}
-console.log('3:', currRowNum, currColNum);
 
 		// ==================
 		// USE NEW VALUES

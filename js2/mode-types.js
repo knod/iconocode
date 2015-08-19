@@ -20,6 +20,8 @@ adder.addTypeMode = function () {
 /* Enclose and name so it can be called in order */
 
 	var iconObj_;
+	var typeMode_ = {};
+	typeMode_.grid;
 
 
 	// ===============
@@ -136,6 +138,7 @@ adder.addTypeMode = function () {
 
 		var numCols = 3;
 		var typeGrid = new adder.Grid( 'types', numCols, typeChoicesNodes );
+		// typeMode_.grid = adder.Grid2( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, chooseChoice_ );
 
 
 		// Now that they're all in DOM, fetch them easily to do stuff to them
@@ -186,4 +189,6 @@ adder.addTypeMode = function () {
 	// ==================
 	adder.addTypePicker( adder.sections.pickers );
 	adder.addTypeTab( adder.sections.tabs );
+
+	return typeMode_;
 };  // End adder.addTypeMode()

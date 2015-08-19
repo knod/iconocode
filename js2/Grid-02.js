@@ -17,7 +17,8 @@
 
 
 adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, chooseChoice_ ) {
-
+// Need obj ids really, so they can be in order from searching?
+// Need num objs to get index? Where will the record of the obj id's be?
 /* Psuedo code
 	This should build everything, even the dom nodes, and handle navigation
 	It should use the choice building function handed in
@@ -244,13 +245,13 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, c
 
 
 	// -- Adding -- \\
-	var addChoice = function ( obj, parentRow, pos ) {
+	var addChoice = function ( objKey, parentRow, pos ) {
 	/* 
 	* 
 	* Add a choice and its event listeners 
 	* ??: What will 'obj' be for purpose choices?
 	*/
-		var choiceNode = makeChoiceNode_( obj, parentRow );
+		var choiceNode = makeChoiceNode_( objKey, parentRow );
 
 		// Give it a cell id so it can be selected by the navigator
 		var cellId = modeName_ + '_choice_row' + pos.row + '_col' + pos.col;
@@ -281,16 +282,18 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, c
 		for ( var colNum = 0; colNum < numCols_; colNum++ ) {
 			// Get the index number of the id of each object we need
 			var index = (rowNum * numCols_) + colNum;
-			// Get the id
-			var id 	= objIds[ index ];
-			// Get the actual object using that id
-			var obj = objsByIds[ id ];  // ??: What to do about global objsByIds?
 
-			// If we haven't passed the last matching item
-			if ( obj !== undefined ) {
+			// If the index doesn't exceed the number of objects
+			if ( index < objIds.length ) {
+				// Get the right object key (the id # is the key)
+				var key = objIds[ index ];
+				// // Get the actual object using that id
+				// var obj = objsByIds[ id ];  // ??: What to do about global objsByIds?
+
 				// Add a choice at the current position
 				var currPosition = {row: rowNum, col: colNum };
-				addChoice( obj, row, currPosition );
+				addChoice( key, row, currPosition );
+
 			}
 		}  // end for every column
 

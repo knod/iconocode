@@ -152,15 +152,17 @@ adder.addImageMode 	= function () {
 	// adder.numRows;
 
 	// Obj-based test
-	adder.makeImageNode = function ( imgObj, parentRow ) {
+	adder.makeImageNode = function ( objKey, parentRow ) {
 	/*
-	* imgObj should never === undefined
+	* objKey should always valid, always be a key that is in the obj dictionary
 	*/
-		var imageNode;
+		// Get the actual object using that id key
+		var obj = objsByIds[ objKey ];  // ??: What to do about global objsByIds?
+
 		// Add a new image object to the parent row
-		var imageObj = new adder.ImgChoice2( imgObj, parentRow );
+		var imageObj = new adder.ImgChoice2( obj, parentRow );
 		// Give it some nice styling so that other style things work
-		imageNode = imageObj.node;
+		var imageNode = imageObj.node;
 		imageNode.style.height = imgMode.imageHeight + 'px';
 		imageNode.style.width = imgMode.imageHeight + 'px';
 
