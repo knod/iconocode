@@ -23,16 +23,16 @@ var IcdUpdater = function ( utils ) {
 	updater.oldCursorPos 	= { line: null, ch: null };
 
 
-	updater.markUnmarked = function ( token, lineNum, iconMap, editor ) {
+	updater.markUnmarked = function ( token, lineNum, iconMap, edInstance ) {
 	/* 
 	* 
 	*/
 		var tokenStart 	= { line: lineNum, ch: token.start  };
 
-		var markArray 	= editor.findMarksAt( tokenStart ),
+		var markArray 	= edInstance.findMarksAt( tokenStart ),  // Don't conflict with other marks
 			mark 		= null;
 
-		// Need a better test in case there are other marks there
+		// Need a better way to make sure not to conflict with other marks
 		if ( markArray.length === 0 ) {
 			// Check if there's a mark for that text
 
@@ -43,7 +43,7 @@ var IcdUpdater = function ( utils ) {
 
 			if ( iconObj !== null ) {
 				// Actually mark the variable's token
-				mark = utils.markVar( token, lineNum, iconObj, editor );
+				mark = utils.markVar( token, lineNum, iconObj, edInstance );
 			}
 		}
 
@@ -94,7 +94,7 @@ var IcdUpdater = function ( utils ) {
 		// If the user's just moved out of a token
 		if ( currType !== oldType ) {
 			// Mark certain tokens with an icon (if not already)
-			updater.markIf( oldToken_, updater.oldCursorPos.line, edInstance );
+			updater.markIf( oldToken_, updater.oldCursorPos.line, edInstance, icd.map );
 		}
 
 		updater.oldToken 		= currToken;
