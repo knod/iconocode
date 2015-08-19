@@ -20,20 +20,35 @@ adder.addTypeMode = function () {
 /* Enclose and name so it can be called in order */
 
 	var iconObj_;
-	var typeMode_ = {};
+	var typeMode_ = adder.modes.types;
+
+	// --- Grid and grid navigation --- \\
+	typeMode_.name = 'types';
+	typeMode_.typeHeight = 100;
+
 	typeMode_.grid;
 
+	typeMode_.choices = {
+		verb: {name: 'verb', text:'changes data', tags: ['verb', 'process', 'transitive']},
+		noun: {name: 'noun', text:'is data, does not change it - is accessed or changed',
+					tags: ['noun', 'data', 'intransitive']},
+		message: {name: 'message', text:'helps the developer develop (debugging, etc.)', tags: ['message', 'meta', 'dev', 'development', 'developer']}
+	};
 
 	// ===============
 	// ACTIVATING TYPE
 	// ================
-	var chooseType = function ( chosenNode ) {
+	typeMode_.chooseType = function ( chosenNode ) {
+	/*
+	* Called by Grid
+	*/
 
 		var $textContainer = $(adder.searchBarContainer);  // created in viewer.js
 
 		var adderIcon = adder.icon;
 
-		var purpose = $(chosenNode).data('terms')[0];
+		// var purpose = $(chosenNode).data('terms')[0];  // data name?
+		var purpose = chosenNode.dataset['name'];
 		adderIcon.setType( purpose );
 
 		// If it's the first time, switch modes automatically
@@ -53,68 +68,131 @@ adder.addTypeMode = function () {
 		adder.backToSearchbar( adder.viewer );
 
 		return $textContainer[0];
-	};  // End chooseType()
+	};  // End typeMode_.chooseType()
 
 	// =============
 	// PICKER
 	// =============
-	adder.addTypeChoiceContainer = function ( typeName, parentNode, explanation ) {
-	/* ( str, Node, Node ) -> new Node
+	// typeMode_.addTypeChoiceContainer = function ( typeName, parentNode, explanation ) {
+	typeMode_.addTypeChoiceContainer = function ( choiceObj, parentNode ) {
+	/* ( str, Node, str ) -> new Node
 
 	*/
+		var typeName = choiceObj.name;
+
 		var typeContainer 		= document.createElement('div');
 		parentNode.appendChild( typeContainer );
-		adder.modes.types.choices[ typeName ] = typeContainer;
+		adder.modes.types.choices[ typeName ] = typeContainer;  // ??: not needed
 
 		typeContainer.className = 'icd-choice-container type-choice-container';
-		typeContainer.id 		= prefix + '_choice_' + typeName;
+		// typeContainer.id 		= prefix + '_choice_' + typeName;
 		// Will use typeToAdd to set the type of the icon to add
-		$(typeContainer).data('typeToAdd', typeName);
-
-		typeContainer.addEventListener( 'click', function ( evnt ) {
-			adder.typeSelected = true;
-			// Use this to add type to viewer
-			typeContainer.dataset['typeToAdd'];
-
-			// If it's the first time, go to image mode
-		} );  // end on click
-
-		// The label for the thing
-		var typeText 			= document.createTextNode( typeName );
-		typeContainer.appendChild( typeText );
+		// $(typeContainer).data('typeToAdd', typeName);
 
 		return typeContainer;
-	}  // End adder.addTypeChoiceContainer()
+	}  // End typeMode_.addTypeChoiceContainer()
 
 
+	typeMode_.addIcon = function ( typeName, parentNode ) {
 
-	adder.addTypeChoice = function ( typeName, description, parentNode ) {
-	/*
-	*/
-
-		var typeContainer = adder.addTypeChoiceContainer( typeName, parentNode, description );
-
-		var typeIcon = new Icon( 'adder-type-choice-' + typeName );
-		typeIcon.createNew( typeContainer );
+		// ??: Don't know if I want hover text for this, but not sure how to handle that
+			// Would rather have tags as the hover text tbh
+		var typeIcon = new Icon( typeName );
+		typeIcon.createNew( parentNode );
 		typeIcon.setType( typeName, typeIcon.container );
-		
-		var $iconBody = $(typeIcon.container).find('.icon-body')
-		// For searching, though that's not happening right now
-		$(typeContainer).data('choice', $iconBody[0] );
-		$iconBody.data('terms', [typeName]);
 
-		// For keyboard navigation. Right now on icon body, may change later
-		$iconBody.addClass('icd-adder-choice');
-		$iconBody[0].tabIndex = 0;
-		$iconBody[0].addEventListener( 'keydown', function ( evnt ) {
-			adder.modes.types.grid.gridKeyHandler( evnt, chooseType );
+		return typeIcon;
+	};  // End typeMode_.addIcon()
+
+
+	typeMode_.addTypeContents = function ( choiceObj, parentNode ) {
+
+		var typeName = choiceObj.name;
+
+		// Actual choice, which will contain everything else
+		// Only needed because images need to have a choice container and a choice
+		var choice = document.createElement( 'div' );
+		parentNode.appendChild( choice );
+		
+		choice.className = 'icd-adder-choice purpose-choice'
+		choice.dataset['name'] = typeName;
+
+		// Make focusable (on icon instead?). Necessarily on this node for keyboard navigation.
+		choice.tabIndex = 0;
+		// Event listener for keyboard navigation
+		$(choice).on( 'keydown', function ( evnt ) {
+			typeMode_.grid.gridKeyHandler( evnt, typeMode_.chooseType );
 		});
 
-		// For setting the searchbar type
-		$iconBody.data( 'typeToAdd', typeName );
+		// Add label of type above shape
+		var typeText = document.createTextNode( typeName );
+		parentNode.appendChild( typeText );
+
+		// Add icon shape
+		typeMode_.addIcon( typeName, parentNode );
+
+		// Add explanitory text below shape
+		var typeDescription = document.createTextNode( choiceObj.text );
+		parentNode.appendChild( typeDescription );
+
+	};  // End typeMode_.addTypeContents()
+
+
+	// typeMode_.addTypeChoice = function ( typeName, description, parentNode ) {
+	typeMode_.addTypeChoice = function ( objKey, parentRow ) {
+	/* ( {JS}, Node ) -> new Node
+	* 
+	* Called by Grid
+	* choicObj looks like {name: str, text: str, tags: []}
+	*/
+		// var typeContainer = typeMode_.addTypeChoiceContainer( typeName, parentNode, description );
+
+		// var typeIcon = new Icon( 'adder-type-choice-' + typeName );
+		// typeIcon.createNew( typeContainer );
+		// typeIcon.setType( typeName, typeIcon.container );
+		
+		// var $iconBody = $(typeIcon.container).find('.icon-body')
+		// // For searching, though that's not happening right now
+		// $(typeContainer).data('choice', $iconBody[0] );
+		// $iconBody.data('terms', [typeName]);
+
+		// // For keyboard navigation. Right now on icon body, may change later
+		// $iconBody.addClass('icd-adder-choice');
+		// $iconBody[0].tabIndex = 0;
+		// $iconBody[0].addEventListener( 'keydown', function ( evnt ) {
+		// 	adder.modes.types.grid.gridKeyHandler( evnt, typeMode_.chooseType );
+		// });
+
+		// // For setting the searchbar type
+		// $iconBody.data( 'typeToAdd', typeName );
+
+		var choiceObj 		= typeMode_.choices[ objKey ]
+		var typeContainer 	= typeMode_.addTypeChoiceContainer( choiceObj, parentRow);
+		typeMode_.addTypeContents( choiceObj, typeContainer );
 
 		return typeContainer;
-	};  // End adder.addTypeChoice()
+	};  // End typeMode_.addTypeChoice()
+
+
+	typeMode_.addGrid = function ( choiceObjs ) {
+
+		var choiceKeys = Object.keys( choiceObjs );
+
+		var rowBlueprint = {
+			height: typeMode_.typeHeight,
+			vertMargin: 16,
+			numCols: choiceKeys.length,
+			numExisting: 1  // Number of rows built at one time inside the sizer (including buffer rows)
+		}
+
+		var modeName 		= typeMode_.name;
+		var makeChoiceNode 	= typeMode_.addTypeChoice;
+		var chooseImage 	= typeMode_.chooseType;
+
+		typeMode_.grid = new adder.Grid2( choiceKeys, rowBlueprint, modeName, makeChoiceNode, chooseImage );
+
+		return typeMode_.grid;
+	};  // End typeMode_.addGrid()
 
 
 	adder.addTypePicker 	= function ( parentNode ) {
@@ -127,18 +205,18 @@ adder.addTypeMode = function () {
 		adder.modes.types.section 	= typePicker;
 		parentNode.appendChild( typePicker );
 
-		var iconPrefix 				= 'adder-type-choice';
+		// var iconPrefix 				= 'adder-type-choice';
 
-		var verbContainer  	 = adder.addTypeChoice( 'verb', 'changes data', document.createDocumentFragment() ),
-			nounContainer 	 = adder.addTypeChoice( 'noun', 'is accessed and changed', document.createDocumentFragment() ),
-			messageContainer = adder.addTypeChoice( 'message', 'tells you things', document.createDocumentFragment() );
+		// var verbContainer  	 = typeMode_.addTypeChoice( 'verb', 'changes data', document.createDocumentFragment() ),
+		// 	nounContainer 	 = typeMode_.addTypeChoice( 'noun', 'is accessed and changed', document.createDocumentFragment() ),
+		// 	messageContainer = typeMode_.addTypeChoice( 'message', 'tells you things', document.createDocumentFragment() );
 
-		var typeChoicesNodes = [ verbContainer, nounContainer, messageContainer ];
+		// var typeChoicesNodes = [ verbContainer, nounContainer, messageContainer ];
 
 
 		var numCols = 3;
-		var typeGrid = new adder.Grid( 'types', numCols, typeChoicesNodes );
-		// typeMode_.grid = adder.Grid2( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, chooseChoice_ );
+		// var typeGrid = new adder.Grid( 'types', numCols, typeChoicesNodes );
+		typeMode_.addGrid( typeMode_.choices );  // Adds rows of choices
 
 
 		// Now that they're all in DOM, fetch them easily to do stuff to them
@@ -190,5 +268,5 @@ adder.addTypeMode = function () {
 	adder.addTypePicker( adder.sections.pickers );
 	adder.addTypeTab( adder.sections.tabs );
 
-	return typeMode_;
+	// return typeMode_;
 };  // End adder.addTypeMode()

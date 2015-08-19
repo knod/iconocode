@@ -91,16 +91,14 @@ adder.Grid2 = function ( currentKeys_, rowBlueprint, modeName_, makeChoiceNode_,
 
 	// --- Blueprints --- \\
 	newGrid.rowBlueprint = rowBlueprint; // for navigation
-	var rowHeight_ 	= rowBlueprint.height,
-		rowMargin_ 	= rowBlueprint.vertMargin,
-		numCols_ 	= rowBlueprint.numCols;
+	var rowHeight_ 		= rowBlueprint.height,
+		rowMargin_ 		= rowBlueprint.vertMargin,
+		numCols_ 		= rowBlueprint.numCols,
+		numExisting_ 	= rowBlueprint.numExisting; // Includes buffer rows
 
 	// Will this ever need to be recalculated? Yes, if row dimensions are changed...
 	var numVisibleRows_ = scrollable_.getBoundingClientRect().height/( rowHeight_ + rowMargin_ );
 	var totalNumRows_;
-
-	// Includes buffer rows (use the biggest number needed for any of the pickers)
-	var NUM_EXISTING_ROWS = 10;
 
 
 
@@ -141,11 +139,11 @@ adder.Grid2 = function ( currentKeys_, rowBlueprint, modeName_, makeChoiceNode_,
 	  // Get the row above the top visible row, our actual top row
 	  // -2 is number of visible rows.
 	  var topRowNum = Math.ceil( numTopVisibleRow - 
-	  					( (NUM_EXISTING_ROWS/2) - numVisibleRows_ ) );
+	  					( (numExisting_/2) - numVisibleRows_ ) );
 	  // Don't go below 0
 	  topRowNum = Math.max( 0, topRowNum );
 	  // or above the max possible indexed top row (Both of these are non-0-indexed, so no -1's needed?)
-	  var maxTopRow = totalNumRows - NUM_EXISTING_ROWS;
+	  var maxTopRow = totalNumRows - numExisting_;
 	  topRowNum = Math.min( maxTopRow, topRowNum );
 	  
 	  return topRowNum;
@@ -165,7 +163,7 @@ adder.Grid2 = function ( currentKeys_, rowBlueprint, modeName_, makeChoiceNode_,
 		var currentRowNum = topRowNum;
 		// Here we don't use rowCount for anything other than making sure we don't loop too much
 		// It's just an iterator
-		for ( var rowCount = 0; rowCount < NUM_EXISTING_ROWS; rowCount++ ) {
+		for ( var rowCount = 0; rowCount < numExisting_; rowCount++ ) {
 			rowNums.push( currentRowNum );
 			currentRowNum += 1;
 		}
@@ -258,6 +256,7 @@ adder.Grid2 = function ( currentKeys_, rowBlueprint, modeName_, makeChoiceNode_,
 		return choiceNode;
 	};  // End addChoice()
 
+
 	var makeRowNode = function ( rowNum, objIds ) {
 		
 		var row = document.createElement('div');
@@ -297,7 +296,7 @@ adder.Grid2 = function ( currentKeys_, rowBlueprint, modeName_, makeChoiceNode_,
 	var addNewRows = function ( topRowNum, objIds, parentNode ) {
 
 		var newRowNum = topRowNum;
-		for ( var rowCount = 0; rowCount < NUM_EXISTING_ROWS; rowCount++ ) {
+		for ( var rowCount = 0; rowCount < numExisting_; rowCount++ ) {
 
 			var rowNode = document.getElementById( modeName_ + '_choice_row' + newRowNum );
 			// If a row of that id isn't there add it. Doesn't matter about prepending or appending, they're all positioned absolutely
@@ -334,7 +333,7 @@ adder.Grid2 = function ( currentKeys_, rowBlueprint, modeName_, makeChoiceNode_,
 		var topVisibleRowNum = topVisibleRowNum || Math.ceil( scrollable_.scrollTop/(rowHeight_ + rowMargin_) );
 		// Do we need to do Math.max() on that?
 
-		// Using that, get the number id of all the rows that should exist (visible and buffer)
+		// Using that, get the number id 	of all the rows that should exist (visible and buffer)
 		var newRowNums = getNewRowNums( topVisibleRowNum, totalNumRows_ );
 
 		// Remove all old rows that don't belong

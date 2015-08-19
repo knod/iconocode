@@ -172,6 +172,7 @@ adder.addImageMode 	= function () {
 
 	imgMode.addGrid = function ( parentNode ) {
 
+		// ??: Need this up top stuff anymore?
 		var allImageObjs 		= imgMode.imageObjects,
 			imageChoicesNodes 	= [];
 
@@ -195,14 +196,14 @@ adder.addImageMode 	= function () {
 		var rowBlueprint = {
 			height: imgMode.imgHeight,
 			vertMargin: 5,
-			numCols: 8
+			numCols: 8,
+			numExisting: 10  // Number of rows built at one time inside the sizer (including buffer rows)
 		}
 		var modeName 		= imgMode.name;
 		var makeChoiceNode 	= adder.makeImageNode;
 		var chooseImage 	= imgMode.chooseImage;
 
 		imgMode.grid = new adder.Grid2( choiceKeys, rowBlueprint, modeName, makeChoiceNode, chooseImage );
-		// testGrid = new adder.Grid2( choiceObjs, rowBlueprint, modeName, makeChoiceNode )
 
 		return imgMode.grid;
 	};  // End imgMode.addGrid()
@@ -222,6 +223,7 @@ adder.addImageMode 	= function () {
 		// Add images to the DOM (will also add custom images in future)
 		// adder.modes.images.choices 	= adder.defaultImages;
 		// imgMode.addGrid( adder.modes.images.choices, imagePicker );
+		// ??: don't need to pass in parentNode anymore?
 		imgMode.addGrid( imagePicker );
 
 		return imagePicker;

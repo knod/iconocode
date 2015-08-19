@@ -123,7 +123,7 @@ imgChoice.addSVG 		= function ( svgStr, parentNode, imgObj ) {
 	/* ( str, Node ) -> new Node
 
 	Maybe way to do image size to maximize image http://jsfiddle.net/0bmws0me/1/
-	(from TheP... something), but maybe we want the images to be their proper size?
+	(from TheP... something), but maybe we want the images to be their proper size? (??: What did I mean?)
 	*/
 		// --- CONTAINER --- \\
 		var imgContainer 		= document.createElement('div');
@@ -151,15 +151,16 @@ imgChoice.addSVG 		= function ( svgStr, parentNode, imgObj ) {
 		$(choiceNode).data('name', imgObj.fileName);
 
 		// Allows image to recieve focus (not a usual thing for images)
+		// Necessarily on this node for keyboard navigation.
 		choiceNode.tabIndex = '0';
 		// No id?
 		// Will use src of clicked image to add correct image
 		// No label?
 
-		// TODO: add when clicked
+		// For grid keyboard navigation
 		choiceNode.addEventListener( 'keydown', function ( evnt ) {
 			// adder.imgKeyHandler( evnt );
-			adder.modes.images.grid.gridKeyHandler( evnt, adder.chooseImage );
+			adder.modes.images.grid.gridKeyHandler( evnt, adder.modes.images.chooseImage );
 		});
 
 		// --- TERM LIST --- \\
