@@ -16,9 +16,8 @@
 */
 
 
-adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, chooseChoice_ ) {
-// Need obj ids really, so they can be in order from searching?
-// Need num objs to get index? Where will the record of the obj id's be?
+adder.Grid2 = function ( currentKeys_, rowBlueprint, modeName_, makeChoiceNode_, chooseChoice_ ) {
+// varName_ to know they're in the top level of this scope, clarity?
 /* Psuedo code
 	This should build everything, even the dom nodes, and handle navigation
 	It should use the choice building function handed in
@@ -81,11 +80,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, c
 	newGrid.dimensions = {};  // Will keep track of where the very last cell is
 	adder.setupGridNavigation02( newGrid, modeName_ );
 
-	// varName_ to know they're in the top level of this scope, clarity
-
-	// --- Object (master object list for this mode/picker) --- \\
-	var choiceObjs_ = choiceObjs;
-	var currentIds_ = Object.keys( choiceObjs_ );
 
 	// --- Nodes --- \\
 	// var parentNode_ = parentNode;
@@ -93,7 +87,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, c
 	// !!!: USE THIS AS THE SIZER INSTEAD (parent is the scroller, it seems)
 	newGrid.scrollable 	= document.querySelector('.adder-pickers-container');
 	var scrollable_ 	= newGrid.scrollable;
-	
 	newGrid.sizer 		= null;  // Will be DOM node
 
 	// --- Blueprints --- \\
@@ -119,8 +112,10 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, c
 		rowHeight_ 	= rowBlueprint.height;
 		rowMargin_ 	= rowBlueprint.vertMargin;
 		numCols_ 	= rowBlueprint.numCols;
+		newGrid.rowBlueprint = { height: rowHeight_, vertMargin: rowMargin_, numCols: numCols_ };
 
 		numVisibleRows_ = scrollable_.getBoundingClientRect().height/( rowHeight_ + rowMargin_ )
+
 
 		return newGrid;
 	};  // End newGrid.redrawBlueprints()
@@ -287,8 +282,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, c
 			if ( index < objIds.length ) {
 				// Get the right object key (the id # is the key)
 				var key = objIds[ index ];
-				// // Get the actual object using that id
-				// var obj = objsByIds[ id ];  // ??: What to do about global objsByIds?
 
 				// Add a choice at the current position
 				var currPosition = {row: rowNum, col: colNum };
@@ -334,8 +327,8 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, c
 	* 	After scrolling
 	* 	After mouse leave element (because may leave in the middle of scroll))
 	*/
-		var objIds = objIds || currentIds_;
-		if ( objIds ) { currentIds_ = objIds; }
+		var objIds = objIds || currentKeys_;
+		if ( objIds ) { currentKeys_ = objIds; }
 
 		// Current top visible row. With this math (if not set manually), it will never exceed the max allowed.
 		var topVisibleRowNum = topVisibleRowNum || Math.ceil( scrollable_.scrollTop/(rowHeight_ + rowMargin_) );
@@ -397,8 +390,8 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, c
 	newGrid.reset = function ( objIds ) {
 	/* ( [str] ) -> Grid2 */
 		
-		var objIds = objIds || currentIds_;  // If there are no objIds, just use the ones we last set, don't change
-		if ( objIds ) { currentIds_ = objIds; }  // Since there were objIds, set currentIds_ again to match
+		var objIds = objIds || currentKeys_;  // If there are no objIds, just use the ones we last set, don't change
+		if ( objIds ) { currentKeys_ = objIds; }  // Since there were objIds, set currentKeys_ again to match
 
 		// Size the sizer and set the grids dimension values (and total number of rows)
 		newGrid.setDimensions( objIds.length, numCols_);
@@ -475,7 +468,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode_, c
 
 		newGrid.sizer = newGrid.addSizer( parentNode );
 		// Size the sizer and set the grids dimension values (and total number of rows)
-		newGrid.setDimensions( currentIds_.length, numCols_);
+		newGrid.setDimensions( currentKeys_.length, numCols_);
 		newGrid.update( 0 );
 
 		return newGrid;

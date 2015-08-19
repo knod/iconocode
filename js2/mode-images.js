@@ -147,7 +147,7 @@ adder.addImageMode 	= function () {
 	// =============
 
 	// --- GRID --- \\
-	adder.imgGrid = [];
+	// adder.imgGrid = [];
 	// adder.numCols = 5;
 	// adder.numRows;
 
@@ -201,7 +201,7 @@ adder.addImageMode 	= function () {
 		var makeChoiceNode 	= adder.makeImageNode;
 		var chooseImage 	= imgMode.chooseImage;
 
-		imgMode.grid = new adder.Grid2( allImgObjs, rowBlueprint, modeName, makeChoiceNode, chooseImage );
+		imgMode.grid = new adder.Grid2( Object.keys( allImgObjs ), rowBlueprint, modeName, makeChoiceNode, chooseImage );
 		// testGrid = new adder.Grid2( choiceObjs, rowBlueprint, modeName, makeChoiceNode )
 
 		return imgMode.grid;
