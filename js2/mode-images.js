@@ -58,7 +58,7 @@ adder.addImageMode 	= function () {
 	// ====================
 	// Choosing
 	// ====================
-	adder.chooseImage = function ( imgNode ) {
+	imgMode.chooseImage = function ( imgNode ) {
 	/* ( node ) -> ?
 
 	Hide text and show image where text was
@@ -128,7 +128,7 @@ adder.addImageMode 	= function () {
 		adder.backToSearchbar( adder.viewer );
 
 		return inViewer;
-	};  // End adder.chooseImage()
+	};  // End imgMode.chooseImage()
 
 
 	// ====================
@@ -147,41 +147,33 @@ adder.addImageMode 	= function () {
 	// =============
 
 	// --- GRID --- \\
-	adder.imgGrid = [];
+	// adder.imgGrid = [];
 	// adder.numCols = 5;
 	// adder.numRows;
 
 	// Obj-based test
-	adder.makeImageNode = function ( imgObj, parentRow ) {
+	adder.makeImageNode = function ( objKey, parentRow ) {
 	/*
-	* imgObj should never === undefined
+	* objKey should always valid, always be a key that is in the obj dictionary
 	*/
-		var imageNode;
+		// Get the actual object using that id key
+		var obj = objsByIds[ objKey ];  // ??: What to do about global objsByIds?
+
 		// Add a new image object to the parent row
-		var imageObj = new adder.ImgChoice2( imgObj, parentRow );
+		var imageObj = new adder.ImgChoice2( obj, parentRow );
 		// Give it some nice styling so that other style things work
-		imageNode = imageObj.node;
+		var imageNode = imageObj.node;
 		imageNode.style.height = imgMode.imageHeight + 'px';
 		imageNode.style.width = imgMode.imageHeight + 'px';
 
 		return imageNode;
 	}  // End adder.makeImageNode()
 
-// TO REMOVE (selection/navigation before objects)
-	// adder.updateImageGrid 	= function ( imageArray ) {
 
-	// 	var maxCols = 5;
-	// 	adder.imageGridObj.set( 'images', maxCols, imageArray );
+	imgMode.addGrid = function ( parentNode ) {
 
-	// 	return adder.imageGridObj;
-	// };  // End adder.updateGrid()
-
-// TO REMOVE (selection/navigation before objects)
-	// adder.imageGridObj;
-	adder.addGrid = function ( parentNode ) {
-
-		var maxCols 			= 5,
-			allImageObjs 		= imgMode.imageObjects,
+		// ??: Need this up top stuff anymore?
+		var allImageObjs 		= imgMode.imageObjects,
 			imageChoicesNodes 	= [];
 
 		// Too many in np to do all of them
@@ -200,20 +192,21 @@ adder.addImageMode 	= function () {
 		// adder.imageGridObj = new adder.Grid( 'images', maxCols, imageChoicesNodes );
 
 		// Make grid of image choice nodes and objects for the user to select
-		var allImgObjs = objsByIds;  // Global in file of the same name, not in this directory
+		var choiceKeys = Object.keys( objsByIds );  // Global in file of the same name, not in this directory
 		var rowBlueprint = {
 			height: imgMode.imgHeight,
 			vertMargin: 5,
-			numCols: 8
+			numCols: 8,
+			numExisting: 10  // Number of rows built at one time inside the sizer (including buffer rows)
 		}
-		var modeName = imgMode.name;
-		var makeChoiceNode = adder.makeImageNode;
+		var modeName 		= imgMode.name;
+		var makeChoiceNode 	= adder.makeImageNode;
+		var chooseImage 	= imgMode.chooseImage;
 
-		imgMode.grid = new adder.Grid2( allImgObjs, rowBlueprint, modeName, makeChoiceNode );
-		// testGrid = new adder.Grid2( choiceObjs, rowBlueprint, modeName, makeChoiceNode )
+		imgMode.grid = new adder.Grid2( choiceKeys, rowBlueprint, modeName, makeChoiceNode, chooseImage );
 
 		return imgMode.grid;
-	};  // End adder.addGrid()
+	};  // End imgMode.addGrid()
 
 
 	// --- PICKER --- \\
@@ -229,38 +222,9 @@ adder.addImageMode 	= function () {
 
 		// Add images to the DOM (will also add custom images in future)
 		// adder.modes.images.choices 	= adder.defaultImages;
-		// adder.addGrid( adder.modes.images.choices, imagePicker );
-		adder.addGrid( imagePicker );
-
-
-		imagePicker.addEventListener( 'mouseover', function ( evnt ) {
-
-			var $target 	= $(evnt.target);
-			var $ancestor 	= $target.closest('.image-choice-container');
-
-			// Visually indicate selection of image
-			if ( $ancestor.length > 0 ) {
-				// TO REMOVE (selection/navigation before objects)
-				// Need new selection methods
-				// adder.imageGridObj.selectChoice( $ancestor[0] );
-			}
-			// TODO: Show all matching terms at full length
-
-		} );
-
-		imagePicker.addEventListener( 'click', function ( evnt ) {
-
-			var $target 	= $(evnt.target);
-			var $ancestor 	= $target.closest('.image-choice-container');
-
-			if ( $ancestor.length > 0 ) {
-				adder.chooseImage($ancestor.find('.image-choice')[0]);
-			}
-
-		} );
-
-		// ScrollReveal( imagePicker );
-
+		// imgMode.addGrid( adder.modes.images.choices, imagePicker );
+		// ??: don't need to pass in parentNode anymore?
+		imgMode.addGrid( imagePicker );
 
 		return imagePicker;
 	};  // End adder.addTypePicker()

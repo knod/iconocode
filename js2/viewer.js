@@ -200,15 +200,15 @@ Working example: http://jsfiddle.net/8fjpbc5L/
 
 	cmEditor.on("change", function( instance, change ) {
 
-		// Get the text that needs to be looked for
-		var query = cmEditor.getTokenAt( cmEditor.getCursor() ).string;
+		// Until the purposes grid is converted. Atm, can't search for purposes
+		if ( adder.activeMode === 'images' ) {
+			// Get the text that needs to be looked for
+			var query = cmEditor.getTokenAt( cmEditor.getCursor() ).string;
 
-		// When text is added or deleted (anything else?) search the mode's choices
-		var activeGrid 	= adder.modes[ adder.activeMode ].grid;
-		var newIds 		= searcher.runSearch( query );
+			// When text is added or deleted (anything else?) search the mode's choices
+			var activeGrid 	= adder.modes[ adder.activeMode ].grid;
+			var newIds 		= searcher.runSearch( query );
 
-		// Until the purposes grid is converted
-		if ( activeGrid.reset !== undefined ) {
 			activeGrid.reset( newIds );
 		}
 

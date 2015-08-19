@@ -16,8 +16,8 @@
 */
 
 
-adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
-
+adder.Grid2 = function ( currentKeys_, rowBlueprint, modeName_, makeChoiceNode_, chooseChoice_ ) {
+// varName_ to know they're in the top level of this scope, clarity?
 /* Psuedo code
 	This should build everything, even the dom nodes, and handle navigation
 	It should use the choice building function handed in
@@ -78,12 +78,8 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 
 	var newGrid = {};
 	newGrid.dimensions = {};  // Will keep track of where the very last cell is
+	adder.setupGridNavigation02( newGrid, modeName_ );
 
-	// varName_ to know they're in the top level of this scope, clarity
-
-	// --- Object (master object list for this mode/picker) --- \\
-	var choiceObjs_ = choiceObjs;
-	var currentIds_ = Object.keys( choiceObjs_ );
 
 	// --- Nodes --- \\
 	// var parentNode_ = parentNode;
@@ -91,21 +87,18 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	// !!!: USE THIS AS THE SIZER INSTEAD (parent is the scroller, it seems)
 	newGrid.scrollable 	= document.querySelector('.adder-pickers-container');
 	var scrollable_ 	= newGrid.scrollable;
-	
 	newGrid.sizer 		= null;  // Will be DOM node
 
 	// --- Blueprints --- \\
 	newGrid.rowBlueprint = rowBlueprint; // for navigation
-	var rowHeight_ 	= rowBlueprint.height,
-		rowMargin_ 	= rowBlueprint.vertMargin,
-		numCols_ 	= rowBlueprint.numCols;
+	var rowHeight_ 		= rowBlueprint.height,
+		rowMargin_ 		= rowBlueprint.vertMargin,
+		numCols_ 		= rowBlueprint.numCols,
+		numExisting_ 	= rowBlueprint.numExisting; // Includes buffer rows
 
 	// Will this ever need to be recalculated? Yes, if row dimensions are changed...
 	var numVisibleRows_ = scrollable_.getBoundingClientRect().height/( rowHeight_ + rowMargin_ );
 	var totalNumRows_;
-
-	// Includes buffer rows (use the biggest number needed for any of the pickers)
-	var NUM_EXISTING_ROWS = 10;
 
 
 
@@ -117,8 +110,10 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 		rowHeight_ 	= rowBlueprint.height;
 		rowMargin_ 	= rowBlueprint.vertMargin;
 		numCols_ 	= rowBlueprint.numCols;
+		newGrid.rowBlueprint = { height: rowHeight_, vertMargin: rowMargin_, numCols: numCols_ };
 
 		numVisibleRows_ = scrollable_.getBoundingClientRect().height/( rowHeight_ + rowMargin_ )
+
 
 		return newGrid;
 	};  // End newGrid.redrawBlueprints()
@@ -144,11 +139,11 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	  // Get the row above the top visible row, our actual top row
 	  // -2 is number of visible rows.
 	  var topRowNum = Math.ceil( numTopVisibleRow - 
-	  					( (NUM_EXISTING_ROWS/2) - numVisibleRows_ ) );
+	  					( (numExisting_/2) - numVisibleRows_ ) );
 	  // Don't go below 0
 	  topRowNum = Math.max( 0, topRowNum );
 	  // or above the max possible indexed top row (Both of these are non-0-indexed, so no -1's needed?)
-	  var maxTopRow = totalNumRows - NUM_EXISTING_ROWS;
+	  var maxTopRow = totalNumRows - numExisting_;
 	  topRowNum = Math.min( maxTopRow, topRowNum );
 	  
 	  return topRowNum;
@@ -168,7 +163,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 		var currentRowNum = topRowNum;
 		// Here we don't use rowCount for anything other than making sure we don't loop too much
 		// It's just an iterator
-		for ( var rowCount = 0; rowCount < NUM_EXISTING_ROWS; rowCount++ ) {
+		for ( var rowCount = 0; rowCount < numExisting_; rowCount++ ) {
 			rowNums.push( currentRowNum );
 			currentRowNum += 1;
 		}
@@ -242,13 +237,14 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	};  // End removeExcessRows()
 
 
-	var addChoice = function ( obj, parentRow, pos ) {
+	// -- Adding -- \\
+	var addChoice = function ( objKey, parentRow, pos ) {
 	/* 
 	* 
 	* Add a choice and its event listeners 
 	* ??: What will 'obj' be for purpose choices?
 	*/
-		var choiceNode = makeChoiceNode( obj, parentRow );
+		var choiceNode = makeChoiceNode_( objKey, parentRow );
 
 		// Give it a cell id so it can be selected by the navigator
 		var cellId = modeName_ + '_choice_row' + pos.row + '_col' + pos.col;
@@ -261,7 +257,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	};  // End addChoice()
 
 
-	// -- Adding -- \\
 	var makeRowNode = function ( rowNum, objIds ) {
 		
 		var row = document.createElement('div');
@@ -281,16 +276,16 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 		for ( var colNum = 0; colNum < numCols_; colNum++ ) {
 			// Get the index number of the id of each object we need
 			var index = (rowNum * numCols_) + colNum;
-			// Get the id
-			var id 	= objIds[ index ];
-			// Get the actual object using that id
-			var obj = objsByIds[ id ];  // ??: What to do about global objsByIds?
 
-			// If we haven't passed the last matching item
-			if ( obj !== undefined ) {
+			// If the index doesn't exceed the number of objects
+			if ( index < objIds.length ) {
+				// Get the right object key (the id # is the key)
+				var key = objIds[ index ];
+
 				// Add a choice at the current position
 				var currPosition = {row: rowNum, col: colNum };
-				addChoice( obj, row, currPosition );
+				addChoice( key, row, currPosition );
+
 			}
 		}  // end for every column
 
@@ -301,7 +296,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	var addNewRows = function ( topRowNum, objIds, parentNode ) {
 
 		var newRowNum = topRowNum;
-		for ( var rowCount = 0; rowCount < NUM_EXISTING_ROWS; rowCount++ ) {
+		for ( var rowCount = 0; rowCount < numExisting_; rowCount++ ) {
 
 			var rowNode = document.getElementById( modeName_ + '_choice_row' + newRowNum );
 			// If a row of that id isn't there add it. Doesn't matter about prepending or appending, they're all positioned absolutely
@@ -331,14 +326,14 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	* 	After scrolling
 	* 	After mouse leave element (because may leave in the middle of scroll))
 	*/
-		var objIds = objIds || currentIds_;
-		if ( objIds ) { currentIds_ = objIds; }
+		var objIds = objIds || currentKeys_;
+		if ( objIds ) { currentKeys_ = objIds; }
 
 		// Current top visible row. With this math (if not set manually), it will never exceed the max allowed.
 		var topVisibleRowNum = topVisibleRowNum || Math.ceil( scrollable_.scrollTop/(rowHeight_ + rowMargin_) );
 		// Do we need to do Math.max() on that?
 
-		// Using that, get the number id of all the rows that should exist (visible and buffer)
+		// Using that, get the number id 	of all the rows that should exist (visible and buffer)
 		var newRowNums = getNewRowNums( topVisibleRowNum, totalNumRows_ );
 
 		// Remove all old rows that don't belong
@@ -394,8 +389,8 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	newGrid.reset = function ( objIds ) {
 	/* ( [str] ) -> Grid2 */
 		
-		var objIds = objIds || currentIds_;  // If there are no objIds, just use the ones we last set, don't change
-		if ( objIds ) { currentIds_ = objIds; }  // Since there were objIds, set currentIds_ again to match
+		var objIds = objIds || currentKeys_;  // If there are no objIds, just use the ones we last set, don't change
+		if ( objIds ) { currentKeys_ = objIds; }  // Since there were objIds, set currentKeys_ again to match
 
 		// Size the sizer and set the grids dimension values (and total number of rows)
 		newGrid.setDimensions( objIds.length, numCols_);
@@ -413,6 +408,46 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	// ====================
 	// SETUP (create initial content, start off logic)
 	// ====================
+	var setListeners = function ( container ) {
+	/*
+	* Uses functions from grid-navigation
+	* For selection and choosing. Kind of wish we could just put it on
+	* the parent. Hmmm.
+	*/
+		var $container = $(container);
+
+		// Select a choice on mouseover, including setting position
+		$container.on( 'mouseover', function ( evnt ) {
+
+			var $target 	= $(evnt.target);
+			var $ancestor 	= $target.closest('.icd-choice-container');
+
+			// If there was actually a choice container there (if not on background or scrollbar)
+			if ( $ancestor.length > 0 ) {
+				newGrid.selectChoice( $ancestor[0] );  // Select choice
+			}
+			// TODO: Show all matching terms at full length
+
+		} );
+
+		// Choose choice with function that was handed in by creator
+		$container.on( 'click', function ( evnt ) {
+
+			var $target 	= $(evnt.target);
+			var $ancestor 	= $target.closest('.icd-choice-container');
+
+			// If there was actually a choice container there (if not on background or scrollbar)
+			if ( $ancestor.length > 0 ) {
+				// Get the correct child and use the given function to select it
+				// The data on this node is set by the creator of this grid, so
+				// it'll know what to fetch from the choice
+				chooseChoice_($ancestor.find('.icd-adder-choice')[0]);
+			}
+
+		} );
+	};  // End setListeners()
+
+
 	newGrid.addSizer = function ( parentNode ) {
 	/*
 	* Add element that will "contain" "all" the elements, providing
@@ -420,6 +455,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	*/
 		var sizer = document.getElementById( 'icd_' + modeName_ + '_picker' );
 		$(sizer).addClass('icd_' + modeName_ + '_sizer');
+		setListeners( sizer );
 
 		return sizer;
 	};  // End addSizer()
@@ -431,7 +467,7 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 
 		newGrid.sizer = newGrid.addSizer( parentNode );
 		// Size the sizer and set the grids dimension values (and total number of rows)
-		newGrid.setDimensions( currentIds_.length, numCols_);
+		newGrid.setDimensions( currentKeys_.length, numCols_);
 		newGrid.update( 0 );
 
 		return newGrid;
@@ -482,7 +518,6 @@ adder.Grid2 = function ( choiceObjs, rowBlueprint, modeName_, makeChoiceNode ) {
 	// START
 	// =====================
 	newGrid.start( scrollable_ );
-	adder.setupGridNavigation02( newGrid, modeName_ );
 
 	return newGrid;
 };  // End adder.Grid {} (new version)

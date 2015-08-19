@@ -27,6 +27,8 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 /*
 * // http://jsfiddle.net/g9HMf/3/ - has a problem with scrolling
 */
+	thisGrid.position = {row: 0, col: 0};
+	position_ = thisGrid.position;
 
 	thisGrid.selectChoice = function ( choiceContainer ) {
 	/*
@@ -39,9 +41,13 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 		var $choiceContainer = $(choiceContainer);
 		$choiceContainer.addClass('selected');
 
+		// Set position (for when moused over instead of position set by keyboard)
+		position_.row = $choiceContainer.data('row');
+		position_.col = $choiceContainer.data('col');
+
 		// Takes focus off of last thing, puts it on this thing's actual choice
-		var infoHolder = $choiceContainer.find('.icd-adder-choice')[0];
-		infoHolder.focus();
+		var $infoHolder = $choiceContainer.find('.icd-adder-choice');
+		$infoHolder[0].focus();
 
 		return choiceContainer;
 	};  // thisGrid.selectChoice();
@@ -73,7 +79,6 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 	};  // End thisGrid.getCellNode()
 
 
-	thisGrid.position;
 	thisGrid.selectChoiceByPos = function ( position ) {
 		// Change the nodes
 		var node = thisGrid.getCellNode( position );
@@ -95,10 +100,11 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 
 	*/
 		thisGrid.position = { col: 0, row: 0 };
+		position_ = thisGrid.position;
 		// Change the nodes. Will remove focus from the editor
 		// Maybe this function should be taken out. This is the only
 		// place it's used so far
-		thisGrid.selectChoiceByPos( thisGrid.position );
+		thisGrid.selectChoiceByPos( position_ );
 
 		// // Prevent 'tab' from going to the next element on the
 		// // first press... how...?
@@ -108,7 +114,7 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 		// // has to be pressed twice to work. Why is this?
 		// thisGrid.choicesJustActivated = true;
 
-		return thisGrid.position;
+		return position_;
 	};  // thisGrid.activateKeyboardNav()
 
 
@@ -172,9 +178,9 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 		var dimensions 		= thisGrid.dimensions;  // { numRows, numCols, numItems, numColsLastRow };
 
 		// So we can compare the previous row number to the current row number later
-		var prevRowNum 		= position.row;
+		var prevRowNum 		= position_.row;
 		// Don't worry about wrapping around for now
-		var currPosition 	= incrementPosition( position, direction, dimensions.numCols );
+		var currPosition 	= incrementPosition( position_, direction, dimensions.numCols );
 		var currRowNum 		= currPosition.row,
 			currColNum 		= currPosition.col;
 
@@ -204,17 +210,16 @@ adder.setupGridNavigation02 = function ( thisGrid, modeName_ ) {
 			currColNum = wrapPosition( currColNum, (dimensions.numCols - 1) );
 		}
 
-
 		// ==================
 		// USE NEW VALUES
 		// ==================
 		// Set persistent values of object
-		position.row = currRowNum; position.col = currColNum;
+		position_.row = currRowNum; position_.col = currColNum;
 		// Use object values to get correct node
-		var choiceNode = thisGrid.getCellNode( position );
+		var choiceNode = thisGrid.getCellNode( position_ );
 		thisGrid.selectChoice( choiceNode );
 
-		return position;
+		return position_;
 	};  // End thisGrid.keyboardNavChoices()
 
 
