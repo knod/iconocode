@@ -43,7 +43,6 @@ var Iconocode = function () {
 		icd.extras = new Extras( editorInstance, icd.map );
 
 		setTimeout( function storage() {
-			console.log(icd.map)
 			icd.hotbar.update( icd.map );
 		}, 600 );
 	};
