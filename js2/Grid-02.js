@@ -143,7 +143,7 @@ adder.Grid2 = function ( currentKeys_, rowBlueprint, modeName_, makeChoiceNode_,
 	  // Don't go below 0
 	  topRowNum = Math.max( 0, topRowNum );
 	  // or above the max possible indexed top row (Both of these are non-0-indexed, so no -1's needed?)
-	  var maxTopRow = totalNumRows - numExisting_;
+	  var maxTopRow = Math.min( totalNumRows, numExisting_);
 	  topRowNum = Math.min( maxTopRow, topRowNum );
 	  
 	  return topRowNum;
@@ -388,7 +388,7 @@ adder.Grid2 = function ( currentKeys_, rowBlueprint, modeName_, makeChoiceNode_,
 
 	newGrid.reset = function ( objIds ) {
 	/* ( [str] ) -> Grid2 */
-		
+
 		var objIds = objIds || currentKeys_;  // If there are no objIds, just use the ones we last set, don't change
 		if ( objIds ) { currentKeys_ = objIds; }  // Since there were objIds, set currentKeys_ again to match
 
