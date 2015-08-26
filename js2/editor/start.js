@@ -15,10 +15,61 @@ window.addEventListener('load', function () {
 
 	var editorContainer = document.querySelector('.editor-container')
 
+	var startingCode = "'use strict'\n\n" +
+"\n" +
+"var player = {};\n" +
+"player.node;\n" +
+"player.speed = 15;// px's per step\n" +
+"\n" +
+"var addPlayer = function ( parentNode ) {\n" +
+"	var node = document.createElement('div');\n" +
+"  	parentNode.appendChild( node );\n" +
+"  	node.style.width = '50px';\n" +
+"  	node.style.height = '50px';\n" +
+"  	node.style['backgroundColor'] = 'teal';\n" +
+"    node.style.border = '1px solid black';\n" +
+"    node.style.position = 'absolute';\n" +
+"  \n" +
+"  	return node;\n" +
+"};\n" +
+"\n" +
+"var move = function ( node, direction ) {\n" +
+"// ( {x: int, y: int} ) -> None\n" +
+"\n" +
+"  var top = node.offsetTop;\n" +
+"  var left = node.offsetLeft;\n" +
+"  top = top + (direction.y * player.speed);\n" +
+"  left = left + (direction.x * player.speed);\n" +
+"  \n" +
+"  node.style.left = left + 'px';\n" +
+"  node.style.top = top + 'px';\n" +
+"};\n" +
+"\n" +
+"\n" +
+"// START\n" +
+"player.node = addPlayer( document.body );\n" +
+"\n" +
+"// ##post\n" +
+"// Has to be 'keydown' or evnt.preventDefault() won't work. Events effects will have already happened\n" +
+"//$('.output').on( 'keydown', function keyup(evnt) {\n" +
+"document.addEventListener( 'keydown', function keyup(evnt) {\n" +
+"  	var x = 0, y = 0;\n" +
+"  	var key = evnt.keyCode;\n" +
+"  	if 		( key === 40 ) { y = 1; }\n" +
+"  	else if ( key === 38 ) { y = -1; }\n" +
+"  	else if ( key === 39 ) { x = 1; }\n" +
+"  	else if ( key === 37 ) { x = -1; }\n" +
+"  \n" +
+"	var direction = {x: x, y: y};\n" +
+"  	evnt.preventDefault();\n" +
+"  	move( player.node, direction );\n" +
+"  // up: 38, down: 40, left: 37, right: 39console.log(event.keyCode);\n" +
+"});";
+
 	myCM = CodeMirror( editorContainer,
 		{
 			mode: 		'javascript',
-			value: 		"'use strict'\n\nvar myScript = function(){return 100;}\nvar token1 = 5;\nvar token2 = 12;",
+			value: 		startingCode,
 			theme:  	"lesser-dark",
 			lineNumbers: true
 		}
@@ -84,52 +135,52 @@ window.addEventListener('load', function () {
 	});
 
 
-	// ====================================================
-	// --- TESTING ICONS --- \\
-	// ====================================================
-	var constructIcon = function ( variableName, purpose, imageNodes ) {
-		/* ( str, str, [Nodes] ) -> {}
-		* 
-		* Creates, sets, and saves an icon with the given values.
-		*/
-			var iconObj = new Icon( variableName );
+	// // ====================================================
+	// // --- TESTING ICONS --- \\
+	// // ====================================================
+	// var constructIcon = function ( variableName, purpose, imageNodes ) {
+	// 	/* ( str, str, [Nodes] ) -> {}
+	// 	* 
+	// 	* Creates, sets, and saves an icon with the given values.
+	// 	*/
+	// 		var iconObj = new Icon( variableName );
 
-			// Placeholder... Not sure this works this way anymore
-			// Need to create marker
-			iconObj.createNew( document.createDocumentFragment() );
-			iconObj.setType( purpose , iconObj.container );
+	// 		// Placeholder... Not sure this works this way anymore
+	// 		// Need to create marker
+	// 		iconObj.createNew( document.createDocumentFragment() );
+	// 		iconObj.setType( purpose , iconObj.container );
 
-			iconObj.setImages( imageNodes, iconObj.body );
+	// 		iconObj.setImages( imageNodes, iconObj.body );
 
-			iconObj.save( icd.map, icd.hotbar );
+	// 		iconObj.save( icd.map, icd.hotbar );
 
-			return iconObj;
-	};  // End constructIcon()
+	// 		return iconObj;
+	// };  // End constructIcon()
 
-	// MAKE ICONS
-	var parent 	= document.createDocumentFragment();
+	// // MAKE ICONS
+	// var parent 	= document.createDocumentFragment();
 
-	var img1a 	= adder.ImgChoice2( objsByIds['icd_0'], parent ).node,
-		img1b 	= adder.ImgChoice2( objsByIds['icd_1'], parent ).node,
-		img2a 	= adder.ImgChoice2( objsByIds['icd_2'], parent ).node,
-		img2b 	= adder.ImgChoice2( objsByIds['icd_3'], parent ).node;
+	// var img1a 	= adder.ImgChoice2( objsByIds['icd_0'], parent ).node,
+	// 	img1b 	= adder.ImgChoice2( objsByIds['icd_1'], parent ).node,
+	// 	img2a 	= adder.ImgChoice2( objsByIds['icd_2'], parent ).node,
+	// 	img2b 	= adder.ImgChoice2( objsByIds['icd_3'], parent ).node;
 
-	img1a 	= $(img1a).find('.image-choice')[0];
-	img1b 	= $(img1b).find('.image-choice')[0];
-	img2a 	= $(img2a).find('.image-choice')[0];
-	img2b 	= $(img2b).find('.image-choice')[0];
+	// img1a 	= $(img1a).find('.image-choice')[0];
+	// img1b 	= $(img1b).find('.image-choice')[0];
+	// img2a 	= $(img2a).find('.image-choice')[0];
+	// img2b 	= $(img2b).find('.image-choice')[0];
 
-	var icon1 	= constructIcon( 'token1', 'verb', [img1a, img1b] ),
-		icon2 	= constructIcon( 'token2', 'verb', [img2a, img2b] );
+	// var icon1 	= constructIcon( 'token1', 'verb', [img1a, img1b] ),
+	// 	icon2 	= constructIcon( 'token2', 'verb', [img2a, img2b] );
 
-	// INSERT AS MARKERS
-	setTimeout( function () {
-		// Wait so there's time for codemirror to tokenize things properly
-		var token1 	= myCM.getTokenAt( {line: 1, ch: 1} ),
-			token2 	= myCM.getTokenAt( {line: 2, ch: 1} );
+	// // INSERT AS MARKERS
+	// setTimeout( function () {
+	// 	// Wait so there's time for codemirror to tokenize things properly
+	// 	var token1 	= myCM.getTokenAt( {line: 1, ch: 1} ),
+	// 		token2 	= myCM.getTokenAt( {line: 2, ch: 1} );
 		icd.updater.markAll( myCM, icd.map );
 
-	} , 50);
+	// } , 50);
 
 });
 
@@ -154,35 +205,37 @@ console.log(xy)
 TEST 4? 5?
 'use strict'
 
-var runner = {};
-runner.node;
-runner.speed = 15;// px's per step
+var player = {};
+player.node;
+player.speed = 15;// px's per step
 
-runner.add = function ( parentNode ) {
+var addPlayer = function ( parentNode ) {
 	var node = document.createElement('div');
-  	runner.node = node;
   	parentNode.appendChild( node );
   	node.style.width = '50px';
   	node.style.height = '50px';
   	node.style['backgroundColor'] = 'teal';
     node.style.border = '1px solid black';
     node.style.position = 'absolute';
+  
+  	return node;
 };
 
-runner.move = function ( direction ) {
+var move = function ( node, direction ) {
 // ( {x: int, y: int} ) -> None
 
-  var node = runner.node;
   var top = node.offsetTop;
   var left = node.offsetLeft;
-  top = top + (direction.y * runner.speed);
-  left = left + (direction.x * runner.speed);
+  top = top + (direction.y * player.speed);
+  left = left + (direction.x * player.speed);
   
   node.style.left = left + 'px';
   node.style.top = top + 'px';
 };
 
-runner.add( document.body );
+
+// START
+player.node = addPlayer( document.body );
 
 // ##post
 // Has to be 'keydown' or evnt.preventDefault() won't work. Events effects will have already happened
@@ -197,9 +250,11 @@ document.addEventListener( 'keydown', function keyup(evnt) {
   
 	var direction = {x: x, y: y};
   	evnt.preventDefault();
-  	runner.move( direction );
+  	move( player.node, direction );
   // up: 38, down: 40, left: 37, right: 39console.log(event.keyCode);
 });
+
+
 
 
 

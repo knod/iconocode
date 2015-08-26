@@ -41,6 +41,11 @@ var Iconocode = function () {
 		// !!!: This is terrible, but it's a hack for now
 		icd.hotbar = new HotBar( editorInstance, icd.map );
 		icd.extras = new Extras( editorInstance, icd.map );
+
+		setTimeout( function storage() {
+			console.log(icd.map)
+			icd.hotbar.update( icd.map );
+		}, 600 );
 	};
 
 	// I think each editor instance will have to add its own event listener
@@ -58,8 +63,10 @@ window.addEventListener('load', function () {
 
 	icd = new Iconocode();
 
+	addIconDefaults();
+
 	setTimeout( function storage() {
-		icd.storage = IcdStorage( $('.save')[0], $('.clear')[0] );
+		icd.storage = IcdStorage( $('.save')[0], $('.clear')[0] );  // Add two buttons and their functionality
 		icd.storage.load();
 	}, 300 );
 

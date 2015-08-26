@@ -20,6 +20,16 @@ form * {
 	display: block;
 	margin: 0 auto;
 	text-align: center;
+	vertical-align: middle;
+}
+
+form span {
+	float: left;
+	display: inline;
+}
+
+#resizer_label {
+    margin-right: 1rem;
 }
 
 .CodeMirror.test-editor .CodeMirror-linenumber {

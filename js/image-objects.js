@@ -28,7 +28,9 @@ adder.setupImageObjects = function ( arrayOfTags, idsInTags ) {
 		{ name: 'push3', filename: 'push3.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
 		{ name: 'push', filename: 'push.svg', tags: [ 'push', 'append', 'add', 'list', 'array', 'add to', 'new', 'item' ] },
 		{ name: 'chaser', filename: 'noun_170400_chaser.svg', tags: [ 'seeker', 'chaser', 'catcher', 'hunter', 'predator' ] },
-		{ name: 'runner', filename: 'noun_170400_runner.svg', tags: [ 'hider', 'runner', 'prey', 'runaway' ] }
+		{ name: 'runner', filename: 'noun_170400_runner.svg', tags: [ 'hider', 'runner', 'prey', 'runaway' ] },
+		{ name: 'player', filename: 'un-objectified/smile-face-green-cutthrough.svg', tags: [ 'player', 'user', 'participant', 'green', 'face', 'smile' ] },
+		{ name: 'move', filename: 'un-objectified/move.svg', tags: [ 'move', 'any', 'direction', 'arrows', 'up', 'down', 'left', 'right' ] }
 	];  // End adder.imgs[]
 
 

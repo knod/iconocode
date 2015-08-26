@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100.00001"
+   height="100"
+   viewBox="0 0 100 99.999997"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="neutral-face-cutthrough.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.7373913"
+     inkscape:cx="49.332256"
+     inkscape:cy="44.100958"
+     inkscape:document-units="px"
+     inkscape:current-layer="g4197"
+     showgrid="false"
+     units="px"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-page="true"
+     inkscape:snap-bbox="false"
+     inkscape:bbox-paths="false"
+     inkscape:bbox-nodes="false"
+     inkscape:window-width="1388"
+     inkscape:window-height="792"
+     inkscape:window-x="327"
+     inkscape:window-y="50"
+     inkscape:window-maximized="0"
+     inkscape:snap-bbox-midpoints="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
+    <sodipodi:guide
+       position="99.999911,99.999997"
+       orientation="0,1"
+       id="guide4202" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-8.4e-5,-952.36216)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="4"
+     transform="translate(-8.4e-5,3.1066872e-7)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="3"
+     transform="translate(-8.4e-5,3.1066872e-7)"
+     style="display:inline" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="1"
+     style="display:inline"
+     transform="translate(-8.4e-5,3.1066872e-7)">
+    <g
+       id="g4197">
+      <path
+         style="fill:#999999;fill-opacity:1;stroke:none;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 119.16016,0 a 50,50 0 0 0 -50.000004,50 50,50 0 0 0 50.000004,50 50,50 0 0 0 50,-50 50,50 0 0 0 -50,-50 z m -15.01954,20.533203 1.3379,0 c 2.22347,0 4.01367,1.790196 4.01367,4.013672 l 0,27.023437 c 0,2.223476 -1.7902,4.013672 -4.01367,4.013672 l -1.3379,0 c -2.22346,0 -4.01171,-1.790193 -4.01171,-4.013672 l 0,-27.023437 c 0,-2.223476 1.78826,-4.013672 4.01171,-4.013672 z m 28.70118,0 1.33593,0 c 2.22348,0 4.01368,1.790196 4.01368,4.013672 l 0,27.023437 c 0,2.223476 -1.7902,4.013672 -4.01368,4.013672 l -1.33593,0 c -2.22348,0 -4.01368,-1.790194 -4.01368,-4.013672 l 0,-27.023437 c 0,-2.223476 1.7902,-4.013672 4.01368,-4.013672 z m -34.517581,48.162109 17.857421,0 5.95703,0 17.85742,0 c 2.22348,0 4.01368,1.790199 4.01368,4.013672 l 0,2.140625 c 0,2.223474 -1.7902,4.011719 -4.01368,4.011719 l -17.85742,0 -5.95703,0 -17.857421,0 c -2.223474,0 -4.013672,-1.788245 -4.013672,-4.011719 l 0,-2.140625 c 0,-2.223473 1.790198,-4.013671 4.013672,-4.013672 z"
+         transform="translate(-69.160072,-3.1066857e-7)"
+         id="path4145"
+         inkscape:connector-curvature="0" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="1 eyes"
+     style="display:inline"
+     transform="translate(-8.4e-5,3.1066872e-7)" />
+</svg>

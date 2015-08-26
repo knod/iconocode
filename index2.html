@@ -36,8 +36,11 @@ Post: matching <defs> and <use> only work within an svg, i.e. in the scope of on
 		<section class='editor-area'>
 
 		  <form id='icon_size_form'>
-		        <input type='range' id='icon_size_input' name='iconSizeInput' min='0.8' max='2' step='0.02' value='1'>
-		        <output name='iconSizeOutput' for='iconSizeInput' id='icon_size_output'></output>
+		  		<span><label for='iconSizeInput' id='resizer_label'>Resize Icons:</label></span>
+		  		<span>
+			        <input type='range' id='icon_size_input' name='iconSizeInput' min='0.8' max='2' step='0.02' value='1'>
+			        <output name='iconSizeOutput' for='iconSizeInput' id='icon_size_output'>1rem</output>
+		        </span>
 		  </form>
 
 		  <section class='icon-hotbar'>
