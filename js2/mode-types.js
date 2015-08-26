@@ -35,6 +35,8 @@ adder.addTypeMode = function () {
 		message: {name: 'message', text:'helps the developer develop (debugging, etc.)', tags: ['message', 'meta', 'dev', 'development', 'developer']}
 	};
 
+	typeMode_.choiceNodes = {};
+
 	// ===============
 	// ACTIVATING TYPE
 	// ================
@@ -82,7 +84,7 @@ adder.addTypeMode = function () {
 
 		var typeContainer 		= document.createElement('div');
 		parentNode.appendChild( typeContainer );
-		adder.modes.types.choices[ typeName ] = typeContainer;  // ??: not needed
+		adder.modes.types.choiceNodes[ typeName ] = typeContainer;  // ??: not needed
 
 		typeContainer.className = 'icd-choice-container type-choice-container';
 		// typeContainer.id 		= prefix + '_choice_' + typeName;
@@ -145,7 +147,7 @@ adder.addTypeMode = function () {
 	* Called by Grid
 	* choicObj looks like {name: str, text: str, tags: []}
 	*/
-		var choiceObj 		= typeMode_.choices[ objKey ]
+		var choiceObj 		= typeMode_.choices[ objKey ];
 		var typeContainer 	= typeMode_.addTypeChoiceContainer( choiceObj, parentRow);
 		typeMode_.addTypeContents( choiceObj, typeContainer );
 
